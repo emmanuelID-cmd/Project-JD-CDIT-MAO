@@ -1,0 +1,25 @@
+{
+  "doc_id": "KB-DRAFT-060",
+  "version": "0.1",
+  "title": "Bulk import of site staff",
+  "topic": "site_staff_bulk_import",
+  "product_area": "administration",
+  "status": "draft",
+  "data_classification": "synthetic",
+  "owner": "Synthetic Administration Owner",
+  "effective_date": "2026-10-01",
+  "review_due": "2027-10-01",
+  "keywords": ["bulk", "import", "site", "staff", "spreadsheet"],
+  "sections": [
+    {
+      "section_id": "s1",
+      "heading": "Bulk import site staff from a spreadsheet",
+      "text": "Draft guidance: administrators can bulk import site staff from a spreadsheet template.",
+      "steps": [
+        {"step_id": "st1", "action_type": "navigate_ui", "text": "Ask the administrator to download the staff import spreadsheet template."}
+      ],
+      "information_needed": [],
+      "stop_conditions": []
+    }
+  ]
+}

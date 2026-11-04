@@ -1,0 +1,51 @@
+{
+  "contract_version": "0.1.0-proposed",
+  "contribution_id": "KNW-3BA4720C1A2E07E1",
+  "stage": "knowledge",
+  "agent": "knowledge-agent",
+  "agent_version": "0.1.0",
+  "context": {
+    "run_id": "RUN-SYN-CASE-0003-1",
+    "case_id": "SYN-CASE-0003",
+    "case_version": 1,
+    "policy_version": "SYN-SUPPORT-POLICY-0.1",
+    "data_classification": "synthetic"
+  },
+  "input_refs": [
+    {
+      "contribution_id": "TRI-2E0FB5958610EF0B",
+      "stage": "triage",
+      "contract_version": "0.1.0-proposed"
+    }
+  ],
+  "created_at": "2026-11-03T15:00:00Z",
+  "status": "abstained",
+  "checkpoint": {
+    "checkpoint": "A3",
+    "passed": false,
+    "reason_codes": [
+      "weak_evidence"
+    ]
+  },
+  "claims": [
+    {
+      "statement": "No approved, current, non-conflicting source supports product guidance for this case (weak_evidence).",
+      "label": "unknown",
+      "sources": [],
+      "basis": null,
+      "confidence": "low"
+    }
+  ],
+  "confidence": "low",
+  "confidence_rationale": "Abstained: evidence is missing, weak, stale, conflicting, or unsafe.",
+  "unknowns": [
+    "Confidence thresholds are provisional and uncalibrated (D-08)."
+  ],
+  "human_review_required": true,
+  "source_set_version": "SRC-9FC8AF62B4B8",
+  "matched_query_terms": [],
+  "passages": [],
+  "excluded_sources": [],
+  "conflicts": [],
+  "injection_flags": []
+}

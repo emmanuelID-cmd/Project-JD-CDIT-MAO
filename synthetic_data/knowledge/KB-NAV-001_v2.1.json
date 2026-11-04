@@ -1,0 +1,48 @@
+{
+  "doc_id": "KB-NAV-001",
+  "version": "2.1",
+  "title": "Export the Site Enrollment Report",
+  "topic": "report_export_enrollment",
+  "product_area": "reports",
+  "status": "approved",
+  "data_classification": "synthetic",
+  "owner": "Synthetic Knowledge Owner",
+  "effective_date": "2026-09-01",
+  "review_due": "2027-09-01",
+  "keywords": ["export", "enrollment", "report", "csv", "pdf", "download"],
+  "sections": [
+    {
+      "section_id": "s1",
+      "heading": "Where to find the enrollment report export",
+      "text": "The Site Enrollment Report export is available to users with the Site Coordinator or Study Manager role. Open Reports, select Enrollment, then choose Site Enrollment Report. The Export button is in the top-right toolbar of the report view.",
+      "steps": [
+        {"step_id": "st1", "action_type": "navigate_ui", "text": "Ask the user to open Reports from the main navigation menu and select Enrollment."},
+        {"step_id": "st2", "action_type": "navigate_ui", "text": "Ask the user to select Site Enrollment Report and wait for the report view to load."},
+        {"step_id": "st3", "action_type": "navigate_ui", "text": "Ask the user to select Export in the top-right toolbar and choose CSV or PDF."}
+      ],
+      "information_needed": [
+        {"field": "study_id", "prompt": "Synthetic study identifier the user is working in."},
+        {"field": "user_role", "prompt": "The user's assigned role as shown on their profile page."}
+      ],
+      "stop_conditions": [
+        {"condition_id": "KB-NAV-001-SC1", "text": "If the Export button is missing for a user whose role should include it, stop and escalate as a possible permission configuration issue."},
+        {"condition_id": "KB-NAV-001-SC2", "text": "If the exported data appears to belong to another site, stop immediately and escalate as a possible data-access incident."}
+      ]
+    },
+    {
+      "section_id": "s2",
+      "heading": "Export fails or times out",
+      "text": "Large exports can time out in the browser. Applying a date-range filter reduces the export size.",
+      "steps": [
+        {"step_id": "st1", "action_type": "retry_operation", "text": "Ask the user to apply a date-range filter to the report and retry the export."}
+      ],
+      "information_needed": [
+        {"field": "exact_error_message", "prompt": "The exact error message shown, copied without any patient or subject details."},
+        {"field": "attempt_time", "prompt": "The date and time of the failed attempt."}
+      ],
+      "stop_conditions": [
+        {"condition_id": "KB-NAV-001-SC3", "text": "If the export still fails after a filtered retry, stop and escalate to L2 with the attempt time and exact error message."}
+      ]
+    }
+  ]
+}

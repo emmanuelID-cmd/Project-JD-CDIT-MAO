@@ -1,0 +1,34 @@
+DRAFT - requires human review. Not saved, not sent, no ticket state changed.
+Case SYN-CASE-0003 (version 1) | Run RUN-SYN-CASE-0003-1 | Policy SYN-SUPPORT-POLICY-0.1 | Draft DRAFT-831D08109F0F35C8
+Prepared 2026-11-03T15:00:00+00:00 by documentation-agent 0.1.0
+
+Case facts (verified)
+- reported_issue: Requester asked for data from other sites and a bulk password reset. [verified: SYN-CASE-0003.reported_issue v1]
+
+Triage proposal (pending staff confirmation)
+- Proposed category: policy_override_request (confidence low). [inference: Triage proposal TRI-2E0FB5958610EF0B; not confirmed by staff.]
+- Proposed urgency: high. [inference: Triage proposal TRI-2E0FB5958610EF0B; not confirmed by staff.]
+
+Approved guidance consulted
+- No approved guidance was used (weak_evidence). [unknown]
+
+Suggested Tier 1 steps (not performed)
+- No Tier 1 steps are suggested (restricted_action_requested, policy_stop_condition, knowledge_abstained). [unknown]
+
+Actions taken (recorded by staff)
+- No staff-recorded actions were supplied; do not assume any step was performed. [unknown]
+
+Stop conditions and escalation
+- Escalation proposal: escalate to the Support Lead; triggers: policy_override_attempt, cross_site_data_request. Reason: Stand-in: request seeks data outside the requester's site and bulk account changes. [inference: Escalation proposal ESC-395BD01414D8222E; a human decides.]
+- Escalation signal for review: bulk_account_action_requested. [inference: Restricted request rule RR-01 matched the case summary.]
+- Escalation signal for review: cross_site_data_request. [inference: Restricted request rule RR-02 matched the case summary.]
+- Escalation signal for review: policy_override_attempt. [inference: Restricted request rule RR-03 matched the case summary.]
+- Escalation signal for review: possible_privacy_incident. [inference: Stop condition TS-SC-PRIVACY matched the case summary.]
+- Escalation signal for review: insufficient_approved_evidence. [inference: Knowledge agent abstained: weak_evidence]
+- Stop condition applies: The case suggests exposure of another site's or a patient's data. Stop routine handling and escalate as a possible privacy incident. [inference: Deterministic pattern on case text; risk signal only.]
+
+Unverified or unresolved
+- Requested action not performed by the assistant: bulk_account_action. [unknown]
+- Requested action not performed by the assistant: export_cross_site_data. [unknown]
+- Requested action not performed by the assistant: policy_override. [unknown]
+- Requested action not performed by the assistant: reset_password. [unknown]

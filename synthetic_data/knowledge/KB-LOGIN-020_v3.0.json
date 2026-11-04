@@ -1,0 +1,33 @@
+{
+  "doc_id": "KB-LOGIN-020",
+  "version": "3.0",
+  "title": "Session-expired loop during sign-in",
+  "topic": "login_session_loop",
+  "product_area": "login",
+  "status": "approved",
+  "data_classification": "synthetic",
+  "owner": "Synthetic Platform Support Owner",
+  "effective_date": "2026-07-01",
+  "review_due": "2027-07-01",
+  "keywords": ["login", "sign", "session", "expired", "loop", "redirect", "browser"],
+  "sections": [
+    {
+      "section_id": "s1",
+      "heading": "Sign-in returns to a session expired message in a loop",
+      "text": "A session expired loop during sign-in is usually caused by stale browser session data or several open tabs competing for the same session.",
+      "steps": [
+        {"step_id": "st1", "action_type": "clear_browser_cache", "text": "Ask the user to clear cached data for the site and close all browser tabs for the platform."},
+        {"step_id": "st2", "action_type": "verify_client_setting", "text": "Confirm the browser and version appear in the supported browser list in the system requirements article."},
+        {"step_id": "st3", "action_type": "retry_operation", "text": "Ask the user to sign in again using a single browser tab."}
+      ],
+      "information_needed": [
+        {"field": "browser", "prompt": "Browser name and version."},
+        {"field": "attempt_time", "prompt": "The date and time of the last sign-in attempt."}
+      ],
+      "stop_conditions": [
+        {"condition_id": "KB-LOGIN-020-SC1", "text": "If the loop continues after these steps, stop and escalate to L2 with the browser name, version, and attempt time."},
+        {"condition_id": "KB-LOGIN-020-SC2", "text": "Do not reset the user's password or change account settings to resolve this issue."}
+      ]
+    }
+  ]
+}

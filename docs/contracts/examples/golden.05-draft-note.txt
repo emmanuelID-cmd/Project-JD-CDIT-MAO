@@ -1,0 +1,34 @@
+DRAFT - requires human review. Not saved, not sent, no ticket state changed.
+Case SYN-CASE-0001 (version 1) | Run RUN-SYN-CASE-0001-1 | Policy SYN-SUPPORT-POLICY-0.1 | Draft DRAFT-5E319A924DA06334
+Prepared 2026-11-03T15:00:00+00:00 by documentation-agent 0.1.0
+
+Case facts (verified)
+- reported_issue: Cannot find the export option for the Site Enrollment Report. [verified: SYN-CASE-0001.reported_issue v1]
+- study_id: SYN-STUDY-0042 [verified: SYN-CASE-0001.study_id v1]
+
+Triage proposal (pending staff confirmation)
+- Proposed category: navigation_how_to (confidence high). [inference: Triage proposal TRI-CFA88256A7D129F5; not confirmed by staff.]
+- Proposed urgency: low. [inference: Triage proposal TRI-CFA88256A7D129F5; not confirmed by staff.]
+
+Approved guidance consulted
+- Export the Site Enrollment Report - Where to find the enrollment report export [verified: KB-NAV-001 v2.1 #s1]
+- Export the Site Enrollment Report - Export fails or times out [verified: KB-NAV-001 v2.1 #s2]
+
+Suggested Tier 1 steps (not performed)
+- 1. Ask the user to open Reports from the main navigation menu and select Enrollment. [verified: KB-NAV-001 v2.1 #s1/st1]
+- 2. Ask the user to select Site Enrollment Report and wait for the report view to load. [verified: KB-NAV-001 v2.1 #s1/st2]
+- 3. Ask the user to select Export in the top-right toolbar and choose CSV or PDF. [verified: KB-NAV-001 v2.1 #s1/st3]
+
+Actions taken (recorded by staff)
+- No staff-recorded actions were supplied; do not assume any step was performed. [unknown]
+
+Information still needed
+- user_role: The user's assigned role as shown on their profile page. [unknown]
+
+Stop conditions and escalation
+- Escalation proposal: no escalation proposed. Reason: Stand-in: no must-escalate rule matched the synthetic case. [inference: Escalation proposal ESC-0E7A137880BA6CCC; a human decides.]
+- Stop condition: If the Export button is missing for a user whose role should include it, stop and escalate as a possible permission configuration issue. [verified: KB-NAV-001 v2.1 #s1]
+- Stop condition: If the exported data appears to belong to another site, stop immediately and escalate as a possible data-access incident. [verified: KB-NAV-001 v2.1 #s1]
+
+Unverified or unresolved
+- Reported, not verified - user_role: Site Coordinator [unknown]

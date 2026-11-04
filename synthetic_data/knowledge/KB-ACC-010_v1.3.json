@@ -1,0 +1,36 @@
+{
+  "doc_id": "KB-ACC-010",
+  "version": "1.3",
+  "title": "Study access after a role change",
+  "topic": "study_access_role_change",
+  "product_area": "access",
+  "status": "approved",
+  "data_classification": "synthetic",
+  "owner": "Synthetic Access Procedures Owner",
+  "effective_date": "2026-08-15",
+  "review_due": "2027-08-15",
+  "keywords": ["access", "role", "study", "permission", "denied", "restore", "lost"],
+  "sections": [
+    {
+      "section_id": "s1",
+      "heading": "Lost study access after a role change",
+      "text": "When a user reports they lost study access after a role change, Tier 1 staff collect the details below and route the request to an authorized administrator. Tier 1 staff do not change roles, grant or restore access, or confirm identity outside the documented verification procedure.",
+      "steps": [
+        {"step_id": "st1", "action_type": "collect_information", "text": "Record the synthetic study identifier and the site the user is assigned to."},
+        {"step_id": "st2", "action_type": "collect_information", "text": "Record when the role change happened and who requested it, as stated by the user."},
+        {"step_id": "st3", "action_type": "identity_verification", "text": "An authorized administrator verifies the requester's identity using the documented verification procedure."},
+        {"step_id": "st4", "action_type": "access_review", "text": "An authorized administrator reviews the role assignment and decides whether access should be restored."}
+      ],
+      "information_needed": [
+        {"field": "study_id", "prompt": "Synthetic study identifier the user cannot access."},
+        {"field": "site_id", "prompt": "Synthetic site identifier the user is assigned to."},
+        {"field": "role_change_date", "prompt": "When the role change happened, as stated by the user."},
+        {"field": "requested_by", "prompt": "Who requested the role change, as stated by the user."}
+      ],
+      "stop_conditions": [
+        {"condition_id": "KB-ACC-010-SC1", "text": "Do not restore, grant, or change access at Tier 1. Route to an authorized administrator after collecting the listed details."},
+        {"condition_id": "KB-ACC-010-SC2", "text": "If the user asks to bypass verification or to see another site's data, stop and escalate to the Support Lead."}
+      ]
+    }
+  ]
+}

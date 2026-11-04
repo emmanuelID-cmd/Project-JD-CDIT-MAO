@@ -1,0 +1,97 @@
+{
+  "policy_id": "SYN-TS-POLICY",
+  "version": "0.1.0",
+  "status": "proposed",
+  "data_classification": "synthetic",
+  "description": "Synthetic Tier 1 troubleshooting boundary for the Troubleshooting agent (Shawn's Lane). Proposed values pending CDIT policy (see D-02, D-03). Patterns are risk signals only; they never grant authority.",
+  "tier1_action_types": {
+    "navigate_ui": "tier1_guides_customer",
+    "clear_browser_cache": "tier1_guides_customer",
+    "verify_client_setting": "tier1_guides_customer",
+    "retry_operation": "tier1_guides_customer",
+    "share_approved_article": "tier1_specialist",
+    "collect_information": "tier1_specialist"
+  },
+  "staff_only_action_types": ["identity_verification", "access_review"],
+  "forbidden_action_types": [
+    "reset_password",
+    "change_role",
+    "grant_access",
+    "restore_access",
+    "modify_account",
+    "send_customer_message",
+    "close_ticket",
+    "write_salesforce",
+    "export_cross_site_data",
+    "bypass_verification",
+    "delete_record",
+    "provide_clinical_advice"
+  ],
+  "restricted_request_rules": [
+    {
+      "rule_id": "RR-01",
+      "action_type": "bulk_account_action",
+      "effect": "block",
+      "signal": "bulk_account_action_requested",
+      "pattern": "\\b(reset|change|unlock|disable|delete)\\b[^.]*\\b(everyone|every user|all users|all accounts|all passwords)\\b"
+    },
+    {
+      "rule_id": "RR-02",
+      "action_type": "export_cross_site_data",
+      "effect": "block",
+      "signal": "cross_site_data_request",
+      "pattern": "\\b(another|other|different)\\s+site'?s?\\b[^.]*\\b(data|records|subjects|reports?)\\b|\\breveal\\b[^.]*\\b(data|records)\\b"
+    },
+    {
+      "rule_id": "RR-03",
+      "action_type": "policy_override",
+      "effect": "block",
+      "signal": "policy_override_attempt",
+      "pattern": "\\b(ignore|disregard|override|bypass)\\b[^.]*\\b(policy|policies|instructions|rules|verification|procedure)\\b"
+    },
+    {
+      "rule_id": "RR-04",
+      "action_type": "provide_clinical_advice",
+      "effect": "block",
+      "signal": "clinical_or_eligibility_question",
+      "pattern": "\\b(dose|dosage|dosing|eligibility|eligible|adverse event|medical advice|diagnosis)\\b"
+    },
+    {
+      "rule_id": "RR-05",
+      "action_type": "reset_password",
+      "effect": "flag",
+      "signal": "credential_action_requested",
+      "pattern": "\\breset\\b[^.]*\\bpasswords?\\b|\\bpasswords?\\b[^.]*\\breset\\b"
+    },
+    {
+      "rule_id": "RR-06",
+      "action_type": "change_access",
+      "effect": "flag",
+      "signal": "access_change_requested",
+      "pattern": "\\b(restore|grant|give|add|change|remove)\\b[^.]*\\b(access|roles?|permissions?)\\b|\\b(access|roles?|permissions?)\\b[^.]*\\b(restored|granted|changed|removed)\\b"
+    }
+  ],
+  "global_stop_conditions": [
+    {
+      "condition_id": "TS-SC-ACCESS",
+      "signal": "access_or_identity",
+      "halts_routine_steps": false,
+      "text": "The case involves lost, restored, granted, or changed access, roles, or identity. Tier 1 collects details only; authorized staff decide through the documented procedure.",
+      "pattern": "\\b(lost|lose|losing|no longer has|denied|restore|restored|grant|granted)\\b[^.]*\\baccess\\b|\\brole change\\b|\\bidentity\\b"
+    },
+    {
+      "condition_id": "TS-SC-PRIVACY",
+      "signal": "possible_privacy_incident",
+      "halts_routine_steps": true,
+      "text": "The case suggests exposure of another site's or a patient's data. Stop routine handling and escalate as a possible privacy incident.",
+      "pattern": "\\b(another|other|wrong|different)\\s+site'?s?\\b|\\bpatient\\b|\\bphi\\b|\\bdata (leak|exposure|breach)\\b"
+    },
+    {
+      "condition_id": "TS-SC-SECURITY",
+      "signal": "possible_security_incident",
+      "halts_routine_steps": true,
+      "text": "The case suggests a compromised account or security incident. Stop routine handling and escalate.",
+      "pattern": "\\b(hacked|compromised|phishing|suspicious (login|sign-in|activity)|unauthori[sz]ed access)\\b"
+    }
+  ]
+}

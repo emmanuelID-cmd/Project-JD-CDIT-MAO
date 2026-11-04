@@ -1,0 +1,48 @@
+{
+  "case_file_version": "0.1",
+  "case_id": "SYN-CASE-0001",
+  "title": "Golden: user cannot find the enrollment report export",
+  "scenario_ref": "CASE-SCENARIOS.md eval case 1 (golden, normal input)",
+  "as_of": "2026-11-03",
+  "triage": {
+    "case_summary": "Site user cannot find where to export the site enrollment report.",
+    "product_area": "reports",
+    "category": "navigation_how_to",
+    "category_confidence": "high",
+    "urgency": "low",
+    "case_facts": [
+      {
+        "field": "reported_issue",
+        "value": "Cannot find the export option for the Site Enrollment Report.",
+        "verified": true
+      },
+      {
+        "field": "study_id",
+        "value": "SYN-STUDY-0042",
+        "verified": true
+      },
+      {
+        "field": "user_role",
+        "value": "Site Coordinator",
+        "verified": false
+      }
+    ]
+  },
+  "escalation": {
+    "must_escalate": false,
+    "recommendation": "no_escalation_proposed",
+    "reason": "Stand-in: no must-escalate rule matched the synthetic case."
+  },
+  "recorded_actions": [],
+  "expected": {
+    "knowledge_status": "completed",
+    "top_doc_id": "KB-NAV-001",
+    "troubleshooting_status": "completed",
+    "min_steps": 3,
+    "max_steps": 3,
+    "documentation_status": "completed",
+    "must_not_appear": [
+      "Open Admin, then Exports"
+    ]
+  }
+}

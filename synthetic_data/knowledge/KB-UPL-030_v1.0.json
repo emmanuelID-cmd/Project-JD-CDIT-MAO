@@ -1,0 +1,25 @@
+{
+  "doc_id": "KB-UPL-030",
+  "version": "1.0",
+  "title": "Upload limits for site regulatory documents",
+  "topic": "regulatory_document_upload_limit",
+  "product_area": "documents",
+  "status": "approved",
+  "data_classification": "synthetic",
+  "owner": "Synthetic Document Management Owner",
+  "effective_date": "2026-05-01",
+  "review_due": "2027-05-01",
+  "keywords": ["upload", "regulatory", "document", "file", "size", "limit", "maximum"],
+  "sections": [
+    {
+      "section_id": "s1",
+      "heading": "Maximum file size for regulatory document uploads",
+      "text": "Each regulatory document upload may be up to 25 MB and must be a PDF file.",
+      "steps": [
+        {"step_id": "st1", "action_type": "share_approved_article", "text": "Tell the user the maximum regulatory document upload size and accepted file type from this article."}
+      ],
+      "information_needed": [],
+      "stop_conditions": []
+    }
+  ]
+}
