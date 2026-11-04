@@ -1,0 +1,68 @@
+{
+  "contract_version": "0.1.0-proposed",
+  "contribution_id": "TRI-CFA88256A7D129F5",
+  "stage": "triage",
+  "agent": "triage-stand-in (fixture; not Manny's Triage agent)",
+  "agent_version": "fixture-0.1",
+  "context": {
+    "run_id": "RUN-SYN-CASE-0001-1",
+    "case_id": "SYN-CASE-0001",
+    "case_version": 1,
+    "policy_version": "SYN-SUPPORT-POLICY-0.1",
+    "data_classification": "synthetic"
+  },
+  "input_refs": [],
+  "created_at": "2026-11-03T15:00:00Z",
+  "status": "completed",
+  "checkpoint": {
+    "checkpoint": "A2",
+    "passed": true,
+    "reason_codes": []
+  },
+  "claims": [],
+  "confidence": "high",
+  "confidence_rationale": "Lane-validation stand-in value from the synthetic case file.",
+  "unknowns": [],
+  "human_review_required": true,
+  "case_summary": "Site user cannot find where to export the site enrollment report.",
+  "product_area": "reports",
+  "category": "navigation_how_to",
+  "category_confidence": "high",
+  "urgency": "low",
+  "case_facts": [
+    {
+      "field": "reported_issue",
+      "value": "Cannot find the export option for the Site Enrollment Report.",
+      "verified": true,
+      "source": {
+        "kind": "case_field",
+        "source_id": "SYN-CASE-0001.reported_issue",
+        "version": "1",
+        "locator": null
+      }
+    },
+    {
+      "field": "study_id",
+      "value": "SYN-STUDY-0042",
+      "verified": true,
+      "source": {
+        "kind": "case_field",
+        "source_id": "SYN-CASE-0001.study_id",
+        "version": "1",
+        "locator": null
+      }
+    },
+    {
+      "field": "user_role",
+      "value": "Site Coordinator",
+      "verified": false,
+      "source": {
+        "kind": "case_field",
+        "source_id": "SYN-CASE-0001.user_role",
+        "version": "1",
+        "locator": null
+      }
+    }
+  ],
+  "missing_facts": []
+}

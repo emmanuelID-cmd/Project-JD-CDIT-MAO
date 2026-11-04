@@ -40,6 +40,8 @@ Use this checklist as the live project status record. Check an item only when it
 
 ## Shawn lane — Knowledge, Troubleshooting, Documentation
 
+> 2026-11-04 status: local synthetic-data implementation of all three agents, proposed v0.1 contracts, 12 lane cases, and 97 tests are drafted on `shawn/knowledge-troubleshooting-docs` (evidence: `docs/lanes/shawn/SHAWN-LANE-DESIGN.md`). Boxes stay unchecked until the work is reviewed and the project lead confirms this phase.
+
 - [ ] Confirm owner availability and accept the three-agent assignment.
 - [ ] Define and implement Knowledge retrieval, approved-source/version handling, citations, conflicts, abstention, and injection handling.
 - [ ] Define and implement Troubleshooting behavior, evidence-supported steps, allowlists, stop conditions, and recovery.

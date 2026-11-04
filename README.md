@@ -65,3 +65,15 @@ uvicorn cdit_support_mao.main:app --reload --app-dir src --env-file .env
 The API health endpoint is `http://127.0.0.1:8000/health`; interactive API documentation is at `http://127.0.0.1:8000/docs`. SQLite is created on first health check at `data/cdit_support.db` by default. Set `CDIT_DATABASE_PATH` to change the local path. Only synthetic data is permitted. The database helper intentionally defines no ticket, user, role, audit, or agent tables yet; those schemas need an approved design.
 
 The current scaffold establishes the API/runtime and database connection foundation only. Coordinator, Triage, and Escalation functionality belongs to Manny's lane; Knowledge, Troubleshooting, Documentation, retrieval, and the model adapter belong to Shawn's lane. Shared state and handoff contracts require coordination before implementation.
+
+## Shawn's Lane agents (pending review)
+
+`shawn/knowledge-troubleshooting-docs` contains a local implementation of the Knowledge, Troubleshooting, and Documentation agents. It uses no language model, works on synthetic data only, and is pending team review and project-lead confirmation. The proposed v0.1 handoff contracts are in `docs/contracts/HANDOFF-CONTRACTS.md`. Design, evidence, and limitations are in `docs/lanes/shawn/SHAWN-LANE-DESIGN.md`.
+
+```powershell
+python -m pip install -e ".[dev]"
+python -m pytest
+python -m cdit_support_mao.lane_harness synthetic_data/cases
+```
+
+The lane harness is not the coordinator. It uses labelled Triage and Escalation stand-ins from `synthetic_data/cases/` until Manny's Lane agents and the shared contracts are agreed.

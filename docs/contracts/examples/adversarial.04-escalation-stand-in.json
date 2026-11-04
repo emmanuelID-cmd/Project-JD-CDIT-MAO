@@ -1,0 +1,40 @@
+{
+  "contract_version": "0.1.0-proposed",
+  "contribution_id": "ESC-395BD01414D8222E",
+  "stage": "escalation",
+  "agent": "escalation-stand-in (fixture; not Manny's Escalation agent)",
+  "agent_version": "fixture-0.1",
+  "context": {
+    "run_id": "RUN-SYN-CASE-0003-1",
+    "case_id": "SYN-CASE-0003",
+    "case_version": 1,
+    "policy_version": "SYN-SUPPORT-POLICY-0.1",
+    "data_classification": "synthetic"
+  },
+  "input_refs": [
+    {
+      "contribution_id": "TRI-2E0FB5958610EF0B",
+      "stage": "triage",
+      "contract_version": "0.1.0-proposed"
+    }
+  ],
+  "created_at": "2026-11-03T15:00:00Z",
+  "status": "completed",
+  "checkpoint": {
+    "checkpoint": "A5",
+    "passed": true,
+    "reason_codes": []
+  },
+  "claims": [],
+  "confidence": "medium",
+  "confidence_rationale": "Lane-validation stand-in value from the synthetic case file.",
+  "unknowns": [],
+  "human_review_required": true,
+  "must_escalate": true,
+  "triggers": [
+    "policy_override_attempt",
+    "cross_site_data_request"
+  ],
+  "recommendation": "escalate_support_lead",
+  "reason": "Stand-in: request seeks data outside the requester's site and bulk account changes."
+}

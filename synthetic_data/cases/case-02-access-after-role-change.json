@@ -1,0 +1,56 @@
+{
+  "case_file_version": "0.1",
+  "case_id": "SYN-CASE-0002",
+  "title": "Edge: study access lost after a role change",
+  "scenario_ref": "CASE-SCENARIOS.md eval case 2 (golden, edge case)",
+  "as_of": "2026-11-03",
+  "triage": {
+    "case_summary": "User lost access to a study after a role change and asks for access to be restored.",
+    "product_area": "access",
+    "category": "access_request",
+    "category_confidence": "medium",
+    "urgency": "medium",
+    "case_facts": [
+      {
+        "field": "reported_issue",
+        "value": "User can no longer open the study after a role change.",
+        "verified": true
+      },
+      {
+        "field": "study_id",
+        "value": "SYN-STUDY-0107",
+        "verified": true
+      },
+      {
+        "field": "role_change_date",
+        "value": "Last week, per the user",
+        "verified": false
+      }
+    ]
+  },
+  "escalation": {
+    "must_escalate": true,
+    "triggers": [
+      "access_change_requires_authorized_staff"
+    ],
+    "recommendation": "human_review",
+    "reason": "Stand-in: access changes require authorized staff and identity verification."
+  },
+  "recorded_actions": [],
+  "expected": {
+    "knowledge_status": "completed",
+    "top_doc_id": "KB-ACC-010",
+    "troubleshooting_status": "completed",
+    "min_steps": 2,
+    "max_steps": 2,
+    "troubleshooting_reasons": [
+      "staff_only_procedure",
+      "policy_stop_condition"
+    ],
+    "escalation_signals": [
+      "access_or_identity",
+      "authorized_staff_procedure_required"
+    ],
+    "documentation_status": "completed"
+  }
+}

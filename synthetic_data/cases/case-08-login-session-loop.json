@@ -1,0 +1,47 @@
+{
+  "case_file_version": "0.1",
+  "case_id": "SYN-CASE-0008",
+  "title": "Routine: session-expired loop with a staff-recorded action",
+  "scenario_ref": "CASE-SCENARIOS.md 'Routine known issue with bounded reversible procedure'",
+  "as_of": "2026-11-03",
+  "triage": {
+    "case_summary": "User is stuck in a session expired loop when signing in.",
+    "product_area": "login",
+    "category": "login_issue",
+    "category_confidence": "high",
+    "urgency": "medium",
+    "case_facts": [
+      {
+        "field": "reported_issue",
+        "value": "Sign-in keeps returning to a session expired message.",
+        "verified": true
+      },
+      {
+        "field": "browser",
+        "value": "Chrome 129",
+        "verified": false
+      }
+    ]
+  },
+  "escalation": {
+    "must_escalate": false,
+    "recommendation": "no_escalation_proposed",
+    "reason": "Stand-in: no must-escalate rule matched the synthetic case."
+  },
+  "recorded_actions": [
+    {
+      "action": "Asked the user to clear cached data and close all tabs",
+      "performed_by_role": "tier1_specialist",
+      "outcome": "User reports the loop continued",
+      "verified": true
+    }
+  ],
+  "expected": {
+    "knowledge_status": "completed",
+    "top_doc_id": "KB-LOGIN-020",
+    "troubleshooting_status": "completed",
+    "min_steps": 3,
+    "max_steps": 3,
+    "documentation_status": "completed"
+  }
+}

@@ -1,0 +1,216 @@
+{
+  "contract_version": "0.1.0-proposed",
+  "contribution_id": "KNW-8F50E479C1CC604E",
+  "stage": "knowledge",
+  "agent": "knowledge-agent",
+  "agent_version": "0.1.0",
+  "context": {
+    "run_id": "RUN-SYN-CASE-0001-1",
+    "case_id": "SYN-CASE-0001",
+    "case_version": 1,
+    "policy_version": "SYN-SUPPORT-POLICY-0.1",
+    "data_classification": "synthetic"
+  },
+  "input_refs": [
+    {
+      "contribution_id": "TRI-CFA88256A7D129F5",
+      "stage": "triage",
+      "contract_version": "0.1.0-proposed"
+    }
+  ],
+  "created_at": "2026-11-03T15:00:00Z",
+  "status": "completed",
+  "checkpoint": {
+    "checkpoint": "A3",
+    "passed": true,
+    "reason_codes": []
+  },
+  "claims": [
+    {
+      "statement": "KB-NAV-001 v2.1 #s1 is an approved source, effective 2026-09-01, review due 2027-09-01.",
+      "label": "verified",
+      "sources": [
+        {
+          "kind": "kb_section",
+          "source_id": "KB-NAV-001",
+          "version": "2.1",
+          "locator": "s1"
+        }
+      ],
+      "basis": null,
+      "confidence": "high"
+    },
+    {
+      "statement": "KB-NAV-001 v2.1 #s1 is relevant to the case query (term coverage 1.00).",
+      "label": "inference",
+      "sources": [
+        {
+          "kind": "kb_section",
+          "source_id": "KB-NAV-001",
+          "version": "2.1",
+          "locator": "s1"
+        }
+      ],
+      "basis": "Lexical query-term coverage against approved sources; not human-verified.",
+      "confidence": "high"
+    },
+    {
+      "statement": "KB-NAV-001 v2.1 #s2 is an approved source, effective 2026-09-01, review due 2027-09-01.",
+      "label": "verified",
+      "sources": [
+        {
+          "kind": "kb_section",
+          "source_id": "KB-NAV-001",
+          "version": "2.1",
+          "locator": "s2"
+        }
+      ],
+      "basis": null,
+      "confidence": "high"
+    },
+    {
+      "statement": "KB-NAV-001 v2.1 #s2 is relevant to the case query (term coverage 0.71).",
+      "label": "inference",
+      "sources": [
+        {
+          "kind": "kb_section",
+          "source_id": "KB-NAV-001",
+          "version": "2.1",
+          "locator": "s2"
+        }
+      ],
+      "basis": "Lexical query-term coverage against approved sources; not human-verified.",
+      "confidence": "medium"
+    }
+  ],
+  "confidence": "high",
+  "confidence_rationale": "Band of the top passage's query-term coverage (1.00); provisional and uncalibrated.",
+  "unknowns": [
+    "Confidence thresholds are provisional and uncalibrated (D-08)."
+  ],
+  "human_review_required": true,
+  "source_set_version": "SRC-9FC8AF62B4B8",
+  "matched_query_terms": [
+    "enrollment",
+    "export",
+    "find",
+    "report",
+    "site"
+  ],
+  "passages": [
+    {
+      "content_trust": "untrusted_evidence",
+      "source": {
+        "kind": "kb_section",
+        "source_id": "KB-NAV-001",
+        "version": "2.1",
+        "locator": "s1"
+      },
+      "doc_id": "KB-NAV-001",
+      "version": "2.1",
+      "section_id": "s1",
+      "title": "Export the Site Enrollment Report",
+      "heading": "Where to find the enrollment report export",
+      "topic": "report_export_enrollment",
+      "product_area": "reports",
+      "text": "The Site Enrollment Report export is available to users with the Site Coordinator or Study Manager role. Open Reports, select Enrollment, then choose Site Enrollment Report. The Export button is in the top-right toolbar of the report view.",
+      "steps": [
+        {
+          "step_id": "st1",
+          "action_type": "navigate_ui",
+          "text": "Ask the user to open Reports from the main navigation menu and select Enrollment."
+        },
+        {
+          "step_id": "st2",
+          "action_type": "navigate_ui",
+          "text": "Ask the user to select Site Enrollment Report and wait for the report view to load."
+        },
+        {
+          "step_id": "st3",
+          "action_type": "navigate_ui",
+          "text": "Ask the user to select Export in the top-right toolbar and choose CSV or PDF."
+        }
+      ],
+      "information_needed": [
+        {
+          "field": "study_id",
+          "prompt": "Synthetic study identifier the user is working in."
+        },
+        {
+          "field": "user_role",
+          "prompt": "The user's assigned role as shown on their profile page."
+        }
+      ],
+      "stop_conditions": [
+        {
+          "condition_id": "KB-NAV-001-SC1",
+          "text": "If the Export button is missing for a user whose role should include it, stop and escalate as a possible permission configuration issue."
+        },
+        {
+          "condition_id": "KB-NAV-001-SC2",
+          "text": "If the exported data appears to belong to another site, stop immediately and escalate as a possible data-access incident."
+        }
+      ],
+      "effective_date": "2026-09-01",
+      "review_due": "2027-09-01",
+      "relevance": 1.0,
+      "relevance_band": "high",
+      "rank": 1
+    },
+    {
+      "content_trust": "untrusted_evidence",
+      "source": {
+        "kind": "kb_section",
+        "source_id": "KB-NAV-001",
+        "version": "2.1",
+        "locator": "s2"
+      },
+      "doc_id": "KB-NAV-001",
+      "version": "2.1",
+      "section_id": "s2",
+      "title": "Export the Site Enrollment Report",
+      "heading": "Export fails or times out",
+      "topic": "report_export_enrollment",
+      "product_area": "reports",
+      "text": "Large exports can time out in the browser. Applying a date-range filter reduces the export size.",
+      "steps": [
+        {
+          "step_id": "st1",
+          "action_type": "retry_operation",
+          "text": "Ask the user to apply a date-range filter to the report and retry the export."
+        }
+      ],
+      "information_needed": [
+        {
+          "field": "exact_error_message",
+          "prompt": "The exact error message shown, copied without any patient or subject details."
+        },
+        {
+          "field": "attempt_time",
+          "prompt": "The date and time of the failed attempt."
+        }
+      ],
+      "stop_conditions": [
+        {
+          "condition_id": "KB-NAV-001-SC3",
+          "text": "If the export still fails after a filtered retry, stop and escalate to L2 with the attempt time and exact error message."
+        }
+      ],
+      "effective_date": "2026-09-01",
+      "review_due": "2027-09-01",
+      "relevance": 0.7099,
+      "relevance_band": "medium",
+      "rank": 2
+    }
+  ],
+  "excluded_sources": [
+    {
+      "doc_id": "KB-NAV-001",
+      "version": "1.0",
+      "section_id": "s1",
+      "reason": "source_retired"
+    }
+  ],
+  "conflicts": [],
+  "injection_flags": []
+}

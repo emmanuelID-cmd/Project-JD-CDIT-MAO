@@ -32,3 +32,16 @@
 ## Scoped authorization recorded — 2026-11-03
 
 The project lead authorized starting the local technology-stack foundation scaffold on Manny's active lane. The authorized scope is package metadata/dependencies for Python 3.13, FastAPI and Pydantic; a minimal health endpoint; local SQLite connection support; and local setup documentation. It uses synthetic data only and introduces no domain tables. This authorization does not extend to runtime-agent behavior, retrieval/RAG, model-provider integration, authentication, real or CDIT data, Salesforce, production services, outbound messages, or other deferred decisions. Those require their own lane ownership, approved interfaces, and/or explicit approvals as specified in the PRD.
+
+## Lane-owner direction recorded — 2026-11-04 (project-lead confirmation requested)
+
+Shawn, the Shawn's Lane owner, directed local implementation of the Shawn-owned Knowledge, Troubleshooting, and Documentation agents on `shawn/knowledge-troubleshooting-docs`. The scope is:
+
+- deterministic and extractive agent behavior, with no language model;
+- a synthetic knowledge set and a synthetic troubleshooting policy;
+- proposed v0.1 handoff contracts (`docs/contracts/HANDOFF-CONTRACTS.md`);
+- tests and a lane-only validation harness.
+
+The work uses synthetic data only. It has no model provider, no external I/O, no persistence, and no changes to Manny-owned agents or the API. Details and evidence are in `docs/lanes/shawn/SHAWN-LANE-DESIGN.md`.
+
+Under `Checklist.md`, expansion beyond the local scaffold needs project-lead authorization, so the project lead is asked to confirm or adjust this phase. The work does not decide D-07, D-08, or D-10; it records proposals for them in the lane design document.

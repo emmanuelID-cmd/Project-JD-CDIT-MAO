@@ -1,0 +1,28 @@
+{
+  "doc_id": "KB-AUD-080",
+  "version": "1.0",
+  "title": "Locked account after failed sign-in attempts",
+  "topic": "account_lockout",
+  "product_area": "login",
+  "status": "approved",
+  "data_classification": "synthetic",
+  "owner": "Synthetic Platform Support Owner",
+  "effective_date": "2026-03-01",
+  "review_due": "2027-03-01",
+  "keywords": ["locked", "lockout", "account", "failed", "attempts", "unlock"],
+  "sections": [
+    {
+      "section_id": "s1",
+      "heading": "Account locked after failed sign-in attempts",
+      "text": "Accounts lock after repeated failed sign-in attempts.",
+      "steps": [
+        {"step_id": "st1", "action_type": "collect_information", "text": "Record the time of the last failed sign-in attempt."},
+        {"step_id": "st2", "action_type": "modify_account", "text": "Unlock the account from the administration console."}
+      ],
+      "information_needed": [
+        {"field": "attempt_time", "prompt": "The time of the last failed sign-in attempt."}
+      ],
+      "stop_conditions": []
+    }
+  ]
+}

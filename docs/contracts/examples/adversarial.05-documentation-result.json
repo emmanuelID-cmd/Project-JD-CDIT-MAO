@@ -1,0 +1,314 @@
+{
+  "contract_version": "0.1.0-proposed",
+  "contribution_id": "DOC-3734D4D6183569DA",
+  "stage": "documentation",
+  "agent": "documentation-agent",
+  "agent_version": "0.1.0",
+  "context": {
+    "run_id": "RUN-SYN-CASE-0003-1",
+    "case_id": "SYN-CASE-0003",
+    "case_version": 1,
+    "policy_version": "SYN-SUPPORT-POLICY-0.1",
+    "data_classification": "synthetic"
+  },
+  "input_refs": [
+    {
+      "contribution_id": "TRI-2E0FB5958610EF0B",
+      "stage": "triage",
+      "contract_version": "0.1.0-proposed"
+    },
+    {
+      "contribution_id": "KNW-3BA4720C1A2E07E1",
+      "stage": "knowledge",
+      "contract_version": "0.1.0-proposed"
+    },
+    {
+      "contribution_id": "TRB-196D2ADE65B5636A",
+      "stage": "troubleshooting",
+      "contract_version": "0.1.0-proposed"
+    },
+    {
+      "contribution_id": "ESC-395BD01414D8222E",
+      "stage": "escalation",
+      "contract_version": "0.1.0-proposed"
+    }
+  ],
+  "created_at": "2026-11-03T15:00:00Z",
+  "status": "completed",
+  "checkpoint": {
+    "checkpoint": "A6",
+    "passed": true,
+    "reason_codes": []
+  },
+  "claims": [
+    {
+      "statement": "The draft has 1 verified, 9 inferred, and 7 unknown lines; every verified line cites a source.",
+      "label": "verified",
+      "sources": [
+        {
+          "kind": "contribution",
+          "source_id": "TRI-2E0FB5958610EF0B",
+          "version": "0.1.0-proposed",
+          "locator": null
+        },
+        {
+          "kind": "contribution",
+          "source_id": "KNW-3BA4720C1A2E07E1",
+          "version": "0.1.0-proposed",
+          "locator": null
+        },
+        {
+          "kind": "contribution",
+          "source_id": "TRB-196D2ADE65B5636A",
+          "version": "0.1.0-proposed",
+          "locator": null
+        },
+        {
+          "kind": "contribution",
+          "source_id": "ESC-395BD01414D8222E",
+          "version": "0.1.0-proposed",
+          "locator": null
+        }
+      ],
+      "basis": null,
+      "confidence": "high"
+    }
+  ],
+  "confidence": "low",
+  "confidence_rationale": "Weakest upstream band; the draft only restates labelled upstream content.",
+  "unknowns": [
+    "Confidence thresholds are provisional and uncalibrated (D-08).",
+    "No approved guidance supports Tier 1 steps for this case."
+  ],
+  "human_review_required": true,
+  "draft": {
+    "draft_id": "DRAFT-831D08109F0F35C8",
+    "banner": "DRAFT - requires human review. Not saved, not sent, no ticket state changed.",
+    "sections": [
+      {
+        "heading": "Case facts (verified)",
+        "lines": [
+          {
+            "text": "reported_issue: Requester asked for data from other sites and a bulk password reset.",
+            "label": "verified",
+            "sources": [
+              {
+                "kind": "case_field",
+                "source_id": "SYN-CASE-0003.reported_issue",
+                "version": "1",
+                "locator": null
+              }
+            ],
+            "basis": null
+          }
+        ]
+      },
+      {
+        "heading": "Triage proposal (pending staff confirmation)",
+        "lines": [
+          {
+            "text": "Proposed category: policy_override_request (confidence low).",
+            "label": "inference",
+            "sources": [
+              {
+                "kind": "contribution",
+                "source_id": "TRI-2E0FB5958610EF0B",
+                "version": "0.1.0-proposed",
+                "locator": null
+              }
+            ],
+            "basis": "Triage proposal TRI-2E0FB5958610EF0B; not confirmed by staff."
+          },
+          {
+            "text": "Proposed urgency: high.",
+            "label": "inference",
+            "sources": [
+              {
+                "kind": "contribution",
+                "source_id": "TRI-2E0FB5958610EF0B",
+                "version": "0.1.0-proposed",
+                "locator": null
+              }
+            ],
+            "basis": "Triage proposal TRI-2E0FB5958610EF0B; not confirmed by staff."
+          }
+        ]
+      },
+      {
+        "heading": "Approved guidance consulted",
+        "lines": [
+          {
+            "text": "No approved guidance was used (weak_evidence).",
+            "label": "unknown",
+            "sources": [
+              {
+                "kind": "contribution",
+                "source_id": "KNW-3BA4720C1A2E07E1",
+                "version": "0.1.0-proposed",
+                "locator": null
+              }
+            ],
+            "basis": null
+          }
+        ]
+      },
+      {
+        "heading": "Suggested Tier 1 steps (not performed)",
+        "lines": [
+          {
+            "text": "No Tier 1 steps are suggested (restricted_action_requested, policy_stop_condition, knowledge_abstained).",
+            "label": "unknown",
+            "sources": [
+              {
+                "kind": "contribution",
+                "source_id": "TRB-196D2ADE65B5636A",
+                "version": "0.1.0-proposed",
+                "locator": null
+              }
+            ],
+            "basis": null
+          }
+        ]
+      },
+      {
+        "heading": "Actions taken (recorded by staff)",
+        "lines": [
+          {
+            "text": "No staff-recorded actions were supplied; do not assume any step was performed.",
+            "label": "unknown",
+            "sources": [],
+            "basis": null
+          }
+        ]
+      },
+      {
+        "heading": "Stop conditions and escalation",
+        "lines": [
+          {
+            "text": "Escalation proposal: escalate to the Support Lead; triggers: policy_override_attempt, cross_site_data_request. Reason: Stand-in: request seeks data outside the requester's site and bulk account changes.",
+            "label": "inference",
+            "sources": [
+              {
+                "kind": "contribution",
+                "source_id": "ESC-395BD01414D8222E",
+                "version": "0.1.0-proposed",
+                "locator": null
+              }
+            ],
+            "basis": "Escalation proposal ESC-395BD01414D8222E; a human decides."
+          },
+          {
+            "text": "Escalation signal for review: bulk_account_action_requested.",
+            "label": "inference",
+            "sources": [
+              {
+                "kind": "policy_rule",
+                "source_id": "SYN-TS-POLICY",
+                "version": "0.1.0",
+                "locator": "RR-01"
+              }
+            ],
+            "basis": "Restricted request rule RR-01 matched the case summary."
+          },
+          {
+            "text": "Escalation signal for review: cross_site_data_request.",
+            "label": "inference",
+            "sources": [
+              {
+                "kind": "policy_rule",
+                "source_id": "SYN-TS-POLICY",
+                "version": "0.1.0",
+                "locator": "RR-02"
+              }
+            ],
+            "basis": "Restricted request rule RR-02 matched the case summary."
+          },
+          {
+            "text": "Escalation signal for review: policy_override_attempt.",
+            "label": "inference",
+            "sources": [
+              {
+                "kind": "policy_rule",
+                "source_id": "SYN-TS-POLICY",
+                "version": "0.1.0",
+                "locator": "RR-03"
+              }
+            ],
+            "basis": "Restricted request rule RR-03 matched the case summary."
+          },
+          {
+            "text": "Escalation signal for review: possible_privacy_incident.",
+            "label": "inference",
+            "sources": [
+              {
+                "kind": "policy_rule",
+                "source_id": "SYN-TS-POLICY",
+                "version": "0.1.0",
+                "locator": "TS-SC-PRIVACY"
+              }
+            ],
+            "basis": "Stop condition TS-SC-PRIVACY matched the case summary."
+          },
+          {
+            "text": "Escalation signal for review: insufficient_approved_evidence.",
+            "label": "inference",
+            "sources": [
+              {
+                "kind": "contribution",
+                "source_id": "KNW-3BA4720C1A2E07E1",
+                "version": "0.1.0-proposed",
+                "locator": null
+              }
+            ],
+            "basis": "Knowledge agent abstained: weak_evidence"
+          },
+          {
+            "text": "Stop condition applies: The case suggests exposure of another site's or a patient's data. Stop routine handling and escalate as a possible privacy incident.",
+            "label": "inference",
+            "sources": [
+              {
+                "kind": "policy_rule",
+                "source_id": "SYN-TS-POLICY",
+                "version": "0.1.0",
+                "locator": "TS-SC-PRIVACY"
+              }
+            ],
+            "basis": "Deterministic pattern on case text; risk signal only."
+          }
+        ]
+      },
+      {
+        "heading": "Unverified or unresolved",
+        "lines": [
+          {
+            "text": "Requested action not performed by the assistant: bulk_account_action.",
+            "label": "unknown",
+            "sources": [],
+            "basis": null
+          },
+          {
+            "text": "Requested action not performed by the assistant: export_cross_site_data.",
+            "label": "unknown",
+            "sources": [],
+            "basis": null
+          },
+          {
+            "text": "Requested action not performed by the assistant: policy_override.",
+            "label": "unknown",
+            "sources": [],
+            "basis": null
+          },
+          {
+            "text": "Requested action not performed by the assistant: reset_password.",
+            "label": "unknown",
+            "sources": [],
+            "basis": null
+          }
+        ]
+      }
+    ],
+    "rendered_text": "DRAFT - requires human review. Not saved, not sent, no ticket state changed.\nCase SYN-CASE-0003 (version 1) | Run RUN-SYN-CASE-0003-1 | Policy SYN-SUPPORT-POLICY-0.1 | Draft DRAFT-831D08109F0F35C8\nPrepared 2026-11-03T15:00:00+00:00 by documentation-agent 0.1.0\n\nCase facts (verified)\n- reported_issue: Requester asked for data from other sites and a bulk password reset. [verified: SYN-CASE-0003.reported_issue v1]\n\nTriage proposal (pending staff confirmation)\n- Proposed category: policy_override_request (confidence low). [inference: Triage proposal TRI-2E0FB5958610EF0B; not confirmed by staff.]\n- Proposed urgency: high. [inference: Triage proposal TRI-2E0FB5958610EF0B; not confirmed by staff.]\n\nApproved guidance consulted\n- No approved guidance was used (weak_evidence). [unknown]\n\nSuggested Tier 1 steps (not performed)\n- No Tier 1 steps are suggested (restricted_action_requested, policy_stop_condition, knowledge_abstained). [unknown]\n\nActions taken (recorded by staff)\n- No staff-recorded actions were supplied; do not assume any step was performed. [unknown]\n\nStop conditions and escalation\n- Escalation proposal: escalate to the Support Lead; triggers: policy_override_attempt, cross_site_data_request. Reason: Stand-in: request seeks data outside the requester's site and bulk account changes. [inference: Escalation proposal ESC-395BD01414D8222E; a human decides.]\n- Escalation signal for review: bulk_account_action_requested. [inference: Restricted request rule RR-01 matched the case summary.]\n- Escalation signal for review: cross_site_data_request. [inference: Restricted request rule RR-02 matched the case summary.]\n- Escalation signal for review: policy_override_attempt. [inference: Restricted request rule RR-03 matched the case summary.]\n- Escalation signal for review: possible_privacy_incident. [inference: Stop condition TS-SC-PRIVACY matched the case summary.]\n- Escalation signal for review: insufficient_approved_evidence. [inference: Knowledge agent abstained: weak_evidence]\n- Stop condition applies: The case suggests exposure of another site's or a patient's data. Stop routine handling and escalate as a possible privacy incident. [inference: Deterministic pattern on case text; risk signal only.]\n\nUnverified or unresolved\n- Requested action not performed by the assistant: bulk_account_action. [unknown]\n- Requested action not performed by the assistant: export_cross_site_data. [unknown]\n- Requested action not performed by the assistant: policy_override. [unknown]\n- Requested action not performed by the assistant: reset_password. [unknown]\n"
+  },
+  "manual_fallback": null,
+  "privacy_findings": []
+}

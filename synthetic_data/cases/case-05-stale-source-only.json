@@ -1,0 +1,39 @@
+{
+  "case_file_version": "0.1",
+  "case_id": "SYN-CASE-0005",
+  "title": "Stale: only matching article is past its review date",
+  "scenario_ref": "PRD A3 (stale sources) and UC-02 abstention",
+  "as_of": "2026-11-03",
+  "triage": {
+    "case_summary": "How do I filter the visit schedule report by visit window?",
+    "product_area": "reports",
+    "category": "how_to",
+    "category_confidence": "high",
+    "urgency": "low",
+    "case_facts": [
+      {
+        "field": "reported_issue",
+        "value": "Asks how to filter the visit schedule report.",
+        "verified": true
+      }
+    ]
+  },
+  "escalation": {
+    "must_escalate": false,
+    "recommendation": "no_escalation_proposed",
+    "reason": "Stand-in: no must-escalate rule matched the synthetic case."
+  },
+  "recorded_actions": [],
+  "expected": {
+    "knowledge_status": "abstained",
+    "knowledge_reasons": [
+      "stale_source_only"
+    ],
+    "troubleshooting_status": "abstained",
+    "max_steps": 0,
+    "documentation_status": "completed",
+    "must_not_appear": [
+      "Visit Window filter to limit visits"
+    ]
+  }
+}
