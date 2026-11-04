@@ -2,9 +2,9 @@
 
 Use this checklist as the live project status record. Check an item only when its evidence is present and reviewed. Planning completion is not implementation completion; an unchecked item blocks a completion claim unless the project lead explicitly marks it out of scope or deferred.
 
-**Current phase:** Planning / requirements refinement
+**Current phase:** Local foundation scaffold (implementation authorized within the scope recorded in `docs/planning/DEFERRED-DECISIONS.md`)
 **Planning deadline:** November 11, 2026
-**Current implementation status:** Not started / requires separate authorization
+**Current implementation status:** Shared API and SQLite foundation scaffold set up; runtime agents and integrations remain not started
 **Completion status:** In progress
 
 ## Shared project baseline
@@ -16,7 +16,17 @@ Use this checklist as the live project status record. Check an item only when it
 - [x] Interactive architecture is available in the field guide and standalone artifact.
 - [ ] Team reviews and accepts the PRD, agent ownership, interfaces, and current scope.
 - [ ] All planning milestone exit evidence and decisions are recorded.
-- [ ] Project lead explicitly authorizes the implementation phase.
+- [x] Project lead explicitly authorized the local technology-stack foundation scaffold on 2026-11-03.
+- [ ] Project lead authorizes any expansion beyond the local scaffold before that work begins.
+
+## Shared foundation scaffold
+
+- [x] Python 3.13 package metadata and FastAPI/Pydantic dependencies are configured.
+- [x] FastAPI health endpoint and local SQLite connection helper are scaffolded.
+- [x] Local setup instructions and synthetic-data configuration example are documented.
+- [ ] Agree and implement domain schemas, authentication, and audit/retention behavior before adding those capabilities.
+- [x] Install project dependencies in the local Python 3.13 virtual environment.
+- [ ] Start the local service and confirm the health endpoint on the contributor machine.
 
 ## Manny lane — Coordinator, Triage, Escalation
 

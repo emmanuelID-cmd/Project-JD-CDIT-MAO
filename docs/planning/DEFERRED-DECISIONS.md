@@ -28,3 +28,7 @@
 - For parallel analysis, compare evidence and policy fit; do not choose a winner by confidence. Material disagreement or uncertainty goes to a human.
 - Timestamp each workflow stage and handoff. Notifications should be minimal and use only an approved channel.
 - Keep blackboard entries versioned, attributable, case-scoped, minimally populated, and immutable after handoff; preserve conflict and uncertainty.
+
+## Scoped authorization recorded — 2026-11-03
+
+The project lead authorized starting the local technology-stack foundation scaffold on Manny's active lane. The authorized scope is package metadata/dependencies for Python 3.13, FastAPI and Pydantic; a minimal health endpoint; local SQLite connection support; and local setup documentation. It uses synthetic data only and introduces no domain tables. This authorization does not extend to runtime-agent behavior, retrieval/RAG, model-provider integration, authentication, real or CDIT data, Salesforce, production services, outbound messages, or other deferred decisions. Those require their own lane ownership, approved interfaces, and/or explicit approvals as specified in the PRD.
