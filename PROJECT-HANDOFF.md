@@ -24,3 +24,12 @@
 
 - Verify the published main tip against the local commit.
 - Create developer, manny/requirements-scenarios, and shawn/architecture-research from the verified main tip; keep their ownership provisional per the task split.
+
+## 2026-11-03 — PRD and architecture planning update
+
+- Branch: `main`; base before this update: `8805db5e786a181a4e43238b61fdfe175ae2a008` (verified equal to `origin/main`).
+- Added PRD planning milestones, agent checkpoints, confidence/factuality gates, prompt-injection controls, case-based resolution authority, urgency routing, blackboard state, and direct/parallel handoff contracts.
+- Added the optional authenticated platform-problem reporting direction and linked companion requirements/scenario files.
+- Added deferred decisions/actions and the interactive architecture diagram plus its standalone HTML.
+- Validation: `git diff --check` and artifact-content checks; source PRD template remains excluded.
+- User explicitly authorized committing and pushing the current project changes directly to `main`; developer-branch integration rules are paused per user's instruction.

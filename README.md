@@ -24,3 +24,18 @@ Use labeled synthetic cases to measure triage accuracy, evidence grounding, must
 ## Local Git
 
 Inspect `git status` before staging. Do not commit, push, create remote repositories, or publish until the user approves the concrete files and collaboration plan.
+## Planning schedule
+
+The planning deadline is **November 11, 2026**. The PRD defines milestones and exit conditions for scope/roles, synthetic workflows, architecture and security review, integrated PRD review, and planning sign-off. The deadline is for the planning package and go/no-go decision; it does not authorize implementation, production deployment, live integration, or PHI use.
+
+See the PRD sections **Delivery milestones, conditions, and deadline**, **Prompt-injection prevention requirements**, and **Out of scope** for checkpoints, lane handoffs, security gates, and exclusions.
+
+The PRD now distinguishes **MAO agent checkpoints within each case run** from **project delivery milestones**. Agent checkpoints cover intake authorization, injection handling, triage, retrieval, troubleshooting, escalation, draft validation, and human disposition; failures stop downstream automation safely.
+
+The PRD also defines claim-level agent confidence and factuality rules: agents must identify verified facts with sources, label inference, disclose unknowns, and abstain/escalate when evidence is insufficient or conflicting. Confidence thresholds and evaluation gates remain proposed pending calibration on held-out synthetic cases.
+
+## Resolution authority and shared state
+
+The PRD defines case-based agent authorization within tier-based urgency routing, ticket-state boundaries (including In Progress, Waiting on Customer, Resolved, and Closed), and a coordinator-managed blackboard with direct-pipeline and parallel-analysis handoffs. Open policy and implementation decisions are tracked in `docs/planning/DEFERRED-DECISIONS.md`.
+- docs/requirements/PRD-USER-NEEDS-AND-USE-CASE-PRIORITIES.md — linked companion detail for prioritized use cases and user needs.
+- docs/requirements/CASE-SCENARIOS.md — synthetic evaluation and case-routing examples referenced by the PRD.
