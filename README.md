@@ -39,3 +39,12 @@ The PRD also defines claim-level agent confidence and factuality rules: agents m
 The PRD defines case-based agent authorization within tier-based urgency routing, ticket-state boundaries (including In Progress, Waiting on Customer, Resolved, and Closed), and a coordinator-managed blackboard with direct-pipeline and parallel-analysis handoffs. Open policy and implementation decisions are tracked in `docs/planning/DEFERRED-DECISIONS.md`.
 - docs/requirements/PRD-USER-NEEDS-AND-USE-CASE-PRIORITIES.md — linked companion detail for prioritized use cases and user needs.
 - docs/requirements/CASE-SCENARIOS.md — synthetic evaluation and case-routing examples referenced by the PRD.
+- `Checklist.md` — live planning, lane, shared integration, pending-decision, and completion checklist.
+
+- `Checklist.md` — live lane, shared integration, pending-decision, and project-completion checklist.
+
+## Contributor lanes
+
+- `manny/coordinator-triage-escalation` — Coordinator, Triage, Escalation agents.
+- `shawn/knowledge-troubleshooting-docs` — Knowledge, Troubleshooting, Documentation agents.
+- Contributor work targets `developer` by pull request. Only `developer` opens a release pull request to `main`; release merge waits for project completion and explicit user direction.

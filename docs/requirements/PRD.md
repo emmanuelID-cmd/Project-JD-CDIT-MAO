@@ -195,6 +195,11 @@ Alternative considered: begin with hosted PostgreSQL, hosted vector search, and 
 - If an external dependency or decision misses a checkpoint, record impact, a responsible owner, and a revised date; do not silently relax a safety or quality gate to preserve the deadline.
 
 ### Cross-lane handoffs
+### Runtime agent ownership and connection boundary
+
+The finalized lane split assigns Manny to Coordinator, Triage, and Escalation, and Shawn to Knowledge, Troubleshooting, and Documentation. These assignments are by runtime agent, not front end/back end. The optional second-reviewer agent remains unapproved/unassigned; Human Reviewer is a human role, not an agent.
+
+Either lane may change presentation-layer UI, including adding or styling Submit/Save controls that invoke existing approved behavior, while following the Consistency Page skill. This does not authorize changing action semantics or removing/bypassing an agent handoff, capability, policy, permission, state transition, or PRD requirement; those remain functionality owned by the responsible lane. Each lane owns its assigned agents' prompts, tools, decision logic, failure behavior, and functionality. Cross-lane access is limited to connecting agents: handoff contracts, shared-state schemas/versions, routing, provenance/confidence/uncertainty preservation, and integration checks. The receiving/sending lane may inspect the interface and make only the minimal connector change needed; it may not modify another lane's agent internals. Agent-internal checkpoints, injection controls, confidence gates, retries, abstention, and recovery are gate-work for that agent's owner. Connection checks validate packet/schema/version integrity and routing. If a connection defect requires a change to another agent's behavior, return it to that agent's owner and stop at the boundary.
 
 - Manny's Lane supplies user journeys, ticket scenarios, Tier 1 limits, and acceptance criteria to Shawn's Lane and Shared Lane.
 - Shawn's Lane returns retrieval/data-source findings, architecture recommendations, evaluation risks, and prompt-injection controls to Shared Lane; only CDIT-approved materials can be treated as product truth.
