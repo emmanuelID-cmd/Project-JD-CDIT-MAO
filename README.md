@@ -4,7 +4,7 @@ Planning workspace for a human-supervised multi-agent orchestration (MAO) assist
 
 ## Project status
 
-Requirements and architecture are at draft stage. The supplied job description is the source for role duties. No CDIT system, Salesforce instance, private knowledge base, customer ticket, credential, or PHI access is assumed or authorized.
+The planning package is established. The project lead has authorized the local shared foundation scaffold only: Python 3.13, FastAPI, Pydantic, and SQLite on Manny's lane. Agent workflows, retrieval, model-provider integration, authentication, and external systems remain unimplemented and require their owners/approvals. The supplied job description is the source for role duties. No CDIT system, Salesforce instance, private knowledge base, customer ticket, credential, or PHI access is authorized.
 
 ## Documents
 
@@ -26,7 +26,7 @@ Use labeled synthetic cases to measure triage accuracy, evidence grounding, must
 Inspect `git status` before staging. Do not commit, push, create remote repositories, or publish until the user approves the concrete files and collaboration plan.
 ## Planning schedule
 
-The planning deadline is **November 11, 2026**. The PRD defines milestones and exit conditions for scope/roles, synthetic workflows, architecture and security review, integrated PRD review, and planning sign-off. The deadline is for the planning package and go/no-go decision; it does not authorize implementation, production deployment, live integration, or PHI use.
+The planning deadline is **November 11, 2026**. The planning package defines milestones and exit conditions for scope/roles, synthetic workflows, architecture and security review, integrated PRD review, and planning sign-off. A later, narrow authorization started the local foundation scaffold; this does not authorize production deployment, live integration, or PHI use.
 
 See the PRD sections **Delivery milestones, conditions, and deadline**, **Prompt-injection prevention requirements**, and **Out of scope** for checkpoints, lane handoffs, security gates, and exclusions.
 
@@ -48,3 +48,20 @@ The PRD defines case-based agent authorization within tier-based urgency routing
 - `manny/coordinator-triage-escalation` — Coordinator, Triage, Escalation agents.
 - `shawn/knowledge-troubleshooting-docs` — Knowledge, Troubleshooting, Documentation agents.
 - Contributor work targets `developer` by pull request. Only `developer` opens a release pull request to `main`; release merge waits for project completion and explicit user direction.
+
+## Local development setup
+
+Requires Python 3.13. The scaffold uses FastAPI and Pydantic, with Python's built-in `sqlite3` module for a local database. No external service or credentials are required.
+
+```powershell
+py -3.13 -m venv .venv
+.\.venv\Scripts\Activate.ps1
+python -m pip install --upgrade pip
+python -m pip install -e .
+Copy-Item .env.example .env
+uvicorn cdit_support_mao.main:app --reload --app-dir src --env-file .env
+```
+
+The API health endpoint is `http://127.0.0.1:8000/health`; interactive API documentation is at `http://127.0.0.1:8000/docs`. SQLite is created on first health check at `data/cdit_support.db` by default. Set `CDIT_DATABASE_PATH` to change the local path. Only synthetic data is permitted. The database helper intentionally defines no ticket, user, role, audit, or agent tables yet; those schemas need an approved design.
+
+The current scaffold establishes the API/runtime and database connection foundation only. Coordinator, Triage, and Escalation functionality belongs to Manny's lane; Knowledge, Troubleshooting, Documentation, retrieval, and the model adapter belong to Shawn's lane. Shared state and handoff contracts require coordination before implementation.
