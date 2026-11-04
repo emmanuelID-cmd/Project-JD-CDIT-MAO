@@ -86,3 +86,40 @@ UI lane clarification: Either lane may add/style presentation controls (includin
 - `git diff --check`: passed; focused tests and service startup were not run.
 - The source PRD template at `docs/templates/PRD Template.md` is pre-existing, untracked, unchanged, and excluded.
 - This handoff is prepared for the requested contributor commit and push; it does not claim publication or PR creation.
+
+## 2026-11-04 — Shawn's Lane agents (Knowledge, Troubleshooting, Documentation)
+
+- Prepared: 2026-11-04T02:02:37-05:00
+- Contributor: xiaoenbi1987 (Shawn, lane owner)
+- Active branch: `shawn/knowledge-troubleshooting-docs`; intended PR target: `developer`
+- Verified remote baseline before this work: `a5605bba6040b7853fbf158c8168d55f8c281548` (lane branch equal to the merged PR #1 tip).
+- Work commit: `43ed2b2c731234eb1a7b0a9d2526b7404d25ea41`.
+- Authorization: directed by the lane owner on 2026-11-04. Project-lead confirmation of the implementation phase is requested and recorded in `docs/planning/DEFERRED-DECISIONS.md`; treat the work as a reviewable proposal until then. Synthetic data only.
+
+### Done
+
+- Knowledge agent (A3): BM25 retrieval over approved, current synthetic articles. It abstains on stale, unapproved, conflicting, injected, or weak evidence, and returns verbatim passages with version citations.
+- Troubleshooting agent (A4):
+  - Suggests only allowlisted Tier 1 steps.
+  - Separates staff-only procedures.
+  - Rejects restricted requests and out-of-tier guidance.
+  - Halts routine steps on privacy and security stop conditions.
+- Documentation agent (A6): writes a labelled draft note, with a privacy scan and a manual fallback. It is draft-only and does not save, send, or change ticket state.
+- Proposed v0.1 contracts (`src/cdit_support_mao/contracts/`, `docs/contracts/HANDOFF-CONTRACTS.md`) with golden and adversarial examples.
+- Synthetic knowledge set, troubleshooting policy, 12 lane cases, lane harness CLI, and 97 tests.
+
+### Not completed
+
+- No coordinator integration: Triage and Escalation inputs are labelled stand-ins. Manny-owned code is unchanged.
+- No persistence, audit events, model adapter, or confidence calibration (D-07, D-08, D-10 are proposals only).
+- Not run on Python 3.13 (only 3.12.0 installed on this machine). The FastAPI `/health` route was not exercised.
+
+### Validation and handoff
+
+- `py -3.12 -m pytest -q -p no:cacheprovider`: 97 passed.
+- `PYTHONPATH=src py -3.12 -m cdit_support_mao.lane_harness synthetic_data/cases`: 12 passed, 0 failed.
+- `git diff --cached --check`: clean.
+- Requested decisions:
+  1. Project-lead confirmation of this phase.
+  2. Shared Lane review of the v0.1 contracts.
+  3. Manny's Lane acknowledgment of the Triage and Escalation fields Shawn's agents read.
