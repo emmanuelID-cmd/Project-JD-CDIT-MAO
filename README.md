@@ -4,14 +4,15 @@ Planning workspace for a human-supervised multi-agent orchestration (MAO) assist
 
 ## Project status
 
-The planning package is established. The project lead has authorized the local shared foundation scaffold only: Python 3.13, FastAPI, Pydantic, and SQLite on Manny's lane. Agent workflows, retrieval, model-provider integration, authentication, and external systems remain unimplemented and require their owners/approvals. The supplied job description is the source for role duties. No CDIT system, Salesforce instance, private knowledge base, customer ticket, credential, or PHI access is authorized.
+The project lead authorized Manny’s synthetic lane phases. The local foundation scaffold and Shawn’s lane proposal are present; Manny’s process-local Coordinator intake and handoff boundary is implemented and locally reviewed; Shared Lane receiver review remains an integration gate. Triage, Escalation, full workflow integration, a model provider, production authentication, and external systems remain incomplete or deferred. The supplied job description is the source for role duties. No CDIT system, Salesforce instance, private knowledge base, customer ticket, credential, or PHI access is authorized.
 
 ## Documents
 
-- `docs/requirements/PRD.md` — v1 requirements source pending v2 review.
+- `docs/requirements/PRD.md` — v1 historical requirements; later approved decisions govern Manny’s lane.
 - `docs/requirements/PRD-v2.md` — retained planning baseline for traceability; not approved as the current requirements source.
-- `docs/requirements/PRD-v3.md` — updated draft based on v2 and applicable review concerns; pending team approval; `PRD.md` remains the current source of truth.
+- `docs/requirements/PRD-v3.md` — project-lead-approved synthetic build baseline for Manny’s lane; team-wide review remains pending.
 - `docs/planning/TASK-SPLIT.md` — proposed Manny, Shawn, and Shared lane responsibilities.
+- `docs/lanes/manny/COORDINATOR-A0-A1.md` — Manny’s Phase 1 fixture boundary, contract, and harness links.
 - `AGENTS.md` — local collaboration and repository guidance.
 - `docs/templates/PRD Template.md` — original user-supplied template; preserve unchanged.
 
@@ -21,7 +22,7 @@ Python 3.13, FastAPI, Pydantic, local SQLite, a local document retrieval index, 
 
 ## Suggested evaluation
 
-Use labeled synthetic cases to measure triage accuracy, evidence grounding, must-escalate recall, note factuality, handling-time change, and data-boundary behavior. The PRD marks thresholds as provisional until CDIT baseline data and pilot criteria are available.
+Use human-approved synthetic labels to measure triage accuracy, grounding, escalation recall, note factuality, data-boundary behavior, latency, and cost. Report finite-set counts; real-world handling-time savings remain unvalidated.
 
 ## Local Git
 

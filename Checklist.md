@@ -2,26 +2,26 @@
 
 Use this checklist as the live project status record. Check an item only when its evidence is present and reviewed. Planning completion is not implementation completion; an unchecked item blocks a completion claim unless the project lead explicitly marks it out of scope or deferred.
 
-**Current phase:** Agent implementation planning; authorization beyond the local scaffold is pending
+**Current phase:** Manny Phase 1 — Coordinator and intake boundary
 **Planning deadline:** November 11, 2026
-**Current implementation status:** Local stack scaffold is set up; Shawn agent code is merged in PR #2 as an unaccepted proposal; Manny agents and end-to-end integration are not implemented
+**Current implementation status:** Shawn agent and calibration work is merged through PR #4; Manny’s Phase 1 synthetic Coordinator fixture boundary is locally implemented and reviewed. Triage, Escalation, and end-to-end integration remain incomplete.
 **Completion status:** In progress
 
 ## Shared project baseline
 
 - [x] PRD is the current requirements source and includes milestones, agent gates, confidence/factuality, prompt-injection controls, case authority, blackboard state, and handoffs.
-- [x] Separate `PRD-v2.md` planning draft created with the approved synthetic scope; project lead/team review and approval remain pending, so `PRD.md` remains the current source of truth.
-- [x] `PRD-v3.md` review draft created from v2; team review is pending, and `PRD.md` remains authoritative until approval.
+- [x] PRD-v2 is retained for history; the project lead selected PRD-v3 as Manny’s lane baseline.
+- [x] The project lead approved `PRD-v3.md` as Manny’s synthetic-lane build baseline; team-wide review remains pending.
 - [x] User Needs and prioritized use cases have a linked companion file.
 - [x] Synthetic evaluation and routing examples are in `docs/requirements/CASE-SCENARIOS.md`.
 - [x] Deferred policy and implementation decisions are tracked in `docs/planning/DEFERRED-DECISIONS.md`.
 - [x] Synthetic account model recorded as User (client view), Staff (back-end view), and Admin (same back-end plus privileged account/access controls); no extra staff tiers or interfaces.
 - [x] Product Health/evaluation scope recorded as synthetic metadata and fixtures only; no real customer records or real-world interview/activity.
-- [x] Updated PRD-v2 hand-drawn architecture JPEG is standalone and displayed at the top of the field guide; the earlier action sketch is labeled deferred policy context.
+- [x] The updated field guide includes the interactive PRD-v3 architecture diagram; the PRD-v2 sketch remains available as a standalone historical artifact.
 - [ ] Team reviews and accepts the PRD, agent ownership, interfaces, and current scope.
 - [ ] All planning milestone exit evidence and decisions are recorded.
 - [x] Project lead explicitly authorized the local technology-stack foundation scaffold on 2026-11-03.
-- [ ] Project lead authorizes any expansion beyond the local scaffold before implementation begins.
+- [x] Project lead authorized Manny’s synthetic-lane phase sequence beyond the local scaffold on 2026-11-04; production and real-data work remain unauthorized.
 - [x] Agent build, injection-risk, harness, and integration phase plan recorded in [`AGENT-IMPLEMENTATION-PHASE-PLAN.md`](docs/planning/AGENT-IMPLEMENTATION-PHASE-PLAN.md).
 - [x] Standalone proposal for additions to the implementation phase plan recorded in [`AGENT-IMPLEMENTATION-PHASE-ADDITIONS.md`](docs/planning/AGENT-IMPLEMENTATION-PHASE-ADDITIONS.md); the current plan remains unchanged pending review.
 - [x] Standalone Claude critique and PRD-v2 correction plan recorded in [`PRD-V2-CLAUDE-CRITIQUE-PLAN.md`](docs/planning/PRD-V2-CLAUDE-CRITIQUE-PLAN.md); the current PRD remains unchanged pending review.
@@ -38,7 +38,8 @@ Use this checklist as the live project status record. Check an item only when it
 
 ## Manny lane — Coordinator, Triage, Escalation
 
-- [ ] Confirm owner availability and accept the three-agent assignment.
+- [x] Confirm owner availability and accept the Coordinator, Triage, and Escalation assignment (Manny’s approved lane sequence).
+- [x] Manny Phase 1: implement and review the process-local synthetic A0/A1 fixture boundary and versioned handoff; Shared receiver review remains an integration gate.
 - [ ] Define and implement Coordinator behavior, tools, schemas, internal validation, stop conditions, retries, and recovery from the current PRD.
 - [ ] Define and implement Triage behavior, policy-grounded outputs, claim-level evidence/confidence, unknown handling, and failure behavior.
 - [ ] Define and implement Escalation behavior, must-escalate checks, evidence packet, uncertainty handling, and human routing.
@@ -48,7 +49,7 @@ Use this checklist as the live project status record. Check an item only when it
 
 ## Shawn lane — Knowledge, Troubleshooting, Documentation
 
-> 2026-11-04 status: PR #2 merged into `developer` at `a14bb8d` with code for all three Shawn agents, a lane harness, 12 synthetic cases, 97 tests, and `0.1.0-proposed` contracts/examples; PR #2 has no recorded reviews or status checks. Follow-up on `shawn/knowledge-troubleshooting-docs` (not yet in `developer`): the lane design record now states the merged status; 110 tests and the 12 lane cases pass on Python 3.13.17; and a 111-case synthetic Knowledge calibration set reports 0 critical errors (`docs/lanes/shawn/calibration/`). The calibration set is lane evidence offered to Manny's D-08/D-09 evaluation protocol, not a decision; its expected labels are drafts that still need human approval. Code presence is tracked separately from authorization, acceptance, and validation below.
+> 2026-11-04 status: Shawn’s three agent implementations and lane harness were merged in PR #2; the calibration follow-up was merged into `developer` in PR #4 (`4deafe7`). PR #4 reports 110 tests and 12 lane cases passing on Python 3.13.17 and a 111-case synthetic calibration set with 0 critical errors. Manny accepted the set as candidate D-08/D-09 evidence and will review the draft labels; the labels and project-wide gates are not yet approved. Code presence, phase authorization, and acceptance remain distinct.
 
 - [x] Confirm owner availability and accept the three-agent assignment (Shawn's lane-owner direction is recorded in `docs/planning/DEFERRED-DECISIONS.md`).
 - [x] Knowledge implementation files are present in merged PR #2 (`src/cdit_support_mao/agents/knowledge/`); acceptance remains pending.
