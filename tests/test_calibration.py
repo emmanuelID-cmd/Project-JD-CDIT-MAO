@@ -8,16 +8,22 @@ from pathlib import Path
 import pytest
 
 from cdit_support_mao.agents.knowledge import KnowledgeAgent
+from cdit_support_mao.agents.knowledge.agent import MAX_PASSAGES
+from cdit_support_mao.agents.knowledge.retrieval import LexicalIndex
 from cdit_support_mao.contracts import AgentStatus, ConfidenceBand
 from cdit_support_mao.lane_calibration import (
+    RECALL_KS,
     SWEEP_CUTOFFS,
     CalibrationRun,
     SafetyChecker,
     classify,
     load_calibration_set,
     main,
+    ranking_rank,
     render_report,
     results_json,
+    retrieval_metrics,
+    returned_rank,
     run_calibration,
     set_fingerprint,
     to_lane_case,
@@ -82,7 +88,7 @@ def test_committed_report_and_results_are_current(calibration_run) -> None:
 
 
 def test_cli_writes_report_and_exits_zero(tmp_path: Path, capsys) -> None:
-    report, results = tmp_path / "report.md", tmp_path / "results.json"
+    report, results, timing = tmp_path / "report.md", tmp_path / "results.json", tmp_path / "timing.json"
     code = main(
         [
             str(SET_PATH),
@@ -90,12 +96,72 @@ def test_cli_writes_report_and_exits_zero(tmp_path: Path, capsys) -> None:
             "--policy", str(POLICY_PATH),
             "--report", str(report),
             "--results", str(results),
+            "--timing", str(timing),
         ]
     )
     assert code == 0
-    assert "critical errors 0" in capsys.readouterr().out
+    out = capsys.readouterr().out
+    assert "critical errors 0" in out
+    assert "ranking recall@3" in out
+    assert "Per-agent duration in ms" in out
     assert report.read_text(encoding="utf-8").startswith("# Knowledge Agent Calibration Report")
     assert len(json.loads(results.read_text(encoding="utf-8"))["cases"]) >= 100
+    measured = json.loads(timing.read_text(encoding="utf-8"))
+    assert measured["model_calls"] == 0 and measured["provider_cost_usd"] == 0.0
+    assert set(measured["durations_ms"]) == {"knowledge", "troubleshooting", "documentation", "lane_total"}
+
+
+# --- N-02: retrieval recall@k, exclusions, and durations -------------------------------------------
+
+
+def test_recall_at_k_is_consistent_with_outcomes(calibration_run) -> None:
+    metrics = retrieval_metrics(calibration_run.results)
+    answerable = [r for r in calibration_run.results if r.case.expect == "answer"]
+    assert metrics["answerable_cases"] == len(answerable)
+    for key in ("ranking_recall_at_k", "returned_recall_at_k"):
+        hits = [metrics[key][str(k)]["hits"] for k in RECALL_KS]
+        assert hits == sorted(hits), f"{key} must not fall as k grows"
+    # Returned recall@1 is exactly the correct-answer count, and @3 is "correct anywhere in top 3".
+    returned = metrics["returned_recall_at_k"]
+    assert returned["1"]["hits"] == sum(r.outcome == "correct_answer" for r in answerable)
+    assert returned["3"]["hits"] == sum(bool(r.correct_any) for r in answerable if r.answered)
+    assert returned[str(RECALL_KS[-1])]["hits"] == returned[str(MAX_PASSAGES)]["hits"]
+    assert metrics["answerable_not_ranked"] == sum(r.ranking_rank is None for r in answerable)
+
+
+def test_exclusion_counts_match_case_results(calibration_run) -> None:
+    metrics = retrieval_metrics(calibration_run.results)
+    total = sum(entry["excluded_sections"] for entry in metrics["excluded_sources_by_reason"].values())
+    assert total == sum(len(r.excluded_reasons) for r in calibration_run.results)
+    assert metrics["ineligible_passages_returned"] == 0
+    for entry in metrics["excluded_sources_by_reason"].values():
+        assert entry["cases"] <= entry["excluded_sections"]
+
+
+def test_ranking_and_returned_rank_definitions(harness, calibration, corpus) -> None:
+    index = LexicalIndex(corpus)
+    eligible = {(a.doc_id, a.version) for a in corpus.eligible_articles(calibration.as_of)}
+    case, run = _run_case(harness, calibration, "SYN-KCAL-0001")
+    assert ranking_rank(case, index, eligible) == 1
+    assert returned_rank(case, run.knowledge) == 1
+
+    off_topic = case.model_copy(update={"summary": "zzqx vbnm"})
+    assert ranking_rank(off_topic, index, eligible) is None
+
+    abstain = case.model_copy(update={"expect": "abstain", "acceptable_sources": ()})
+    assert ranking_rank(abstain, index, eligible) is None
+    assert returned_rank(abstain, run.knowledge) is None
+
+    _, conflict_run = _run_case(harness, calibration, "SYN-KCAL-0105")
+    assert conflict_run.knowledge.status is AgentStatus.ABSTAINED
+    assert returned_rank(case, conflict_run.knowledge) is None
+
+
+def test_durations_stay_out_of_committed_evidence(calibration_run) -> None:
+    assert set(calibration_run.durations) == {"knowledge", "troubleshooting", "documentation", "lane_total"}
+    assert calibration_run.durations["lane_total"]["cases"] == len(calibration_run.results)
+    for text in (render_report(calibration_run), results_json(calibration_run)):
+        assert "median_ms" not in text and "durations_ms" not in text
 
 
 def _run_case(harness, calibration, case_id: str):

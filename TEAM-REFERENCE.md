@@ -1,4 +1,19 @@
 # Handoffs prepared for push
+## 2026-11-05T18:30:00-05:00 — Shawn's Lane: retrieval measurement (N-02) and agent charters (N-03)
+
+Summary file: PROJECT-HANDOFF.md
+
+- Git author: xiaoenbi1987 (Shawn).
+- Branch: `shawn/knowledge-troubleshooting-docs`; intended target: `developer` by PR. Verified baseline: `6bdad272cf0cb882ba0c8f0d09996f0d936a95f9` (Manny's integration, fast-forwarded into the lane). No PR opened yet.
+- Done:
+  - N-02: the calibration report adds ranking recall@1/3/5 (98.6% / 100% / 100%), returned recall (74.3%), and source exclusions by reason. The lane and calibration CLIs print per-agent duration (median, p95, max); `--timing` writes it to JSON. Durations are kept out of committed evidence.
+  - N-03: draft charters for Knowledge, Troubleshooting, and Documentation (`docs/lanes/shawn/AGENT-CHARTERS.md`), each with a system prompt draft for use only if a model is approved.
+  - Records updated: PRD-v3 alignment review, lane design, and the Checklist status note.
+- Finding: all 18 answerable cases that abstained did so with `weak_evidence`, and in 17 of them the right section was ranked first. The gap is the relevance gate, not ranking.
+- No agent behaviour changed. Agent versions, contribution IDs, and all 12 lane and 111 calibration outcomes are unchanged.
+- Validation: 524 tests passed on Python 3.13.17; lane harness 12 passed; combined harness 12 of 12 PASS; calibration 0 critical errors.
+- Reviewer next step: Manny to answer review §7 (Q-01 to Q-04, Q-06, and the corpus and lane-case part of Q-05). Q-04 decides whether the charters satisfy PRD-v3 §3b.
+
 ## 2026-11-05T17:05:00-05:00 — Manny Lane Completion (Phases 2–4) & Combined Six-Agent Workflow
 
 Summary file: PROJECT-HANDOFF.md
