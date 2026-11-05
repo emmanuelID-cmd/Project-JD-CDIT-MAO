@@ -9,7 +9,7 @@ Summary file: PROJECT-HANDOFF.md
 - Done: captured trace manifest/evidence, reconciled independent Reviewer A/B findings, scoped SECURITY review, and marked the trace INCOMPLETE. Updated the Phase 2 plan, draft prompt status, Checklist, and PROJECT-HANDOFF to match observed execution.
 - Not completed: this is not six-agent E2E; semantic label, prompt/request hashes, fixture mapping, and separate authorization-record linkage remain open; injection/failure/full-workflow security cases were not tested.
 - Validation recorded: focused tests 29 passed, full suite 478 passed, pip check passed, git diff --check exit 0. No new tests were run during handoff preparation.
-- PR preflight: git merge-tree found content conflicts in Checklist.md and PROJECT-HANDOFF.md against origin/developer. The owner-lane push remains fast-forwardable, but PR integration/branch alignment must wait for those shared-document conflicts to be reconciled.
+- PR preflight: git merge-tree found content conflicts in Checklist.md and PROJECT-HANDOFF.md against origin/developer. The owner-lane push is verified at 3138388. PR #6 is open to developer and GitHub reports CONFLICTING / DIRTY with no checks reported; reconcile the shared-document conflicts before integration.
 
 ## Active local work — Manny Phase 2 (handoff prepared for requested push)
 

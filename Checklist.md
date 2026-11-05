@@ -61,6 +61,7 @@ Use this checklist as the live project status record. Check an item only when it
 - [ ] Resolve trace provenance gaps, obtain Manny's semantic label, and run the app-wired six-agent integration/security cases.
 - [ ] At project completion, run 100 sequential synthetic-only traces; retain pass and failure evidence and stay within the available $40 budget.
 - [x] Compare the outgoing Manny work with origin/developer using git merge-tree; PR preflight found content conflicts in Checklist.md and PROJECT-HANDOFF.md.
+- [x] Open PR #6 to developer; GitHub reports CONFLICTING / DIRTY and no checks reported.
 - [ ] Reconcile those shared-document conflicts, then review PR checks before integration.
 - [ ] After an authorized merge, fast-forward only clean branches whose ancestry proves it safe.
 ## Shawn lane — Knowledge, Troubleshooting, Documentation
