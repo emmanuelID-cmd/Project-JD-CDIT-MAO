@@ -228,3 +228,28 @@ UI lane clarification: Either lane may add/style presentation controls (includin
 - Start by reading current PRD-v3, project AGENTS.md, Checklist.md, this handoff, and docs/planning/Manny-phase/phase2/PLAN.md.
 - Continue from temp/manny-phase2-triage or the verified Manny lane after checking its exact remote tip; preserve .env and exclude docs/templates/PRD Template.md.
 - Before integration: inspect the PR diff, CI/review status, and reconcile the known Checklist.md and PROJECT-HANDOFF.md conflicts with developer. Do not merge until resolved and required review/checks pass. Fast-forward only branches proven safe by ancestry and cleanliness; local Manny and temporary phase refs are aligned at 3138388; local developer and Shawn refs are aligned at origin/developer 10168a2. Integration of this work into developer is blocked by the PR #6 conflicts.
+
+## 2026-11-05T17:05:00-05:00 — Manny Lane Completion (Phases 2–4) & Combined Six-Agent Workflow
+
+- Prepared: 2026-11-05T17:05:00-05:00
+- Active worktree: `temp/manny-phase2-triage`; project baseline: `docs/requirements/PRD-v3.md` (authoritative).
+- Verified tips: `temp/manny-phase2-triage`, `manny/coordinator-triage-escalation`, and `developer` aligned at `37c01c8`.
+
+### Done
+- Reconciled PR #6 merge conflicts between `origin/developer` and Manny lane across `.env.example`, `Checklist.md`, `PROJECT-HANDOFF.md`, and `TEAM-REFERENCE.md` without winner/loser concessions.
+- Phase 2 (Triage Wiring & D-20): pinned `claude-sonnet-5-5`, SDK 2.5.0, 0 retries, 60s timeout, preflight, and regression policy in `src/cdit_support_mao/agents/triage/semantic_pipeline.py`.
+- Phase 3 (Escalation Agent A5): created `src/cdit_support_mao/agents/escalation/agent.py` implementing deterministic rules for security incidents, privacy incidents, P1 urgency, out-of-tier requests, role/access changes, quoted policy overrides, and uncertainty preservation on conflicting/stale KB evidence.
+- Shared Integration (Combined Six-Agent Harness): implemented `src/cdit_support_mao/combined_harness.py` linking Coordinator -> Triage -> Knowledge -> Troubleshooting -> Escalation -> Documentation. All 12 synthetic cases executed with 100% pass rate.
+- Phase 4 (Validation & Synthetic Evaluation Runner): implemented `src/cdit_support_mao/manny_evaluation.py` producing `docs/lanes/manny/evaluation/MANNY-EVALUATION-REPORT.md` and `manny-evaluation-v1.results.json`. Verified all 6 PRD-v3 must-pass safety gates with 0 violations.
+- Full pytest suite: 518 passed on Python 3.13 in 6.57s.
+- Completed full completion audit pipeline (BUDDY read-only audit, ACCOUNTANT database/auth audit, ARCHIVIST preservation verification, and final REVIEWER verdict).
+
+### Invariants Verified
+- Strictly synthetic data; propose-only runtime; mandatory human review (`human_review_required=True`).
+- 0 ticket writes, 0 external notifications, 0 billable API key exposures.
+- Untracked source template `docs/templates/PRD Template.md` preserved byte-for-byte.
+
+### Next / Resume Point
+- All Manny phases and six-agent combined workflow integration are complete.
+- Branch `developer` is fast-forwarded to `37c01c8`.
+- Merge to `main` requires explicit project lead authorization per `AGENTS.md` branch rules.
