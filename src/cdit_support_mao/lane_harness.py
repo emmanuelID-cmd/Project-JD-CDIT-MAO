@@ -8,6 +8,10 @@ fixtures, not implementations of Manny-owned behaviour. The harness also plays
 the coordinator's acknowledgment role only so the agents' input gates can be
 exercised.
 
+Each run also records the wall-clock duration of every lane agent call (PRD-v3
+§2d per-run latency). Durations depend on the machine, so they stay out of
+``LaneRun.as_json()`` and out of committed evidence; the CLIs print a summary.
+
 Usage (from the repository root)::
 
     python -m cdit_support_mao.lane_harness synthetic_data/cases
@@ -18,9 +22,12 @@ from __future__ import annotations
 
 import argparse
 import json
+import math
+import statistics
 import sys
-from collections.abc import Sequence
-from dataclasses import dataclass
+import time
+from collections.abc import Iterable, Mapping, Sequence
+from dataclasses import dataclass, field
 from datetime import UTC, date, datetime
 from pathlib import Path
 from typing import Literal
@@ -56,6 +63,7 @@ from cdit_support_mao.contracts.handoffs import (
 )
 
 STAND_IN_VERSION = "fixture-0.1"
+LANE_AGENTS = ("knowledge", "troubleshooting", "documentation")
 
 
 class FactStandIn(StrictModel):
@@ -130,6 +138,8 @@ class LaneRun:
     knowledge: KnowledgeResult
     troubleshooting: TroubleshootingResult
     documentation: DocumentationResult
+    # Wall-clock milliseconds per lane agent call; machine-dependent, so not in as_json().
+    durations_ms: Mapping[str, float] = field(default_factory=dict, compare=False)
 
     def as_json(self) -> dict:
         return {
@@ -209,15 +219,20 @@ class LaneHarness:
             missing_facts=stand_in.missing_facts,
         )
         acknowledged = {triage.contribution_id}
+        durations: dict[str, float] = {}
 
+        start = time.perf_counter()
         knowledge = self.knowledge_agent.run(
             context, triage, acknowledged=acknowledged, as_of=case.as_of, now=now
         )
+        durations["knowledge"] = _elapsed_ms(start)
         acknowledged.add(knowledge.contribution_id)
 
+        start = time.perf_counter()
         troubleshooting = self.troubleshooting_agent.run(
             context, triage, knowledge, acknowledged=acknowledged, now=now
         )
+        durations["troubleshooting"] = _elapsed_ms(start)
         acknowledged.add(troubleshooting.contribution_id)
 
         esc = case.escalation
@@ -253,6 +268,7 @@ class LaneHarness:
             )
             for index, item in enumerate(case.recorded_actions, start=1)
         )
+        start = time.perf_counter()
         documentation = self.documentation_agent.run(
             context,
             triage=triage,
@@ -263,7 +279,53 @@ class LaneHarness:
             acknowledged=acknowledged,
             now=now,
         )
-        return LaneRun(case, context, triage, escalation, knowledge, troubleshooting, documentation)
+        durations["documentation"] = _elapsed_ms(start)
+        return LaneRun(
+            case, context, triage, escalation, knowledge, troubleshooting, documentation, durations
+        )
+
+
+def _elapsed_ms(start: float) -> float:
+    return (time.perf_counter() - start) * 1000.0
+
+
+def _stats(values: Sequence[float]) -> dict[str, float]:
+    ordered = sorted(values)
+    nearest_rank = max(1, math.ceil(0.95 * len(ordered)))
+    return {
+        "cases": len(ordered),
+        "median_ms": round(statistics.median(ordered), 3),
+        "p95_ms": round(ordered[nearest_rank - 1], 3),
+        "max_ms": round(ordered[-1], 3),
+    }
+
+
+def duration_summary(runs: Iterable[LaneRun]) -> dict[str, dict[str, float]]:
+    """Median, 95th percentile (nearest rank), and maximum milliseconds per lane agent and in total.
+
+    Runs without recorded durations are skipped. "lane_total" is the sum of the three
+    lane agents for one case; stand-in construction is not included.
+    """
+    samples: dict[str, list[float]] = {name: [] for name in (*LANE_AGENTS, "lane_total")}
+    for run in runs:
+        if not all(name in run.durations_ms for name in LANE_AGENTS):
+            continue
+        for name in LANE_AGENTS:
+            samples[name].append(run.durations_ms[name])
+        samples["lane_total"].append(sum(run.durations_ms[name] for name in LANE_AGENTS))
+    return {name: _stats(values) for name, values in samples.items() if values}
+
+
+def format_durations(summary: Mapping[str, Mapping[str, float]]) -> str:
+    if not summary:
+        return "Per-agent duration: no timed runs."
+    lines = ["Per-agent duration in ms (median / p95 / max; machine-dependent; 0 model calls, $0 provider cost):"]
+    for name, stats in summary.items():
+        lines.append(
+            f"  {name:<16} {stats['median_ms']:8.3f} / {stats['p95_ms']:8.3f} / {stats['max_ms']:8.3f}"
+            f"  ({stats['cases']} cases)"
+        )
+    return "\n".join(lines)
 
 
 def check_expectations(run: LaneRun) -> list[str]:
@@ -334,8 +396,10 @@ def main(argv: Sequence[str] | None = None) -> int:
     now = default_now()
     failures = 0
     outputs = []
+    runs: list[LaneRun] = []
     for path in case_files(args.target):
         run = harness.run(load_case(path), now=now)
+        runs.append(run)
         problems = check_expectations(run)
         failures += bool(problems)
         if args.json:
@@ -352,6 +416,7 @@ def main(argv: Sequence[str] | None = None) -> int:
         print(json.dumps(outputs if len(outputs) != 1 else outputs[0], indent=2))
     else:
         print(f"\n{len(case_files(args.target)) - failures} passed, {failures} failed")
+        print(format_durations(duration_summary(runs)))
     return 1 if failures else 0
 
 

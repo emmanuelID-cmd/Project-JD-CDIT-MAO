@@ -12,6 +12,11 @@ safety gate (no invented or ineligible citations, no non-verbatim guidance, no
 out-of-tier steps, no leaked unsafe source text, no confidence inflation) is checked
 on 100+ unseen inputs. Any critical error makes the CLI exit non-zero.
 
+The report also measures retrieval recall@k, source exclusions by reason, and
+per-agent duration (PRD-v3 §2d and UC-10; review finding N-02). Durations depend
+on the machine, so they are printed and optionally written with ``--timing``,
+never stored in the committed report or results.
+
 Usage (from the repository root)::
 
     python -m cdit_support_mao.lane_calibration synthetic_data/calibration/knowledge-calibration-v1.json \
@@ -25,6 +30,7 @@ import argparse
 import hashlib
 import json
 import math
+import platform
 import sys
 from collections import Counter
 from collections.abc import Sequence
@@ -37,8 +43,10 @@ from pydantic import Field, ValidationError, model_validator
 
 from cdit_support_mao.agents.knowledge import KnowledgeAgent, KnowledgeCorpus, load_corpus
 from cdit_support_mao.agents.knowledge.agent import AGENT_VERSION as KNOWLEDGE_AGENT_VERSION
+from cdit_support_mao.agents.knowledge.agent import MAX_PASSAGES
 from cdit_support_mao.agents.knowledge.corpus import ineligibility_reason
 from cdit_support_mao.agents.knowledge.injection import scan_for_injection
+from cdit_support_mao.agents.knowledge.retrieval import LexicalIndex
 from cdit_support_mao.agents.troubleshooting import TroubleshootingPolicy, load_policy
 from cdit_support_mao.contracts.common import (
     CONFIDENCE_CALIBRATED,
@@ -46,6 +54,7 @@ from cdit_support_mao.contracts.common import (
     AgentStatus,
     ClaimLabel,
     ConfidenceBand,
+    ReasonCode,
     SourceKind,
     StrictModel,
 )
@@ -56,6 +65,8 @@ from cdit_support_mao.lane_harness import (
     LaneHarness,
     LaneRun,
     TriageStandIn,
+    duration_summary,
+    format_durations,
 )
 
 CaseKind = Literal[
@@ -76,6 +87,14 @@ Outcome = Literal[
 SWEEP_CUTOFFS = tuple(round(0.40 + 0.05 * i, 2) for i in range(12))  # 0.40 .. 0.95
 HIGH_CUTOFFS = (0.75, 0.80, 0.85, 0.90, 0.95)
 RELEVANCE_BINS = ((0.60, 0.70), (0.70, 0.80), (0.80, 0.85), (0.85, 0.90), (0.90, 0.95), (0.95, 1.0001))
+RECALL_KS = (1, 3, 5)
+EXCLUSION_REASONS = (
+    ReasonCode.SOURCE_STALE,
+    ReasonCode.SOURCE_NOT_EFFECTIVE,
+    ReasonCode.SOURCE_UNAPPROVED,
+    ReasonCode.SOURCE_RETIRED,
+    ReasonCode.RETRIEVED_INJECTION,
+)
 _BAND_RANK = {ConfidenceBand.LOW: 0, ConfidenceBand.MEDIUM: 1, ConfidenceBand.HIGH: 2}
 
 
@@ -184,6 +203,11 @@ class CaseResult:
     correct_any: bool | None
     troubleshooting_status: AgentStatus
     documentation_status: AgentStatus
+    # N-02 retrieval measures (answerable cases only for the two ranks).
+    ranking_rank: int | None
+    returned_rank: int | None
+    excluded_reasons: tuple[str, ...]
+    ineligible_returned: int
     critical: tuple[str, ...] = ()
 
     @property
@@ -203,6 +227,9 @@ class CaseResult:
             "band": str(self.band),
             "outcome": self.outcome,
             "correct_in_top_3": self.correct_any,
+            "ranking_rank": self.ranking_rank,
+            "returned_rank": self.returned_rank,
+            "excluded_reasons": list(self.excluded_reasons),
             "troubleshooting_status": str(self.troubleshooting_status),
             "documentation_status": str(self.documentation_status),
             "critical_errors": list(self.critical),
@@ -220,6 +247,35 @@ def classify(case: CalibrationCase, knowledge: KnowledgeResult) -> tuple[Outcome
     if case.expect == "answer":
         return "false_abstention", False
     return "correct_abstention", None
+
+
+def _first_acceptable(case: CalibrationCase, refs: Sequence[str]) -> int | None:
+    if case.expect != "answer":
+        return None
+    return next((rank for rank, ref in enumerate(refs, start=1) if ref in case.acceptable_sources), None)
+
+
+def ranking_rank(case: CalibrationCase, index: LexicalIndex, eligible: set[tuple[str, str]]) -> int | None:
+    """1-based rank of the first acceptable section among approved, current sections.
+
+    The order is the lexical index order, taken before the answer cut-off, the
+    minimum matched-term rule, and the product-area preference. This isolates
+    ranking quality from the abstention gates. ``None`` for should-abstain cases
+    and for answerable cases whose acceptable sections match no query term.
+    """
+    refs = [
+        f"{item.article.doc_id}#{item.section.section_id}"
+        for item in index.search(case.summary)
+        if (item.article.doc_id, item.article.version) in eligible
+    ]
+    return _first_acceptable(case, refs)
+
+
+def returned_rank(case: CalibrationCase, knowledge: KnowledgeResult) -> int | None:
+    """1-based rank of the first acceptable passage the agent returned to staff, after every gate."""
+    if knowledge.status is not AgentStatus.COMPLETED:
+        return None
+    return _first_acceptable(case, [f"{p.doc_id}#{p.section_id}" for p in knowledge.passages])
 
 
 class SafetyChecker:
@@ -313,6 +369,8 @@ class CalibrationRun:
     results: list[CaseResult]
     sweep: list[dict] = field(default_factory=list)
     label_problems: list[str] = field(default_factory=list)
+    # Machine-dependent; never rendered into the committed report or results.
+    durations: dict[str, dict[str, float]] = field(default_factory=dict)
 
     @property
     def critical_errors(self) -> list[tuple[str, str]]:
@@ -330,6 +388,8 @@ def run_calibration(
     now = datetime.combine(as_of, time(12, 0), tzinfo=UTC)
     harness = LaneHarness(corpus, policy)
     checker = SafetyChecker(corpus, policy, as_of)
+    index = LexicalIndex(corpus)
+    eligible = {(article.doc_id, article.version) for article in corpus.eligible_articles(as_of)}
     results: list[CaseResult] = []
     runs: list[LaneRun] = []
     for case in calibration.cases:
@@ -349,6 +409,12 @@ def run_calibration(
                 correct_any=any_ok,
                 troubleshooting_status=run.troubleshooting.status,
                 documentation_status=run.documentation.status,
+                ranking_rank=ranking_rank(case, index, eligible),
+                returned_rank=returned_rank(case, run.knowledge),
+                excluded_reasons=tuple(str(item.reason) for item in run.knowledge.excluded_sources),
+                ineligible_returned=sum(
+                    (p.doc_id, p.version) not in eligible for p in run.knowledge.passages
+                ),
                 critical=checker.check(run),
             )
         )
@@ -372,11 +438,46 @@ def run_calibration(
         results=results,
         sweep=sweep,
         label_problems=label_problems(calibration, corpus),
+        durations=duration_summary(runs),
     )
 
 
 def _rate(k: int, n: int) -> float | None:
     return k / n if n else None
+
+
+def retrieval_metrics(results: Sequence[CaseResult]) -> dict:
+    """Recall@k over answerable cases, plus source exclusions by reason over all cases (N-02)."""
+    answerable = [r for r in results if r.case.expect == "answer"]
+
+    def recall(rank_of) -> dict[str, dict]:
+        out = {}
+        for k in RECALL_KS:
+            hits = sum(1 for r in answerable if (rank := rank_of(r)) is not None and rank <= k)
+            out[str(k)] = {"hits": hits, "rate": _rate(hits, len(answerable))}
+        return out
+
+    exclusions = {
+        reason.value: {
+            "excluded_sections": sum(r.excluded_reasons.count(reason.value) for r in results),
+            "cases": sum(reason.value in r.excluded_reasons for r in results),
+        }
+        for reason in EXCLUSION_REASONS
+    }
+    return {
+        "answerable_cases": len(answerable),
+        "ranking_recall_at_k": recall(lambda r: r.ranking_rank),
+        "returned_recall_at_k": recall(lambda r: r.returned_rank),
+        "answerable_not_ranked": sum(r.ranking_rank is None for r in answerable),
+        "excluded_sources_by_reason": exclusions,
+        "abstained_stale_source_only": sum(
+            ReasonCode.STALE_SOURCE_ONLY.value in r.reason_codes for r in results
+        ),
+        "abstained_unapproved_source_only": sum(
+            ReasonCode.UNAPPROVED_SOURCE_ONLY.value in r.reason_codes for r in results
+        ),
+        "ineligible_passages_returned": sum(r.ineligible_returned for r in results),
+    }
 
 
 def wilson(k: int, n: int, z: float = 1.96) -> tuple[float, float] | None:
@@ -515,6 +616,9 @@ def render_report(run: CalibrationRun) -> str:
             align="ll",
         ),
         "",
+    ]
+    lines += _retrieval_section(run.results)
+    lines += [
         "## Accuracy by confidence band",
         "",
         "Only medium and high bands can answer; anything below the cut-off abstains with low confidence.",
@@ -622,14 +726,61 @@ def render_report(run: CalibrationRun) -> str:
         ]
 
     lines += [
+        "## Latency and cost",
+        "",
+        "- The three lane agents are deterministic and make no model or network calls: 0 model calls and $0 provider cost per case.",
+        "- Wall-clock duration per agent depends on the machine, so this report does not store it; the report must match a fresh run exactly.",
+        "- The CLI prints the median, p95, and maximum duration per agent. `--timing PATH` also writes them to a JSON file.",
+        "",
         "## Limits",
         "",
         f"- {len(results)} synthetic cases written by one author; intervals are wide and the set is not representative of real tickets.",
         "- Labels judge only the rank-1 Knowledge source; they do not judge Troubleshooting step quality.",
+        "- Recall@k uses the same draft labels and measures lexical ranking only; it is not a comparison with another retrieval method (N-01).",
         "- Do not adjust thresholds or retrieval against this set. A change needs a new held-out set version to re-measure.",
         "",
     ]
     return "\n".join(lines)
+
+
+def _hits(entry: dict, total: int) -> str:
+    return f"{_pct(entry['rate'])} ({entry['hits']}/{total})"
+
+
+def _retrieval_section(results: Sequence[CaseResult]) -> list[str]:
+    metrics = retrieval_metrics(results)
+    total = metrics["answerable_cases"]
+    recall_rows = [
+        (k, _hits(metrics["ranking_recall_at_k"][k], total), _hits(metrics["returned_recall_at_k"][k], total))
+        for k in map(str, RECALL_KS)
+    ]
+    exclusion_rows = [
+        (f"`{reason}`", counts["excluded_sections"], counts["cases"])
+        for reason, counts in metrics["excluded_sources_by_reason"].items()
+    ]
+    return [
+        "## Retrieval recall@k",
+        "",
+        f"Answerable cases only ({total}). A hit means an acceptable section is within the first k.",
+        "",
+        "- **Ranking:** approved, current sections in lexical-index order, before the answer cut-off, the minimum matched-term rule, and the product-area preference. This isolates ranking quality from the abstention gates.",
+        f"- **Returned:** passages the agent returned to staff after every gate. The agent returns at most {MAX_PASSAGES} passages, so returned recall stops growing after k = {MAX_PASSAGES}.",
+        "",
+        *_table(("k", "Ranking recall@k", "Returned recall@k"), recall_rows),
+        "",
+        f"Answerable cases whose acceptable sections match no query term: {metrics['answerable_not_ranked']}.",
+        "",
+        "## Source freshness and exclusions",
+        "",
+        f"Sources the agent excluded across all {len(results)} cases. Only candidates that passed the answer cut-off are checked for eligibility, and only selected passages are scanned for injected instructions. Excluded sources are never returned as guidance.",
+        "",
+        *_table(("Exclusion reason", "Excluded sections", "Cases"), exclusion_rows, align="lrr"),
+        "",
+        f"- Abstained because only stale or not-yet-effective sources matched (`stale_source_only`): {metrics['abstained_stale_source_only']} cases.",
+        f"- Abstained because only draft or retired sources matched (`unapproved_source_only`): {metrics['abstained_unapproved_source_only']} cases.",
+        f"- Passages returned to staff from a stale, not-yet-effective, draft, or retired source: {metrics['ineligible_passages_returned']}.",
+        "",
+    ]
 
 
 def results_json(run: CalibrationRun) -> str:
@@ -643,10 +794,27 @@ def results_json(run: CalibrationRun) -> str:
         "knowledge_agent_version": KNOWLEDGE_AGENT_VERSION,
         "as_of": run.calibration.as_of.isoformat(),
         "summary": _summary(Counter(r.outcome for r in run.results)),
+        "retrieval": retrieval_metrics(run.results),
         "critical_errors": [{"case_id": c, "error": e} for c, e in run.critical_errors],
         "label_problems": run.label_problems,
         "sweep": run.sweep,
         "cases": [r.as_json() for r in run.results],
+    }
+    return json.dumps(payload, indent=2) + "\n"
+
+
+def timing_json(run: CalibrationRun) -> str:
+    """Per-agent durations for one run on this machine. Not reproducible, so not committed evidence."""
+    payload = {
+        "measured_at": datetime.now(UTC).isoformat(timespec="seconds"),
+        "set_id": run.calibration.set_id,
+        "set_version": run.calibration.version,
+        "cases": len(run.results),
+        "python": platform.python_version(),
+        "system": f"{platform.system()} {platform.machine()}",
+        "model_calls": 0,
+        "provider_cost_usd": 0.0,
+        "durations_ms": run.durations,
     }
     return json.dumps(payload, indent=2) + "\n"
 
@@ -664,6 +832,9 @@ def main(argv: Sequence[str] | None = None) -> int:
     parser.add_argument("--policy", type=Path, default=None)
     parser.add_argument("--report", type=Path, default=None, help="Write the Markdown report here")
     parser.add_argument("--results", type=Path, default=None, help="Write per-case JSON results here")
+    parser.add_argument(
+        "--timing", type=Path, default=None, help="Write machine-dependent per-agent durations (JSON) here"
+    )
     args = parser.parse_args(argv)
 
     calibration = load_calibration_set(args.calibration_set)
@@ -677,13 +848,18 @@ def main(argv: Sequence[str] | None = None) -> int:
         _write(args.report, render_report(run))
     if args.results:
         _write(args.results, results_json(run))
+    if args.timing:
+        _write(args.timing, timing_json(run))
 
     summary = _summary(Counter(r.outcome for r in run.results))
+    recall = retrieval_metrics(run.results)["ranking_recall_at_k"]
     print(
         f"{len(run.results)} cases | answered {summary['answered']} | accuracy {_pct(summary['answer_accuracy'])} | "
         f"coverage {_pct(summary['answer_coverage'])} | abstention recall {_pct(summary['abstention_recall'])} | "
+        f"ranking recall@3 {_pct(recall['3']['rate'])} | "
         f"critical errors {len(run.critical_errors)} | label problems {len(run.label_problems)}"
     )
+    print(format_durations(run.durations))
     return 1 if run.critical_errors or run.label_problems else 0
 
 

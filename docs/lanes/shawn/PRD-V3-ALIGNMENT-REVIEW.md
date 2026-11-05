@@ -5,6 +5,14 @@
 **Reviewed code:** `developer` at `4deafe7`; agents `0.1.0`; contracts `0.1.0-proposed`
 **Status:** Findings recorded on 2026-11-04. B-01 was fixed afterwards in Troubleshooting `0.1.1` with policy `SYN-TS-POLICY 0.1.1`. The other findings are open, and the contract is unchanged.
 
+**Update 2026-11-05:**
+- PR #5 merged this review and the B-01 fix into `developer` at `10168a2`. Manny's integration then reached `developer` at `6bdad27`.
+- The project lead approved PRD-v3 as Manny's build baseline on 2026-11-04. Team-wide review is still pending, so this review keeps `PRD.md` as the reference for Shawn's agents.
+- Manny's Escalation agent now handles `quoted_policy_override_attempt` (rule 6: must escalate, human review). This covers the interface note from B-01.
+- Q-05 is partly answered: `DEFERRED-DECISIONS.md` records that Manny will review and approve the calibration labels. No peer reviewer is named for the corpus or the lane cases. Q-01 to Q-04 and Q-06 have no recorded answers.
+- N-02 is done: the calibration report now has recall@k and source exclusions, and both CLIs print per-agent duration.
+- N-03 is drafted: [AGENT-CHARTERS.md](AGENT-CHARTERS.md). Whether it satisfies §3b is still Q-04.
+
 ## 1. Scope and method
 
 - **Baseline.** `docs/requirements/PRD.md` is still the source of truth. `PRD-v3.md` is a draft pending team review. This review checks the current agents against v3 so that gaps are known before v3 is approved. It is Phase 2 in `docs/planning/AGENT-IMPLEMENTATION-PHASE-PLAN.md`.
@@ -83,11 +91,18 @@ These need a coordinated contract change (v0.2) through Shared Lane.
 | ID | v3 reference | Gap | Proposed work | Owner |
 | :--- | :--- | :--- | :--- | :--- |
 | N-01 | §4b: compare retrieval quality and source freshness on the synthetic corpus before Knowledge acceptance | BM25 is implemented but was not compared with any alternative. | Compare current BM25 with at least one alternative (for example, BM25 with stemming and synonyms). Run the comparison on an independently written `SYN-KCAL` v2. Report recall, freshness, abstention, and the safety gate. | Shawn + Shared |
-| N-02 | §2d and UC-10: retrieval recall@k, retrieval freshness, per-run latency and cost | The calibration report measures rank-1 accuracy only; there is no latency. | Add recall@1/3/5, exclusion counts by reason, and per-agent duration to the calibration and harness output. This is measurement only; Manny sets the targets. | Shawn |
-| N-03 | §3b: each agent has a lane-owned prompt and structured output schema | Schemas exist. No prompts exist, because the agents are deterministic and use no model. | Write a per-agent charter: role, inputs, allowed outputs, forbidden actions, stop rules. It would become the system prompt if a model is approved. Ask whether the charter satisfies §3b (Q-04). | Shawn |
+| N-02 | §2d and UC-10: retrieval recall@k, retrieval freshness, per-run latency and cost | The calibration report measures rank-1 accuracy only; there is no latency. | Add recall@1/3/5, exclusion counts by reason, and per-agent duration to the calibration and harness output. This is measurement only; Manny sets the targets. **Done 2026-11-05** (see below). | Shawn |
+| N-03 | §3b: each agent has a lane-owned prompt and structured output schema | Schemas exist. No prompts exist, because the agents are deterministic and use no model. | Write a per-agent charter: role, inputs, allowed outputs, forbidden actions, stop rules. It would become the system prompt if a model is approved. Ask whether the charter satisfies §3b (Q-04). **Drafted 2026-11-05:** [AGENT-CHARTERS.md](AGENT-CHARTERS.md). | Shawn |
 | N-04 | §4a local RAG; §4b provider-neutral model adapter | The agents are extractive; there is no adapter interface. | Keep extractive as the baseline. Add an adapter only if the team wants model-backed behaviour in these agents (Q-04). Without a provider, the adapter returns `failed_dependency`. | Shawn; provider selection is Manny + Shared |
 | N-05 | §4b proposed SQLite entities `knowledge_documents`, `knowledge_chunks`, `agent_handoffs`, `workflow_runs` | The D-07 proposal uses `contributions` and `acknowledgments`. | Restate the D-07 proposal with v3 entity names, and give Shared Lane columns for the knowledge and handoff tables. | Shawn input to Shared |
 | N-06 | §4b: confirm the case author, knowledge-corpus author, and peer reviewer | Shawn's Lane wrote the 38-article corpus, 12 lane cases, and 111 calibration cases. No peer reviewer is assigned. | Record the authors and ask Manny to name a peer reviewer (Q-05). | Manny |
+
+**N-02 results** (`SYN-KCAL` v1, 70 answerable cases; draft labels):
+- **Ranking recall:** 98.6% at k = 1 and 100% at k = 3. This counts approved, current sections in index order, before the answer cut-off.
+- **Returned recall:** 74.3% at every k. This counts only the passages returned to staff.
+- **Reading:** all 18 answerable cases that abstained did so with `weak_evidence` (17 paraphrases, 1 direct). In 17 of them the acceptable section was ranked first. The missed answers therefore come from the relevance gate, not from ranking. N-01 should compare how relevance is scored for the gate, not only ranking, and must still be measured on `SYN-KCAL` v2.
+- **Exclusions:** 14 sections were excluded across 111 cases (3 stale, 1 not yet effective, 2 draft, 4 retired, 4 injected). No ineligible passage was returned.
+- **Latency and cost:** the agents make no model calls. On Shawn's machine the median lane total is about 1 ms per case. Durations are printed by the CLIs and are not stored in committed evidence.
 
 ## 6. Probe record
 
@@ -119,8 +134,8 @@ The lane harness runs every downstream agent even after an upstream abstention. 
 ## 8. Proposed order of work in Shawn's Lane
 
 1. **B-01:** done (Troubleshooting 0.1.1, policy 0.1.1).
-2. **N-02:** add recall@k, exclusion counts, and per-agent duration to the reports. This is measurement only.
-3. **N-03:** write the per-agent charters.
+2. **N-02:** done 2026-11-05. Recall@k, exclusion counts, and per-agent duration are measured. This is measurement only.
+3. **N-03:** drafted 2026-11-05 in [AGENT-CHARTERS.md](AGENT-CHARTERS.md); acceptance waits for Q-04.
 4. **C-01 to C-03:** draft contract v0.2 fields with Shared Lane after Q-03 is answered.
 5. **N-01:** run the retrieval comparison once an independently written `SYN-KCAL` v2 exists. B-02 is measured in the same run.
 6. **B-03:** apply after Q-01 is answered.

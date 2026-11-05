@@ -3,12 +3,22 @@
 from __future__ import annotations
 
 import ast
+import json
+from dataclasses import replace
 from pathlib import Path
 
 import pytest
 
 from cdit_support_mao.contracts import AgentStatus, ClaimLabel
-from cdit_support_mao.lane_harness import case_files, check_expectations, load_case, main
+from cdit_support_mao.lane_harness import (
+    LANE_AGENTS,
+    case_files,
+    check_expectations,
+    duration_summary,
+    format_durations,
+    load_case,
+    main,
+)
 
 from conftest import CASES_DIR, NOW, REPO_ROOT
 
@@ -52,7 +62,33 @@ def test_case_matches_expected_outcome(harness, policy, path: Path) -> None:
 
 def test_harness_cli_passes_on_case_set(capsys) -> None:
     assert main([str(CASES_DIR)]) == 0
-    assert f"{len(CASES)} passed, 0 failed" in capsys.readouterr().out
+    out = capsys.readouterr().out
+    assert f"{len(CASES)} passed, 0 failed" in out
+    assert "Per-agent duration in ms" in out and "0 model calls" in out
+
+
+def test_run_records_durations_outside_json(harness) -> None:
+    run = harness.run(load_case(CASES[0]), now=NOW)
+    assert set(run.durations_ms) == set(LANE_AGENTS)
+    assert all(value >= 0 for value in run.durations_ms.values())
+    assert "durations_ms" not in json.dumps(run.as_json())
+    # Durations do not take part in equality, so identical runs still compare equal.
+    assert run == replace(run, durations_ms={})
+
+
+def test_duration_summary_statistics(harness) -> None:
+    run = harness.run(load_case(CASES[0]), now=NOW)
+    runs = [
+        replace(run, durations_ms={"knowledge": float(i), "troubleshooting": 1.0, "documentation": 2.0})
+        for i in range(1, 21)
+    ]
+    untimed = replace(run, durations_ms={})
+    summary = duration_summary([*runs, untimed])
+    assert summary["knowledge"] == {"cases": 20, "median_ms": 10.5, "p95_ms": 19.0, "max_ms": 20.0}
+    assert summary["lane_total"]["median_ms"] == 13.5
+    assert summary["troubleshooting"]["p95_ms"] == 1.0
+    assert "knowledge" in format_durations(summary)
+    assert format_durations({}) == "Per-agent duration: no timed runs."
 
 
 FORBIDDEN_IMPORTS = {"socket", "requests", "httpx", "urllib", "http", "smtplib", "subprocess", "aiohttp"}

@@ -3,12 +3,12 @@
 **Branch:** `shawn/knowledge-troubleshooting-docs`
 **Owner:** Shawn (finalized six-agent split, `docs/planning/TASK-SPLIT.md`)
 **Version:** Knowledge and Documentation `0.1.0`, Troubleshooting `0.1.1`; contracts `0.1.0-proposed`
-**Status:** Implemented on synthetic data. The first version was merged into `developer` through PR #2 on 2026-11-04. The calibration and Python 3.13 follow-up (§7, §9) is on the lane branch, pending review.
+**Status:** Implemented on synthetic data and merged into `developer` through PRs #2, #4, and #5 (2026-11-04 and 2026-11-05). Manny's combined six-agent harness runs these agents with his Coordinator, Triage, and Escalation agents. Measurement additions (N-02) and the agent charters (N-03) are on the lane branch, pending review.
 
 ## 1. Authorization and scope
 
 - On 2026-11-04 Shawn, the lane owner, directed this implementation in a working session.
-- `Checklist.md` still has "Project lead authorizes any expansion beyond the local scaffold before that work begins" unchecked. **Project-lead confirmation of this phase is requested** (recorded in `docs/planning/DEFERRED-DECISIONS.md`). Until then, treat this work as a reviewable proposal.
+- `Checklist.md` now marks the project-lead authorization of this phase and the per-agent acceptance items as done. Manny's 2026-11-05 integration commits made that update. The agent charters and contracts are still `proposed`, and team-wide review of PRD-v3 is pending.
 - Inside scope: Shawn-owned agent behaviour for Knowledge (A3), Troubleshooting (A4), and Documentation (A6). Also a synthetic knowledge set and troubleshooting policy, proposed handoff contracts, tests, and a lane-only validation harness.
 - Outside scope, not touched: the Coordinator, Triage, and Escalation agents (Manny's Lane), the API routes in `main.py`, authentication, database schemas, model-provider integration, Salesforce, outbound messages, real or CDIT data.
 - **No language model is used.** No model provider is approved (D-12), so all three agents are deterministic and extractive. They quote approved text verbatim and never generate product guidance. This removes fabricated claims by construction. A model adapter remains future work and needs approval.
@@ -22,14 +22,15 @@
 | `src/cdit_support_mao/agents/knowledge/` | Corpus loader (fails closed; synthetic-only), BM25 lexical index, retrieved-text injection scanner, Knowledge agent. |
 | `src/cdit_support_mao/agents/troubleshooting/` | Versioned Tier 1 policy loader and Troubleshooting agent. |
 | `src/cdit_support_mao/agents/documentation/` | Privacy scanner and Documentation agent. |
-| `src/cdit_support_mao/lane_harness.py` | Lane validation harness and CLI. **Not the coordinator.** It builds labelled Triage and Escalation stand-ins from case files. |
-| `src/cdit_support_mao/lane_calibration.py` | Calibration runner and CLI that produces lane evidence for D-08: band accuracy, abstention, cut-off sweep, and a critical safety gate over every case (§9). |
+| `src/cdit_support_mao/lane_harness.py` | Lane validation harness and CLI. **Not the coordinator.** It builds labelled Triage and Escalation stand-ins from case files and times each lane agent call. |
+| `src/cdit_support_mao/lane_calibration.py` | Calibration runner and CLI that produces lane evidence for D-08: band accuracy, abstention, cut-off sweep, retrieval recall@k, source exclusions, and a critical safety gate over every case (§9). |
+| `docs/lanes/shawn/AGENT-CHARTERS.md` | Per-agent charters: role, inputs, outputs, forbidden actions, stop rules, and a system prompt draft (N-03). |
 | `synthetic_data/knowledge/` | 38 synthetic KB article versions (see §6 and `synthetic_data/README.md`). |
 | `synthetic_data/policy/troubleshooting-policy_v0.1.1.json` | Synthetic Tier 1 action allowlist, staff-only and forbidden action types, request rules, stop conditions. |
 | `synthetic_data/cases/` | 12 synthetic lane cases, each with its expected outcome written before the run. |
 | `synthetic_data/calibration/` | Held-out calibration set `SYN-KCAL` v1.0: 111 cases with draft labels, written before the first run and not yet human-approved. |
 | `docs/lanes/shawn/calibration/` | Generated calibration report and per-case results. |
-| `tests/` | 125 focused tests. |
+| `tests/` | 132 tests in the lane's test files, including one Escalation contract test Manny added to `test_contracts.py`. The full project suite has 524. |
 
 ## 3. Knowledge agent (A3 — retrieval handoff)
 
@@ -120,13 +121,32 @@ uvicorn cdit_support_mao.main:app --app-dir src  ->  GET /health  200 {"status":
 - **Quoted-instruction fix (B-01).** Troubleshooting 0.1.1 with policy 0.1.1 adds 15 tests: benign quotes, unquoted and boundary-crossing overrides, other rules, stop conditions, and quote detection. The 12 lane cases and all 111 calibration cases keep their outcomes; only version fields changed in the report and examples.
 - **Corpus growth.** The knowledge set grew from 11 to 38 article versions for calibration. All 12 lane cases kept their expected outcomes without any agent change. Contract examples were regenerated for the new source set.
 - **Isolation.** A static test asserts that the agent packages import no network or process modules.
+- **Measurement (N-02, 2026-11-05).** Run on Python 3.13.17 after pulling Manny's integration (`developer` at `6bdad27`):
+
+  ```text
+  python -m pytest -q
+  524 passed
+
+  python -m cdit_support_mao.lane_harness synthetic_data/cases
+  12 passed, 0 failed  (plus per-agent duration summary)
+
+  python -m cdit_support_mao.combined_harness synthetic_data/cases
+  12 of 12 cases PASS
+
+  python -m cdit_support_mao.lane_calibration synthetic_data/calibration/knowledge-calibration-v1.json
+  111 cases | answered 54 | accuracy 96.3% | coverage 74.3% | abstention recall 95.1% | ranking recall@3 100.0% | critical errors 0 | label problems 0
+  ```
+
+  - The calibration report adds ranking recall@1/3/5 (98.6% / 100% / 100%), returned recall (74.3%), and exclusions by reason. All 111 case outcomes are unchanged.
+  - Both CLIs print the median, p95, and maximum duration per agent. `--timing PATH` writes the calibration timings to JSON. On Shawn's machine the median lane total was about 1 ms per case, with 0 model calls and $0 provider cost.
+  - Durations are machine-dependent, so they are kept out of `LaneRun.as_json()`, the committed report, and the results file.
 
 ## 8. Known limitations
 
-- Lexical retrieval misses paraphrases and synonyms. The calibration set measures this: 8 of 25 paraphrased cases were answered, and the other 17 abstained safely (§9). A long, chatty `case_summary` also lowers coverage. Triage should send a minimized summary. Replacing or augmenting retrieval needs evaluation and a decision.
+- Lexical retrieval misses paraphrases and synonyms. The calibration set measures this: 8 of 25 paraphrased cases were answered, and the other 17 abstained safely (§9). Recall@k shows the ranking itself is not the problem: in 16 of those 17 cases the acceptable section was ranked first, but its relevance stayed under the 0.60 gate. A long, chatty `case_summary` also lowers coverage. Triage should send a minimized summary. Replacing or augmenting retrieval needs evaluation and a decision.
 - Injection, request, and privacy patterns are regex risk signals tuned on synthetic text. They are a backstop, not a guarantee. Real PHI must never enter the prototype.
 - Confidence thresholds are still provisional. Calibration evidence now exists (§9), but adopting new cut-offs is the D-08 decision, which belongs to the evaluation owner (Manny).
-- Triage and Escalation inputs are stand-ins until Manny's Lane delivers its agents and the contracts are agreed.
+- The lane harness and calibration runner still use labelled Triage and Escalation stand-ins, so lane evidence stays independent of Manny's agents. Manny's `combined_harness` runs the same 12 cases through all six agents. The v0.1 contracts are still `proposed`.
 - Nothing is persisted. Blackboard storage (D-07) and audit events (D-10) are proposals only (§9).
 
 ## 9. Proposals for Shawn-owned deferred decisions (not decided)
@@ -169,8 +189,8 @@ uvicorn cdit_support_mao.main:app --app-dir src  ->  GET /health  200 {"status":
   - Troubleshooting policy `SYN-TS-POLICY 0.1.1` (proposed).
 - **Completed:** the three Shawn-owned agents, their gates, synthetic data, harness, tests, and contract proposal with examples. Also calibration evidence for D-08 (draft labels) and a Python 3.13 / `/health` run.
 - **Evidence:** §7, plus `docs/contracts/examples/`.
-- **PRD-v3 alignment:** [PRD-V3-ALIGNMENT-REVIEW.md](PRD-V3-ALIGNMENT-REVIEW.md) (2026-11-04). It lists findings and open questions. B-01 is fixed (§4); the other findings are open.
-- **Escalation interface note:** Troubleshooting can now emit `quoted_policy_override_attempt`. Escalation should treat it as an input, like the other signals.
+- **PRD-v3 alignment:** [PRD-V3-ALIGNMENT-REVIEW.md](PRD-V3-ALIGNMENT-REVIEW.md) (2026-11-04, updated 2026-11-05). It lists findings and open questions. B-01 is fixed (§4), N-02 is done (§7), and N-03 is drafted in [AGENT-CHARTERS.md](AGENT-CHARTERS.md). The other findings are open.
+- **Escalation interface note:** Troubleshooting can emit `quoted_policy_override_attempt`. Manny's Escalation agent routes it to human review (rule 6).
 - **Assumptions:**
   - Triage supplies the minimized summary, per-field verification flags, and acknowledgment IDs.
   - Escalation consumes `escalation_signals`.

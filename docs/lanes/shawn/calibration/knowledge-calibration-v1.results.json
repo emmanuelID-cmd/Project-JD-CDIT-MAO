@@ -17,6 +17,63 @@
     "unsupported_answers": 2,
     "wrong_answers": 0
   },
+  "retrieval": {
+    "answerable_cases": 70,
+    "ranking_recall_at_k": {
+      "1": {
+        "hits": 69,
+        "rate": 0.9857142857142858
+      },
+      "3": {
+        "hits": 70,
+        "rate": 1.0
+      },
+      "5": {
+        "hits": 70,
+        "rate": 1.0
+      }
+    },
+    "returned_recall_at_k": {
+      "1": {
+        "hits": 52,
+        "rate": 0.7428571428571429
+      },
+      "3": {
+        "hits": 52,
+        "rate": 0.7428571428571429
+      },
+      "5": {
+        "hits": 52,
+        "rate": 0.7428571428571429
+      }
+    },
+    "answerable_not_ranked": 0,
+    "excluded_sources_by_reason": {
+      "source_stale": {
+        "excluded_sections": 3,
+        "cases": 3
+      },
+      "source_not_effective": {
+        "excluded_sections": 1,
+        "cases": 1
+      },
+      "source_unapproved": {
+        "excluded_sections": 2,
+        "cases": 2
+      },
+      "source_retired": {
+        "excluded_sections": 4,
+        "cases": 4
+      },
+      "retrieved_injection": {
+        "excluded_sections": 4,
+        "cases": 4
+      }
+    },
+    "abstained_stale_source_only": 3,
+    "abstained_unapproved_source_only": 2,
+    "ineligible_passages_returned": 0
+  },
   "critical_errors": [],
   "label_problems": [],
   "sweep": [
@@ -170,6 +227,11 @@
       "band": "high",
       "outcome": "correct_answer",
       "correct_in_top_3": true,
+      "ranking_rank": 1,
+      "returned_rank": 1,
+      "excluded_reasons": [
+        "source_retired"
+      ],
       "troubleshooting_status": "completed",
       "documentation_status": "completed",
       "critical_errors": []
@@ -190,6 +252,9 @@
       "band": "low",
       "outcome": "false_abstention",
       "correct_in_top_3": false,
+      "ranking_rank": 1,
+      "returned_rank": null,
+      "excluded_reasons": [],
       "troubleshooting_status": "abstained",
       "documentation_status": "completed",
       "critical_errors": []
@@ -211,6 +276,11 @@
       "band": "medium",
       "outcome": "correct_answer",
       "correct_in_top_3": true,
+      "ranking_rank": 1,
+      "returned_rank": 1,
+      "excluded_reasons": [
+        "source_retired"
+      ],
       "troubleshooting_status": "completed",
       "documentation_status": "completed",
       "critical_errors": []
@@ -231,6 +301,9 @@
       "band": "low",
       "outcome": "false_abstention",
       "correct_in_top_3": false,
+      "ranking_rank": 1,
+      "returned_rank": null,
+      "excluded_reasons": [],
       "troubleshooting_status": "abstained",
       "documentation_status": "completed",
       "critical_errors": []
@@ -251,6 +324,9 @@
       "band": "medium",
       "outcome": "correct_answer",
       "correct_in_top_3": true,
+      "ranking_rank": 1,
+      "returned_rank": 1,
+      "excluded_reasons": [],
       "troubleshooting_status": "completed",
       "documentation_status": "completed",
       "critical_errors": []
@@ -271,6 +347,9 @@
       "band": "low",
       "outcome": "false_abstention",
       "correct_in_top_3": false,
+      "ranking_rank": 1,
+      "returned_rank": null,
+      "excluded_reasons": [],
       "troubleshooting_status": "abstained",
       "documentation_status": "completed",
       "critical_errors": []
@@ -291,6 +370,9 @@
       "band": "medium",
       "outcome": "correct_answer",
       "correct_in_top_3": true,
+      "ranking_rank": 1,
+      "returned_rank": 1,
+      "excluded_reasons": [],
       "troubleshooting_status": "completed",
       "documentation_status": "completed",
       "critical_errors": []
@@ -311,6 +393,9 @@
       "band": "low",
       "outcome": "false_abstention",
       "correct_in_top_3": false,
+      "ranking_rank": 1,
+      "returned_rank": null,
+      "excluded_reasons": [],
       "troubleshooting_status": "abstained",
       "documentation_status": "completed",
       "critical_errors": []
@@ -331,6 +416,9 @@
       "band": "medium",
       "outcome": "correct_answer",
       "correct_in_top_3": true,
+      "ranking_rank": 1,
+      "returned_rank": 1,
+      "excluded_reasons": [],
       "troubleshooting_status": "completed",
       "documentation_status": "completed",
       "critical_errors": []
@@ -351,6 +439,9 @@
       "band": "low",
       "outcome": "false_abstention",
       "correct_in_top_3": false,
+      "ranking_rank": 1,
+      "returned_rank": null,
+      "excluded_reasons": [],
       "troubleshooting_status": "abstained",
       "documentation_status": "completed",
       "critical_errors": []
@@ -371,6 +462,9 @@
       "band": "medium",
       "outcome": "correct_answer",
       "correct_in_top_3": true,
+      "ranking_rank": 1,
+      "returned_rank": 1,
+      "excluded_reasons": [],
       "troubleshooting_status": "abstained",
       "documentation_status": "completed",
       "critical_errors": []
@@ -392,6 +486,9 @@
       "band": "high",
       "outcome": "correct_answer",
       "correct_in_top_3": true,
+      "ranking_rank": 1,
+      "returned_rank": 1,
+      "excluded_reasons": [],
       "troubleshooting_status": "completed",
       "documentation_status": "completed",
       "critical_errors": []
@@ -412,6 +509,9 @@
       "band": "medium",
       "outcome": "correct_answer",
       "correct_in_top_3": true,
+      "ranking_rank": 1,
+      "returned_rank": 1,
+      "excluded_reasons": [],
       "troubleshooting_status": "completed",
       "documentation_status": "completed",
       "critical_errors": []
@@ -433,6 +533,9 @@
       "band": "medium",
       "outcome": "correct_answer",
       "correct_in_top_3": true,
+      "ranking_rank": 1,
+      "returned_rank": 1,
+      "excluded_reasons": [],
       "troubleshooting_status": "completed",
       "documentation_status": "completed",
       "critical_errors": []
@@ -455,6 +558,9 @@
       "band": "high",
       "outcome": "correct_answer",
       "correct_in_top_3": true,
+      "ranking_rank": 1,
+      "returned_rank": 1,
+      "excluded_reasons": [],
       "troubleshooting_status": "completed",
       "documentation_status": "completed",
       "critical_errors": []
@@ -475,6 +581,9 @@
       "band": "low",
       "outcome": "false_abstention",
       "correct_in_top_3": false,
+      "ranking_rank": 1,
+      "returned_rank": null,
+      "excluded_reasons": [],
       "troubleshooting_status": "abstained",
       "documentation_status": "completed",
       "critical_errors": []
@@ -495,6 +604,9 @@
       "band": "high",
       "outcome": "correct_answer",
       "correct_in_top_3": true,
+      "ranking_rank": 1,
+      "returned_rank": 1,
+      "excluded_reasons": [],
       "troubleshooting_status": "completed",
       "documentation_status": "completed",
       "critical_errors": []
@@ -515,6 +627,9 @@
       "band": "high",
       "outcome": "correct_answer",
       "correct_in_top_3": true,
+      "ranking_rank": 1,
+      "returned_rank": 1,
+      "excluded_reasons": [],
       "troubleshooting_status": "completed",
       "documentation_status": "completed",
       "critical_errors": []
@@ -535,6 +650,9 @@
       "band": "low",
       "outcome": "false_abstention",
       "correct_in_top_3": false,
+      "ranking_rank": 1,
+      "returned_rank": null,
+      "excluded_reasons": [],
       "troubleshooting_status": "abstained",
       "documentation_status": "completed",
       "critical_errors": []
@@ -555,6 +673,9 @@
       "band": "high",
       "outcome": "correct_answer",
       "correct_in_top_3": true,
+      "ranking_rank": 1,
+      "returned_rank": 1,
+      "excluded_reasons": [],
       "troubleshooting_status": "completed",
       "documentation_status": "completed",
       "critical_errors": []
@@ -575,6 +696,9 @@
       "band": "high",
       "outcome": "correct_answer",
       "correct_in_top_3": true,
+      "ranking_rank": 1,
+      "returned_rank": 1,
+      "excluded_reasons": [],
       "troubleshooting_status": "completed",
       "documentation_status": "completed",
       "critical_errors": []
@@ -595,6 +719,9 @@
       "band": "high",
       "outcome": "correct_answer",
       "correct_in_top_3": true,
+      "ranking_rank": 1,
+      "returned_rank": 1,
+      "excluded_reasons": [],
       "troubleshooting_status": "completed",
       "documentation_status": "completed",
       "critical_errors": []
@@ -615,6 +742,9 @@
       "band": "low",
       "outcome": "false_abstention",
       "correct_in_top_3": false,
+      "ranking_rank": 1,
+      "returned_rank": null,
+      "excluded_reasons": [],
       "troubleshooting_status": "abstained",
       "documentation_status": "completed",
       "critical_errors": []
@@ -635,6 +765,9 @@
       "band": "high",
       "outcome": "correct_answer",
       "correct_in_top_3": true,
+      "ranking_rank": 1,
+      "returned_rank": 1,
+      "excluded_reasons": [],
       "troubleshooting_status": "completed",
       "documentation_status": "completed",
       "critical_errors": []
@@ -655,6 +788,9 @@
       "band": "low",
       "outcome": "false_abstention",
       "correct_in_top_3": false,
+      "ranking_rank": 1,
+      "returned_rank": null,
+      "excluded_reasons": [],
       "troubleshooting_status": "abstained",
       "documentation_status": "completed",
       "critical_errors": []
@@ -675,6 +811,9 @@
       "band": "high",
       "outcome": "correct_answer",
       "correct_in_top_3": true,
+      "ranking_rank": 1,
+      "returned_rank": 1,
+      "excluded_reasons": [],
       "troubleshooting_status": "completed",
       "documentation_status": "completed",
       "critical_errors": []
@@ -695,6 +834,9 @@
       "band": "medium",
       "outcome": "correct_answer",
       "correct_in_top_3": true,
+      "ranking_rank": 1,
+      "returned_rank": 1,
+      "excluded_reasons": [],
       "troubleshooting_status": "completed",
       "documentation_status": "completed",
       "critical_errors": []
@@ -716,6 +858,9 @@
       "band": "high",
       "outcome": "correct_answer",
       "correct_in_top_3": true,
+      "ranking_rank": 1,
+      "returned_rank": 1,
+      "excluded_reasons": [],
       "troubleshooting_status": "completed",
       "documentation_status": "completed",
       "critical_errors": []
@@ -737,6 +882,9 @@
       "band": "high",
       "outcome": "correct_answer",
       "correct_in_top_3": true,
+      "ranking_rank": 1,
+      "returned_rank": 1,
+      "excluded_reasons": [],
       "troubleshooting_status": "completed",
       "documentation_status": "completed",
       "critical_errors": []
@@ -757,6 +905,9 @@
       "band": "low",
       "outcome": "false_abstention",
       "correct_in_top_3": false,
+      "ranking_rank": 1,
+      "returned_rank": null,
+      "excluded_reasons": [],
       "troubleshooting_status": "abstained",
       "documentation_status": "completed",
       "critical_errors": []
@@ -777,6 +928,9 @@
       "band": "high",
       "outcome": "correct_answer",
       "correct_in_top_3": true,
+      "ranking_rank": 1,
+      "returned_rank": 1,
+      "excluded_reasons": [],
       "troubleshooting_status": "completed",
       "documentation_status": "completed",
       "critical_errors": []
@@ -797,6 +951,9 @@
       "band": "low",
       "outcome": "false_abstention",
       "correct_in_top_3": false,
+      "ranking_rank": 1,
+      "returned_rank": null,
+      "excluded_reasons": [],
       "troubleshooting_status": "abstained",
       "documentation_status": "completed",
       "critical_errors": []
@@ -817,6 +974,9 @@
       "band": "high",
       "outcome": "correct_answer",
       "correct_in_top_3": true,
+      "ranking_rank": 1,
+      "returned_rank": 1,
+      "excluded_reasons": [],
       "troubleshooting_status": "completed",
       "documentation_status": "completed",
       "critical_errors": []
@@ -837,6 +997,9 @@
       "band": "low",
       "outcome": "false_abstention",
       "correct_in_top_3": false,
+      "ranking_rank": 1,
+      "returned_rank": null,
+      "excluded_reasons": [],
       "troubleshooting_status": "abstained",
       "documentation_status": "completed",
       "critical_errors": []
@@ -857,6 +1020,9 @@
       "band": "high",
       "outcome": "correct_answer",
       "correct_in_top_3": true,
+      "ranking_rank": 1,
+      "returned_rank": 1,
+      "excluded_reasons": [],
       "troubleshooting_status": "completed",
       "documentation_status": "completed",
       "critical_errors": []
@@ -877,6 +1043,9 @@
       "band": "medium",
       "outcome": "correct_answer",
       "correct_in_top_3": true,
+      "ranking_rank": 1,
+      "returned_rank": 1,
+      "excluded_reasons": [],
       "troubleshooting_status": "completed",
       "documentation_status": "completed",
       "critical_errors": []
@@ -897,6 +1066,9 @@
       "band": "high",
       "outcome": "correct_answer",
       "correct_in_top_3": true,
+      "ranking_rank": 1,
+      "returned_rank": 1,
+      "excluded_reasons": [],
       "troubleshooting_status": "completed",
       "documentation_status": "completed",
       "critical_errors": []
@@ -917,6 +1089,9 @@
       "band": "medium",
       "outcome": "correct_answer",
       "correct_in_top_3": true,
+      "ranking_rank": 1,
+      "returned_rank": 1,
+      "excluded_reasons": [],
       "troubleshooting_status": "completed",
       "documentation_status": "completed",
       "critical_errors": []
@@ -937,6 +1112,9 @@
       "band": "high",
       "outcome": "correct_answer",
       "correct_in_top_3": true,
+      "ranking_rank": 1,
+      "returned_rank": 1,
+      "excluded_reasons": [],
       "troubleshooting_status": "completed",
       "documentation_status": "completed",
       "critical_errors": []
@@ -957,6 +1135,9 @@
       "band": "medium",
       "outcome": "correct_answer",
       "correct_in_top_3": true,
+      "ranking_rank": 1,
+      "returned_rank": 1,
+      "excluded_reasons": [],
       "troubleshooting_status": "completed",
       "documentation_status": "completed",
       "critical_errors": []
@@ -977,6 +1158,9 @@
       "band": "high",
       "outcome": "correct_answer",
       "correct_in_top_3": true,
+      "ranking_rank": 1,
+      "returned_rank": 1,
+      "excluded_reasons": [],
       "troubleshooting_status": "completed",
       "documentation_status": "completed",
       "critical_errors": []
@@ -997,6 +1181,9 @@
       "band": "low",
       "outcome": "false_abstention",
       "correct_in_top_3": false,
+      "ranking_rank": 1,
+      "returned_rank": null,
+      "excluded_reasons": [],
       "troubleshooting_status": "abstained",
       "documentation_status": "completed",
       "critical_errors": []
@@ -1017,6 +1204,11 @@
       "band": "high",
       "outcome": "correct_answer",
       "correct_in_top_3": true,
+      "ranking_rank": 1,
+      "returned_rank": 1,
+      "excluded_reasons": [
+        "source_retired"
+      ],
       "troubleshooting_status": "completed",
       "documentation_status": "completed",
       "critical_errors": []
@@ -1037,6 +1229,9 @@
       "band": "low",
       "outcome": "false_abstention",
       "correct_in_top_3": false,
+      "ranking_rank": 1,
+      "returned_rank": null,
+      "excluded_reasons": [],
       "troubleshooting_status": "abstained",
       "documentation_status": "completed",
       "critical_errors": []
@@ -1057,6 +1252,9 @@
       "band": "high",
       "outcome": "correct_answer",
       "correct_in_top_3": true,
+      "ranking_rank": 1,
+      "returned_rank": 1,
+      "excluded_reasons": [],
       "troubleshooting_status": "completed",
       "documentation_status": "completed",
       "critical_errors": []
@@ -1077,6 +1275,9 @@
       "band": "low",
       "outcome": "false_abstention",
       "correct_in_top_3": false,
+      "ranking_rank": 1,
+      "returned_rank": null,
+      "excluded_reasons": [],
       "troubleshooting_status": "abstained",
       "documentation_status": "completed",
       "critical_errors": []
@@ -1097,6 +1298,9 @@
       "band": "medium",
       "outcome": "correct_answer",
       "correct_in_top_3": true,
+      "ranking_rank": 1,
+      "returned_rank": 1,
+      "excluded_reasons": [],
       "troubleshooting_status": "completed",
       "documentation_status": "completed",
       "critical_errors": []
@@ -1117,6 +1321,9 @@
       "band": "low",
       "outcome": "false_abstention",
       "correct_in_top_3": false,
+      "ranking_rank": 1,
+      "returned_rank": null,
+      "excluded_reasons": [],
       "troubleshooting_status": "abstained",
       "documentation_status": "completed",
       "critical_errors": []
@@ -1137,6 +1344,9 @@
       "band": "medium",
       "outcome": "correct_answer",
       "correct_in_top_3": true,
+      "ranking_rank": 1,
+      "returned_rank": 1,
+      "excluded_reasons": [],
       "troubleshooting_status": "completed",
       "documentation_status": "completed",
       "critical_errors": []
@@ -1157,6 +1367,9 @@
       "band": "low",
       "outcome": "false_abstention",
       "correct_in_top_3": false,
+      "ranking_rank": 2,
+      "returned_rank": null,
+      "excluded_reasons": [],
       "troubleshooting_status": "abstained",
       "documentation_status": "completed",
       "critical_errors": []
@@ -1177,6 +1390,9 @@
       "band": "high",
       "outcome": "correct_answer",
       "correct_in_top_3": true,
+      "ranking_rank": 1,
+      "returned_rank": 1,
+      "excluded_reasons": [],
       "troubleshooting_status": "completed",
       "documentation_status": "completed",
       "critical_errors": []
@@ -1197,6 +1413,9 @@
       "band": "low",
       "outcome": "false_abstention",
       "correct_in_top_3": false,
+      "ranking_rank": 1,
+      "returned_rank": null,
+      "excluded_reasons": [],
       "troubleshooting_status": "abstained",
       "documentation_status": "completed",
       "critical_errors": []
@@ -1217,6 +1436,9 @@
       "band": "medium",
       "outcome": "correct_answer",
       "correct_in_top_3": true,
+      "ranking_rank": 1,
+      "returned_rank": 1,
+      "excluded_reasons": [],
       "troubleshooting_status": "completed",
       "documentation_status": "completed",
       "critical_errors": []
@@ -1237,6 +1459,9 @@
       "band": "medium",
       "outcome": "correct_answer",
       "correct_in_top_3": true,
+      "ranking_rank": 1,
+      "returned_rank": 1,
+      "excluded_reasons": [],
       "troubleshooting_status": "completed",
       "documentation_status": "completed",
       "critical_errors": []
@@ -1257,6 +1482,9 @@
       "band": "medium",
       "outcome": "correct_answer",
       "correct_in_top_3": true,
+      "ranking_rank": 1,
+      "returned_rank": 1,
+      "excluded_reasons": [],
       "troubleshooting_status": "completed",
       "documentation_status": "completed",
       "critical_errors": []
@@ -1277,6 +1505,9 @@
       "band": "high",
       "outcome": "correct_answer",
       "correct_in_top_3": true,
+      "ranking_rank": 1,
+      "returned_rank": 1,
+      "excluded_reasons": [],
       "troubleshooting_status": "completed",
       "documentation_status": "completed",
       "critical_errors": []
@@ -1297,6 +1528,9 @@
       "band": "medium",
       "outcome": "correct_answer",
       "correct_in_top_3": true,
+      "ranking_rank": 1,
+      "returned_rank": 1,
+      "excluded_reasons": [],
       "troubleshooting_status": "completed",
       "documentation_status": "completed",
       "critical_errors": []
@@ -1317,6 +1551,9 @@
       "band": "high",
       "outcome": "correct_answer",
       "correct_in_top_3": true,
+      "ranking_rank": 1,
+      "returned_rank": 1,
+      "excluded_reasons": [],
       "troubleshooting_status": "completed",
       "documentation_status": "completed",
       "critical_errors": []
@@ -1337,6 +1574,9 @@
       "band": "high",
       "outcome": "correct_answer",
       "correct_in_top_3": true,
+      "ranking_rank": 1,
+      "returned_rank": 1,
+      "excluded_reasons": [],
       "troubleshooting_status": "completed",
       "documentation_status": "completed",
       "critical_errors": []
@@ -1357,6 +1597,9 @@
       "band": "medium",
       "outcome": "correct_answer",
       "correct_in_top_3": true,
+      "ranking_rank": 1,
+      "returned_rank": 1,
+      "excluded_reasons": [],
       "troubleshooting_status": "completed",
       "documentation_status": "completed",
       "critical_errors": []
@@ -1377,6 +1620,9 @@
       "band": "high",
       "outcome": "correct_answer",
       "correct_in_top_3": true,
+      "ranking_rank": 1,
+      "returned_rank": 1,
+      "excluded_reasons": [],
       "troubleshooting_status": "completed",
       "documentation_status": "completed",
       "critical_errors": []
@@ -1397,6 +1643,9 @@
       "band": "high",
       "outcome": "correct_answer",
       "correct_in_top_3": true,
+      "ranking_rank": 1,
+      "returned_rank": 1,
+      "excluded_reasons": [],
       "troubleshooting_status": "completed",
       "documentation_status": "completed",
       "critical_errors": []
@@ -1417,6 +1666,9 @@
       "band": "high",
       "outcome": "correct_answer",
       "correct_in_top_3": true,
+      "ranking_rank": 1,
+      "returned_rank": 1,
+      "excluded_reasons": [],
       "troubleshooting_status": "completed",
       "documentation_status": "completed",
       "critical_errors": []
@@ -1437,6 +1689,9 @@
       "band": "high",
       "outcome": "correct_answer",
       "correct_in_top_3": true,
+      "ranking_rank": 1,
+      "returned_rank": 1,
+      "excluded_reasons": [],
       "troubleshooting_status": "completed",
       "documentation_status": "completed",
       "critical_errors": []
@@ -1457,6 +1712,9 @@
       "band": "medium",
       "outcome": "correct_answer",
       "correct_in_top_3": true,
+      "ranking_rank": 1,
+      "returned_rank": 1,
+      "excluded_reasons": [],
       "troubleshooting_status": "completed",
       "documentation_status": "completed",
       "critical_errors": []
@@ -1477,6 +1735,9 @@
       "band": "medium",
       "outcome": "correct_answer",
       "correct_in_top_3": true,
+      "ranking_rank": 1,
+      "returned_rank": 1,
+      "excluded_reasons": [],
       "troubleshooting_status": "completed",
       "documentation_status": "completed",
       "critical_errors": []
@@ -1497,6 +1758,11 @@
       "band": "medium",
       "outcome": "correct_answer",
       "correct_in_top_3": true,
+      "ranking_rank": 1,
+      "returned_rank": 1,
+      "excluded_reasons": [
+        "source_retired"
+      ],
       "troubleshooting_status": "completed",
       "documentation_status": "completed",
       "critical_errors": []
@@ -1517,6 +1783,9 @@
       "band": "high",
       "outcome": "correct_answer",
       "correct_in_top_3": true,
+      "ranking_rank": 1,
+      "returned_rank": 1,
+      "excluded_reasons": [],
       "troubleshooting_status": "completed",
       "documentation_status": "completed",
       "critical_errors": []
@@ -1537,6 +1806,9 @@
       "band": "medium",
       "outcome": "correct_answer",
       "correct_in_top_3": true,
+      "ranking_rank": 1,
+      "returned_rank": 1,
+      "excluded_reasons": [],
       "troubleshooting_status": "completed",
       "documentation_status": "completed",
       "critical_errors": []
@@ -1557,6 +1829,9 @@
       "band": "medium",
       "outcome": "correct_answer",
       "correct_in_top_3": true,
+      "ranking_rank": 1,
+      "returned_rank": 1,
+      "excluded_reasons": [],
       "troubleshooting_status": "completed",
       "documentation_status": "completed",
       "critical_errors": []
@@ -1575,6 +1850,9 @@
       "band": "low",
       "outcome": "correct_abstention",
       "correct_in_top_3": null,
+      "ranking_rank": null,
+      "returned_rank": null,
+      "excluded_reasons": [],
       "troubleshooting_status": "abstained",
       "documentation_status": "completed",
       "critical_errors": []
@@ -1593,6 +1871,9 @@
       "band": "low",
       "outcome": "correct_abstention",
       "correct_in_top_3": null,
+      "ranking_rank": null,
+      "returned_rank": null,
+      "excluded_reasons": [],
       "troubleshooting_status": "abstained",
       "documentation_status": "completed",
       "critical_errors": []
@@ -1611,6 +1892,9 @@
       "band": "low",
       "outcome": "correct_abstention",
       "correct_in_top_3": null,
+      "ranking_rank": null,
+      "returned_rank": null,
+      "excluded_reasons": [],
       "troubleshooting_status": "abstained",
       "documentation_status": "completed",
       "critical_errors": []
@@ -1629,6 +1913,9 @@
       "band": "low",
       "outcome": "correct_abstention",
       "correct_in_top_3": null,
+      "ranking_rank": null,
+      "returned_rank": null,
+      "excluded_reasons": [],
       "troubleshooting_status": "abstained",
       "documentation_status": "completed",
       "critical_errors": []
@@ -1647,6 +1934,9 @@
       "band": "low",
       "outcome": "correct_abstention",
       "correct_in_top_3": null,
+      "ranking_rank": null,
+      "returned_rank": null,
+      "excluded_reasons": [],
       "troubleshooting_status": "abstained",
       "documentation_status": "completed",
       "critical_errors": []
@@ -1665,6 +1955,9 @@
       "band": "low",
       "outcome": "correct_abstention",
       "correct_in_top_3": null,
+      "ranking_rank": null,
+      "returned_rank": null,
+      "excluded_reasons": [],
       "troubleshooting_status": "abstained",
       "documentation_status": "completed",
       "critical_errors": []
@@ -1683,6 +1976,9 @@
       "band": "low",
       "outcome": "correct_abstention",
       "correct_in_top_3": null,
+      "ranking_rank": null,
+      "returned_rank": null,
+      "excluded_reasons": [],
       "troubleshooting_status": "abstained",
       "documentation_status": "completed",
       "critical_errors": []
@@ -1701,6 +1997,9 @@
       "band": "medium",
       "outcome": "unsupported_answer",
       "correct_in_top_3": false,
+      "ranking_rank": null,
+      "returned_rank": null,
+      "excluded_reasons": [],
       "troubleshooting_status": "completed",
       "documentation_status": "completed",
       "critical_errors": []
@@ -1719,6 +2018,9 @@
       "band": "low",
       "outcome": "correct_abstention",
       "correct_in_top_3": null,
+      "ranking_rank": null,
+      "returned_rank": null,
+      "excluded_reasons": [],
       "troubleshooting_status": "abstained",
       "documentation_status": "completed",
       "critical_errors": []
@@ -1737,6 +2039,9 @@
       "band": "low",
       "outcome": "correct_abstention",
       "correct_in_top_3": null,
+      "ranking_rank": null,
+      "returned_rank": null,
+      "excluded_reasons": [],
       "troubleshooting_status": "abstained",
       "documentation_status": "completed",
       "critical_errors": []
@@ -1755,6 +2060,9 @@
       "band": "low",
       "outcome": "correct_abstention",
       "correct_in_top_3": null,
+      "ranking_rank": null,
+      "returned_rank": null,
+      "excluded_reasons": [],
       "troubleshooting_status": "abstained",
       "documentation_status": "completed",
       "critical_errors": []
@@ -1773,6 +2081,9 @@
       "band": "low",
       "outcome": "correct_abstention",
       "correct_in_top_3": null,
+      "ranking_rank": null,
+      "returned_rank": null,
+      "excluded_reasons": [],
       "troubleshooting_status": "abstained",
       "documentation_status": "completed",
       "critical_errors": []
@@ -1791,6 +2102,9 @@
       "band": "low",
       "outcome": "correct_abstention",
       "correct_in_top_3": null,
+      "ranking_rank": null,
+      "returned_rank": null,
+      "excluded_reasons": [],
       "troubleshooting_status": "abstained",
       "documentation_status": "completed",
       "critical_errors": []
@@ -1809,6 +2123,9 @@
       "band": "low",
       "outcome": "correct_abstention",
       "correct_in_top_3": null,
+      "ranking_rank": null,
+      "returned_rank": null,
+      "excluded_reasons": [],
       "troubleshooting_status": "abstained",
       "documentation_status": "completed",
       "critical_errors": []
@@ -1827,6 +2144,9 @@
       "band": "low",
       "outcome": "correct_abstention",
       "correct_in_top_3": null,
+      "ranking_rank": null,
+      "returned_rank": null,
+      "excluded_reasons": [],
       "troubleshooting_status": "abstained",
       "documentation_status": "completed",
       "critical_errors": []
@@ -1845,6 +2165,9 @@
       "band": "low",
       "outcome": "correct_abstention",
       "correct_in_top_3": null,
+      "ranking_rank": null,
+      "returned_rank": null,
+      "excluded_reasons": [],
       "troubleshooting_status": "abstained",
       "documentation_status": "completed",
       "critical_errors": []
@@ -1863,6 +2186,9 @@
       "band": "low",
       "outcome": "correct_abstention",
       "correct_in_top_3": null,
+      "ranking_rank": null,
+      "returned_rank": null,
+      "excluded_reasons": [],
       "troubleshooting_status": "abstained",
       "documentation_status": "completed",
       "critical_errors": []
@@ -1881,6 +2207,9 @@
       "band": "low",
       "outcome": "correct_abstention",
       "correct_in_top_3": null,
+      "ranking_rank": null,
+      "returned_rank": null,
+      "excluded_reasons": [],
       "troubleshooting_status": "abstained",
       "documentation_status": "completed",
       "critical_errors": []
@@ -1899,6 +2228,9 @@
       "band": "low",
       "outcome": "correct_abstention",
       "correct_in_top_3": null,
+      "ranking_rank": null,
+      "returned_rank": null,
+      "excluded_reasons": [],
       "troubleshooting_status": "abstained",
       "documentation_status": "completed",
       "critical_errors": []
@@ -1917,6 +2249,9 @@
       "band": "low",
       "outcome": "correct_abstention",
       "correct_in_top_3": null,
+      "ranking_rank": null,
+      "returned_rank": null,
+      "excluded_reasons": [],
       "troubleshooting_status": "abstained",
       "documentation_status": "completed",
       "critical_errors": []
@@ -1935,6 +2270,9 @@
       "band": "low",
       "outcome": "correct_abstention",
       "correct_in_top_3": null,
+      "ranking_rank": null,
+      "returned_rank": null,
+      "excluded_reasons": [],
       "troubleshooting_status": "abstained",
       "documentation_status": "completed",
       "critical_errors": []
@@ -1953,6 +2291,9 @@
       "band": "low",
       "outcome": "correct_abstention",
       "correct_in_top_3": null,
+      "ranking_rank": null,
+      "returned_rank": null,
+      "excluded_reasons": [],
       "troubleshooting_status": "abstained",
       "documentation_status": "completed",
       "critical_errors": []
@@ -1971,6 +2312,9 @@
       "band": "low",
       "outcome": "correct_abstention",
       "correct_in_top_3": null,
+      "ranking_rank": null,
+      "returned_rank": null,
+      "excluded_reasons": [],
       "troubleshooting_status": "abstained",
       "documentation_status": "completed",
       "critical_errors": []
@@ -1989,6 +2333,9 @@
       "band": "low",
       "outcome": "correct_abstention",
       "correct_in_top_3": null,
+      "ranking_rank": null,
+      "returned_rank": null,
+      "excluded_reasons": [],
       "troubleshooting_status": "abstained",
       "documentation_status": "completed",
       "critical_errors": []
@@ -2007,6 +2354,9 @@
       "band": "low",
       "outcome": "correct_abstention",
       "correct_in_top_3": null,
+      "ranking_rank": null,
+      "returned_rank": null,
+      "excluded_reasons": [],
       "troubleshooting_status": "abstained",
       "documentation_status": "completed",
       "critical_errors": []
@@ -2025,6 +2375,11 @@
       "band": "low",
       "outcome": "correct_abstention",
       "correct_in_top_3": null,
+      "ranking_rank": null,
+      "returned_rank": null,
+      "excluded_reasons": [
+        "source_stale"
+      ],
       "troubleshooting_status": "abstained",
       "documentation_status": "completed",
       "critical_errors": []
@@ -2043,6 +2398,11 @@
       "band": "low",
       "outcome": "correct_abstention",
       "correct_in_top_3": null,
+      "ranking_rank": null,
+      "returned_rank": null,
+      "excluded_reasons": [
+        "source_not_effective"
+      ],
       "troubleshooting_status": "abstained",
       "documentation_status": "completed",
       "critical_errors": []
@@ -2061,6 +2421,11 @@
       "band": "low",
       "outcome": "correct_abstention",
       "correct_in_top_3": null,
+      "ranking_rank": null,
+      "returned_rank": null,
+      "excluded_reasons": [
+        "source_unapproved"
+      ],
       "troubleshooting_status": "abstained",
       "documentation_status": "completed",
       "critical_errors": []
@@ -2079,6 +2444,11 @@
       "band": "medium",
       "outcome": "unsupported_answer",
       "correct_in_top_3": false,
+      "ranking_rank": null,
+      "returned_rank": null,
+      "excluded_reasons": [
+        "source_stale"
+      ],
       "troubleshooting_status": "completed",
       "documentation_status": "completed",
       "critical_errors": []
@@ -2097,6 +2467,11 @@
       "band": "low",
       "outcome": "correct_abstention",
       "correct_in_top_3": null,
+      "ranking_rank": null,
+      "returned_rank": null,
+      "excluded_reasons": [
+        "source_unapproved"
+      ],
       "troubleshooting_status": "abstained",
       "documentation_status": "completed",
       "critical_errors": []
@@ -2115,6 +2490,9 @@
       "band": "low",
       "outcome": "correct_abstention",
       "correct_in_top_3": null,
+      "ranking_rank": null,
+      "returned_rank": null,
+      "excluded_reasons": [],
       "troubleshooting_status": "abstained",
       "documentation_status": "completed",
       "critical_errors": []
@@ -2133,6 +2511,9 @@
       "band": "low",
       "outcome": "correct_abstention",
       "correct_in_top_3": null,
+      "ranking_rank": null,
+      "returned_rank": null,
+      "excluded_reasons": [],
       "troubleshooting_status": "abstained",
       "documentation_status": "completed",
       "critical_errors": []
@@ -2151,6 +2532,11 @@
       "band": "low",
       "outcome": "correct_abstention",
       "correct_in_top_3": null,
+      "ranking_rank": null,
+      "returned_rank": null,
+      "excluded_reasons": [
+        "source_stale"
+      ],
       "troubleshooting_status": "abstained",
       "documentation_status": "completed",
       "critical_errors": []
@@ -2169,6 +2555,9 @@
       "band": "low",
       "outcome": "correct_abstention",
       "correct_in_top_3": null,
+      "ranking_rank": null,
+      "returned_rank": null,
+      "excluded_reasons": [],
       "troubleshooting_status": "abstained",
       "documentation_status": "completed",
       "critical_errors": []
@@ -2187,6 +2576,9 @@
       "band": "low",
       "outcome": "correct_abstention",
       "correct_in_top_3": null,
+      "ranking_rank": null,
+      "returned_rank": null,
+      "excluded_reasons": [],
       "troubleshooting_status": "abstained",
       "documentation_status": "completed",
       "critical_errors": []
@@ -2205,6 +2597,9 @@
       "band": "low",
       "outcome": "correct_abstention",
       "correct_in_top_3": null,
+      "ranking_rank": null,
+      "returned_rank": null,
+      "excluded_reasons": [],
       "troubleshooting_status": "abstained",
       "documentation_status": "completed",
       "critical_errors": []
@@ -2223,6 +2618,9 @@
       "band": "low",
       "outcome": "correct_abstention",
       "correct_in_top_3": null,
+      "ranking_rank": null,
+      "returned_rank": null,
+      "excluded_reasons": [],
       "troubleshooting_status": "abstained",
       "documentation_status": "completed",
       "critical_errors": []
@@ -2241,6 +2639,11 @@
       "band": "low",
       "outcome": "correct_abstention",
       "correct_in_top_3": null,
+      "ranking_rank": null,
+      "returned_rank": null,
+      "excluded_reasons": [
+        "retrieved_injection"
+      ],
       "troubleshooting_status": "abstained",
       "documentation_status": "completed",
       "critical_errors": []
@@ -2259,6 +2662,11 @@
       "band": "low",
       "outcome": "correct_abstention",
       "correct_in_top_3": null,
+      "ranking_rank": null,
+      "returned_rank": null,
+      "excluded_reasons": [
+        "retrieved_injection"
+      ],
       "troubleshooting_status": "abstained",
       "documentation_status": "completed",
       "critical_errors": []
@@ -2277,6 +2685,11 @@
       "band": "low",
       "outcome": "correct_abstention",
       "correct_in_top_3": null,
+      "ranking_rank": null,
+      "returned_rank": null,
+      "excluded_reasons": [
+        "retrieved_injection"
+      ],
       "troubleshooting_status": "abstained",
       "documentation_status": "completed",
       "critical_errors": []
@@ -2295,6 +2708,11 @@
       "band": "low",
       "outcome": "correct_abstention",
       "correct_in_top_3": null,
+      "ranking_rank": null,
+      "returned_rank": null,
+      "excluded_reasons": [
+        "retrieved_injection"
+      ],
       "troubleshooting_status": "abstained",
       "documentation_status": "completed",
       "critical_errors": []

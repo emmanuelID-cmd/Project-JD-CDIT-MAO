@@ -52,6 +52,37 @@ These checks run on every case through Knowledge, Troubleshooting, and Documenta
 | Abstention recall | 95.1% |
 | Correct source anywhere in top 3 (answered, answerable) | 100.0% |
 
+## Retrieval recall@k
+
+Answerable cases only (70). A hit means an acceptable section is within the first k.
+
+- **Ranking:** approved, current sections in lexical-index order, before the answer cut-off, the minimum matched-term rule, and the product-area preference. This isolates ranking quality from the abstention gates.
+- **Returned:** passages the agent returned to staff after every gate. The agent returns at most 3 passages, so returned recall stops growing after k = 3.
+
+| k | Ranking recall@k | Returned recall@k |
+| :--- | ---: | ---: |
+| 1 | 98.6% (69/70) | 74.3% (52/70) |
+| 3 | 100.0% (70/70) | 74.3% (52/70) |
+| 5 | 100.0% (70/70) | 74.3% (52/70) |
+
+Answerable cases whose acceptable sections match no query term: 0.
+
+## Source freshness and exclusions
+
+Sources the agent excluded across all 111 cases. Only candidates that passed the answer cut-off are checked for eligibility, and only selected passages are scanned for injected instructions. Excluded sources are never returned as guidance.
+
+| Exclusion reason | Excluded sections | Cases |
+| :--- | ---: | ---: |
+| `source_stale` | 3 | 3 |
+| `source_not_effective` | 1 | 1 |
+| `source_unapproved` | 2 | 2 |
+| `source_retired` | 4 | 4 |
+| `retrieved_injection` | 4 | 4 |
+
+- Abstained because only stale or not-yet-effective sources matched (`stale_source_only`): 3 cases.
+- Abstained because only draft or retired sources matched (`unapproved_source_only`): 2 cases.
+- Passages returned to staff from a stale, not-yet-effective, draft, or retired source: 0.
+
 ## Accuracy by confidence band
 
 Only medium and high bands can answer; anything below the cut-off abstains with low confidence.
@@ -142,8 +173,15 @@ Re-runs the Knowledge agent with each candidate answer cut-off. Lower cut-offs a
 | `SYN-KCAL-0078` | unsupported_answer | no_coverage | How to randomize a subject in the study? | KB-SRCH-240#s1 v1.0 | 0.63 | medium |
 | `SYN-KCAL-0099` | unsupported_answer | ineligible_only | Export the training transcript from the learning portal. | KB-TRN-250#s1 v1.0 | 0.61 | medium |
 
+## Latency and cost
+
+- The three lane agents are deterministic and make no model or network calls: 0 model calls and $0 provider cost per case.
+- Wall-clock duration per agent depends on the machine, so this report does not store it; the report must match a fresh run exactly.
+- The CLI prints the median, p95, and maximum duration per agent. `--timing PATH` also writes them to a JSON file.
+
 ## Limits
 
 - 111 synthetic cases written by one author; intervals are wide and the set is not representative of real tickets.
 - Labels judge only the rank-1 Knowledge source; they do not judge Troubleshooting step quality.
+- Recall@k uses the same draft labels and measures lexical ranking only; it is not a comparison with another retrieval method (N-01).
 - Do not adjust thresholds or retrieval against this set. A change needs a new held-out set version to re-measure.

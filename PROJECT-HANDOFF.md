@@ -253,3 +253,39 @@ UI lane clarification: Either lane may add/style presentation controls (includin
 - All Manny phases and six-agent combined workflow integration are complete.
 - Branch `developer` is fast-forwarded to `37c01c8`.
 - Merge to `main` requires explicit project lead authorization per `AGENTS.md` branch rules.
+
+## 2026-11-05T18:30:00-05:00 — Shawn's Lane: retrieval measurement (N-02) and agent charters (N-03)
+
+- Prepared: 2026-11-05T18:30:00-05:00
+- Branch: `shawn/knowledge-troubleshooting-docs`. Baseline: `developer` at `6bdad27`, fast-forwarded into the lane before this work. Target: `developer` by PR; none opened yet.
+
+### Done
+
+- **N-02 measurement** (PRD-v3 §2d and UC-10). Measurement only; no agent behaviour changed.
+  - `lane_calibration` reports ranking recall@1/3/5, returned recall@1/3/5, exclusions by reason, freshness-driven abstentions, and ineligible passages returned (0).
+  - `lane_harness` records each lane agent's wall-clock duration. Both CLIs print the median, p95, and maximum, and `lane_calibration --timing PATH` writes them to JSON.
+  - Durations are machine-dependent, so they stay out of `LaneRun.as_json()`, the committed report, and the results file.
+- **N-03 charters.** `docs/lanes/shawn/AGENT-CHARTERS.md` states, for each Shawn agent: purpose, inputs, outputs, forbidden actions, stop rules, confidence, the files and tests that enforce them, and a system prompt draft. The prompt draft applies only if a model is approved (Q-04, D-12).
+- **Tests.** 6 new tests cover recall consistency, exclusion totals, rank definitions, durations kept out of evidence, duration statistics, and CLI output.
+- **Records.** Updated the PRD-v3 alignment review (2026-11-05 update and N-02 results), the lane design, and the Checklist status note.
+
+### Findings
+
+- Ranking recall@3 is 100%, but returned recall is 74.3%. All 18 answerable cases that abstained did so with `weak_evidence`, and in 17 of them the acceptable section was ranked first. The gap is the relevance gate, not ranking. N-01 should compare gate scoring on an independently written `SYN-KCAL` v2.
+- Manny's Escalation agent routes `quoted_policy_override_attempt` to human review (rule 6), which covers the B-01 interface note.
+
+### Not completed
+
+- Q-01 to Q-04 and Q-06 have no recorded answers. Q-05 is partly answered: Manny will approve the calibration labels, but no peer reviewer is named for the corpus or lane cases. B-02, B-03, C-01 to C-06, N-01, and N-04 to N-06 remain open.
+- The calibration labels are still drafts pending Manny's approval (D-09).
+
+### Validation
+
+- `.venv\Scripts\python.exe -m pytest -q` (Python 3.13.17): 524 passed.
+- `python -m cdit_support_mao.lane_harness synthetic_data/cases`: 12 passed, 0 failed.
+- `python -m cdit_support_mao.combined_harness synthetic_data/cases`: 12 of 12 PASS.
+- `python -m cdit_support_mao.lane_calibration … --report … --results …`: 0 critical errors, 0 label problems; committed report and results regenerated.
+
+### Requested
+
+- Manny: answers to review §7, especially Q-04 (do the charters satisfy PRD-v3 §3b?) and the rest of Q-05 (who peer-reviews the corpus and lane cases?).
