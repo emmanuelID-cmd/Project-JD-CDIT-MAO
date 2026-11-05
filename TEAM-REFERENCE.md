@@ -1,5 +1,21 @@
 # Handoffs prepared for push
 
+## 2026-11-04T20:58:45-05:00 — Requirements, phase planning, and architecture guide
+
+Summary file: PROJECT-HANDOFF.md
+
+- Git author: Emmanuel De Jesus <emmanuel.dejesus@pursuit.org>.
+- Branch: `manny/coordinator-triage-escalation`; intended target: `developer`. Verified remote baseline: `a14bb8d54e0230cdb569f790c554b8ceb106c989`. Work commits: `5ccc84b`, `5a0330d`, `61a7d82`.
+- Done:
+  - Drafted PRD v2/v3 and updated synthetic scenarios and user-needs priorities.
+  - Organized Manny, voluntary Shawn, shared, and unassigned phase guidance, deferred decisions, and checklist status.
+  - Updated architecture artifacts with a connected interactive field guide and looping guided playback.
+- Not completed:
+  - PRD-v3 team review, agent integration, and full synthetic evaluation.
+  - Visual and interaction review of the local field guide; browser policy blocked the preview.
+- Validation: staged whitespace checks passed; 29 Markdown files checked for trailing whitespace and balanced fences; field-guide JavaScript syntax and static structure checked. No runtime-agent tests run for this batch.
+- Reviewer next step: review requirements, lane guidance and the artifact; verify the field guide visually in a browser. The original template remains untracked and excluded.
+
 ## 2026-11-04T02:02:37-05:00 — Shawn's Lane agents (Knowledge, Troubleshooting, Documentation)
 
 Summary file: PROJECT-HANDOFF.md
