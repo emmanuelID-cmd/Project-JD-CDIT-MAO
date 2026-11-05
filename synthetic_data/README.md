@@ -7,7 +7,7 @@ Never place real customer tickets, PHI, credentials, Salesforce exports, or CDIT
 | Folder | Contents | Used by |
 | :--- | :--- | :--- |
 | `knowledge/` | 38 versioned KB article files (approved, retired, draft, stale, not-yet-effective, conflicting, injected, and governance-error examples) | Knowledge agent |
-| `policy/` | Proposed Tier 1 troubleshooting policy (`SYN-TS-POLICY` 0.1.0) | Troubleshooting agent |
+| `policy/` | Proposed Tier 1 troubleshooting policy (`SYN-TS-POLICY` 0.1.1) | Troubleshooting agent |
 | `cases/` | 12 lane cases, each with Triage and Escalation stand-ins and expected outcomes | `cdit_support_mao.lane_harness`, tests |
 | `calibration/` | Held-out calibration set `SYN-KCAL` v1.0: 111 cases with draft labels, written before the first run and pending human approval (D-09) | `cdit_support_mao.lane_calibration`, tests |
 

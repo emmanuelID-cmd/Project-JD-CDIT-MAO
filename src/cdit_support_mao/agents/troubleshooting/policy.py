@@ -19,7 +19,23 @@ from pydantic import Field, ValidationError, field_validator, model_validator
 from cdit_support_mao.contracts.common import StrictModel
 
 POLICY_PATH_ENV = "CDIT_TROUBLESHOOTING_POLICY"
-DEFAULT_POLICY_PATH = Path("synthetic_data/policy/troubleshooting-policy_v0.1.0.json")
+DEFAULT_POLICY_PATH = Path("synthetic_data/policy/troubleshooting-policy_v0.1.1.json")
+
+# Quoted spans in untrusted case text. Straight and curly single quotes allow an
+# apostrophe inside a word (can't, site's) and must not start or end inside a word.
+_QUOTE_PATTERNS: tuple[re.Pattern[str], ...] = (
+    re.compile(r'"([^"\n]+)"'),
+    re.compile(r"“([^”\n]+)”"),
+    re.compile(r"(?<!\w)'((?:[^'\n]|'(?=\w))+)'(?!\w)"),
+    re.compile(r"(?<!\w)‘((?:[^’\n]|’(?=\w))+)’(?!\w)"),
+)
+
+RuleMatch = Literal["none", "direct", "quoted"]
+
+
+def quoted_spans(text: str) -> tuple[tuple[int, int], ...]:
+    """Return (start, end) offsets of the content of each quoted span in ``text``."""
+    return tuple(sorted(match.span(1) for pattern in _QUOTE_PATTERNS for match in pattern.finditer(text)))
 
 
 class PolicyError(ValueError):
@@ -39,6 +55,10 @@ class RestrictedRequestRule(StrictModel):
     action_type: str
     effect: Literal["block", "flag"]
     signal: str
+    # "signal_only": a match that lies entirely inside quotation marks is quoted case
+    # data (for example a training example), so it raises a signal instead of the
+    # rule's effect. Any match outside quotes still applies the effect.
+    quoted_match: Literal["apply", "signal_only"] = "apply"
     pattern: str
 
     @field_validator("pattern")
@@ -48,6 +68,22 @@ class RestrictedRequestRule(StrictModel):
 
     def matches(self, text: str) -> bool:
         return re.search(self.pattern, text, re.IGNORECASE) is not None
+
+    def evaluate(self, text: str) -> RuleMatch:
+        """Classify the rule's matches in ``text``.
+
+        ``quoted`` only when the rule opts in and every match lies inside one quoted
+        span. A match that crosses a quote boundary counts as ``direct``, so ambiguity
+        keeps the stricter effect.
+        """
+        found = [match.span() for match in re.finditer(self.pattern, text, re.IGNORECASE)]
+        if not found:
+            return "none"
+        if self.quoted_match == "apply":
+            return "direct"
+        spans = quoted_spans(text)
+        inside = all(any(start <= m_start and m_end <= end for start, end in spans) for m_start, m_end in found)
+        return "quoted" if inside else "direct"
 
 
 class GlobalStopCondition(StrictModel):
