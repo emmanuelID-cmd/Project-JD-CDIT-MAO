@@ -1,0 +1,47 @@
+{
+  "doc_id": "KB-RPT-290",
+  "version": "1.0",
+  "title": "Scheduled report emails not arriving",
+  "topic": "scheduled_report_delivery",
+  "product_area": "reports",
+  "status": "approved",
+  "data_classification": "synthetic",
+  "owner": "Synthetic Knowledge Owner",
+  "effective_date": "2026-08-01",
+  "review_due": "2027-08-01",
+  "keywords": [
+    "scheduled",
+    "schedule",
+    "report",
+    "email",
+    "delivery",
+    "recurring",
+    "subscription"
+  ],
+  "sections": [
+    {
+      "section_id": "s1",
+      "heading": "Scheduled report email not received",
+      "text": "Scheduled reports are emailed to the recipients listed on the schedule. Delivery stops if the schedule has passed its end date or if a recipient's address bounced.",
+      "steps": [
+        {
+          "step_id": "st1",
+          "action_type": "navigate_ui",
+          "text": "Ask the user to open Reports > Schedules and check the end date of the schedule."
+        },
+        {
+          "step_id": "st2",
+          "action_type": "verify_client_setting",
+          "text": "Ask the user to confirm their address is listed as a recipient and to check their junk mail folder."
+        }
+      ],
+      "information_needed": [
+        {
+          "field": "report_name",
+          "prompt": "The name of the scheduled report."
+        }
+      ],
+      "stop_conditions": []
+    }
+  ]
+}

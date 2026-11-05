@@ -70,3 +70,14 @@ Shawn, the Shawn's Lane owner, directed local implementation of the Shawn-owned 
 The work uses synthetic data only. It has no model provider, no external I/O, no persistence, and no changes to Manny-owned agents or the API. Details and evidence are in `docs/lanes/shawn/SHAWN-LANE-DESIGN.md`.
 
 Under `Checklist.md`, expansion beyond the local scaffold needs project-lead authorization, so the project lead is asked to confirm or adjust this phase. The work does not decide D-07, D-08, or D-10; it records proposals for them in the lane design document.
+
+## D-08 calibration evidence recorded — 2026-11-04 (not a decision)
+
+Shawn's Lane added a held-out synthetic calibration set (`synthetic_data/calibration/`, 111 cases) and a generated report (`docs/lanes/shawn/calibration/KNOWLEDGE-CALIBRATION-REPORT.md`).
+
+- Critical safety gate: 0 errors.
+- High band: 29/29 correct.
+- Medium band: 23/25 correct. Both errors are unsupported answers just above the 0.60 cut-off.
+- Paraphrased tickets are mostly abstained on (lexical retrieval limit).
+
+The provisional 0.60/0.85 cut-offs are unchanged. D-08 and D-09 belong to Manny as evaluation owner (2026-11-04 planning agreements); this set is lane evidence offered to that protocol. Its expected labels are drafts that need human approval before they count toward a gate. Candidate cut-offs (0.65/0.75) should be confirmed on a second, independently written held-out set first.

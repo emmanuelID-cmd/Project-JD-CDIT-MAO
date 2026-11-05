@@ -1,0 +1,36 @@
+{
+  "doc_id": "KB-MOB-260",
+  "version": "1.4",
+  "title": "Mobile app not syncing",
+  "topic": "mobile_app_sync",
+  "product_area": "mobile",
+  "status": "retired",
+  "data_classification": "synthetic",
+  "owner": "Synthetic Knowledge Owner",
+  "effective_date": "2025-05-01",
+  "review_due": "2026-05-01",
+  "keywords": [
+    "mobile",
+    "app",
+    "sync",
+    "syncing",
+    "tablet",
+    "offline"
+  ],
+  "sections": [
+    {
+      "section_id": "s1",
+      "heading": "Mobile app data not syncing",
+      "text": "Reinstall the mobile app to force a full sync.",
+      "steps": [
+        {
+          "step_id": "st1",
+          "action_type": "navigate_ui",
+          "text": "Ask the user to uninstall and reinstall the mobile app."
+        }
+      ],
+      "information_needed": [],
+      "stop_conditions": []
+    }
+  ]
+}

@@ -1,6 +1,6 @@
 {
   "contract_version": "0.1.0-proposed",
-  "contribution_id": "DOC-2D4B408267DF6365",
+  "contribution_id": "DOC-2F25A28215CB0B94",
   "stage": "documentation",
   "agent": "documentation-agent",
   "agent_version": "0.1.0",
@@ -18,12 +18,12 @@
       "contract_version": "0.1.0-proposed"
     },
     {
-      "contribution_id": "KNW-8F50E479C1CC604E",
+      "contribution_id": "KNW-67D1F1558EA45991",
       "stage": "knowledge",
       "contract_version": "0.1.0-proposed"
     },
     {
-      "contribution_id": "TRB-C6365761849E8A4E",
+      "contribution_id": "TRB-EE65F2BFAAEE1291",
       "stage": "troubleshooting",
       "contract_version": "0.1.0-proposed"
     },
@@ -53,13 +53,13 @@
         },
         {
           "kind": "contribution",
-          "source_id": "KNW-8F50E479C1CC604E",
+          "source_id": "KNW-67D1F1558EA45991",
           "version": "0.1.0-proposed",
           "locator": null
         },
         {
           "kind": "contribution",
-          "source_id": "TRB-C6365761849E8A4E",
+          "source_id": "TRB-EE65F2BFAAEE1291",
           "version": "0.1.0-proposed",
           "locator": null
         },
@@ -81,7 +81,7 @@
   ],
   "human_review_required": true,
   "draft": {
-    "draft_id": "DRAFT-5E319A924DA06334",
+    "draft_id": "DRAFT-CFA2920127AC4363",
     "banner": "DRAFT - requires human review. Not saved, not sent, no ticket state changed.",
     "sections": [
       {
@@ -313,7 +313,7 @@
         ]
       }
     ],
-    "rendered_text": "DRAFT - requires human review. Not saved, not sent, no ticket state changed.\nCase SYN-CASE-0001 (version 1) | Run RUN-SYN-CASE-0001-1 | Policy SYN-SUPPORT-POLICY-0.1 | Draft DRAFT-5E319A924DA06334\nPrepared 2026-11-03T15:00:00+00:00 by documentation-agent 0.1.0\n\nCase facts (verified)\n- reported_issue: Cannot find the export option for the Site Enrollment Report. [verified: SYN-CASE-0001.reported_issue v1]\n- study_id: SYN-STUDY-0042 [verified: SYN-CASE-0001.study_id v1]\n\nTriage proposal (pending staff confirmation)\n- Proposed category: navigation_how_to (confidence high). [inference: Triage proposal TRI-CFA88256A7D129F5; not confirmed by staff.]\n- Proposed urgency: low. [inference: Triage proposal TRI-CFA88256A7D129F5; not confirmed by staff.]\n\nApproved guidance consulted\n- Export the Site Enrollment Report - Where to find the enrollment report export [verified: KB-NAV-001 v2.1 #s1]\n- Export the Site Enrollment Report - Export fails or times out [verified: KB-NAV-001 v2.1 #s2]\n\nSuggested Tier 1 steps (not performed)\n- 1. Ask the user to open Reports from the main navigation menu and select Enrollment. [verified: KB-NAV-001 v2.1 #s1/st1]\n- 2. Ask the user to select Site Enrollment Report and wait for the report view to load. [verified: KB-NAV-001 v2.1 #s1/st2]\n- 3. Ask the user to select Export in the top-right toolbar and choose CSV or PDF. [verified: KB-NAV-001 v2.1 #s1/st3]\n\nActions taken (recorded by staff)\n- No staff-recorded actions were supplied; do not assume any step was performed. [unknown]\n\nInformation still needed\n- user_role: The user's assigned role as shown on their profile page. [unknown]\n\nStop conditions and escalation\n- Escalation proposal: no escalation proposed. Reason: Stand-in: no must-escalate rule matched the synthetic case. [inference: Escalation proposal ESC-0E7A137880BA6CCC; a human decides.]\n- Stop condition: If the Export button is missing for a user whose role should include it, stop and escalate as a possible permission configuration issue. [verified: KB-NAV-001 v2.1 #s1]\n- Stop condition: If the exported data appears to belong to another site, stop immediately and escalate as a possible data-access incident. [verified: KB-NAV-001 v2.1 #s1]\n\nUnverified or unresolved\n- Reported, not verified - user_role: Site Coordinator [unknown]\n"
+    "rendered_text": "DRAFT - requires human review. Not saved, not sent, no ticket state changed.\nCase SYN-CASE-0001 (version 1) | Run RUN-SYN-CASE-0001-1 | Policy SYN-SUPPORT-POLICY-0.1 | Draft DRAFT-CFA2920127AC4363\nPrepared 2026-11-03T15:00:00+00:00 by documentation-agent 0.1.0\n\nCase facts (verified)\n- reported_issue: Cannot find the export option for the Site Enrollment Report. [verified: SYN-CASE-0001.reported_issue v1]\n- study_id: SYN-STUDY-0042 [verified: SYN-CASE-0001.study_id v1]\n\nTriage proposal (pending staff confirmation)\n- Proposed category: navigation_how_to (confidence high). [inference: Triage proposal TRI-CFA88256A7D129F5; not confirmed by staff.]\n- Proposed urgency: low. [inference: Triage proposal TRI-CFA88256A7D129F5; not confirmed by staff.]\n\nApproved guidance consulted\n- Export the Site Enrollment Report - Where to find the enrollment report export [verified: KB-NAV-001 v2.1 #s1]\n- Export the Site Enrollment Report - Export fails or times out [verified: KB-NAV-001 v2.1 #s2]\n\nSuggested Tier 1 steps (not performed)\n- 1. Ask the user to open Reports from the main navigation menu and select Enrollment. [verified: KB-NAV-001 v2.1 #s1/st1]\n- 2. Ask the user to select Site Enrollment Report and wait for the report view to load. [verified: KB-NAV-001 v2.1 #s1/st2]\n- 3. Ask the user to select Export in the top-right toolbar and choose CSV or PDF. [verified: KB-NAV-001 v2.1 #s1/st3]\n\nActions taken (recorded by staff)\n- No staff-recorded actions were supplied; do not assume any step was performed. [unknown]\n\nInformation still needed\n- user_role: The user's assigned role as shown on their profile page. [unknown]\n\nStop conditions and escalation\n- Escalation proposal: no escalation proposed. Reason: Stand-in: no must-escalate rule matched the synthetic case. [inference: Escalation proposal ESC-0E7A137880BA6CCC; a human decides.]\n- Stop condition: If the Export button is missing for a user whose role should include it, stop and escalate as a possible permission configuration issue. [verified: KB-NAV-001 v2.1 #s1]\n- Stop condition: If the exported data appears to belong to another site, stop immediately and escalate as a possible data-access incident. [verified: KB-NAV-001 v2.1 #s1]\n\nUnverified or unresolved\n- Reported, not verified - user_role: Site Coordinator [unknown]\n"
   },
   "manual_fallback": null,
   "privacy_findings": []

@@ -34,7 +34,7 @@ Use this checklist as the live project status record. Check an item only when it
 - [x] Local setup instructions and synthetic-data configuration example are documented.
 - [ ] Agree and implement domain schemas, authentication, and audit/retention behavior before adding those capabilities.
 - [x] Install project dependencies in the local Python 3.13 virtual environment.
-- [ ] Start the local service and confirm the health endpoint on the contributor machine.
+- [x] Start the local service and confirm the health endpoint on the contributor machine. (2026-11-04, Shawn's machine: Python 3.13.17, `GET /health` returned 200 `{"status":"ok","database":"ok"}`.)
 
 ## Manny lane — Coordinator, Triage, Escalation
 
@@ -48,7 +48,7 @@ Use this checklist as the live project status record. Check an item only when it
 
 ## Shawn lane — Knowledge, Troubleshooting, Documentation
 
-> 2026-11-04 status: PR #2 merged into `developer` at `a14bb8d`. The merged proposal contains code for all three Shawn agents, a lane harness, 12 synthetic cases, 97 tests, and v0.1.0-proposed contracts/examples. `SHAWN-LANE-DESIGN.md` reports 97 tests and 12 cases passing on Python 3.12; the project targets Python 3.13 and this task did not rerun them. PR #2 has no recorded reviews or status checks. The lane design document still contains a pre-merge status statement; Shawn should correct that lane-owned record. Code presence is tracked separately from authorization, acceptance, and validation below.
+> 2026-11-04 status: PR #2 merged into `developer` at `a14bb8d` with code for all three Shawn agents, a lane harness, 12 synthetic cases, 97 tests, and `0.1.0-proposed` contracts/examples; PR #2 has no recorded reviews or status checks. Follow-up on `shawn/knowledge-troubleshooting-docs` (not yet in `developer`): the lane design record now states the merged status; 110 tests and the 12 lane cases pass on Python 3.13.17; and a 111-case synthetic Knowledge calibration set reports 0 critical errors (`docs/lanes/shawn/calibration/`). The calibration set is lane evidence offered to Manny's D-08/D-09 evaluation protocol, not a decision; its expected labels are drafts that still need human approval. Code presence is tracked separately from authorization, acceptance, and validation below.
 
 - [x] Confirm owner availability and accept the three-agent assignment (Shawn's lane-owner direction is recorded in `docs/planning/DEFERRED-DECISIONS.md`).
 - [x] Knowledge implementation files are present in merged PR #2 (`src/cdit_support_mao/agents/knowledge/`); acceptance remains pending.

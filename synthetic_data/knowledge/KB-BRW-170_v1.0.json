@@ -1,0 +1,46 @@
+{
+  "doc_id": "KB-BRW-170",
+  "version": "1.0",
+  "title": "Document preview does not open",
+  "topic": "popup_preview",
+  "product_area": "documents",
+  "status": "approved",
+  "data_classification": "synthetic",
+  "owner": "Synthetic Knowledge Owner",
+  "effective_date": "2026-06-01",
+  "review_due": "2027-06-01",
+  "keywords": [
+    "preview",
+    "pop-up",
+    "popup",
+    "window",
+    "blocked",
+    "viewer"
+  ],
+  "sections": [
+    {
+      "section_id": "s1",
+      "heading": "Document preview window does not open",
+      "text": "Document previews open in a new browser window. Browsers that block pop-ups for the application site prevent the preview from opening without showing an error.",
+      "steps": [
+        {
+          "step_id": "st1",
+          "action_type": "verify_client_setting",
+          "text": "Ask the user to allow pop-ups for the application site in the browser settings."
+        },
+        {
+          "step_id": "st2",
+          "action_type": "retry_operation",
+          "text": "Ask the user to select Preview again after allowing pop-ups."
+        }
+      ],
+      "information_needed": [
+        {
+          "field": "browser",
+          "prompt": "Browser name and version from the browser's About page."
+        }
+      ],
+      "stop_conditions": []
+    }
+  ]
+}

@@ -1,5 +1,23 @@
 # Handoffs prepared for push
 
+## 2026-11-04T22:00:53-05:00 — Shawn's Lane: Python 3.13 run and Knowledge calibration evidence
+
+Summary file: PROJECT-HANDOFF.md
+
+- Git author: xiaoenbi1987 (Shawn).
+- Branch: `shawn/knowledge-troubleshooting-docs`; intended target: `developer` by PR; no PR opened. Verified remote baseline: `440b25de27f1c1c53288312c79b67d7af51352a8` (PR #3 merge, already fast-forwarded onto this lane). One work commit on top: `feat(shawn-lane): add knowledge calibration set and Python 3.13 evidence`.
+- Done:
+  - Python 3.13.17 run: 110 tests and 12 lane cases pass; `GET /health` returned 200.
+  - Synthetic knowledge corpus grown from 11 to 38 article versions; existing lane case outcomes unchanged.
+  - 111-case held-out Knowledge calibration set, runner, and generated report: 0 critical errors; high band 29/29; medium band 23/25.
+  - Lane design record now states the PR #2 merged status.
+- Not completed:
+  - D-08 and D-09 belong to Manny as evaluation owner; this is lane evidence only. The calibration labels are drafts that need human approval.
+  - Thresholds unchanged (0.60/0.85). Candidate cut-offs 0.65/0.75 need a second, independently written set.
+  - Coordinator integration, persistence (D-07), and audit events (D-10).
+- Validation: 110 tests passed on Python 3.13.17; lane harness 12 passed, 0 failed; calibration CLI 0 critical errors, 0 label problems; `git diff --check` clean.
+- Reviewer next step: Manny, as evaluation owner, to decide whether this set and report fit the D-08/D-09 protocol and who approves the labels.
+
 ## 2026-11-04T20:58:45-05:00 — Requirements, phase planning, and architecture guide
 
 Summary file: PROJECT-HANDOFF.md

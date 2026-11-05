@@ -1,0 +1,34 @@
+{
+  "doc_id": "KB-TRN-360",
+  "version": "1.0",
+  "title": "Export a training transcript",
+  "topic": "training_transcript_export",
+  "product_area": "training",
+  "status": "approved",
+  "data_classification": "synthetic",
+  "owner": "Synthetic Knowledge Owner",
+  "effective_date": "2025-09-01",
+  "review_due": "2026-09-30",
+  "keywords": [
+    "transcript",
+    "export",
+    "history",
+    "record"
+  ],
+  "sections": [
+    {
+      "section_id": "s1",
+      "heading": "Download a training transcript",
+      "text": "Training transcripts can be downloaded from the learning portal under My Learning > Transcript.",
+      "steps": [
+        {
+          "step_id": "st1",
+          "action_type": "navigate_ui",
+          "text": "Ask the user to open My Learning > Transcript in the learning portal."
+        }
+      ],
+      "information_needed": [],
+      "stop_conditions": []
+    }
+  ]
+}

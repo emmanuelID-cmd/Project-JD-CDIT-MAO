@@ -67,9 +67,18 @@ def kb_section_ref(article: KbArticle, section_id: str) -> SourceRef:
 class KnowledgeAgent:
     """Retrieves approved evidence for a triaged case, or abstains."""
 
-    def __init__(self, corpus: KnowledgeCorpus) -> None:
+    def __init__(self, corpus: KnowledgeCorpus, *, min_relevance: float | None = None) -> None:
+        """``min_relevance`` overrides the answer cut-off for calibration sweeps only (D-08).
+
+        Production use keeps the provisional PRD medium threshold (the default).
+        """
         self._corpus = corpus
         self._index = LexicalIndex(corpus)
+        default = PROVISIONAL_BAND_THRESHOLDS["medium"]
+        self._min_relevance = default if min_relevance is None else float(min_relevance)
+        if not 0.0 < self._min_relevance <= 1.0:
+            raise ValueError("min_relevance must be in (0, 1]")
+        self._override = () if self._min_relevance == default else (f"min_relevance={self._min_relevance:.4f}",)
 
     @property
     def source_set_version(self) -> str:
@@ -95,6 +104,7 @@ class KnowledgeAgent:
             self._corpus.source_set_version,
             as_of.isoformat(),
             AGENT_VERSION,
+            *self._override,
         )
         base = {
             "contribution_id": contribution_id,
@@ -130,7 +140,7 @@ class KnowledgeAgent:
         candidates = [
             s
             for s in scored
-            if s.coverage >= PROVISIONAL_BAND_THRESHOLDS["medium"] and len(s.matched_terms) >= min_terms
+            if s.coverage >= self._min_relevance and len(s.matched_terms) >= min_terms
         ]
 
         eligible: list[ScoredSection] = []

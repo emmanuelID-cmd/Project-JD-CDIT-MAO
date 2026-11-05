@@ -133,3 +133,30 @@ UI lane clarification: Either lane may add/style presentation controls (includin
 - Validation: staged whitespace checks passed for the three work commits; 29 intended Markdown files had no trailing whitespace or unbalanced fences; field-guide JavaScript syntax and static diagram structure were checked. No runtime-agent tests were run for this documentation/artifact update.
 - Preserved the untracked source template at `docs/templates/PRD Template.md`; no agent implementation, real data, or production integration was added by this work.
 - Next: review PRD-v3, phase guidance, and artifact; address pending evaluation and integration decisions through the assigned lanes.
+
+## 2026-11-04T22:00:53-05:00 — Shawn's Lane: Python 3.13 run and Knowledge calibration evidence
+
+- Prepared by: xiaoenbi1987 (Shawn); branch: `shawn/knowledge-troubleshooting-docs`; intended PR target: `developer`; no PR opened.
+- Verified remote baseline: `440b25de27f1c1c53288312c79b67d7af51352a8`. Work commit: `feat(shawn-lane): add knowledge calibration set and Python 3.13 evidence`.
+
+### Done
+
+- Created a Python 3.13.17 virtual environment. The full suite and the 12 lane cases pass, and `GET /health` returned 200 `{"status":"ok","database":"ok"}`. The matching `Checklist.md` item is ticked.
+- Grew the synthetic knowledge corpus from 11 to 38 article versions with distractors and traps: stale, draft, not-yet-effective, retired, two approved versions, and injected text. No agent behaviour changed for the existing cases.
+- Added a held-out calibration set (`synthetic_data/calibration/`, 111 cases), a runner (`cdit_support_mao.lane_calibration`), and a generated report (`docs/lanes/shawn/calibration/`). Results: 0 critical errors; high band 29/29; medium band 23/25 (two unsupported answers at relevance 0.61 and 0.63); paraphrases mostly abstain safely.
+- `KnowledgeAgent` takes an optional answer cut-off used only by calibration sweeps; the default is unchanged.
+- Corrected the lane design record's pre-merge status statement.
+
+### Not completed
+
+- D-08 and D-09 belong to Manny as evaluation owner (2026-11-04 planning agreements). This set is lane evidence for that protocol, not a decision. Its expected labels were written in Shawn's lane with AI assistance and need human approval.
+- Thresholds stay at 0.60/0.85. Candidate cut-offs 0.65/0.75 need confirmation on a second, independently written set.
+- No coordinator integration, persistence (D-07), or audit events (D-10). Triage and Escalation inputs remain stand-ins.
+
+### Validation and handoff
+
+- `.venv\Scripts\python.exe -m pytest -q` (Python 3.13.17): 110 passed.
+- `python -m cdit_support_mao.lane_harness synthetic_data/cases`: 12 passed, 0 failed.
+- `python -m cdit_support_mao.lane_calibration synthetic_data/calibration/knowledge-calibration-v1.json …`: 0 critical errors, 0 label problems.
+- `git diff --check`: clean.
+- Requested from Manny (evaluation owner): whether this set and report fit the D-08/D-09 protocol, and who approves the labels.

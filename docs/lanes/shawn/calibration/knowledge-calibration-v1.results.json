@@ -1,0 +1,2303 @@
+{
+  "set_id": "SYN-KCAL",
+  "set_version": "1.0",
+  "set_fingerprint": "KCAL-FF71D1966812",
+  "label_status": "draft, not yet human-approved (D-09)",
+  "source_set_version": "SRC-61C4A35E96CF",
+  "policy": "SYN-TS-POLICY 0.1.0",
+  "knowledge_agent_version": "0.1.0",
+  "as_of": "2026-11-03",
+  "summary": {
+    "answered": 54,
+    "correct": 52,
+    "answer_accuracy": 0.9629629629629629,
+    "answer_coverage": 0.7428571428571429,
+    "abstention_precision": 0.6842105263157895,
+    "abstention_recall": 0.9512195121951219,
+    "unsupported_answers": 2,
+    "wrong_answers": 0
+  },
+  "critical_errors": [],
+  "label_problems": [],
+  "sweep": [
+    {
+      "cutoff": 0.4,
+      "answered": 69,
+      "correct": 65,
+      "answer_accuracy": 0.9420289855072463,
+      "answer_coverage": 0.9285714285714286,
+      "abstention_precision": 0.8809523809523809,
+      "abstention_recall": 0.9024390243902439,
+      "unsupported_answers": 4,
+      "wrong_answers": 0
+    },
+    {
+      "cutoff": 0.45,
+      "answered": 62,
+      "correct": 59,
+      "answer_accuracy": 0.9516129032258065,
+      "answer_coverage": 0.8428571428571429,
+      "abstention_precision": 0.7755102040816326,
+      "abstention_recall": 0.926829268292683,
+      "unsupported_answers": 3,
+      "wrong_answers": 0
+    },
+    {
+      "cutoff": 0.5,
+      "answered": 59,
+      "correct": 57,
+      "answer_accuracy": 0.9661016949152542,
+      "answer_coverage": 0.8142857142857143,
+      "abstention_precision": 0.75,
+      "abstention_recall": 0.9512195121951219,
+      "unsupported_answers": 2,
+      "wrong_answers": 0
+    },
+    {
+      "cutoff": 0.55,
+      "answered": 58,
+      "correct": 56,
+      "answer_accuracy": 0.9655172413793104,
+      "answer_coverage": 0.8,
+      "abstention_precision": 0.7358490566037735,
+      "abstention_recall": 0.9512195121951219,
+      "unsupported_answers": 2,
+      "wrong_answers": 0
+    },
+    {
+      "cutoff": 0.6,
+      "answered": 54,
+      "correct": 52,
+      "answer_accuracy": 0.9629629629629629,
+      "answer_coverage": 0.7428571428571429,
+      "abstention_precision": 0.6842105263157895,
+      "abstention_recall": 0.9512195121951219,
+      "unsupported_answers": 2,
+      "wrong_answers": 0
+    },
+    {
+      "cutoff": 0.65,
+      "answered": 49,
+      "correct": 49,
+      "answer_accuracy": 1.0,
+      "answer_coverage": 0.7,
+      "abstention_precision": 0.6612903225806451,
+      "abstention_recall": 1.0,
+      "unsupported_answers": 0,
+      "wrong_answers": 0
+    },
+    {
+      "cutoff": 0.7,
+      "answered": 45,
+      "correct": 45,
+      "answer_accuracy": 1.0,
+      "answer_coverage": 0.6428571428571429,
+      "abstention_precision": 0.6212121212121212,
+      "abstention_recall": 1.0,
+      "unsupported_answers": 0,
+      "wrong_answers": 0
+    },
+    {
+      "cutoff": 0.75,
+      "answered": 43,
+      "correct": 43,
+      "answer_accuracy": 1.0,
+      "answer_coverage": 0.6142857142857143,
+      "abstention_precision": 0.6029411764705882,
+      "abstention_recall": 1.0,
+      "unsupported_answers": 0,
+      "wrong_answers": 0
+    },
+    {
+      "cutoff": 0.8,
+      "answered": 41,
+      "correct": 41,
+      "answer_accuracy": 1.0,
+      "answer_coverage": 0.5857142857142857,
+      "abstention_precision": 0.5857142857142857,
+      "abstention_recall": 1.0,
+      "unsupported_answers": 0,
+      "wrong_answers": 0
+    },
+    {
+      "cutoff": 0.85,
+      "answered": 29,
+      "correct": 29,
+      "answer_accuracy": 1.0,
+      "answer_coverage": 0.4142857142857143,
+      "abstention_precision": 0.5,
+      "abstention_recall": 1.0,
+      "unsupported_answers": 0,
+      "wrong_answers": 0
+    },
+    {
+      "cutoff": 0.9,
+      "answered": 23,
+      "correct": 23,
+      "answer_accuracy": 1.0,
+      "answer_coverage": 0.32857142857142857,
+      "abstention_precision": 0.4659090909090909,
+      "abstention_recall": 1.0,
+      "unsupported_answers": 0,
+      "wrong_answers": 0
+    },
+    {
+      "cutoff": 0.95,
+      "answered": 23,
+      "correct": 23,
+      "answer_accuracy": 1.0,
+      "answer_coverage": 0.32857142857142857,
+      "abstention_precision": 0.4659090909090909,
+      "abstention_recall": 1.0,
+      "unsupported_answers": 0,
+      "wrong_answers": 0
+    }
+  ],
+  "cases": [
+    {
+      "case_id": "SYN-KCAL-0001",
+      "kind": "direct",
+      "expect": "answer",
+      "acceptable_sources": [
+        "KB-NAV-001#s1"
+      ],
+      "knowledge_status": "completed",
+      "reason_codes": [],
+      "passages": [
+        "KB-NAV-001#s1 v2.1"
+      ],
+      "top_relevance": 1.0,
+      "band": "high",
+      "outcome": "correct_answer",
+      "correct_in_top_3": true,
+      "troubleshooting_status": "completed",
+      "documentation_status": "completed",
+      "critical_errors": []
+    },
+    {
+      "case_id": "SYN-KCAL-0002",
+      "kind": "paraphrase",
+      "expect": "answer",
+      "acceptable_sources": [
+        "KB-NAV-001#s1"
+      ],
+      "knowledge_status": "abstained",
+      "reason_codes": [
+        "weak_evidence"
+      ],
+      "passages": [],
+      "top_relevance": null,
+      "band": "low",
+      "outcome": "false_abstention",
+      "correct_in_top_3": false,
+      "troubleshooting_status": "abstained",
+      "documentation_status": "completed",
+      "critical_errors": []
+    },
+    {
+      "case_id": "SYN-KCAL-0003",
+      "kind": "direct",
+      "expect": "answer",
+      "acceptable_sources": [
+        "KB-NAV-001#s2"
+      ],
+      "knowledge_status": "completed",
+      "reason_codes": [],
+      "passages": [
+        "KB-NAV-001#s2 v2.1",
+        "KB-NAV-001#s1 v2.1"
+      ],
+      "top_relevance": 0.8074,
+      "band": "medium",
+      "outcome": "correct_answer",
+      "correct_in_top_3": true,
+      "troubleshooting_status": "completed",
+      "documentation_status": "completed",
+      "critical_errors": []
+    },
+    {
+      "case_id": "SYN-KCAL-0004",
+      "kind": "paraphrase",
+      "expect": "answer",
+      "acceptable_sources": [
+        "KB-NAV-001#s2"
+      ],
+      "knowledge_status": "abstained",
+      "reason_codes": [
+        "weak_evidence"
+      ],
+      "passages": [],
+      "top_relevance": null,
+      "band": "low",
+      "outcome": "false_abstention",
+      "correct_in_top_3": false,
+      "troubleshooting_status": "abstained",
+      "documentation_status": "completed",
+      "critical_errors": []
+    },
+    {
+      "case_id": "SYN-KCAL-0005",
+      "kind": "direct",
+      "expect": "answer",
+      "acceptable_sources": [
+        "KB-ACC-010#s1"
+      ],
+      "knowledge_status": "completed",
+      "reason_codes": [],
+      "passages": [
+        "KB-ACC-010#s1 v1.3"
+      ],
+      "top_relevance": 0.6524,
+      "band": "medium",
+      "outcome": "correct_answer",
+      "correct_in_top_3": true,
+      "troubleshooting_status": "completed",
+      "documentation_status": "completed",
+      "critical_errors": []
+    },
+    {
+      "case_id": "SYN-KCAL-0006",
+      "kind": "paraphrase",
+      "expect": "answer",
+      "acceptable_sources": [
+        "KB-ACC-010#s1"
+      ],
+      "knowledge_status": "abstained",
+      "reason_codes": [
+        "weak_evidence"
+      ],
+      "passages": [],
+      "top_relevance": null,
+      "band": "low",
+      "outcome": "false_abstention",
+      "correct_in_top_3": false,
+      "troubleshooting_status": "abstained",
+      "documentation_status": "completed",
+      "critical_errors": []
+    },
+    {
+      "case_id": "SYN-KCAL-0007",
+      "kind": "direct",
+      "expect": "answer",
+      "acceptable_sources": [
+        "KB-LOGIN-020#s1"
+      ],
+      "knowledge_status": "completed",
+      "reason_codes": [],
+      "passages": [
+        "KB-LOGIN-020#s1 v3.0"
+      ],
+      "top_relevance": 0.8327,
+      "band": "medium",
+      "outcome": "correct_answer",
+      "correct_in_top_3": true,
+      "troubleshooting_status": "completed",
+      "documentation_status": "completed",
+      "critical_errors": []
+    },
+    {
+      "case_id": "SYN-KCAL-0008",
+      "kind": "paraphrase",
+      "expect": "answer",
+      "acceptable_sources": [
+        "KB-LOGIN-020#s1"
+      ],
+      "knowledge_status": "abstained",
+      "reason_codes": [
+        "weak_evidence"
+      ],
+      "passages": [],
+      "top_relevance": null,
+      "band": "low",
+      "outcome": "false_abstention",
+      "correct_in_top_3": false,
+      "troubleshooting_status": "abstained",
+      "documentation_status": "completed",
+      "critical_errors": []
+    },
+    {
+      "case_id": "SYN-KCAL-0009",
+      "kind": "direct",
+      "expect": "answer",
+      "acceptable_sources": [
+        "KB-PWD-070#s1"
+      ],
+      "knowledge_status": "completed",
+      "reason_codes": [],
+      "passages": [
+        "KB-PWD-070#s1 v1.2"
+      ],
+      "top_relevance": 0.6238,
+      "band": "medium",
+      "outcome": "correct_answer",
+      "correct_in_top_3": true,
+      "troubleshooting_status": "completed",
+      "documentation_status": "completed",
+      "critical_errors": []
+    },
+    {
+      "case_id": "SYN-KCAL-0010",
+      "kind": "paraphrase",
+      "expect": "answer",
+      "acceptable_sources": [
+        "KB-PWD-070#s1"
+      ],
+      "knowledge_status": "abstained",
+      "reason_codes": [
+        "weak_evidence"
+      ],
+      "passages": [],
+      "top_relevance": null,
+      "band": "low",
+      "outcome": "false_abstention",
+      "correct_in_top_3": false,
+      "troubleshooting_status": "abstained",
+      "documentation_status": "completed",
+      "critical_errors": []
+    },
+    {
+      "case_id": "SYN-KCAL-0011",
+      "kind": "direct",
+      "expect": "answer",
+      "acceptable_sources": [
+        "KB-AUD-080#s1"
+      ],
+      "knowledge_status": "completed",
+      "reason_codes": [],
+      "passages": [
+        "KB-AUD-080#s1 v1.0"
+      ],
+      "top_relevance": 0.8153,
+      "band": "medium",
+      "outcome": "correct_answer",
+      "correct_in_top_3": true,
+      "troubleshooting_status": "abstained",
+      "documentation_status": "completed",
+      "critical_errors": []
+    },
+    {
+      "case_id": "SYN-KCAL-0012",
+      "kind": "direct",
+      "expect": "answer",
+      "acceptable_sources": [
+        "KB-EDC-100#s1"
+      ],
+      "knowledge_status": "completed",
+      "reason_codes": [],
+      "passages": [
+        "KB-EDC-100#s1 v1.2",
+        "KB-EDC-100#s2 v1.2"
+      ],
+      "top_relevance": 1.0,
+      "band": "high",
+      "outcome": "correct_answer",
+      "correct_in_top_3": true,
+      "troubleshooting_status": "completed",
+      "documentation_status": "completed",
+      "critical_errors": []
+    },
+    {
+      "case_id": "SYN-KCAL-0013",
+      "kind": "paraphrase",
+      "expect": "answer",
+      "acceptable_sources": [
+        "KB-EDC-100#s1"
+      ],
+      "knowledge_status": "completed",
+      "reason_codes": [],
+      "passages": [
+        "KB-EDC-100#s1 v1.2"
+      ],
+      "top_relevance": 0.6721,
+      "band": "medium",
+      "outcome": "correct_answer",
+      "correct_in_top_3": true,
+      "troubleshooting_status": "completed",
+      "documentation_status": "completed",
+      "critical_errors": []
+    },
+    {
+      "case_id": "SYN-KCAL-0014",
+      "kind": "direct",
+      "expect": "answer",
+      "acceptable_sources": [
+        "KB-EDC-100#s2",
+        "KB-SES-310#s1"
+      ],
+      "knowledge_status": "completed",
+      "reason_codes": [],
+      "passages": [
+        "KB-EDC-100#s2 v1.2"
+      ],
+      "top_relevance": 0.8069,
+      "band": "medium",
+      "outcome": "correct_answer",
+      "correct_in_top_3": true,
+      "troubleshooting_status": "completed",
+      "documentation_status": "completed",
+      "critical_errors": []
+    },
+    {
+      "case_id": "SYN-KCAL-0015",
+      "kind": "direct",
+      "expect": "answer",
+      "acceptable_sources": [
+        "KB-EDC-110#s1"
+      ],
+      "knowledge_status": "completed",
+      "reason_codes": [],
+      "passages": [
+        "KB-EDC-110#s1 v2.0",
+        "KB-EDC-110#s2 v2.0",
+        "KB-EDC-120#s1 v1.0"
+      ],
+      "top_relevance": 1.0,
+      "band": "high",
+      "outcome": "correct_answer",
+      "correct_in_top_3": true,
+      "troubleshooting_status": "completed",
+      "documentation_status": "completed",
+      "critical_errors": []
+    },
+    {
+      "case_id": "SYN-KCAL-0016",
+      "kind": "paraphrase",
+      "expect": "answer",
+      "acceptable_sources": [
+        "KB-EDC-110#s1"
+      ],
+      "knowledge_status": "abstained",
+      "reason_codes": [
+        "weak_evidence"
+      ],
+      "passages": [],
+      "top_relevance": null,
+      "band": "low",
+      "outcome": "false_abstention",
+      "correct_in_top_3": false,
+      "troubleshooting_status": "abstained",
+      "documentation_status": "completed",
+      "critical_errors": []
+    },
+    {
+      "case_id": "SYN-KCAL-0017",
+      "kind": "direct",
+      "expect": "answer",
+      "acceptable_sources": [
+        "KB-EDC-110#s2"
+      ],
+      "knowledge_status": "completed",
+      "reason_codes": [],
+      "passages": [
+        "KB-EDC-110#s2 v2.0"
+      ],
+      "top_relevance": 1.0,
+      "band": "high",
+      "outcome": "correct_answer",
+      "correct_in_top_3": true,
+      "troubleshooting_status": "completed",
+      "documentation_status": "completed",
+      "critical_errors": []
+    },
+    {
+      "case_id": "SYN-KCAL-0018",
+      "kind": "direct",
+      "expect": "answer",
+      "acceptable_sources": [
+        "KB-EDC-120#s1"
+      ],
+      "knowledge_status": "completed",
+      "reason_codes": [],
+      "passages": [
+        "KB-EDC-120#s1 v1.0"
+      ],
+      "top_relevance": 1.0,
+      "band": "high",
+      "outcome": "correct_answer",
+      "correct_in_top_3": true,
+      "troubleshooting_status": "completed",
+      "documentation_status": "completed",
+      "critical_errors": []
+    },
+    {
+      "case_id": "SYN-KCAL-0019",
+      "kind": "paraphrase",
+      "expect": "answer",
+      "acceptable_sources": [
+        "KB-EDC-120#s1"
+      ],
+      "knowledge_status": "abstained",
+      "reason_codes": [
+        "weak_evidence"
+      ],
+      "passages": [],
+      "top_relevance": null,
+      "band": "low",
+      "outcome": "false_abstention",
+      "correct_in_top_3": false,
+      "troubleshooting_status": "abstained",
+      "documentation_status": "completed",
+      "critical_errors": []
+    },
+    {
+      "case_id": "SYN-KCAL-0020",
+      "kind": "direct",
+      "expect": "answer",
+      "acceptable_sources": [
+        "KB-SCH-140#s1"
+      ],
+      "knowledge_status": "completed",
+      "reason_codes": [],
+      "passages": [
+        "KB-SCH-140#s1 v1.1"
+      ],
+      "top_relevance": 1.0,
+      "band": "high",
+      "outcome": "correct_answer",
+      "correct_in_top_3": true,
+      "troubleshooting_status": "completed",
+      "documentation_status": "completed",
+      "critical_errors": []
+    },
+    {
+      "case_id": "SYN-KCAL-0021",
+      "kind": "paraphrase",
+      "expect": "answer",
+      "acceptable_sources": [
+        "KB-SCH-140#s1"
+      ],
+      "knowledge_status": "completed",
+      "reason_codes": [],
+      "passages": [
+        "KB-SCH-140#s1 v1.1"
+      ],
+      "top_relevance": 0.8628,
+      "band": "high",
+      "outcome": "correct_answer",
+      "correct_in_top_3": true,
+      "troubleshooting_status": "completed",
+      "documentation_status": "completed",
+      "critical_errors": []
+    },
+    {
+      "case_id": "SYN-KCAL-0022",
+      "kind": "direct",
+      "expect": "answer",
+      "acceptable_sources": [
+        "KB-SCH-150#s1"
+      ],
+      "knowledge_status": "completed",
+      "reason_codes": [],
+      "passages": [
+        "KB-SCH-150#s1 v1.0"
+      ],
+      "top_relevance": 0.8627,
+      "band": "high",
+      "outcome": "correct_answer",
+      "correct_in_top_3": true,
+      "troubleshooting_status": "completed",
+      "documentation_status": "completed",
+      "critical_errors": []
+    },
+    {
+      "case_id": "SYN-KCAL-0023",
+      "kind": "paraphrase",
+      "expect": "answer",
+      "acceptable_sources": [
+        "KB-SCH-150#s1"
+      ],
+      "knowledge_status": "abstained",
+      "reason_codes": [
+        "weak_evidence"
+      ],
+      "passages": [],
+      "top_relevance": null,
+      "band": "low",
+      "outcome": "false_abstention",
+      "correct_in_top_3": false,
+      "troubleshooting_status": "abstained",
+      "documentation_status": "completed",
+      "critical_errors": []
+    },
+    {
+      "case_id": "SYN-KCAL-0024",
+      "kind": "direct",
+      "expect": "answer",
+      "acceptable_sources": [
+        "KB-BRW-160#s1"
+      ],
+      "knowledge_status": "completed",
+      "reason_codes": [],
+      "passages": [
+        "KB-BRW-160#s1 v3.1"
+      ],
+      "top_relevance": 1.0,
+      "band": "high",
+      "outcome": "correct_answer",
+      "correct_in_top_3": true,
+      "troubleshooting_status": "completed",
+      "documentation_status": "completed",
+      "critical_errors": []
+    },
+    {
+      "case_id": "SYN-KCAL-0025",
+      "kind": "paraphrase",
+      "expect": "answer",
+      "acceptable_sources": [
+        "KB-BRW-160#s1"
+      ],
+      "knowledge_status": "abstained",
+      "reason_codes": [
+        "weak_evidence"
+      ],
+      "passages": [],
+      "top_relevance": null,
+      "band": "low",
+      "outcome": "false_abstention",
+      "correct_in_top_3": false,
+      "troubleshooting_status": "abstained",
+      "documentation_status": "completed",
+      "critical_errors": []
+    },
+    {
+      "case_id": "SYN-KCAL-0026",
+      "kind": "direct",
+      "expect": "answer",
+      "acceptable_sources": [
+        "KB-BRW-170#s1"
+      ],
+      "knowledge_status": "completed",
+      "reason_codes": [],
+      "passages": [
+        "KB-BRW-170#s1 v1.0"
+      ],
+      "top_relevance": 1.0,
+      "band": "high",
+      "outcome": "correct_answer",
+      "correct_in_top_3": true,
+      "troubleshooting_status": "completed",
+      "documentation_status": "completed",
+      "critical_errors": []
+    },
+    {
+      "case_id": "SYN-KCAL-0027",
+      "kind": "paraphrase",
+      "expect": "answer",
+      "acceptable_sources": [
+        "KB-BRW-170#s1"
+      ],
+      "knowledge_status": "completed",
+      "reason_codes": [],
+      "passages": [
+        "KB-BRW-170#s1 v1.0"
+      ],
+      "top_relevance": 0.6889,
+      "band": "medium",
+      "outcome": "correct_answer",
+      "correct_in_top_3": true,
+      "troubleshooting_status": "completed",
+      "documentation_status": "completed",
+      "critical_errors": []
+    },
+    {
+      "case_id": "SYN-KCAL-0028",
+      "kind": "direct",
+      "expect": "answer",
+      "acceptable_sources": [
+        "KB-DOC-180#s1"
+      ],
+      "knowledge_status": "completed",
+      "reason_codes": [],
+      "passages": [
+        "KB-DOC-180#s1 v2.2",
+        "KB-DOC-180#s2 v2.2"
+      ],
+      "top_relevance": 1.0,
+      "band": "high",
+      "outcome": "correct_answer",
+      "correct_in_top_3": true,
+      "troubleshooting_status": "completed",
+      "documentation_status": "completed",
+      "critical_errors": []
+    },
+    {
+      "case_id": "SYN-KCAL-0029",
+      "kind": "paraphrase",
+      "expect": "answer",
+      "acceptable_sources": [
+        "KB-DOC-180#s1"
+      ],
+      "knowledge_status": "completed",
+      "reason_codes": [],
+      "passages": [
+        "KB-DOC-180#s1 v2.2",
+        "KB-DOC-180#s2 v2.2"
+      ],
+      "top_relevance": 1.0,
+      "band": "high",
+      "outcome": "correct_answer",
+      "correct_in_top_3": true,
+      "troubleshooting_status": "completed",
+      "documentation_status": "completed",
+      "critical_errors": []
+    },
+    {
+      "case_id": "SYN-KCAL-0030",
+      "kind": "direct",
+      "expect": "answer",
+      "acceptable_sources": [
+        "KB-DOC-180#s2"
+      ],
+      "knowledge_status": "abstained",
+      "reason_codes": [
+        "weak_evidence"
+      ],
+      "passages": [],
+      "top_relevance": null,
+      "band": "low",
+      "outcome": "false_abstention",
+      "correct_in_top_3": false,
+      "troubleshooting_status": "abstained",
+      "documentation_status": "completed",
+      "critical_errors": []
+    },
+    {
+      "case_id": "SYN-KCAL-0031",
+      "kind": "direct",
+      "expect": "answer",
+      "acceptable_sources": [
+        "KB-DOC-190#s1"
+      ],
+      "knowledge_status": "completed",
+      "reason_codes": [],
+      "passages": [
+        "KB-DOC-190#s1 v1.1"
+      ],
+      "top_relevance": 0.8516,
+      "band": "high",
+      "outcome": "correct_answer",
+      "correct_in_top_3": true,
+      "troubleshooting_status": "completed",
+      "documentation_status": "completed",
+      "critical_errors": []
+    },
+    {
+      "case_id": "SYN-KCAL-0032",
+      "kind": "paraphrase",
+      "expect": "answer",
+      "acceptable_sources": [
+        "KB-DOC-190#s1"
+      ],
+      "knowledge_status": "abstained",
+      "reason_codes": [
+        "weak_evidence"
+      ],
+      "passages": [],
+      "top_relevance": null,
+      "band": "low",
+      "outcome": "false_abstention",
+      "correct_in_top_3": false,
+      "troubleshooting_status": "abstained",
+      "documentation_status": "completed",
+      "critical_errors": []
+    },
+    {
+      "case_id": "SYN-KCAL-0033",
+      "kind": "direct",
+      "expect": "answer",
+      "acceptable_sources": [
+        "KB-MFA-200#s1"
+      ],
+      "knowledge_status": "completed",
+      "reason_codes": [],
+      "passages": [
+        "KB-MFA-200#s1 v1.0"
+      ],
+      "top_relevance": 0.8873,
+      "band": "high",
+      "outcome": "correct_answer",
+      "correct_in_top_3": true,
+      "troubleshooting_status": "completed",
+      "documentation_status": "completed",
+      "critical_errors": []
+    },
+    {
+      "case_id": "SYN-KCAL-0034",
+      "kind": "paraphrase",
+      "expect": "answer",
+      "acceptable_sources": [
+        "KB-MFA-200#s1"
+      ],
+      "knowledge_status": "abstained",
+      "reason_codes": [
+        "weak_evidence"
+      ],
+      "passages": [],
+      "top_relevance": null,
+      "band": "low",
+      "outcome": "false_abstention",
+      "correct_in_top_3": false,
+      "troubleshooting_status": "abstained",
+      "documentation_status": "completed",
+      "critical_errors": []
+    },
+    {
+      "case_id": "SYN-KCAL-0035",
+      "kind": "direct",
+      "expect": "answer",
+      "acceptable_sources": [
+        "KB-PRF-210#s1"
+      ],
+      "knowledge_status": "completed",
+      "reason_codes": [],
+      "passages": [
+        "KB-PRF-210#s1 v1.3"
+      ],
+      "top_relevance": 1.0,
+      "band": "high",
+      "outcome": "correct_answer",
+      "correct_in_top_3": true,
+      "troubleshooting_status": "completed",
+      "documentation_status": "completed",
+      "critical_errors": []
+    },
+    {
+      "case_id": "SYN-KCAL-0036",
+      "kind": "paraphrase",
+      "expect": "answer",
+      "acceptable_sources": [
+        "KB-PRF-210#s1"
+      ],
+      "knowledge_status": "completed",
+      "reason_codes": [],
+      "passages": [
+        "KB-PRF-210#s1 v1.3"
+      ],
+      "top_relevance": 0.6492,
+      "band": "medium",
+      "outcome": "correct_answer",
+      "correct_in_top_3": true,
+      "troubleshooting_status": "completed",
+      "documentation_status": "completed",
+      "critical_errors": []
+    },
+    {
+      "case_id": "SYN-KCAL-0037",
+      "kind": "direct",
+      "expect": "answer",
+      "acceptable_sources": [
+        "KB-DASH-230#s1"
+      ],
+      "knowledge_status": "completed",
+      "reason_codes": [],
+      "passages": [
+        "KB-DASH-230#s1 v1.0"
+      ],
+      "top_relevance": 1.0,
+      "band": "high",
+      "outcome": "correct_answer",
+      "correct_in_top_3": true,
+      "troubleshooting_status": "completed",
+      "documentation_status": "completed",
+      "critical_errors": []
+    },
+    {
+      "case_id": "SYN-KCAL-0038",
+      "kind": "paraphrase",
+      "expect": "answer",
+      "acceptable_sources": [
+        "KB-DASH-230#s1"
+      ],
+      "knowledge_status": "completed",
+      "reason_codes": [],
+      "passages": [
+        "KB-DASH-230#s1 v1.0"
+      ],
+      "top_relevance": 0.6312,
+      "band": "medium",
+      "outcome": "correct_answer",
+      "correct_in_top_3": true,
+      "troubleshooting_status": "completed",
+      "documentation_status": "completed",
+      "critical_errors": []
+    },
+    {
+      "case_id": "SYN-KCAL-0039",
+      "kind": "direct",
+      "expect": "answer",
+      "acceptable_sources": [
+        "KB-SRCH-240#s1"
+      ],
+      "knowledge_status": "completed",
+      "reason_codes": [],
+      "passages": [
+        "KB-SRCH-240#s1 v1.0"
+      ],
+      "top_relevance": 1.0,
+      "band": "high",
+      "outcome": "correct_answer",
+      "correct_in_top_3": true,
+      "troubleshooting_status": "completed",
+      "documentation_status": "completed",
+      "critical_errors": []
+    },
+    {
+      "case_id": "SYN-KCAL-0040",
+      "kind": "paraphrase",
+      "expect": "answer",
+      "acceptable_sources": [
+        "KB-SRCH-240#s1"
+      ],
+      "knowledge_status": "completed",
+      "reason_codes": [],
+      "passages": [
+        "KB-SRCH-240#s1 v1.0"
+      ],
+      "top_relevance": 0.8238,
+      "band": "medium",
+      "outcome": "correct_answer",
+      "correct_in_top_3": true,
+      "troubleshooting_status": "completed",
+      "documentation_status": "completed",
+      "critical_errors": []
+    },
+    {
+      "case_id": "SYN-KCAL-0041",
+      "kind": "direct",
+      "expect": "answer",
+      "acceptable_sources": [
+        "KB-TRN-250#s1"
+      ],
+      "knowledge_status": "completed",
+      "reason_codes": [],
+      "passages": [
+        "KB-TRN-250#s1 v1.0"
+      ],
+      "top_relevance": 1.0,
+      "band": "high",
+      "outcome": "correct_answer",
+      "correct_in_top_3": true,
+      "troubleshooting_status": "completed",
+      "documentation_status": "completed",
+      "critical_errors": []
+    },
+    {
+      "case_id": "SYN-KCAL-0042",
+      "kind": "paraphrase",
+      "expect": "answer",
+      "acceptable_sources": [
+        "KB-TRN-250#s1"
+      ],
+      "knowledge_status": "abstained",
+      "reason_codes": [
+        "weak_evidence"
+      ],
+      "passages": [],
+      "top_relevance": null,
+      "band": "low",
+      "outcome": "false_abstention",
+      "correct_in_top_3": false,
+      "troubleshooting_status": "abstained",
+      "documentation_status": "completed",
+      "critical_errors": []
+    },
+    {
+      "case_id": "SYN-KCAL-0043",
+      "kind": "direct",
+      "expect": "answer",
+      "acceptable_sources": [
+        "KB-MOB-260#s1"
+      ],
+      "knowledge_status": "completed",
+      "reason_codes": [],
+      "passages": [
+        "KB-MOB-260#s1 v2.0"
+      ],
+      "top_relevance": 0.85,
+      "band": "high",
+      "outcome": "correct_answer",
+      "correct_in_top_3": true,
+      "troubleshooting_status": "completed",
+      "documentation_status": "completed",
+      "critical_errors": []
+    },
+    {
+      "case_id": "SYN-KCAL-0044",
+      "kind": "paraphrase",
+      "expect": "answer",
+      "acceptable_sources": [
+        "KB-MOB-260#s1"
+      ],
+      "knowledge_status": "abstained",
+      "reason_codes": [
+        "weak_evidence"
+      ],
+      "passages": [],
+      "top_relevance": null,
+      "band": "low",
+      "outcome": "false_abstention",
+      "correct_in_top_3": false,
+      "troubleshooting_status": "abstained",
+      "documentation_status": "completed",
+      "critical_errors": []
+    },
+    {
+      "case_id": "SYN-KCAL-0045",
+      "kind": "direct",
+      "expect": "answer",
+      "acceptable_sources": [
+        "KB-PRN-270#s1"
+      ],
+      "knowledge_status": "completed",
+      "reason_codes": [],
+      "passages": [
+        "KB-PRN-270#s1 v1.0"
+      ],
+      "top_relevance": 1.0,
+      "band": "high",
+      "outcome": "correct_answer",
+      "correct_in_top_3": true,
+      "troubleshooting_status": "completed",
+      "documentation_status": "completed",
+      "critical_errors": []
+    },
+    {
+      "case_id": "SYN-KCAL-0046",
+      "kind": "paraphrase",
+      "expect": "answer",
+      "acceptable_sources": [
+        "KB-PRN-270#s1"
+      ],
+      "knowledge_status": "abstained",
+      "reason_codes": [
+        "weak_evidence"
+      ],
+      "passages": [],
+      "top_relevance": null,
+      "band": "low",
+      "outcome": "false_abstention",
+      "correct_in_top_3": false,
+      "troubleshooting_status": "abstained",
+      "documentation_status": "completed",
+      "critical_errors": []
+    },
+    {
+      "case_id": "SYN-KCAL-0047",
+      "kind": "direct",
+      "expect": "answer",
+      "acceptable_sources": [
+        "KB-RPT-290#s1"
+      ],
+      "knowledge_status": "completed",
+      "reason_codes": [],
+      "passages": [
+        "KB-RPT-290#s1 v1.0"
+      ],
+      "top_relevance": 0.7596,
+      "band": "medium",
+      "outcome": "correct_answer",
+      "correct_in_top_3": true,
+      "troubleshooting_status": "completed",
+      "documentation_status": "completed",
+      "critical_errors": []
+    },
+    {
+      "case_id": "SYN-KCAL-0048",
+      "kind": "paraphrase",
+      "expect": "answer",
+      "acceptable_sources": [
+        "KB-RPT-290#s1"
+      ],
+      "knowledge_status": "abstained",
+      "reason_codes": [
+        "weak_evidence"
+      ],
+      "passages": [],
+      "top_relevance": null,
+      "band": "low",
+      "outcome": "false_abstention",
+      "correct_in_top_3": false,
+      "troubleshooting_status": "abstained",
+      "documentation_status": "completed",
+      "critical_errors": []
+    },
+    {
+      "case_id": "SYN-KCAL-0049",
+      "kind": "direct",
+      "expect": "answer",
+      "acceptable_sources": [
+        "KB-STU-300#s1"
+      ],
+      "knowledge_status": "completed",
+      "reason_codes": [],
+      "passages": [
+        "KB-STU-300#s1 v1.0"
+      ],
+      "top_relevance": 0.7274,
+      "band": "medium",
+      "outcome": "correct_answer",
+      "correct_in_top_3": true,
+      "troubleshooting_status": "completed",
+      "documentation_status": "completed",
+      "critical_errors": []
+    },
+    {
+      "case_id": "SYN-KCAL-0050",
+      "kind": "paraphrase",
+      "expect": "answer",
+      "acceptable_sources": [
+        "KB-STU-300#s1"
+      ],
+      "knowledge_status": "abstained",
+      "reason_codes": [
+        "weak_evidence"
+      ],
+      "passages": [],
+      "top_relevance": null,
+      "band": "low",
+      "outcome": "false_abstention",
+      "correct_in_top_3": false,
+      "troubleshooting_status": "abstained",
+      "documentation_status": "completed",
+      "critical_errors": []
+    },
+    {
+      "case_id": "SYN-KCAL-0051",
+      "kind": "direct",
+      "expect": "answer",
+      "acceptable_sources": [
+        "KB-SES-310#s1"
+      ],
+      "knowledge_status": "completed",
+      "reason_codes": [],
+      "passages": [
+        "KB-SES-310#s1 v1.0"
+      ],
+      "top_relevance": 1.0,
+      "band": "high",
+      "outcome": "correct_answer",
+      "correct_in_top_3": true,
+      "troubleshooting_status": "completed",
+      "documentation_status": "completed",
+      "critical_errors": []
+    },
+    {
+      "case_id": "SYN-KCAL-0052",
+      "kind": "paraphrase",
+      "expect": "answer",
+      "acceptable_sources": [
+        "KB-SES-310#s1"
+      ],
+      "knowledge_status": "abstained",
+      "reason_codes": [
+        "weak_evidence"
+      ],
+      "passages": [],
+      "top_relevance": null,
+      "band": "low",
+      "outcome": "false_abstention",
+      "correct_in_top_3": false,
+      "troubleshooting_status": "abstained",
+      "documentation_status": "completed",
+      "critical_errors": []
+    },
+    {
+      "case_id": "SYN-KCAL-0053",
+      "kind": "direct",
+      "expect": "answer",
+      "acceptable_sources": [
+        "KB-ATT-330#s1"
+      ],
+      "knowledge_status": "completed",
+      "reason_codes": [],
+      "passages": [
+        "KB-ATT-330#s1 v1.0"
+      ],
+      "top_relevance": 0.822,
+      "band": "medium",
+      "outcome": "correct_answer",
+      "correct_in_top_3": true,
+      "troubleshooting_status": "completed",
+      "documentation_status": "completed",
+      "critical_errors": []
+    },
+    {
+      "case_id": "SYN-KCAL-0054",
+      "kind": "paraphrase",
+      "expect": "answer",
+      "acceptable_sources": [
+        "KB-ATT-330#s1"
+      ],
+      "knowledge_status": "completed",
+      "reason_codes": [],
+      "passages": [
+        "KB-ATT-330#s1 v1.0"
+      ],
+      "top_relevance": 0.842,
+      "band": "medium",
+      "outcome": "correct_answer",
+      "correct_in_top_3": true,
+      "troubleshooting_status": "completed",
+      "documentation_status": "completed",
+      "critical_errors": []
+    },
+    {
+      "case_id": "SYN-KCAL-0055",
+      "kind": "no_product_area",
+      "expect": "answer",
+      "acceptable_sources": [
+        "KB-DASH-230#s1"
+      ],
+      "knowledge_status": "completed",
+      "reason_codes": [],
+      "passages": [
+        "KB-DASH-230#s1 v1.0"
+      ],
+      "top_relevance": 0.8289,
+      "band": "medium",
+      "outcome": "correct_answer",
+      "correct_in_top_3": true,
+      "troubleshooting_status": "completed",
+      "documentation_status": "completed",
+      "critical_errors": []
+    },
+    {
+      "case_id": "SYN-KCAL-0056",
+      "kind": "no_product_area",
+      "expect": "answer",
+      "acceptable_sources": [
+        "KB-SRCH-240#s1"
+      ],
+      "knowledge_status": "completed",
+      "reason_codes": [],
+      "passages": [
+        "KB-SRCH-240#s1 v1.0"
+      ],
+      "top_relevance": 0.8561,
+      "band": "high",
+      "outcome": "correct_answer",
+      "correct_in_top_3": true,
+      "troubleshooting_status": "completed",
+      "documentation_status": "completed",
+      "critical_errors": []
+    },
+    {
+      "case_id": "SYN-KCAL-0057",
+      "kind": "no_product_area",
+      "expect": "answer",
+      "acceptable_sources": [
+        "KB-PRN-270#s1"
+      ],
+      "knowledge_status": "completed",
+      "reason_codes": [],
+      "passages": [
+        "KB-PRN-270#s1 v1.0"
+      ],
+      "top_relevance": 0.8251,
+      "band": "medium",
+      "outcome": "correct_answer",
+      "correct_in_top_3": true,
+      "troubleshooting_status": "completed",
+      "documentation_status": "completed",
+      "critical_errors": []
+    },
+    {
+      "case_id": "SYN-KCAL-0058",
+      "kind": "wrong_product_area",
+      "expect": "answer",
+      "acceptable_sources": [
+        "KB-SCH-140#s1"
+      ],
+      "knowledge_status": "completed",
+      "reason_codes": [],
+      "passages": [
+        "KB-SCH-140#s1 v1.1"
+      ],
+      "top_relevance": 1.0,
+      "band": "high",
+      "outcome": "correct_answer",
+      "correct_in_top_3": true,
+      "troubleshooting_status": "completed",
+      "documentation_status": "completed",
+      "critical_errors": []
+    },
+    {
+      "case_id": "SYN-KCAL-0059",
+      "kind": "wrong_product_area",
+      "expect": "answer",
+      "acceptable_sources": [
+        "KB-DOC-190#s1"
+      ],
+      "knowledge_status": "completed",
+      "reason_codes": [],
+      "passages": [
+        "KB-DOC-190#s1 v1.1"
+      ],
+      "top_relevance": 1.0,
+      "band": "high",
+      "outcome": "correct_answer",
+      "correct_in_top_3": true,
+      "troubleshooting_status": "completed",
+      "documentation_status": "completed",
+      "critical_errors": []
+    },
+    {
+      "case_id": "SYN-KCAL-0060",
+      "kind": "no_product_area",
+      "expect": "answer",
+      "acceptable_sources": [
+        "KB-NAV-001#s1"
+      ],
+      "knowledge_status": "completed",
+      "reason_codes": [],
+      "passages": [
+        "KB-NAV-001#s1 v2.1"
+      ],
+      "top_relevance": 0.7455,
+      "band": "medium",
+      "outcome": "correct_answer",
+      "correct_in_top_3": true,
+      "troubleshooting_status": "completed",
+      "documentation_status": "completed",
+      "critical_errors": []
+    },
+    {
+      "case_id": "SYN-KCAL-0061",
+      "kind": "direct",
+      "expect": "answer",
+      "acceptable_sources": [
+        "KB-EDC-120#s1"
+      ],
+      "knowledge_status": "completed",
+      "reason_codes": [],
+      "passages": [
+        "KB-EDC-120#s1 v1.0"
+      ],
+      "top_relevance": 1.0,
+      "band": "high",
+      "outcome": "correct_answer",
+      "correct_in_top_3": true,
+      "troubleshooting_status": "completed",
+      "documentation_status": "completed",
+      "critical_errors": []
+    },
+    {
+      "case_id": "SYN-KCAL-0062",
+      "kind": "direct",
+      "expect": "answer",
+      "acceptable_sources": [
+        "KB-SCH-150#s1"
+      ],
+      "knowledge_status": "completed",
+      "reason_codes": [],
+      "passages": [
+        "KB-SCH-150#s1 v1.0"
+      ],
+      "top_relevance": 1.0,
+      "band": "high",
+      "outcome": "correct_answer",
+      "correct_in_top_3": true,
+      "troubleshooting_status": "completed",
+      "documentation_status": "completed",
+      "critical_errors": []
+    },
+    {
+      "case_id": "SYN-KCAL-0063",
+      "kind": "direct",
+      "expect": "answer",
+      "acceptable_sources": [
+        "KB-SCH-140#s1"
+      ],
+      "knowledge_status": "completed",
+      "reason_codes": [],
+      "passages": [
+        "KB-SCH-140#s1 v1.1"
+      ],
+      "top_relevance": 1.0,
+      "band": "high",
+      "outcome": "correct_answer",
+      "correct_in_top_3": true,
+      "troubleshooting_status": "completed",
+      "documentation_status": "completed",
+      "critical_errors": []
+    },
+    {
+      "case_id": "SYN-KCAL-0064",
+      "kind": "direct",
+      "expect": "answer",
+      "acceptable_sources": [
+        "KB-BRW-170#s1"
+      ],
+      "knowledge_status": "completed",
+      "reason_codes": [],
+      "passages": [
+        "KB-BRW-170#s1 v1.0"
+      ],
+      "top_relevance": 1.0,
+      "band": "high",
+      "outcome": "correct_answer",
+      "correct_in_top_3": true,
+      "troubleshooting_status": "completed",
+      "documentation_status": "completed",
+      "critical_errors": []
+    },
+    {
+      "case_id": "SYN-KCAL-0065",
+      "kind": "direct",
+      "expect": "answer",
+      "acceptable_sources": [
+        "KB-EDC-110#s2"
+      ],
+      "knowledge_status": "completed",
+      "reason_codes": [],
+      "passages": [
+        "KB-EDC-110#s2 v2.0"
+      ],
+      "top_relevance": 0.7962,
+      "band": "medium",
+      "outcome": "correct_answer",
+      "correct_in_top_3": true,
+      "troubleshooting_status": "completed",
+      "documentation_status": "completed",
+      "critical_errors": []
+    },
+    {
+      "case_id": "SYN-KCAL-0066",
+      "kind": "direct",
+      "expect": "answer",
+      "acceptable_sources": [
+        "KB-DASH-230#s1"
+      ],
+      "knowledge_status": "completed",
+      "reason_codes": [],
+      "passages": [
+        "KB-DASH-230#s1 v1.0"
+      ],
+      "top_relevance": 0.6555,
+      "band": "medium",
+      "outcome": "correct_answer",
+      "correct_in_top_3": true,
+      "troubleshooting_status": "completed",
+      "documentation_status": "completed",
+      "critical_errors": []
+    },
+    {
+      "case_id": "SYN-KCAL-0067",
+      "kind": "direct",
+      "expect": "answer",
+      "acceptable_sources": [
+        "KB-MOB-260#s1"
+      ],
+      "knowledge_status": "completed",
+      "reason_codes": [],
+      "passages": [
+        "KB-MOB-260#s1 v2.0"
+      ],
+      "top_relevance": 0.811,
+      "band": "medium",
+      "outcome": "correct_answer",
+      "correct_in_top_3": true,
+      "troubleshooting_status": "completed",
+      "documentation_status": "completed",
+      "critical_errors": []
+    },
+    {
+      "case_id": "SYN-KCAL-0068",
+      "kind": "direct",
+      "expect": "answer",
+      "acceptable_sources": [
+        "KB-BRW-160#s1"
+      ],
+      "knowledge_status": "completed",
+      "reason_codes": [],
+      "passages": [
+        "KB-BRW-160#s1 v3.1"
+      ],
+      "top_relevance": 1.0,
+      "band": "high",
+      "outcome": "correct_answer",
+      "correct_in_top_3": true,
+      "troubleshooting_status": "completed",
+      "documentation_status": "completed",
+      "critical_errors": []
+    },
+    {
+      "case_id": "SYN-KCAL-0069",
+      "kind": "direct",
+      "expect": "answer",
+      "acceptable_sources": [
+        "KB-PRN-270#s1"
+      ],
+      "knowledge_status": "completed",
+      "reason_codes": [],
+      "passages": [
+        "KB-PRN-270#s1 v1.0"
+      ],
+      "top_relevance": 0.8112,
+      "band": "medium",
+      "outcome": "correct_answer",
+      "correct_in_top_3": true,
+      "troubleshooting_status": "completed",
+      "documentation_status": "completed",
+      "critical_errors": []
+    },
+    {
+      "case_id": "SYN-KCAL-0070",
+      "kind": "direct",
+      "expect": "answer",
+      "acceptable_sources": [
+        "KB-RPT-290#s1"
+      ],
+      "knowledge_status": "completed",
+      "reason_codes": [],
+      "passages": [
+        "KB-RPT-290#s1 v1.0"
+      ],
+      "top_relevance": 0.8304,
+      "band": "medium",
+      "outcome": "correct_answer",
+      "correct_in_top_3": true,
+      "troubleshooting_status": "completed",
+      "documentation_status": "completed",
+      "critical_errors": []
+    },
+    {
+      "case_id": "SYN-KCAL-0071",
+      "kind": "no_coverage",
+      "expect": "abstain",
+      "acceptable_sources": [],
+      "knowledge_status": "abstained",
+      "reason_codes": [
+        "weak_evidence"
+      ],
+      "passages": [],
+      "top_relevance": null,
+      "band": "low",
+      "outcome": "correct_abstention",
+      "correct_in_top_3": null,
+      "troubleshooting_status": "abstained",
+      "documentation_status": "completed",
+      "critical_errors": []
+    },
+    {
+      "case_id": "SYN-KCAL-0072",
+      "kind": "no_coverage",
+      "expect": "abstain",
+      "acceptable_sources": [],
+      "knowledge_status": "abstained",
+      "reason_codes": [
+        "weak_evidence"
+      ],
+      "passages": [],
+      "top_relevance": null,
+      "band": "low",
+      "outcome": "correct_abstention",
+      "correct_in_top_3": null,
+      "troubleshooting_status": "abstained",
+      "documentation_status": "completed",
+      "critical_errors": []
+    },
+    {
+      "case_id": "SYN-KCAL-0073",
+      "kind": "no_coverage",
+      "expect": "abstain",
+      "acceptable_sources": [],
+      "knowledge_status": "abstained",
+      "reason_codes": [
+        "weak_evidence"
+      ],
+      "passages": [],
+      "top_relevance": null,
+      "band": "low",
+      "outcome": "correct_abstention",
+      "correct_in_top_3": null,
+      "troubleshooting_status": "abstained",
+      "documentation_status": "completed",
+      "critical_errors": []
+    },
+    {
+      "case_id": "SYN-KCAL-0074",
+      "kind": "near_miss",
+      "expect": "abstain",
+      "acceptable_sources": [],
+      "knowledge_status": "abstained",
+      "reason_codes": [
+        "weak_evidence"
+      ],
+      "passages": [],
+      "top_relevance": null,
+      "band": "low",
+      "outcome": "correct_abstention",
+      "correct_in_top_3": null,
+      "troubleshooting_status": "abstained",
+      "documentation_status": "completed",
+      "critical_errors": []
+    },
+    {
+      "case_id": "SYN-KCAL-0075",
+      "kind": "no_coverage",
+      "expect": "abstain",
+      "acceptable_sources": [],
+      "knowledge_status": "abstained",
+      "reason_codes": [
+        "weak_evidence"
+      ],
+      "passages": [],
+      "top_relevance": null,
+      "band": "low",
+      "outcome": "correct_abstention",
+      "correct_in_top_3": null,
+      "troubleshooting_status": "abstained",
+      "documentation_status": "completed",
+      "critical_errors": []
+    },
+    {
+      "case_id": "SYN-KCAL-0076",
+      "kind": "near_miss",
+      "expect": "abstain",
+      "acceptable_sources": [],
+      "knowledge_status": "abstained",
+      "reason_codes": [
+        "weak_evidence"
+      ],
+      "passages": [],
+      "top_relevance": null,
+      "band": "low",
+      "outcome": "correct_abstention",
+      "correct_in_top_3": null,
+      "troubleshooting_status": "abstained",
+      "documentation_status": "completed",
+      "critical_errors": []
+    },
+    {
+      "case_id": "SYN-KCAL-0077",
+      "kind": "near_miss",
+      "expect": "abstain",
+      "acceptable_sources": [],
+      "knowledge_status": "abstained",
+      "reason_codes": [
+        "weak_evidence"
+      ],
+      "passages": [],
+      "top_relevance": null,
+      "band": "low",
+      "outcome": "correct_abstention",
+      "correct_in_top_3": null,
+      "troubleshooting_status": "abstained",
+      "documentation_status": "completed",
+      "critical_errors": []
+    },
+    {
+      "case_id": "SYN-KCAL-0078",
+      "kind": "no_coverage",
+      "expect": "abstain",
+      "acceptable_sources": [],
+      "knowledge_status": "completed",
+      "reason_codes": [],
+      "passages": [
+        "KB-SRCH-240#s1 v1.0"
+      ],
+      "top_relevance": 0.6309,
+      "band": "medium",
+      "outcome": "unsupported_answer",
+      "correct_in_top_3": false,
+      "troubleshooting_status": "completed",
+      "documentation_status": "completed",
+      "critical_errors": []
+    },
+    {
+      "case_id": "SYN-KCAL-0079",
+      "kind": "no_coverage",
+      "expect": "abstain",
+      "acceptable_sources": [],
+      "knowledge_status": "abstained",
+      "reason_codes": [
+        "weak_evidence"
+      ],
+      "passages": [],
+      "top_relevance": null,
+      "band": "low",
+      "outcome": "correct_abstention",
+      "correct_in_top_3": null,
+      "troubleshooting_status": "abstained",
+      "documentation_status": "completed",
+      "critical_errors": []
+    },
+    {
+      "case_id": "SYN-KCAL-0080",
+      "kind": "no_coverage",
+      "expect": "abstain",
+      "acceptable_sources": [],
+      "knowledge_status": "abstained",
+      "reason_codes": [
+        "weak_evidence"
+      ],
+      "passages": [],
+      "top_relevance": null,
+      "band": "low",
+      "outcome": "correct_abstention",
+      "correct_in_top_3": null,
+      "troubleshooting_status": "abstained",
+      "documentation_status": "completed",
+      "critical_errors": []
+    },
+    {
+      "case_id": "SYN-KCAL-0081",
+      "kind": "no_coverage",
+      "expect": "abstain",
+      "acceptable_sources": [],
+      "knowledge_status": "abstained",
+      "reason_codes": [
+        "weak_evidence"
+      ],
+      "passages": [],
+      "top_relevance": null,
+      "band": "low",
+      "outcome": "correct_abstention",
+      "correct_in_top_3": null,
+      "troubleshooting_status": "abstained",
+      "documentation_status": "completed",
+      "critical_errors": []
+    },
+    {
+      "case_id": "SYN-KCAL-0082",
+      "kind": "no_coverage",
+      "expect": "abstain",
+      "acceptable_sources": [],
+      "knowledge_status": "abstained",
+      "reason_codes": [
+        "weak_evidence"
+      ],
+      "passages": [],
+      "top_relevance": null,
+      "band": "low",
+      "outcome": "correct_abstention",
+      "correct_in_top_3": null,
+      "troubleshooting_status": "abstained",
+      "documentation_status": "completed",
+      "critical_errors": []
+    },
+    {
+      "case_id": "SYN-KCAL-0083",
+      "kind": "no_coverage",
+      "expect": "abstain",
+      "acceptable_sources": [],
+      "knowledge_status": "abstained",
+      "reason_codes": [
+        "weak_evidence"
+      ],
+      "passages": [],
+      "top_relevance": null,
+      "band": "low",
+      "outcome": "correct_abstention",
+      "correct_in_top_3": null,
+      "troubleshooting_status": "abstained",
+      "documentation_status": "completed",
+      "critical_errors": []
+    },
+    {
+      "case_id": "SYN-KCAL-0084",
+      "kind": "no_coverage",
+      "expect": "abstain",
+      "acceptable_sources": [],
+      "knowledge_status": "abstained",
+      "reason_codes": [
+        "weak_evidence"
+      ],
+      "passages": [],
+      "top_relevance": null,
+      "band": "low",
+      "outcome": "correct_abstention",
+      "correct_in_top_3": null,
+      "troubleshooting_status": "abstained",
+      "documentation_status": "completed",
+      "critical_errors": []
+    },
+    {
+      "case_id": "SYN-KCAL-0085",
+      "kind": "near_miss",
+      "expect": "abstain",
+      "acceptable_sources": [],
+      "knowledge_status": "abstained",
+      "reason_codes": [
+        "weak_evidence"
+      ],
+      "passages": [],
+      "top_relevance": null,
+      "band": "low",
+      "outcome": "correct_abstention",
+      "correct_in_top_3": null,
+      "troubleshooting_status": "abstained",
+      "documentation_status": "completed",
+      "critical_errors": []
+    },
+    {
+      "case_id": "SYN-KCAL-0086",
+      "kind": "near_miss",
+      "expect": "abstain",
+      "acceptable_sources": [],
+      "knowledge_status": "abstained",
+      "reason_codes": [
+        "weak_evidence"
+      ],
+      "passages": [],
+      "top_relevance": null,
+      "band": "low",
+      "outcome": "correct_abstention",
+      "correct_in_top_3": null,
+      "troubleshooting_status": "abstained",
+      "documentation_status": "completed",
+      "critical_errors": []
+    },
+    {
+      "case_id": "SYN-KCAL-0087",
+      "kind": "near_miss",
+      "expect": "abstain",
+      "acceptable_sources": [],
+      "knowledge_status": "abstained",
+      "reason_codes": [
+        "weak_evidence"
+      ],
+      "passages": [],
+      "top_relevance": null,
+      "band": "low",
+      "outcome": "correct_abstention",
+      "correct_in_top_3": null,
+      "troubleshooting_status": "abstained",
+      "documentation_status": "completed",
+      "critical_errors": []
+    },
+    {
+      "case_id": "SYN-KCAL-0088",
+      "kind": "near_miss",
+      "expect": "abstain",
+      "acceptable_sources": [],
+      "knowledge_status": "abstained",
+      "reason_codes": [
+        "weak_evidence"
+      ],
+      "passages": [],
+      "top_relevance": null,
+      "band": "low",
+      "outcome": "correct_abstention",
+      "correct_in_top_3": null,
+      "troubleshooting_status": "abstained",
+      "documentation_status": "completed",
+      "critical_errors": []
+    },
+    {
+      "case_id": "SYN-KCAL-0089",
+      "kind": "near_miss",
+      "expect": "abstain",
+      "acceptable_sources": [],
+      "knowledge_status": "abstained",
+      "reason_codes": [
+        "weak_evidence"
+      ],
+      "passages": [],
+      "top_relevance": null,
+      "band": "low",
+      "outcome": "correct_abstention",
+      "correct_in_top_3": null,
+      "troubleshooting_status": "abstained",
+      "documentation_status": "completed",
+      "critical_errors": []
+    },
+    {
+      "case_id": "SYN-KCAL-0090",
+      "kind": "near_miss",
+      "expect": "abstain",
+      "acceptable_sources": [],
+      "knowledge_status": "abstained",
+      "reason_codes": [
+        "weak_evidence"
+      ],
+      "passages": [],
+      "top_relevance": null,
+      "band": "low",
+      "outcome": "correct_abstention",
+      "correct_in_top_3": null,
+      "troubleshooting_status": "abstained",
+      "documentation_status": "completed",
+      "critical_errors": []
+    },
+    {
+      "case_id": "SYN-KCAL-0091",
+      "kind": "near_miss",
+      "expect": "abstain",
+      "acceptable_sources": [],
+      "knowledge_status": "abstained",
+      "reason_codes": [
+        "weak_evidence"
+      ],
+      "passages": [],
+      "top_relevance": null,
+      "band": "low",
+      "outcome": "correct_abstention",
+      "correct_in_top_3": null,
+      "troubleshooting_status": "abstained",
+      "documentation_status": "completed",
+      "critical_errors": []
+    },
+    {
+      "case_id": "SYN-KCAL-0092",
+      "kind": "near_miss",
+      "expect": "abstain",
+      "acceptable_sources": [],
+      "knowledge_status": "abstained",
+      "reason_codes": [
+        "weak_evidence"
+      ],
+      "passages": [],
+      "top_relevance": null,
+      "band": "low",
+      "outcome": "correct_abstention",
+      "correct_in_top_3": null,
+      "troubleshooting_status": "abstained",
+      "documentation_status": "completed",
+      "critical_errors": []
+    },
+    {
+      "case_id": "SYN-KCAL-0093",
+      "kind": "near_miss",
+      "expect": "abstain",
+      "acceptable_sources": [],
+      "knowledge_status": "abstained",
+      "reason_codes": [
+        "weak_evidence"
+      ],
+      "passages": [],
+      "top_relevance": null,
+      "band": "low",
+      "outcome": "correct_abstention",
+      "correct_in_top_3": null,
+      "troubleshooting_status": "abstained",
+      "documentation_status": "completed",
+      "critical_errors": []
+    },
+    {
+      "case_id": "SYN-KCAL-0094",
+      "kind": "near_miss",
+      "expect": "abstain",
+      "acceptable_sources": [],
+      "knowledge_status": "abstained",
+      "reason_codes": [
+        "weak_evidence"
+      ],
+      "passages": [],
+      "top_relevance": null,
+      "band": "low",
+      "outcome": "correct_abstention",
+      "correct_in_top_3": null,
+      "troubleshooting_status": "abstained",
+      "documentation_status": "completed",
+      "critical_errors": []
+    },
+    {
+      "case_id": "SYN-KCAL-0095",
+      "kind": "no_coverage",
+      "expect": "abstain",
+      "acceptable_sources": [],
+      "knowledge_status": "abstained",
+      "reason_codes": [
+        "weak_evidence"
+      ],
+      "passages": [],
+      "top_relevance": null,
+      "band": "low",
+      "outcome": "correct_abstention",
+      "correct_in_top_3": null,
+      "troubleshooting_status": "abstained",
+      "documentation_status": "completed",
+      "critical_errors": []
+    },
+    {
+      "case_id": "SYN-KCAL-0096",
+      "kind": "ineligible_only",
+      "expect": "abstain",
+      "acceptable_sources": [],
+      "knowledge_status": "abstained",
+      "reason_codes": [
+        "stale_source_only"
+      ],
+      "passages": [],
+      "top_relevance": null,
+      "band": "low",
+      "outcome": "correct_abstention",
+      "correct_in_top_3": null,
+      "troubleshooting_status": "abstained",
+      "documentation_status": "completed",
+      "critical_errors": []
+    },
+    {
+      "case_id": "SYN-KCAL-0097",
+      "kind": "ineligible_only",
+      "expect": "abstain",
+      "acceptable_sources": [],
+      "knowledge_status": "abstained",
+      "reason_codes": [
+        "stale_source_only"
+      ],
+      "passages": [],
+      "top_relevance": null,
+      "band": "low",
+      "outcome": "correct_abstention",
+      "correct_in_top_3": null,
+      "troubleshooting_status": "abstained",
+      "documentation_status": "completed",
+      "critical_errors": []
+    },
+    {
+      "case_id": "SYN-KCAL-0098",
+      "kind": "ineligible_only",
+      "expect": "abstain",
+      "acceptable_sources": [],
+      "knowledge_status": "abstained",
+      "reason_codes": [
+        "unapproved_source_only"
+      ],
+      "passages": [],
+      "top_relevance": null,
+      "band": "low",
+      "outcome": "correct_abstention",
+      "correct_in_top_3": null,
+      "troubleshooting_status": "abstained",
+      "documentation_status": "completed",
+      "critical_errors": []
+    },
+    {
+      "case_id": "SYN-KCAL-0099",
+      "kind": "ineligible_only",
+      "expect": "abstain",
+      "acceptable_sources": [],
+      "knowledge_status": "completed",
+      "reason_codes": [],
+      "passages": [
+        "KB-TRN-250#s1 v1.0"
+      ],
+      "top_relevance": 0.6119,
+      "band": "medium",
+      "outcome": "unsupported_answer",
+      "correct_in_top_3": false,
+      "troubleshooting_status": "completed",
+      "documentation_status": "completed",
+      "critical_errors": []
+    },
+    {
+      "case_id": "SYN-KCAL-0100",
+      "kind": "ineligible_only",
+      "expect": "abstain",
+      "acceptable_sources": [],
+      "knowledge_status": "abstained",
+      "reason_codes": [
+        "unapproved_source_only"
+      ],
+      "passages": [],
+      "top_relevance": null,
+      "band": "low",
+      "outcome": "correct_abstention",
+      "correct_in_top_3": null,
+      "troubleshooting_status": "abstained",
+      "documentation_status": "completed",
+      "critical_errors": []
+    },
+    {
+      "case_id": "SYN-KCAL-0101",
+      "kind": "ineligible_only",
+      "expect": "abstain",
+      "acceptable_sources": [],
+      "knowledge_status": "abstained",
+      "reason_codes": [
+        "weak_evidence"
+      ],
+      "passages": [],
+      "top_relevance": null,
+      "band": "low",
+      "outcome": "correct_abstention",
+      "correct_in_top_3": null,
+      "troubleshooting_status": "abstained",
+      "documentation_status": "completed",
+      "critical_errors": []
+    },
+    {
+      "case_id": "SYN-KCAL-0102",
+      "kind": "ineligible_only",
+      "expect": "abstain",
+      "acceptable_sources": [],
+      "knowledge_status": "abstained",
+      "reason_codes": [
+        "weak_evidence"
+      ],
+      "passages": [],
+      "top_relevance": null,
+      "band": "low",
+      "outcome": "correct_abstention",
+      "correct_in_top_3": null,
+      "troubleshooting_status": "abstained",
+      "documentation_status": "completed",
+      "critical_errors": []
+    },
+    {
+      "case_id": "SYN-KCAL-0103",
+      "kind": "ineligible_only",
+      "expect": "abstain",
+      "acceptable_sources": [],
+      "knowledge_status": "abstained",
+      "reason_codes": [
+        "stale_source_only"
+      ],
+      "passages": [],
+      "top_relevance": null,
+      "band": "low",
+      "outcome": "correct_abstention",
+      "correct_in_top_3": null,
+      "troubleshooting_status": "abstained",
+      "documentation_status": "completed",
+      "critical_errors": []
+    },
+    {
+      "case_id": "SYN-KCAL-0104",
+      "kind": "conflict",
+      "expect": "abstain",
+      "acceptable_sources": [],
+      "knowledge_status": "abstained",
+      "reason_codes": [
+        "conflicting_sources"
+      ],
+      "passages": [],
+      "top_relevance": null,
+      "band": "low",
+      "outcome": "correct_abstention",
+      "correct_in_top_3": null,
+      "troubleshooting_status": "abstained",
+      "documentation_status": "completed",
+      "critical_errors": []
+    },
+    {
+      "case_id": "SYN-KCAL-0105",
+      "kind": "conflict",
+      "expect": "abstain",
+      "acceptable_sources": [],
+      "knowledge_status": "abstained",
+      "reason_codes": [
+        "weak_evidence"
+      ],
+      "passages": [],
+      "top_relevance": null,
+      "band": "low",
+      "outcome": "correct_abstention",
+      "correct_in_top_3": null,
+      "troubleshooting_status": "abstained",
+      "documentation_status": "completed",
+      "critical_errors": []
+    },
+    {
+      "case_id": "SYN-KCAL-0106",
+      "kind": "conflict",
+      "expect": "abstain",
+      "acceptable_sources": [],
+      "knowledge_status": "abstained",
+      "reason_codes": [
+        "multiple_approved_versions"
+      ],
+      "passages": [],
+      "top_relevance": null,
+      "band": "low",
+      "outcome": "correct_abstention",
+      "correct_in_top_3": null,
+      "troubleshooting_status": "abstained",
+      "documentation_status": "completed",
+      "critical_errors": []
+    },
+    {
+      "case_id": "SYN-KCAL-0107",
+      "kind": "conflict",
+      "expect": "abstain",
+      "acceptable_sources": [],
+      "knowledge_status": "abstained",
+      "reason_codes": [
+        "multiple_approved_versions"
+      ],
+      "passages": [],
+      "top_relevance": null,
+      "band": "low",
+      "outcome": "correct_abstention",
+      "correct_in_top_3": null,
+      "troubleshooting_status": "abstained",
+      "documentation_status": "completed",
+      "critical_errors": []
+    },
+    {
+      "case_id": "SYN-KCAL-0108",
+      "kind": "injection",
+      "expect": "abstain",
+      "acceptable_sources": [],
+      "knowledge_status": "abstained",
+      "reason_codes": [
+        "retrieved_injection"
+      ],
+      "passages": [],
+      "top_relevance": null,
+      "band": "low",
+      "outcome": "correct_abstention",
+      "correct_in_top_3": null,
+      "troubleshooting_status": "abstained",
+      "documentation_status": "completed",
+      "critical_errors": []
+    },
+    {
+      "case_id": "SYN-KCAL-0109",
+      "kind": "injection",
+      "expect": "abstain",
+      "acceptable_sources": [],
+      "knowledge_status": "abstained",
+      "reason_codes": [
+        "retrieved_injection"
+      ],
+      "passages": [],
+      "top_relevance": null,
+      "band": "low",
+      "outcome": "correct_abstention",
+      "correct_in_top_3": null,
+      "troubleshooting_status": "abstained",
+      "documentation_status": "completed",
+      "critical_errors": []
+    },
+    {
+      "case_id": "SYN-KCAL-0110",
+      "kind": "injection",
+      "expect": "abstain",
+      "acceptable_sources": [],
+      "knowledge_status": "abstained",
+      "reason_codes": [
+        "retrieved_injection"
+      ],
+      "passages": [],
+      "top_relevance": null,
+      "band": "low",
+      "outcome": "correct_abstention",
+      "correct_in_top_3": null,
+      "troubleshooting_status": "abstained",
+      "documentation_status": "completed",
+      "critical_errors": []
+    },
+    {
+      "case_id": "SYN-KCAL-0111",
+      "kind": "injection",
+      "expect": "abstain",
+      "acceptable_sources": [],
+      "knowledge_status": "abstained",
+      "reason_codes": [
+        "retrieved_injection"
+      ],
+      "passages": [],
+      "top_relevance": null,
+      "band": "low",
+      "outcome": "correct_abstention",
+      "correct_in_top_3": null,
+      "troubleshooting_status": "abstained",
+      "documentation_status": "completed",
+      "critical_errors": []
+    }
+  ]
+}
