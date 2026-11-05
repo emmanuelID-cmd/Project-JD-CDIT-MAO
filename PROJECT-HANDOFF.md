@@ -175,7 +175,7 @@ UI lane clarification: Either lane may add/style presentation controls (includin
 - Prepared: 2026-11-05 (before the requested push); active worktree: temp/manny-phase2-triage; project baseline: docs/requirements/PRD-v3.md.
 - Intended publication: push the completed work as a fast-forward to Manny’s existing lane manny/coordinator-triage-escalation; open a PR to developer. No new remote branch is intended.
 - Remote check: origin/developer has Shawn PR #5 merged (10168a2); local developer and Shawn lane were two commits behind at inspection. No open PR to developer existed before this work.
-- The temporary branch and persistent local Manny lane both started at fa47adc; local Manny was four commits ahead of its remote lane before this work. Current uncommitted phase work is preserved for task-grouped commits.
+- The temporary branch and persistent local Manny lane both started at fa47adc; local Manny was four commits ahead of its remote lane before this work. The new two-commit snapshot is a fast-forward from that remote lane. A merge-tree preflight against origin/developer found conflicts in Checklist.md and PROJECT-HANDOFF.md; the PR merge must wait for reconciliation.
 
 ### Done
 
@@ -199,4 +199,4 @@ UI lane clarification: Either lane may add/style presentation controls (includin
 
 - Start by reading current PRD-v3, project AGENTS.md, Checklist.md, this handoff, and docs/planning/Manny-phase/phase2/PLAN.md.
 - Continue from temp/manny-phase2-triage or the verified Manny lane after checking its exact remote tip; preserve .env and exclude docs/templates/PRD Template.md.
-- Before integration: inspect the PR diff, CI/review status, and conflicts; merge only when repository rules and authorization allow it. Fast-forward only branches proven safe by ancestry and cleanliness.
+- Before integration: inspect the PR diff, CI/review status, and reconcile the known Checklist.md and PROJECT-HANDOFF.md conflicts with developer. Do not merge until resolved and required review/checks pass. Fast-forward only branches proven safe by ancestry and cleanliness; no branch fast-forward to integrate this work is currently safe.
