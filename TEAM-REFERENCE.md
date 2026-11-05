@@ -1,4 +1,34 @@
 # Handoffs prepared for push
+## 2026-11-05T17:05:00-05:00 — Manny Lane Completion (Phases 2–4) & Combined Six-Agent Workflow
+
+Summary file: PROJECT-HANDOFF.md
+
+- Git author represented: Emmanuel De Jesus <emmanuel.dejesus@pursuit.org>; branch: temp/manny-phase2-triage; destination: manny/coordinator-triage-escalation and developer.
+- Baseline: docs/requirements/PRD-v3.md (authoritative).
+- Done: Completed Phase 2 (Triage & D-20), Phase 3 (Escalation Agent A5), Shared Integration (CombinedWorkflowHarness connecting all 6 agents), and Phase 4 (Manny Lane Validation & Synthetic Evaluation Runner).
+- Validation: 518 pytest unit and integration tests passing on Python 3.13; CombinedWorkflowHarness passes 12/12 cases; Phase 4 runner passes 100% across all 6 safety gates (0 unsupported claims, 0 false human reviews, 0 unsafe down-triages, 0 prompt injection escapes, 0 unauthorized writes, 0 lost uncertainties).
+- Audits: BUDDY, ACCOUNTANT, ARCHIVIST, and final REVIEWER completion checks completed and verified.
+- Status: Ready for release PR / project lead merge authorization to main.
+
+## 2026-11-05T15:12:00-05:00 — Manny Phase 2 Triage trace and interim handoff
+
+Summary file: PROJECT-HANDOFF.md
+
+- Git author represented: Emmanuel De Jesus <emmanuel.dejesus@pursuit.org>; verified source history at fa47adc. Active temporary branch: temp/manny-phase2-triage; intended remote destination is the existing owner lane manny/coordinator-triage-escalation; PR target developer.
+- Verified pre-change remote baseline: local Manny lane fa47adc, remote Manny lane four commits behind; origin/developer at 10168a2 with Shawn PR #5 merged. No open Manny-to-developer PR was found before publication.
+- Done: completed one explicitly authorized synthetic Claude adapter call and documented its output, 461 input/680 output tokens, 5,910 ms latency, and $0.007722 estimated cost. Unknown fields remained unknown, human review was required, and dispatch/downstream stayed disabled.
+- Done: captured trace manifest/evidence, reconciled independent Reviewer A/B findings, scoped SECURITY review, and marked the trace INCOMPLETE. Updated the Phase 2 plan, draft prompt status, Checklist, and PROJECT-HANDOFF to match observed execution.
+- Not completed: this is not six-agent E2E; semantic label, prompt/request hashes, fixture mapping, and separate authorization-record linkage remain open; injection/failure/full-workflow security cases were not tested.
+- Validation recorded: focused tests 29 passed, full suite 478 passed, pip check passed, git diff --check exit 0. No new tests were run during handoff preparation.
+- PR preflight: git merge-tree found content conflicts in Checklist.md and PROJECT-HANDOFF.md against origin/developer. The owner-lane push is verified at 3138388. PR #6 is open to developer and GitHub reports CONFLICTING / DIRTY with no checks reported; reconcile the shared-document conflicts before integration.
+
+## Active local work — Manny Phase 2 (handoff prepared for requested push)
+
+- Active branch: `temp/manny-phase2-triage`; work must remain on Manny's lane.
+- Use the approved `docs/requirements/PRD-v3.md` as Manny's current baseline.
+- Anthropic Python SDK `2.5.0` and `python-dotenv` `1.2.4` are pinned. The ignored project `.env` exists with a blank `ANTHROPIC_API_KEY` field.
+- One synthetic-only billable Claude request is authorized by the project lead but has not been made; wait for the key to be filled locally. Do not transmit or display the key. Keep SDK retries disabled and validate the handoff immediately before the single request.
+- Phase 2 remains in progress. No commit, push, PR, merge, or cross-lane functionality change is authorized by this handoff note.
 
 ## 2026-11-04T23:37:11-05:00 — Shawn's Lane: PRD-v3 alignment review and B-01 fix
 

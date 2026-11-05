@@ -33,9 +33,28 @@ These fixtures define expected assistant-run outcomes. They do not set ticket st
 | F-15 False-positive urgent keyword | The synthetic case facts and current status field confirm that the outage ended yesterday and no users are currently affected. | ready_for_human_review with Low [P3] and no Urgent flag | Use verified current impact, not keyword presence alone; explain that the historical outage is not currently active. |
 | F-16 High-risk signal buried in routine request | A routine access request also says an administrator account is actively changing permissions without authorization. | `ready_for_human_review` with High [P1] Urgent flag after deterministic rule check. | The deterministic must-escalate rule overrides the routine category; route to immediate human attention and do not let an LLM-proposed lower band suppress it. |
 
+## Multi-request and Auditor examples
+
+These are approved synthetic workflow directions, not CDIT operational rules. The per-item array is a proposed contract pending Shared Lane integration review.
+
+| Fixture | Synthetic input | Expected handling |
+| :--- | :--- | :--- |
+| M-01 Several requests | Expected pay did not arrive today; a blank reimbursement form is needed; an administrator account is actively changing permissions without authorization. | Preserve three linked items. Propose payroll, form and security categories separately. Flag the security item for immediate human attention; apply a High band only when a matching approved synthetic rule supports it. Do not send messages or change accounts. |
+| M-02 One unclear item | A reporter asks for a blank form and also says “I can’t get in” without identifying the system or impact. | Preserve the supported form item for review. Mark the access item unknown and send it to the authorized human Auditor with only the discriminating questions; do not claim the parent run is complete. |
+| M-03 Similar but different impact | A new synthetic access report resembles an approved historical example, but current affected scope or timing differs or is missing. | Show the earlier approved example as context and identify differences. Do not copy its band as a fact; if impact remains uncertain, request Auditor review. |
+| M-04 Reusable decision | An Auditor resolves an unknown synthetic request and proposes an example for future use. | Store only an approved, sanitized, versioned example or reviewed general rule in the future catalog. Do not automatically retrain a model or promote a one-off decision into a rule. |
+
 ## Generic ticket-condition catalog and proposed urgency
 
 This catalog supplies candidate ticket queries for synthetic triage coverage across customer service, HR, payroll, scheduling, access, compliance, records, and general operations. It intentionally broadens beyond CTMS support examples for stress-testing classification; inclusion here does not make every category an approved CDIT product/support domain.
+
+### In-progress benchmark examples
+
+- A High/P1 item receives immediate attention; if still In Progress after 15 synthetic elapsed minutes, show a review flag explaining the ongoing condition. This is a prompt, not a response guarantee.
+- A Medium/P2 item still In Progress after 4 synthetic elapsed hours or Low/P3 item after 24 synthetic elapsed hours receives a reasoned review flag; time alone does not raise priority or make it Unknown.
+- When a case is Waiting on Customer, exclude that period from the staff benchmark. A customer reply starts a fresh In Progress benchmark; preserve the original safety timeline and attention flag for any ongoing safety concern until human review. Safety investigation, emergency care, and legal action take precedence over benchmark timing.
+- A human places a case Under Investigation for a safety, legal, security or similar review; the agent preserves context and does not interfere. This status does not itself prove a third party was contacted. Keep an ongoing safety timeline and flag visible.
+- For an outstanding form or correction, a future authorized reminder may identify the needed action. A due date is shown only when an authorized case record or policy supplies it; outbound delivery is not part of the current prototype.
 
 ### Proposed urgency bands
 

@@ -4,24 +4,25 @@ Planning workspace for a human-supervised multi-agent orchestration (MAO) assist
 
 ## Project status
 
-The planning package is established. The project lead has authorized the local shared foundation scaffold only: Python 3.13, FastAPI, Pydantic, and SQLite on Manny's lane. Agent workflows, retrieval, model-provider integration, authentication, and external systems remain unimplemented and require their owners/approvals. The supplied job description is the source for role duties. No CDIT system, Salesforce instance, private knowledge base, customer ticket, credential, or PHI access is authorized.
+The project lead authorized Manny’s synthetic lane phases. Manny’s process-local Coordinator boundary, Triage request preparation, and a guarded Claude client adapter are in progress; the adapter is not wired into the app and has not made an API call. The Anthropic SDK is pinned locally. Shared Lane receiver review remains an integration gate. Escalation, full workflow integration, production authentication, and external systems remain incomplete or deferred. The supplied job description is the source for role duties. No CDIT system, Salesforce instance, private knowledge base, customer ticket, or PHI access is authorized.
 
 ## Documents
 
-- `docs/requirements/PRD.md` — v1 requirements source pending v2 review.
+- `docs/requirements/PRD.md` — v1 historical requirements; later approved decisions govern Manny’s lane.
 - `docs/requirements/PRD-v2.md` — retained planning baseline for traceability; not approved as the current requirements source.
-- `docs/requirements/PRD-v3.md` — updated draft based on v2 and applicable review concerns; pending team approval; `PRD.md` remains the current source of truth.
+- `docs/requirements/PRD-v3.md` — project-lead-approved synthetic build baseline for Manny’s lane; team-wide review remains pending.
 - `docs/planning/TASK-SPLIT.md` — proposed Manny, Shawn, and Shared lane responsibilities.
+- `docs/lanes/manny/COORDINATOR-A0-A1.md` — Manny’s Phase 1 fixture boundary, contract, and harness links.
 - `AGENTS.md` — local collaboration and repository guidance.
 - `docs/templates/PRD Template.md` — original user-supplied template; preserve unchanged.
 
 ## Recommended prototype direction
 
-Python 3.13, FastAPI, Pydantic, local SQLite, a local document retrieval index, and one model adapter. Start with synthetic tickets and mock knowledge articles. The initial prototype has no live Salesforce integration, outbound messages, credential resets, permission changes, or production authentication. Production services and any handling of PHI require CDIT review and approval first.
+Python 3.13, FastAPI, Pydantic, local SQLite, a local document retrieval index, and one Anthropic model adapter for synthetic Triage. The prototype uses synthetic tickets and mock knowledge articles. It has no live Salesforce integration, outbound messages, credential resets, permission changes, or production authentication. Production services and any handling of PHI require CDIT review and approval first.
 
 ## Suggested evaluation
 
-Use labeled synthetic cases to measure triage accuracy, evidence grounding, must-escalate recall, note factuality, handling-time change, and data-boundary behavior. The PRD marks thresholds as provisional until CDIT baseline data and pilot criteria are available.
+Use human-approved synthetic labels to measure triage accuracy, grounding, escalation recall, note factuality, data-boundary behavior, latency, and cost. Report finite-set counts; real-world handling-time savings remain unvalidated.
 
 ## Local Git
 
@@ -53,7 +54,7 @@ The PRD defines case-based agent authorization within tier-based urgency routing
 
 ## Local development setup
 
-Requires Python 3.13. The scaffold uses FastAPI and Pydantic, with Python's built-in `sqlite3` module for a local database. No external service or credentials are required.
+Requires Python 3.13. The scaffold uses FastAPI and Pydantic, with Python's built-in `sqlite3` module for a local database. The health endpoint needs no external credentials. A Claude Triage request requires the local API key in `.env` and a separately authorized synthetic run.
 
 ```powershell
 py -3.13 -m venv .venv
@@ -66,7 +67,9 @@ uvicorn cdit_support_mao.main:app --reload --app-dir src --env-file .env
 
 The API health endpoint is `http://127.0.0.1:8000/health`; interactive API documentation is at `http://127.0.0.1:8000/docs`. SQLite is created on first health check at `data/cdit_support.db` by default. Set `CDIT_DATABASE_PATH` to change the local path. Only synthetic data is permitted. The database helper intentionally defines no ticket, user, role, audit, or agent tables yet; those schemas need an approved design.
 
-The current scaffold establishes the API/runtime and database connection foundation only. Coordinator, Triage, and Escalation functionality belongs to Manny's lane; Knowledge, Troubleshooting, Documentation, retrieval, and the model adapter belong to Shawn's lane. Shared state and handoff contracts require coordination before implementation.
+The repository ignores `.env`; a blank local copy is present for `ANTHROPIC_API_KEY`. Add the key locally to that file and never commit or send it in chat. The pinned Anthropic client factory reads the local file but makes no request during import or app startup. A model request requires explicit per-run authorization and a fresh handoff preflight.
+
+The current scaffold establishes the API/runtime and database connection foundation. Coordinator, Triage, Escalation, and the Claude Triage adapter belong to Manny's lane; Knowledge, Troubleshooting, Documentation, and retrieval belong to Shawn's lane. Shared state and handoff contracts require coordination before integration.
 
 ## Shawn's Lane agents (pending review)
 

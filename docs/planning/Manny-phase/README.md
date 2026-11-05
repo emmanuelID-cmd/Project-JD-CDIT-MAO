@@ -6,10 +6,10 @@
 
 ## Sequence
 
-- [Phase 0 — PRD v2 baseline and authorization](phase0/PLAN.md)
+- [Phase 0 — PRD v3 baseline and authorization](phase0/PLAN.md)
 - [Phase 1 — Coordinator and intake boundary](phase1/PLAN.md)
 - [Phase 2 — Triage](phase2/PLAN.md)
 - [Phase 3 — Escalation](phase3/PLAN.md)
 - [Phase 4 — Lane validation and handoff](phase4/PLAN.md)
 
-Phases 1–3 follow the shared contract/evaluation baseline. Internal agent gates belong to Manny; Shared Lane validates connecting contracts and integration behavior only.
+Phases 1–3 follow the project-lead-approved working contract and synthetic baseline; Shared Lane review and formal evaluation acceptance remain open. Internal agent gates belong to Manny; Shared Lane validates connecting contracts and integration behavior only.
