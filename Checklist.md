@@ -2,22 +2,30 @@
 
 Use this checklist as the live project status record. Check an item only when its evidence is present and reviewed. Planning completion is not implementation completion; an unchecked item blocks a completion claim unless the project lead explicitly marks it out of scope or deferred.
 
-**Current phase:** Local foundation scaffold (implementation authorized within the scope recorded in `docs/planning/DEFERRED-DECISIONS.md`)
+**Current phase:** Agent implementation planning; authorization beyond the local scaffold is pending
 **Planning deadline:** November 11, 2026
-**Current implementation status:** Shared API and SQLite foundation scaffold set up; runtime agents and integrations remain not started
+**Current implementation status:** Local stack scaffold is set up; Shawn agent code is merged in PR #2 as an unaccepted proposal; Manny agents and end-to-end integration are not implemented
 **Completion status:** In progress
 
 ## Shared project baseline
 
 - [x] PRD is the current requirements source and includes milestones, agent gates, confidence/factuality, prompt-injection controls, case authority, blackboard state, and handoffs.
+- [x] Separate `PRD-v2.md` planning draft created with the approved synthetic scope; project lead/team review and approval remain pending, so `PRD.md` remains the current source of truth.
+- [x] `PRD-v3.md` review draft created from v2; team review is pending, and `PRD.md` remains authoritative until approval.
 - [x] User Needs and prioritized use cases have a linked companion file.
 - [x] Synthetic evaluation and routing examples are in `docs/requirements/CASE-SCENARIOS.md`.
 - [x] Deferred policy and implementation decisions are tracked in `docs/planning/DEFERRED-DECISIONS.md`.
-- [x] Interactive architecture is available in the field guide and standalone artifact.
+- [x] Synthetic account model recorded as User (client view), Staff (back-end view), and Admin (same back-end plus privileged account/access controls); no extra staff tiers or interfaces.
+- [x] Product Health/evaluation scope recorded as synthetic metadata and fixtures only; no real customer records or real-world interview/activity.
+- [x] Updated PRD-v2 hand-drawn architecture JPEG is standalone and displayed at the top of the field guide; the earlier action sketch is labeled deferred policy context.
 - [ ] Team reviews and accepts the PRD, agent ownership, interfaces, and current scope.
 - [ ] All planning milestone exit evidence and decisions are recorded.
 - [x] Project lead explicitly authorized the local technology-stack foundation scaffold on 2026-11-03.
-- [ ] Project lead authorizes any expansion beyond the local scaffold before that work begins.
+- [ ] Project lead authorizes any expansion beyond the local scaffold before implementation begins.
+- [x] Agent build, injection-risk, harness, and integration phase plan recorded in [`AGENT-IMPLEMENTATION-PHASE-PLAN.md`](docs/planning/AGENT-IMPLEMENTATION-PHASE-PLAN.md).
+- [x] Standalone proposal for additions to the implementation phase plan recorded in [`AGENT-IMPLEMENTATION-PHASE-ADDITIONS.md`](docs/planning/AGENT-IMPLEMENTATION-PHASE-ADDITIONS.md); the current plan remains unchanged pending review.
+- [x] Standalone Claude critique and PRD-v2 correction plan recorded in [`PRD-V2-CLAUDE-CRITIQUE-PLAN.md`](docs/planning/PRD-V2-CLAUDE-CRITIQUE-PLAN.md); the current PRD remains unchanged pending review.
+- [x] PRD v2 assessment and lane-specific phase guides recorded in [PHASE-PLAN-INDEX.md](docs/planning/PHASE-PLAN-INDEX.md); Manny's guide is his obligation, Shawn's is voluntary, and neither authorizes implementation.
 
 ## Shared foundation scaffold
 
@@ -40,15 +48,17 @@ Use this checklist as the live project status record. Check an item only when it
 
 ## Shawn lane — Knowledge, Troubleshooting, Documentation
 
-> 2026-11-04 status: local synthetic-data implementation of all three agents, proposed v0.1 contracts, 12 lane cases, and 97 tests are drafted on `shawn/knowledge-troubleshooting-docs` (evidence: `docs/lanes/shawn/SHAWN-LANE-DESIGN.md`). Boxes stay unchecked until the work is reviewed and the project lead confirms this phase.
+> 2026-11-04 status: PR #2 merged into `developer` at `a14bb8d`. The merged proposal contains code for all three Shawn agents, a lane harness, 12 synthetic cases, 97 tests, and v0.1.0-proposed contracts/examples. `SHAWN-LANE-DESIGN.md` reports 97 tests and 12 cases passing on Python 3.12; the project targets Python 3.13 and this task did not rerun them. PR #2 has no recorded reviews or status checks. The lane design document still contains a pre-merge status statement; Shawn should correct that lane-owned record. Code presence is tracked separately from authorization, acceptance, and validation below.
 
-- [ ] Confirm owner availability and accept the three-agent assignment.
-- [ ] Define and implement Knowledge retrieval, approved-source/version handling, citations, conflicts, abstention, and injection handling.
-- [ ] Define and implement Troubleshooting behavior, evidence-supported steps, allowlists, stop conditions, and recovery.
-- [ ] Define and implement Documentation behavior, verified-fact-only drafts, citations, schema validation, and uncertainty reporting.
-- [ ] Validate each owned agent independently against its own prompts, tools, permissions, and failure gates.
-- [ ] Publish versioned input/output contracts and handoff examples for the connection points.
-- [ ] Fix agent-internal failures found in this lane; do not modify Manny-owned agent functionality.
+- [x] Confirm owner availability and accept the three-agent assignment (Shawn's lane-owner direction is recorded in `docs/planning/DEFERRED-DECISIONS.md`).
+- [x] Knowledge implementation files are present in merged PR #2 (`src/cdit_support_mao/agents/knowledge/`); acceptance remains pending.
+- [x] Troubleshooting implementation files are present in merged PR #2 (`src/cdit_support_mao/agents/troubleshooting/`); acceptance remains pending.
+- [x] Documentation implementation files are present in merged PR #2 (`src/cdit_support_mao/agents/documentation/`); acceptance remains pending.
+- [x] Versioned `0.1.0-proposed` contracts and synthetic handoff examples are published in `docs/contracts/`; Shared Lane acceptance remains pending.
+- [ ] Project lead authorizes this agent implementation phase beyond the local scaffold.
+- [ ] Review and accept each agent against PRD A3/A4/A6 and the approved shared contract.
+- [ ] Validate each agent independently on Python 3.13 against prompts, tools, permissions, evidence, and failure gates.
+- [ ] Fix agent-internal findings in Shawn's lane; do not modify Manny-owned agent functionality.
 
 ## Shared connection and integration work
 
@@ -65,7 +75,8 @@ Use this checklist as the live project status record. Check an item only when it
 
 - [ ] Decide whether to add the optional second-reviewer agent; if approved, assign an owner before work begins.
 - [ ] Confirm whether authenticated client-to-developer platform issue reporting is in project scope; keep disabled/optional until scope is confirmed and all submitters are authenticated.
-- [ ] Resolve the deferred urgency definitions, SLA thresholds, alerts, state transitions, write permissions, confidence calibration, storage, retention, and audit decisions in the deferred register.
+- [ ] After initial PRD-v2 finalization, define urgency bands, case groupings, SLA thresholds, and overrides; record them in a reviewed PRD amendment.
+- [ ] Resolve future-use items separately before expanding beyond the synthetic read-only prototype: write authority/state transitions, production data and integrations, and applicable storage, retention, and audit controls.
 - [ ] Confirm CDIT data/source, security, privacy, hosting, model-provider, and production integration approvals before any production or sensitive-data work.
 - [ ] Assign any new agent or workstream explicitly; unassigned work stays pending or is assigned to the user by explicit direction, never silently shared.
 

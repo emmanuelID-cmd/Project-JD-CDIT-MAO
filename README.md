@@ -8,7 +8,9 @@ The planning package is established. The project lead has authorized the local s
 
 ## Documents
 
-- `docs/requirements/PRD.md` — Agent Build PRD, including user needs, proposed workflow, metrics, tool boundaries, blast radius, and evaluation cases.
+- `docs/requirements/PRD.md` — v1 requirements source pending v2 review.
+- `docs/requirements/PRD-v2.md` — retained planning baseline for traceability; not approved as the current requirements source.
+- `docs/requirements/PRD-v3.md` — updated draft based on v2 and applicable review concerns; pending team approval; `PRD.md` remains the current source of truth.
 - `docs/planning/TASK-SPLIT.md` — proposed Manny, Shawn, and Shared lane responsibilities.
 - `AGENTS.md` — local collaboration and repository guidance.
 - `docs/templates/PRD Template.md` — original user-supplied template; preserve unchanged.
