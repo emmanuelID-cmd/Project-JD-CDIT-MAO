@@ -1,9 +1,9 @@
 {
   "policy_id": "SYN-TS-POLICY",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "status": "proposed",
   "data_classification": "synthetic",
-  "description": "Synthetic Tier 1 troubleshooting boundary for the Troubleshooting agent (Shawn's Lane). Proposed values pending CDIT policy (see D-02, D-03). Patterns are risk signals only; they never grant authority.",
+  "description": "Synthetic Tier 1 troubleshooting boundary for the Troubleshooting agent (Shawn's Lane). Proposed values pending CDIT policy (see D-02, D-03). Patterns are risk signals only; they never grant authority. 0.1.1: RR-03 treats a match that lies entirely inside quotation marks as quoted case data (signal only), per PRD-v3 fixture F-10.",
   "tier1_action_types": {
     "navigate_ui": "tier1_guides_customer",
     "clear_browser_cache": "tier1_guides_customer",
@@ -47,6 +47,7 @@
       "action_type": "policy_override",
       "effect": "block",
       "signal": "policy_override_attempt",
+      "quoted_match": "signal_only",
       "pattern": "\\b(ignore|disregard|override|bypass)\\b[^.]*\\b(policy|policies|instructions|rules|verification|procedure)\\b"
     },
     {

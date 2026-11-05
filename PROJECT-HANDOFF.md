@@ -170,6 +170,34 @@ UI lane clarification: Either lane may add/style presentation controls (includin
 - `git diff --check`: clean.
 - Requested from Manny (evaluation owner): whether this set and report fit the D-08/D-09 protocol, and who approves the labels.
 
+## 2026-11-04T23:37:11-05:00 — Shawn's Lane: PRD-v3 alignment review and B-01 fix
+
+- Prepared by: xiaoenbi1987 (Shawn); branch: `shawn/knowledge-troubleshooting-docs`; intended PR target: `developer`; no PR opened.
+- Verified remote baseline: `4deafe7156954bf1b9b01624b11b0d8981f7df74`. Work commit: `fix(troubleshooting): treat quoted policy-override text as case data`.
+
+### Done
+
+- Reviewed Knowledge, Troubleshooting, and Documentation against draft PRD-v3, failure fixtures F-01 to F-16, and the use cases. Lane-harness probes ran on Python 3.13.17. Findings and questions are in `docs/lanes/shawn/PRD-V3-ALIGNMENT-REVIEW.md`. `PRD.md` remains the source of truth.
+- Fixed B-01 (F-10 benign quoted instruction):
+  - Policy `SYN-TS-POLICY 0.1.1` adds `quoted_match: signal_only`; only RR-03 opts in.
+  - Troubleshooting `0.1.1` treats an RR-03 match that lies entirely inside quotation marks as quoted case data. It records an inference claim, an unknown, and a `quoted_policy_override_attempt` escalation signal.
+  - Unquoted and boundary-crossing matches, other request rules, and stop conditions are unchanged.
+- Regenerated contract examples and the calibration report. Only version fields and derived IDs changed.
+
+### Not completed
+
+- F-10 end to end still abstains, because quoted words dilute Knowledge retrieval (B-02). It depends on Q-02 or on a Knowledge change measured on a new calibration set.
+- B-03 (retrieved injection: abstain or block) waits for Q-01. The contract gaps C-01 to C-06 need a coordinated v0.2. N-01 to N-06 are open.
+- Residual risk, documented in the lane design §4: a customer's override request quoted in full by Triage becomes a signal, not a block.
+
+### Validation and handoff
+
+- `.venv\Scripts\python.exe -m pytest -q -p no:cacheprovider` (Python 3.13.17): 125 passed. Python 3.12.0: 125 passed.
+- `python -m cdit_support_mao.lane_harness synthetic_data/cases`: 12 passed, 0 failed.
+- `python -m cdit_support_mao.lane_calibration synthetic_data/calibration/knowledge-calibration-v1.json …`: 0 critical errors, 0 label problems, all case outcomes unchanged.
+- `git diff --cached --check`: clean. Markdown checks: no problems.
+- Requested from Manny: answers to review §7 (Q-01 to Q-06), and acknowledgment that Escalation may receive `quoted_policy_override_attempt`.
+
 ## 2026-11-05 — Interim Manny Phase 2 and Triage trace handoff
 
 - Prepared: 2026-11-05T15:12:00-05:00; active worktree: temp/manny-phase2-triage; project baseline: docs/requirements/PRD-v3.md.

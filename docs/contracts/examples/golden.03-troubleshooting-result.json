@@ -1,9 +1,9 @@
 {
   "contract_version": "0.1.0-proposed",
-  "contribution_id": "TRB-EE65F2BFAAEE1291",
+  "contribution_id": "TRB-8D1E7B4DC7DD70E8",
   "stage": "troubleshooting",
   "agent": "troubleshooting-agent",
-  "agent_version": "0.1.0",
+  "agent_version": "0.1.1",
   "context": {
     "run_id": "RUN-SYN-CASE-0001-1",
     "case_id": "SYN-CASE-0001",
@@ -79,7 +79,7 @@
   "unknowns": [],
   "human_review_required": true,
   "policy_id": "SYN-TS-POLICY",
-  "policy_version": "0.1.0",
+  "policy_version": "0.1.1",
   "primary_source": {
     "kind": "kb_section",
     "source_id": "KB-NAV-001",

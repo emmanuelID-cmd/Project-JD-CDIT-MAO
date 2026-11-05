@@ -62,11 +62,11 @@ Use this checklist as the live project status record. Check an item only when it
 - [ ] At project completion, run 100 sequential synthetic-only traces; retain pass and failure evidence and stay within the available $40 budget.
 - [x] Compare the outgoing Manny work with origin/developer using git merge-tree; PR preflight found content conflicts in Checklist.md and PROJECT-HANDOFF.md.
 - [x] Open PR #6 to developer; GitHub reports CONFLICTING / DIRTY and no checks reported.
-- [ ] Reconcile those shared-document conflicts, then review PR checks before integration.
+- [x] Reconcile those shared-document conflicts, then review PR checks before integration.
 - [ ] After an authorized merge, fast-forward only clean branches whose ancestry proves it safe.
 ## Shawn lane — Knowledge, Troubleshooting, Documentation
 
-> 2026-11-04 status: Shawn’s three agent implementations and lane harness were merged in PR #2; the calibration follow-up was merged into `developer` in PR #4 (`4deafe7`). PR #4 reports 110 tests and 12 lane cases passing on Python 3.13.17 and a 111-case synthetic calibration set with 0 critical errors. Manny accepted the set as candidate D-08/D-09 evidence and will review the draft labels; the labels and project-wide gates are not yet approved. Code presence, phase authorization, and acceptance remain distinct.
+> 2026-11-04 status: PR #2 merged into `developer` at `a14bb8d` with code for all three Shawn agents, a lane harness, 12 synthetic cases, 97 tests, and `0.1.0-proposed` contracts/examples; PR #4 merged the follow-up into `developer` at `4deafe7` (110 tests and 12 lane cases passed on Python 3.13.17; 111-case synthetic Knowledge calibration set with 0 critical errors). PR #5 merged into `developer` at `10168a2`: PRD-v3 alignment review (`docs/lanes/shawn/PRD-V3-ALIGNMENT-REVIEW.md`) and B-01 fix (Troubleshooting 0.1.1 with policy 0.1.1; 125 tests pass). The calibration set is lane evidence offered to Manny's D-08/D-09 evaluation protocol, not a decision; its expected labels are drafts that still need human approval. Code presence is tracked separately from authorization, acceptance, and validation below.
 
 - [x] Confirm owner availability and accept the three-agent assignment (Shawn's lane-owner direction is recorded in `docs/planning/DEFERRED-DECISIONS.md`).
 - [x] Knowledge implementation files are present in merged PR #2 (`src/cdit_support_mao/agents/knowledge/`); acceptance remains pending.

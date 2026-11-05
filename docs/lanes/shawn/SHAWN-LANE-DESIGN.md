@@ -2,7 +2,7 @@
 
 **Branch:** `shawn/knowledge-troubleshooting-docs`
 **Owner:** Shawn (finalized six-agent split, `docs/planning/TASK-SPLIT.md`)
-**Version:** agents `0.1.0`; contracts `0.1.0-proposed`
+**Version:** Knowledge and Documentation `0.1.0`, Troubleshooting `0.1.1`; contracts `0.1.0-proposed`
 **Status:** Implemented on synthetic data. The first version was merged into `developer` through PR #2 on 2026-11-04. The calibration and Python 3.13 follow-up (§7, §9) is on the lane branch, pending review.
 
 ## 1. Authorization and scope
@@ -25,11 +25,11 @@
 | `src/cdit_support_mao/lane_harness.py` | Lane validation harness and CLI. **Not the coordinator.** It builds labelled Triage and Escalation stand-ins from case files. |
 | `src/cdit_support_mao/lane_calibration.py` | Calibration runner and CLI that produces lane evidence for D-08: band accuracy, abstention, cut-off sweep, and a critical safety gate over every case (§9). |
 | `synthetic_data/knowledge/` | 38 synthetic KB article versions (see §6 and `synthetic_data/README.md`). |
-| `synthetic_data/policy/troubleshooting-policy_v0.1.0.json` | Synthetic Tier 1 action allowlist, staff-only and forbidden action types, request rules, stop conditions. |
+| `synthetic_data/policy/troubleshooting-policy_v0.1.1.json` | Synthetic Tier 1 action allowlist, staff-only and forbidden action types, request rules, stop conditions. |
 | `synthetic_data/cases/` | 12 synthetic lane cases, each with its expected outcome written before the run. |
 | `synthetic_data/calibration/` | Held-out calibration set `SYN-KCAL` v1.0: 111 cases with draft labels, written before the first run and not yet human-approved. |
 | `docs/lanes/shawn/calibration/` | Generated calibration report and per-case results. |
-| `tests/` | 110 focused tests. |
+| `tests/` | 125 focused tests. |
 
 ## 3. Knowledge agent (A3 — retrieval handoff)
 
@@ -46,6 +46,11 @@
 
 1. **Input gate.** Same checks as Knowledge, plus the Knowledge result must have been built from the same Triage contribution.
 2. **Restricted requests** in the untrusted summary are matched against policy rules. Blocking rules mean no steps plus escalation signals: bulk account actions, cross-site data, policy override, clinical or eligibility questions. Flag rules (password reset, access change) are recorded in `rejected` ("the assistant will not do this") but still allow approved self-service guidance.
+   - **Quoted text (policy 0.1.1, PRD-v3 fixture F-10).** A rule marked `quoted_match: signal_only` treats a match as quoted case data when every match lies inside quotation marks, for example a training example quoting "ignore policy".
+     - Such a match is not rejected. The agent records an inference claim, an unknown, and a `quoted_<signal>` escalation signal so a human still sees it.
+     - Only RR-03 (policy override) opts in. Unquoted matches and matches that cross a quote boundary still block.
+     - Other request rules and all stop conditions ignore quotes, so a quoted "suspicious login" still halts.
+     - Residual risk: a customer's own override request quoted in full by Triage is downgraded to a signal. The agent has no tools, and the signal keeps the request visible to Escalation and the human reviewer.
 3. **Policy stop conditions:**
    - Access or identity concerns are flagged and only collection steps are allowed.
    - Privacy and security concerns halt all routine steps.
@@ -100,7 +105,7 @@ Run from the repository root in the project `.venv` (Python 3.13.17, pydantic 2.
 
 ```text
 python -m pytest -q -p no:cacheprovider
-110 passed
+125 passed
 
 python -m cdit_support_mao.lane_harness synthetic_data/cases
 12 passed, 0 failed
@@ -111,7 +116,8 @@ python -m cdit_support_mao.lane_calibration synthetic_data/calibration/knowledge
 uvicorn cdit_support_mao.main:app --app-dir src  ->  GET /health  200 {"status":"ok","database":"ok"}
 ```
 
-- **Python versions.** The suite also passes on Python 3.12.0 (110 passed).
+- **Python versions.** The suite also passes on Python 3.12.0 (125 passed).
+- **Quoted-instruction fix (B-01).** Troubleshooting 0.1.1 with policy 0.1.1 adds 15 tests: benign quotes, unquoted and boundary-crossing overrides, other rules, stop conditions, and quote detection. The 12 lane cases and all 111 calibration cases keep their outcomes; only version fields changed in the report and examples.
 - **Corpus growth.** The knowledge set grew from 11 to 38 article versions for calibration. All 12 lane cases kept their expected outcomes without any agent change. Contract examples were regenerated for the new source set.
 - **Isolation.** A static test asserts that the agent packages import no network or process modules.
 
@@ -156,13 +162,15 @@ uvicorn cdit_support_mao.main:app --app-dir src  ->  GET /health  200 {"status":
 ## 10. Handoff record
 
 - **Artifacts and versions:**
-  - Agents `0.1.0`.
+  - Knowledge and Documentation agents `0.1.0`; Troubleshooting agent `0.1.1`.
   - Contracts `0.1.0-proposed`.
   - Source set `SRC-61C4A35E96CF`.
   - Calibration set `SYN-KCAL` 1.0.
-  - Troubleshooting policy `SYN-TS-POLICY 0.1.0` (proposed).
+  - Troubleshooting policy `SYN-TS-POLICY 0.1.1` (proposed).
 - **Completed:** the three Shawn-owned agents, their gates, synthetic data, harness, tests, and contract proposal with examples. Also calibration evidence for D-08 (draft labels) and a Python 3.13 / `/health` run.
 - **Evidence:** §7, plus `docs/contracts/examples/`.
+- **PRD-v3 alignment:** [PRD-V3-ALIGNMENT-REVIEW.md](PRD-V3-ALIGNMENT-REVIEW.md) (2026-11-04). It lists findings and open questions. B-01 is fixed (§4); the other findings are open.
+- **Escalation interface note:** Troubleshooting can now emit `quoted_policy_override_attempt`. Escalation should treat it as an input, like the other signals.
 - **Assumptions:**
   - Triage supplies the minimized summary, per-field verification flags, and acknowledgment IDs.
   - Escalation consumes `escalation_signals`.

@@ -6,6 +6,9 @@ troubleshooting policy. It has no tools and performs no actions. It:
 
 - rejects restricted requests found in the (untrusted) case summary and, for
   blocking rules, suggests nothing and emits escalation signals;
+- treats a match the policy marks ``signal_only`` that lies entirely inside
+  quotation marks as quoted case data: it records a risk claim, an unknown, and
+  an escalation signal for humans, but does not reject the request;
 - abstains when Knowledge abstained or when approved guidance contains a step
   outside Tier 1 authority (a guidance governance problem for humans);
 - separates steps reserved for authorized staff from Tier 1 suggestions;
@@ -49,7 +52,7 @@ from cdit_support_mao.contracts.handoffs import (
 )
 
 AGENT_NAME = "troubleshooting-agent"
-AGENT_VERSION = "0.1.0"
+AGENT_VERSION = "0.1.1"
 
 
 def _step_ref(passage: EvidencePassage, step_id: str) -> SourceRef:
@@ -136,9 +139,34 @@ class TroubleshootingAgent:
         # 1. Restricted requests in the untrusted case summary.
         blocking = False
         for rule in self._policy.restricted_request_rules:
-            if not rule.matches(summary):
+            outcome = rule.evaluate(summary)
+            if outcome == "none":
                 continue
             ref = self._policy_ref(rule.rule_id)
+            if outcome == "quoted":
+                claims.append(
+                    Claim(
+                        statement=(
+                            f"The case quotes text that resembles a restricted request ({rule.action_type}); "
+                            "it is treated as quoted case data, not as a request."
+                        ),
+                        label=ClaimLabel.INFERENCE,
+                        sources=(ref,),
+                        basis=f"Pattern {rule.rule_id} matched only inside quotation marks in untrusted case text.",
+                        confidence=ConfidenceBand.MEDIUM,
+                    )
+                )
+                signals.append(
+                    EscalationSignal(
+                        signal=f"quoted_{rule.signal}",
+                        basis=f"Restricted request rule {rule.rule_id} matched only quoted text in the case summary.",
+                        sources=(ref,),
+                    )
+                )
+                unknowns.append(
+                    f"The case quotes text matching rule {rule.rule_id}; a human should confirm it is not a request."
+                )
+                continue
             rejected.append(
                 RejectedItem(
                     item_kind="case_request",
