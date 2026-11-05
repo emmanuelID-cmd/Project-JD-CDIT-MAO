@@ -287,5 +287,5 @@ class Coordinator:
         a1 = IntakeEvent(trace_id=trace_id,run_id=context.run_id,sequence=2,checkpoint="A1",
                          status="passed",timestamp=finished)
         return IntakeResult(trace_id=trace_id,status=IntakeStatus.READY_FOR_TRIAGE,checkpoint="A1",
-            context=context,policy_generation=policy_generation,session_ref=session_ref,untrusted_message=request.message.strip(),
+            context=context,policy_generation=policy_generation,session_ref=session_ref,untrusted_message=request.message,
             created_at=finished,next_action="triage",events=(a0,a1))
