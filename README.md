@@ -4,7 +4,7 @@ Planning workspace for a human-supervised multi-agent orchestration (MAO) assist
 
 ## Project status
 
-The project lead authorized Manny’s synthetic lane phases. The local foundation scaffold and Shawn’s lane proposal are present; Manny’s process-local Coordinator intake and handoff boundary is implemented and locally reviewed; Shared Lane receiver review remains an integration gate. Triage, Escalation, full workflow integration, a model provider, production authentication, and external systems remain incomplete or deferred. The supplied job description is the source for role duties. No CDIT system, Salesforce instance, private knowledge base, customer ticket, credential, or PHI access is authorized.
+The project lead authorized Manny’s synthetic lane phases. Manny’s process-local Coordinator boundary, Triage request preparation, and a guarded Claude client adapter are in progress; the adapter is not wired into the app and has not made an API call. The Anthropic SDK is pinned locally. Shared Lane receiver review remains an integration gate. Escalation, full workflow integration, production authentication, and external systems remain incomplete or deferred. The supplied job description is the source for role duties. No CDIT system, Salesforce instance, private knowledge base, customer ticket, or PHI access is authorized.
 
 ## Documents
 
@@ -18,7 +18,7 @@ The project lead authorized Manny’s synthetic lane phases. The local foundatio
 
 ## Recommended prototype direction
 
-Python 3.13, FastAPI, Pydantic, local SQLite, a local document retrieval index, and one model adapter. Start with synthetic tickets and mock knowledge articles. The initial prototype has no live Salesforce integration, outbound messages, credential resets, permission changes, or production authentication. Production services and any handling of PHI require CDIT review and approval first.
+Python 3.13, FastAPI, Pydantic, local SQLite, a local document retrieval index, and one Anthropic model adapter for synthetic Triage. The prototype uses synthetic tickets and mock knowledge articles. It has no live Salesforce integration, outbound messages, credential resets, permission changes, or production authentication. Production services and any handling of PHI require CDIT review and approval first.
 
 ## Suggested evaluation
 
@@ -54,7 +54,7 @@ The PRD defines case-based agent authorization within tier-based urgency routing
 
 ## Local development setup
 
-Requires Python 3.13. The scaffold uses FastAPI and Pydantic, with Python's built-in `sqlite3` module for a local database. No external service or credentials are required.
+Requires Python 3.13. The scaffold uses FastAPI and Pydantic, with Python's built-in `sqlite3` module for a local database. The health endpoint needs no external credentials. A Claude Triage request requires the local API key in `.env` and a separately authorized synthetic run.
 
 ```powershell
 py -3.13 -m venv .venv
@@ -67,7 +67,9 @@ uvicorn cdit_support_mao.main:app --reload --app-dir src --env-file .env
 
 The API health endpoint is `http://127.0.0.1:8000/health`; interactive API documentation is at `http://127.0.0.1:8000/docs`. SQLite is created on first health check at `data/cdit_support.db` by default. Set `CDIT_DATABASE_PATH` to change the local path. Only synthetic data is permitted. The database helper intentionally defines no ticket, user, role, audit, or agent tables yet; those schemas need an approved design.
 
-The current scaffold establishes the API/runtime and database connection foundation only. Coordinator, Triage, and Escalation functionality belongs to Manny's lane; Knowledge, Troubleshooting, Documentation, retrieval, and the model adapter belong to Shawn's lane. Shared state and handoff contracts require coordination before implementation.
+The repository ignores `.env`; a blank local copy is present for `ANTHROPIC_API_KEY`. Add the key locally to that file and never commit or send it in chat. The pinned Anthropic client factory reads the local file but makes no request during import or app startup. A model request requires explicit per-run authorization and a fresh handoff preflight.
+
+The current scaffold establishes the API/runtime and database connection foundation. Coordinator, Triage, Escalation, and the Claude Triage adapter belong to Manny's lane; Knowledge, Troubleshooting, Documentation, and retrieval belong to Shawn's lane. Shared state and handoff contracts require coordination before integration.
 
 ## Shawn's Lane agents (pending review)
 

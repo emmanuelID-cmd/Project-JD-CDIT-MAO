@@ -2,6 +2,11 @@
 
 **Status:** Planned; follows Phases 1–3 and accepted contracts.
 
+## Current progress — 2026-11-05
+
+- Drafted [`EVALUATION-PROTOCOL-DRAFT.md`](../../lanes/manny/EVALUATION-PROTOCOL-DRAFT.md) with synthetic-only case lifecycle, label approval, metric definitions, safety gates, over-reliance checks, retrieval freshness, confidence, latency/cost, and reproducibility.
+- Manny-approved labels, counts/denominators, runner/report, evaluation execution, and release results remain outstanding. Phase 4 is approximately 25% prepared; this is a rough work-scope estimate, not a schedule or acceptance claim.
+
 ## Work
 
 - Map Manny A0/A1/A2/A5 requirements to tests, deterministic assertions, and synthetic fixtures.

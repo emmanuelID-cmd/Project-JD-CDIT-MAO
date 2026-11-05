@@ -1,0 +1,20 @@
+{
+  "schema_version": "1.0",
+  "runs": [
+    {
+      "trace_id": "triage-smoke-20261105T144736-0500",
+      "agent": "Manny-local Triage semantic path",
+      "version": "31842136f78c4ee8e50579e4e6dcbd4a2f1c06da8ab087283b93172261145cee",
+      "started_at": "2026-11-05T14:47:36.120752-05:00",
+      "completion": "INCOMPLETE",
+      "check_outcome": "INCOMPLETE",
+      "evidence": "docs/temp/trace/Trace 2026-11-05_14-47-36-120752_-0500 Triage triage-smoke-20261105T144736-0500 Report.md",
+      "expected_checks": 10,
+      "passed_checks": 7,
+      "failed_checks": 0,
+      "parent_trace_id": null,
+      "unverified_checks": 2,
+      "not_tested_checks": 1
+    }
+  ]
+}

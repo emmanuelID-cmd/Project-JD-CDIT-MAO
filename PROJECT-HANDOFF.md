@@ -36,13 +36,22 @@
 
 ## AI handoff instruction — current requirements source
 
-At the start of every AI/agent task, read the most up-to-date `docs/requirements/PRD.md` in the active project branch and use it as the authoritative product requirements source, together with later explicit user decisions. Do not rely on this handoff, an earlier PRD copy, or memory when they differ from the current PRD. Check the active branch and PRD revision before work; if the PRD is missing, stale, contradictory, or does not define the requested behavior, stop at the boundary and ask the user or record the issue in `Checklist.md`. Follow lane ownership and cross-lane restrictions in the current PRD, `AGENTS.md`, and `docs/planning/TASK-SPLIT.md`.
+At the start of every AI/agent task, read the most up-to-date approved project PRD in the active branch. For Manny's current lane, that is `docs/requirements/PRD-v3.md`; PRD.md and PRD-v2 are historical. Follow later explicit user decisions together with that PRD. Do not rely on this handoff, older PRD copies, or memory when they differ from the current source. Check the active branch and PRD revision before work; if requirements are missing, stale, or contradictory, record the issue in `Checklist.md` and ask only when the decision blocks safe progress. Follow lane ownership and cross-lane restrictions in the current PRD, `AGENTS.md`, and `docs/planning/TASK-SPLIT.md`.
 
 ## Current lane assignment
 
 - Manny: Coordinator, Triage, Escalation agents.
 - Shawn: Knowledge, Troubleshooting, Documentation agents.
 - Shared: connector contracts, blackboard schema/interface, integration checks, human review boundary.
+
+## 2026-11-05 — Manny Phase 2 Claude SDK and local environment setup
+
+- Active branch: `temp/manny-phase2-triage`, based on Manny's lane. Current baseline: `docs/requirements/PRD-v3.md`.
+- Pinned Anthropic Python SDK `2.5.0` and `python-dotenv` `1.2.4`; installed the SDK in the project `.venv` and reinstalled the package in editable mode.
+- Created the ignored project-local `.env` from `.env.example`. Its Anthropic key field is blank; no credential was supplied or read into tool output.
+- Added a client factory that reads the local file but makes no request on construction/startup. The adapter requires synthetic data, a billable-run authorization flag, current handoff preflight, zero retries, bounded timeout, and strict result validation.
+- The project lead authorized one synthetic-only billable Claude request. It has not been made; wait until the project lead fills `ANTHROPIC_API_KEY` in the local `.env`. Use one synthetic fixture and do not expose the key.
+- Validation: `pip install -e .` succeeded; focused client/adapter tests passed (13); full suite passed (478); blank-key factory check returned `anthropic_api_key_missing`; `git diff --check` passed. The authorized billable smoke call is still pending the user-entered local key. No commit, push, or PR is part of this step. Keep the original untracked PRD template unchanged.
 - Optional second-reviewer agent: pending approval and assignment; not part of the six-agent baseline.
 
 ## Checklist and current source of truth
@@ -160,3 +169,34 @@ UI lane clarification: Either lane may add/style presentation controls (includin
 - `python -m cdit_support_mao.lane_calibration synthetic_data/calibration/knowledge-calibration-v1.json …`: 0 critical errors, 0 label problems.
 - `git diff --check`: clean.
 - Requested from Manny (evaluation owner): whether this set and report fit the D-08/D-09 protocol, and who approves the labels.
+
+## 2026-11-05 — Interim Manny Phase 2 and Triage trace handoff
+
+- Prepared: 2026-11-05 (before the requested push); active worktree: temp/manny-phase2-triage; project baseline: docs/requirements/PRD-v3.md.
+- Intended publication: push the completed work as a fast-forward to Manny’s existing lane manny/coordinator-triage-escalation; open a PR to developer. No new remote branch is intended.
+- Remote check: origin/developer has Shawn PR #5 merged (10168a2); local developer and Shawn lane were two commits behind at inspection. No open PR to developer existed before this work.
+- The temporary branch and persistent local Manny lane both started at fa47adc; local Manny was four commits ahead of its remote lane before this work. Current uncommitted phase work is preserved for task-grouped commits.
+
+### Done
+
+- Continued the synthetic Manny Phase 2 Triage work in the existing temporary phase branch; no work was made to Shawn’s agent internals.
+- Pinned/installed Anthropic Python SDK 2.5.0 and python-dotenv 1.2.4; kept the API key only in ignored local .env.
+- Completed one explicitly authorized synthetic Claude adapter call. It abstained with unknown category/urgency/destination, asked two clarification questions, required human review, and did not permit downstream action or dispatch. Recorded cost estimate: $0.007722.
+- Captured the trace manifest/evidence, two independent reviews with reconciliation, scoped SECURITY review, and an INCOMPLETE trace report. Test evidence recorded: 29 focused and 478 full tests passed; pip check passed; git diff --check exited 0.
+- Corrected stale prompt and Phase 2 documentation so it distinguishes the unused draft prompt from the adapter’s separate inline prompt and records the completed call.
+- Reconciled this checklist checkpoint. Phase 2 remains in progress: implementation scaffold estimate is about 85%; exit readiness about 45%, both qualitative estimates.
+
+### Not completed
+
+- The trace is not a six-agent application run. No A–E score is assigned.
+- The fixture ID mapping (SYN-CASE-01 vs SYN-TRACE-001), active prompt hash, exact outbound request hash, and machine-readable authorization reference need trace-provenance follow-up.
+- Semantic correctness remains unverified until Manny approves a gold label.
+- Injection, provider failure/timeout, malformed-output fallback, live handoff-race, and full-workflow security cases were not tested.
+- Shared receiver acceptance, integrated six-agent execution, full Phase 2 exit gates, database/authentication, and production integrations remain incomplete or deferred under PRD-v3.
+- Project closeout requires 100 sequential synthetic-only traces. Preserve every run, including failures, with model/prompt/source versions, fixture IDs, validation, latency, and cost; estimate the batch and remain within the available $40 budget.
+
+### Continuation in Antigravity
+
+- Start by reading current PRD-v3, project AGENTS.md, Checklist.md, this handoff, and docs/planning/Manny-phase/phase2/PLAN.md.
+- Continue from temp/manny-phase2-triage or the verified Manny lane after checking its exact remote tip; preserve .env and exclude docs/templates/PRD Template.md.
+- Before integration: inspect the PR diff, CI/review status, and conflicts; merge only when repository rules and authorization allow it. Fast-forward only branches proven safe by ancestry and cleanliness.
