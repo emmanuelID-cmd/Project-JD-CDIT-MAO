@@ -1,5 +1,20 @@
 # Handoffs prepared for push
 
+## 2026-11-04T23:37:11-05:00 — Shawn's Lane: PRD-v3 alignment review and B-01 fix
+
+Summary file: PROJECT-HANDOFF.md
+
+- Git author: xiaoenbi1987 (Shawn).
+- Branch: `shawn/knowledge-troubleshooting-docs`; intended target: `developer` by PR; no PR opened. Verified remote baseline: `4deafe7156954bf1b9b01624b11b0d8981f7df74` (PR #4 merge). One work commit on top: `fix(troubleshooting): treat quoted policy-override text as case data`.
+- Done:
+  - PRD-v3 alignment review of the three Shawn agents (`docs/lanes/shawn/PRD-V3-ALIGNMENT-REVIEW.md`): no safety regression; 3 behaviour mismatches, 6 contract gaps, 6 new obligations, 6 questions for Manny and Shared Lane.
+  - Fixed B-01: Troubleshooting 0.1.1 with policy `SYN-TS-POLICY 0.1.1`. A policy-override phrase found only inside quotation marks (PRD-v3 F-10) now raises `quoted_policy_override_attempt` instead of rejecting the case. Unquoted requests still block.
+- Not completed:
+  - F-10 end to end still abstains: quoted words dilute Knowledge retrieval (B-02, question Q-02).
+  - Review findings B-02, B-03, C-01 to C-06, and N-01 to N-06 are open.
+- Validation: 125 tests passed on Python 3.13.17 and 3.12.0; lane harness 12 passed, 0 failed; calibration CLI 0 critical errors with all 111 case outcomes unchanged; `git diff --cached --check` clean.
+- Reviewer next step: Manny to answer review §7 (Q-01 to Q-06) and note the new Escalation input signal `quoted_policy_override_attempt`.
+
 ## 2026-11-04T22:00:53-05:00 — Shawn's Lane: Python 3.13 run and Knowledge calibration evidence
 
 Summary file: PROJECT-HANDOFF.md
