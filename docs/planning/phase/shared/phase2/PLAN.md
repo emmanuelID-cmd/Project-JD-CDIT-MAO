@@ -1,6 +1,6 @@
 # Shared Phase 2 — Combined Workflow Harness
 
-**Status:** Planned; depends on approved contracts, owner components, and test authorization.
+**Status:** Completed and verified; implemented in `src/cdit_support_mao/combined_harness.py` and tested via `tests/test_combined_workflow.py`.
 
 ## Purpose
 

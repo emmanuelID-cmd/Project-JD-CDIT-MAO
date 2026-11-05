@@ -1,6 +1,6 @@
 # Shared Phase 3 — Integrated Evaluation and Independent Review
 
-**Status:** Planned; depends on stable owner components, harness, and approved evaluation criteria.
+**Status:** Completed and verified; executed via `src/cdit_support_mao/manny_evaluation.py` with results recorded in `docs/lanes/manny/evaluation/MANNY-EVALUATION-REPORT.md`.
 
 ## Work
 

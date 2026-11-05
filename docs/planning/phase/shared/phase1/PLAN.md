@@ -1,6 +1,6 @@
 # Shared Phase 1 — Shared State and Connector Agreement
 
-**Status:** Planned; depends on approved PRD v2, project authorization, and Phase 0.
+**Status:** Completed and verified; versioned contracts implemented in `src/cdit_support_mao/contracts/`.
 
 ## Work
 
