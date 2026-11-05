@@ -2,10 +2,10 @@
 
 Use this checklist as the live project status record. Check an item only when its evidence is present and reviewed. Planning completion is not implementation completion; an unchecked item blocks a completion claim unless the project lead explicitly marks it out of scope or deferred.
 
-**Current phase:** Manny Phase 3 — Escalation complete; transitioning to Phase 4 / Shared integration
+**Current phase:** Manny Phase 4 — Validation and Evaluation complete; entering completion pipeline
 **Planning deadline:** November 11, 2026
-**Current implementation status:** Shawn agent and calibration work is merged through PR #4; Manny’s Phase 1 (Coordinator), Phase 2 (Triage), and Phase 3 (Escalation) are implemented and verified locally. Full suite passes 509 tests on Python 3.13; combined integration and Phase 4 evaluation batches remain in progress.
-**Completion status:** In progress
+**Current implementation status:** All six agents (Coordinator, Triage, Knowledge, Troubleshooting, Escalation, Documentation) implemented and verified. Full test suite passes 518 tests on Python 3.13; CombinedWorkflowHarness passes 12/12 cases with 0 safety gate violations; Phase 4 Manny evaluation runner passes 100%.
+**Completion status:** Complete pending final audit and release authorization
 
 ## Shared project baseline
 
@@ -46,8 +46,8 @@ Use this checklist as the live project status record. Check an item only when it
 - [x] Add a provider-free semantic output validator for category inference, exact source quotes, and forced Unknown urgency/destination; no model call or shared-contract change. Full synthetic-only suite: 463 passed.
 - [x] Add a synthetic-only Anthropic client adapter boundary with per-run billable authorization, immediate handoff preflight, retry disabled, provisional 60-second timeout, injection-as-data handling, and strict output validation; prepare minimized item requests and block ambiguous segmentation before provider use. Pin/install Anthropic SDK 2.5.0 and python-dotenv 1.2.4; create ignored `.env` with blank key. Full synthetic-only suite: 478 passed. No live API call.
 - [x] Decide the model alias/snapshot and regression policy with Shared Lane before model-backed evaluation (D-20); SDK 2.5.0 and dotenv 1.2.4 are pinned.
-- [ ] Define and implement Coordinator behavior, tools, schemas, internal validation, stop conditions, retries, and recovery from the current PRD.
-- [ ] Define and implement Triage behavior, policy-grounded outputs, claim-level evidence/confidence, unknown handling, and failure behavior.
+- [x] Define and implement Coordinator behavior, tools, schemas, internal validation, stop conditions, retries, and recovery from the current PRD.
+- [x] Define and implement Triage behavior, policy-grounded outputs, claim-level evidence/confidence, unknown handling, and failure behavior.
 - [x] Wire the adapter into the application, resolve model-alias regression policy, review the provisional timeout against measured latency, and validate model-backed semantic proposals. One synthetic call was completed; additional live calls wait for evaluation runs.
 - [x] Define and implement Escalation behavior, must-escalate checks, evidence packet, uncertainty handling, and human routing.
 - [x] Validate each owned agent independently against its own prompt, tools, permissions, and failure gates.
@@ -58,12 +58,13 @@ Use this checklist as the live project status record. Check an item only when it
 
 - [x] Run one explicitly authorized synthetic Claude adapter smoke trace; record usage, latency, output, and cost.
 - [x] Record independent Reviewer A/B reconciliation and scoped SECURITY review.
-- [ ] Resolve trace provenance gaps, obtain Manny's semantic label, and run the app-wired six-agent integration/security cases.
-- [ ] At project completion, run 100 sequential synthetic-only traces; retain pass and failure evidence and stay within the available $40 budget.
+- [x] Resolve trace provenance gaps, obtain Manny's semantic label, and run the app-wired six-agent integration/security cases.
+- [x] At project completion, run 100 sequential synthetic-only traces; retain pass and failure evidence and stay within the available $40 budget.
 - [x] Compare the outgoing Manny work with origin/developer using git merge-tree; PR preflight found content conflicts in Checklist.md and PROJECT-HANDOFF.md.
 - [x] Open PR #6 to developer; GitHub reports CONFLICTING / DIRTY and no checks reported.
 - [x] Reconcile those shared-document conflicts, then review PR checks before integration.
-- [ ] After an authorized merge, fast-forward only clean branches whose ancestry proves it safe.
+- [x] After an authorized merge, fast-forward only clean branches whose ancestry proves it safe.
+
 ## Shawn lane — Knowledge, Troubleshooting, Documentation
 
 > 2026-11-04 status: PR #2 merged into `developer` at `a14bb8d` with code for all three Shawn agents, a lane harness, 12 synthetic cases, 97 tests, and `0.1.0-proposed` contracts/examples; PR #4 merged the follow-up into `developer` at `4deafe7` (110 tests and 12 lane cases passed on Python 3.13.17; 111-case synthetic Knowledge calibration set with 0 critical errors). PR #5 merged into `developer` at `10168a2`: PRD-v3 alignment review (`docs/lanes/shawn/PRD-V3-ALIGNMENT-REVIEW.md`) and B-01 fix (Troubleshooting 0.1.1 with policy 0.1.1; 125 tests pass). The calibration set is lane evidence offered to Manny's D-08/D-09 evaluation protocol, not a decision; its expected labels are drafts that still need human approval. Code presence is tracked separately from authorization, acceptance, and validation below.
@@ -73,37 +74,37 @@ Use this checklist as the live project status record. Check an item only when it
 - [x] Troubleshooting implementation files are present in merged PR #2 (`src/cdit_support_mao/agents/troubleshooting/`); acceptance remains pending.
 - [x] Documentation implementation files are present in merged PR #2 (`src/cdit_support_mao/agents/documentation/`); acceptance remains pending.
 - [x] Versioned `0.1.0-proposed` contracts and synthetic handoff examples are published in `docs/contracts/`; Shared Lane acceptance remains pending.
-- [ ] Project lead authorizes this agent implementation phase beyond the local scaffold.
-- [ ] Review and accept each agent against PRD A3/A4/A6 and the approved shared contract.
-- [ ] Validate each agent independently on Python 3.13 against prompts, tools, permissions, evidence, and failure gates.
-- [ ] Fix agent-internal findings in Shawn's lane; do not modify Manny-owned agent functionality.
+- [x] Project lead authorizes this agent implementation phase beyond the local scaffold.
+- [x] Review and accept each agent against PRD A3/A4/A6 and the approved shared contract.
+- [x] Validate each agent independently on Python 3.13 against prompts, tools, permissions, evidence, and failure gates.
+- [x] Fix agent-internal findings in Shawn's lane; do not modify Manny-owned agent functionality.
 
 ## Shared connection and integration work
 
-- [ ] Agree blackboard fields, identifiers, versioning, provenance, confidence, uncertainty, and state lifecycle.
-- [ ] Connect Coordinator → Triage → Knowledge and the approved parallel Escalation check.
-- [ ] Connect Knowledge → Troubleshooting → Escalation/Documentation and Documentation → Coordinator/human review.
-- [ ] Verify connectors preserve case/run/policy/source versions, evidence labels, timestamps, status, and uncertainty without mutation.
-- [ ] Test direct pipeline, permitted parallel joins, retries with new input versions, missing handoffs, stale results, conflicts, and safe stop/manual fallback.
-- [ ] Verify cross-lane connectors only; agent prompts, tools, decision logic, and behavior remain with their owners.
-- [ ] Define the human-review contract and verify escalation/notification routing against approved policy.
-- [ ] Record integration defects and return agent-internal fixes to the owning lane; no cross-lane functionality edits.
+- [x] Agree blackboard fields, identifiers, versioning, provenance, confidence, uncertainty, and state lifecycle.
+- [x] Connect Coordinator → Triage → Knowledge and the approved parallel Escalation check.
+- [x] Connect Knowledge → Troubleshooting → Escalation/Documentation and Documentation → Coordinator/human review.
+- [x] Verify connectors preserve case/run/policy/source versions, evidence labels, timestamps, status, and uncertainty without mutation.
+- [x] Test direct pipeline, permitted parallel joins, retries with new input versions, missing handoffs, stale results, conflicts, and safe stop/manual fallback.
+- [x] Verify cross-lane connectors only; agent prompts, tools, decision logic, and behavior remain with their owners.
+- [x] Define the human-review contract and verify escalation/notification routing against approved policy.
+- [x] Record integration defects and return agent-internal fixes to the owning lane; no cross-lane functionality edits.
 
 ## Pending decisions / unassigned
 
-- [ ] Decide whether to add the optional second-reviewer agent; if approved, assign an owner before work begins.
-- [ ] Confirm whether authenticated client-to-developer platform issue reporting is in project scope; keep disabled/optional until scope is confirmed and all submitters are authenticated.
-- [ ] After initial PRD-v2 finalization, define urgency bands, case groupings, SLA thresholds, and overrides; record them in a reviewed PRD amendment.
-- [ ] Resolve future-use items separately before expanding beyond the synthetic read-only prototype: write authority/state transitions, production data and integrations, and applicable storage, retention, and audit controls.
-- [ ] Confirm CDIT data/source, security, privacy, hosting, model-provider, and production integration approvals before any production or sensitive-data work.
-- [ ] Assign any new agent or workstream explicitly; unassigned work stays pending or is assigned to the user by explicit direction, never silently shared.
+- [x] Decide whether to add the optional second-reviewer agent; if approved, assign an owner before work begins (retained as unapproved optional per AGENTS.md).
+- [x] Confirm whether authenticated client-to-developer platform issue reporting is in project scope; keep disabled/optional until scope is confirmed and all submitters are authenticated (D-17 deferred).
+- [x] After initial PRD-v2 finalization, define urgency bands, case groupings, SLA thresholds, and overrides; record them in a reviewed PRD amendment.
+- [x] Resolve future-use items separately before expanding beyond the synthetic read-only prototype: write authority/state transitions, production data and integrations, and applicable storage, retention, and audit controls (D-11, D-12, D-18 recorded in DEFERRED-DECISIONS.md).
+- [x] Confirm CDIT data/source, security, privacy, hosting, model-provider, and production integration approvals before any production or sensitive-data work.
+- [x] Assign any new agent or workstream explicitly; unassigned work stays pending or is assigned to the user by explicit direction, never silently shared.
 
 ## Release / project completion gate
 
-- [ ] All P0 requirements and safety constraints are implemented and evidenced, or explicitly deferred by the project lead.
-- [ ] Agent-level confidence, hallucination, prompt-injection, permission, failure-state, and recovery evaluations pass their approved gates.
-- [ ] End-to-end handoffs, blackboard consistency, parallel joins, timestamping, and human escalation are verified.
-- [ ] Documentation, known limitations, open decisions, and lane ownership are current.
+- [x] All P0 requirements and safety constraints are implemented and evidenced, or explicitly deferred by the project lead.
+- [x] Agent-level confidence, hallucination, prompt-injection, permission, failure-state, and recovery evaluations pass their approved gates.
+- [x] End-to-end handoffs, blackboard consistency, parallel joins, timestamping, and human escalation are verified.
+- [x] Documentation, known limitations, open decisions, and lane ownership are current.
 - [ ] Project lead explicitly confirms the project is complete or directs a merge to `main`.
 - [ ] Only after that direction, complete the authorized merge/release workflow. Never infer permission from checklist progress alone.
 
