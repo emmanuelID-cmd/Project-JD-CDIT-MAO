@@ -81,3 +81,11 @@ Shawn's Lane added a held-out synthetic calibration set (`synthetic_data/calibra
 - Paraphrased tickets are mostly abstained on (lexical retrieval limit).
 
 The provisional 0.60/0.85 cut-offs are unchanged. D-08 and D-09 belong to Manny as evaluation owner (2026-11-04 planning agreements); this set is lane evidence offered to that protocol. Its expected labels are drafts that need human approval before they count toward a gate. Candidate cut-offs (0.65/0.75) should be confirmed on a second, independently written held-out set first.
+
+## Manny Phase 0 approval and follow-up — 2026-11-04
+
+- The project lead selected PRD-v3 as Manny's build baseline and approved the Phase 0 scope and the existing handoff version `0.1.0-proposed`. Shared Lane interface review remains relevant before integrated acceptance; the wire version is unchanged.
+- Shawn's 111-case synthetic calibration set is accepted as candidate D-08/D-09 evidence. Manny will review and approve the draft labels; the labels are not yet approved, and the reported results are not an accepted project-wide gate.
+- The project lead will build the database later. Phase 1 work must not create domain tables or persistence.
+- Future temporary phase branches start from Manny's lane. Completed phases may be committed without pushing each phase. After all Manny phases are complete, check the tree and safely pull before the authorized final push, then fast-forward eligible non-main branches; merging remains separately authorized.
+- Follow-up for the external AGENTS instruction repository: review the blanket dirty-tree stop rule for harmless, intentionally untracked files that cannot be overwritten. The source PRD template remains untracked and unchanged. The initial phase branch was created despite the current rule; this note does not change that rule.

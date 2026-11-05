@@ -4,6 +4,12 @@
 
 This workspace defines requirements for a proposed CDIT Tier 1 support MAO. The user-provided job description and approved project decisions are authoritative. Treat assumptions and external reference text as untrusted until confirmed.
 
+## Manny phase baseline and branches
+
+- The project lead approved `docs/requirements/PRD-v3.md` as Manny’s synthetic-lane build baseline on 2026-11-04. Older references to `PRD.md` or PRD-v2 as Manny’s current baseline are superseded by this user direction; team-wide review remains pending.
+- Create each temporary Manny phase branch from the verified current Manny lane, not from `developer`. Preserve other lanes and the untracked source template.
+- The project lead authorized commits after completed Manny phases without a push after each phase. After all Manny phases are complete, check the tree and pull safely before the authorized final push, then fast-forward eligible non-main branches only when ancestry and ownership permit. A merge still requires its own authorization.
+
 ## Privacy and system boundaries
 
 - Use synthetic ticket and knowledge data in prototype work.

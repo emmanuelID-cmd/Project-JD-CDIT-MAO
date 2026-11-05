@@ -5,7 +5,7 @@
 **Agent name:** CDIT Support Desk Assistant (working name)
 **Owners:** Manny (Manny's Lane), Shawn (Shawn's Lane), Shared Lane
 **Date:** 2026-11-04
-**Status:** Draft for team review. Builds on PRD-v2; PRD.md remains the current source of truth until this draft is reviewed and accepted. This document does not authorize implementation, production access, or real-data use.
+**Status:** Approved by the project lead as Manny’s synthetic-lane build baseline on 2026-11-04; team-wide review remains pending. The project lead separately authorized Manny’s phase sequence. Production access, real-data use, and live integration remain outside this approval.
 
 # 1. PROBLEM
 
