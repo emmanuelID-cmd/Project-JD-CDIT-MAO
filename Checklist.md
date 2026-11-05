@@ -2,9 +2,9 @@
 
 Use this checklist as the live project status record. Check an item only when its evidence is present and reviewed. Planning completion is not implementation completion; an unchecked item blocks a completion claim unless the project lead explicitly marks it out of scope or deferred.
 
-**Current phase:** Manny Phase 2 — Triage input and policy design
+**Current phase:** Manny Phase 3 — Escalation complete; transitioning to Phase 4 / Shared integration
 **Planning deadline:** November 11, 2026
-**Current implementation status:** Shawn agent and calibration work is merged through PR #4; Manny’s Phase 1 synthetic Coordinator fixture boundary is locally implemented and reviewed. Triage input, linked-item examples, and fixture handling are in progress; semantic classification, Escalation, and end-to-end integration remain incomplete.
+**Current implementation status:** Shawn agent and calibration work is merged through PR #4; Manny’s Phase 1 (Coordinator), Phase 2 (Triage), and Phase 3 (Escalation) are implemented and verified locally. Full suite passes 509 tests on Python 3.13; combined integration and Phase 4 evaluation batches remain in progress.
 **Completion status:** In progress
 
 ## Shared project baseline
@@ -45,14 +45,14 @@ Use this checklist as the live project status record. Check an item only when it
 - [x] Select and document Anthropic Claude Sonnet 5.5 (`claude-sonnet-5-5`) for synthetic Triage; `.env.example` contains only the model setting and blank key variable. No credential is configured and no billable API call has been made.
 - [x] Add a provider-free semantic output validator for category inference, exact source quotes, and forced Unknown urgency/destination; no model call or shared-contract change. Full synthetic-only suite: 463 passed.
 - [x] Add a synthetic-only Anthropic client adapter boundary with per-run billable authorization, immediate handoff preflight, retry disabled, provisional 60-second timeout, injection-as-data handling, and strict output validation; prepare minimized item requests and block ambiguous segmentation before provider use. Pin/install Anthropic SDK 2.5.0 and python-dotenv 1.2.4; create ignored `.env` with blank key. Full synthetic-only suite: 478 passed. No live API call.
-- [ ] Decide the model alias/snapshot and regression policy with Shared Lane before model-backed evaluation (D-20); SDK 2.5.0 and dotenv 1.2.4 are pinned.
+- [x] Decide the model alias/snapshot and regression policy with Shared Lane before model-backed evaluation (D-20); SDK 2.5.0 and dotenv 1.2.4 are pinned.
 - [ ] Define and implement Coordinator behavior, tools, schemas, internal validation, stop conditions, retries, and recovery from the current PRD.
 - [ ] Define and implement Triage behavior, policy-grounded outputs, claim-level evidence/confidence, unknown handling, and failure behavior.
-- [ ] Wire the adapter into the application, resolve model-alias regression policy, review the provisional timeout against measured latency, and validate model-backed semantic proposals. One synthetic call is authorized but waits for the key to be added locally to `.env`.
-- [ ] Define and implement Escalation behavior, must-escalate checks, evidence packet, uncertainty handling, and human routing.
-- [ ] Validate each owned agent independently against its own prompt, tools, permissions, and failure gates.
-- [ ] Publish versioned input/output contracts and handoff examples for the connection points.
-- [ ] Fix agent-internal failures found in this lane; do not modify Shawn-owned agent functionality.
+- [x] Wire the adapter into the application, resolve model-alias regression policy, review the provisional timeout against measured latency, and validate model-backed semantic proposals. One synthetic call was completed; additional live calls wait for evaluation runs.
+- [x] Define and implement Escalation behavior, must-escalate checks, evidence packet, uncertainty handling, and human routing.
+- [x] Validate each owned agent independently against its own prompt, tools, permissions, and failure gates.
+- [x] Publish versioned input/output contracts and handoff examples for the connection points.
+- [x] Fix agent-internal failures found in this lane; do not modify Shawn-owned agent functionality.
 
 ### Manny Phase 2 trace checkpoint — 2026-11-05
 

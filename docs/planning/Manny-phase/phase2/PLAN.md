@@ -74,6 +74,14 @@
 - One billable Claude call on one synthetic fixture was explicitly authorized and completed. It used one attempt, zero retries, a provisional 60-second timeout, explicit run authorization, and active-handoff preflight.
 - Client configuration tests pass; full suite after setup: 478 passed. One live adapter-level synthetic call completed; see docs/temp/trace/Trace 2026-11-05_14-47-36-120752_-0500 Triage triage-smoke-20261105T144736-0500 Report.md for evidence and limitations.
 
+### Semantic pipeline wiring and D-20 resolution — 2026-11-05
+
+- Wired `execute_semantic_triage` in `src/cdit_support_mao/agents/triage/semantic_pipeline.py` to link multi-item candidates to the Anthropic adapter.
+- Strictly enforced fail-closed behavior: unauthorized calls, missing client, stale handoffs, ambiguous segmentation, and provider errors return `None`, preserving fallback to Auditor review.
+- Mandatory active-handoff preflight callback verifies handoff currency immediately before adapter invocation.
+- Resolved decision D-20: pinned model to `claude-sonnet-5-5`, SDK 2.5.0, 0 retries, 60s timeout, and strict regression policy.
+- Full suite verification: 499 passed on Python 3.13; lane harness 12 passed. Phase 2 implementation scaffolding reaches ~95%. Exit readiness is ~65% pending Phase 4 evaluation batch.
+
 ## Handoff and exit evidence
 
 Send the schema and synthetic examples to Knowledge and Shared Lane. Knowledge consumes only the minimized agreed packet; Shared checks fields, versions, and routing without changing Triage logic. Every material claim is supported or labeled; down-triage rules are tested; unsupported urgency/SLA claims abstain or go to human review; outputs pass contract validation.

@@ -101,3 +101,41 @@ def test_stable_id_is_deterministic_and_prefix_sensitive() -> None:
 def test_citation_is_ascii() -> None:
     assert REF.cite() == "KB-NAV-001 v2.1 #s1"
     assert REF.cite().isascii()
+
+
+def test_escalation_handoff_contract_invariants(context) -> None:
+    from datetime import UTC
+    from cdit_support_mao.contracts.handoffs import EscalationHandoff
+    from cdit_support_mao.contracts.common import AgentStatus
+
+    now = datetime(2026, 11, 4, 12, 0, tzinfo=UTC)
+    handoff = EscalationHandoff(
+        contribution_id="ESC-TEST-1",
+        agent="escalation-agent",
+        agent_version="0.1.0",
+        context=context,
+        created_at=now,
+        status=AgentStatus.COMPLETED,
+        checkpoint=CheckpointOutcome(checkpoint="A5", passed=True),
+        must_escalate=False,
+        triggers=(),
+        recommendation="no_escalation_proposed",
+        reason="Routine handling.",
+        confidence=ConfidenceBand.HIGH,
+        confidence_rationale="High confidence based on verified rules.",
+    )
+    assert handoff.stage == "escalation"
+    assert handoff.human_review_required is True
+
+    # Mutability check
+    with pytest.raises(ValidationError):
+        handoff.must_escalate = True  # type: ignore[misc]
+
+    # Human review invariant
+    data = handoff.model_dump()
+    with pytest.raises(ValidationError):
+        EscalationHandoff.model_validate({**data, "human_review_required": False})
+
+    # Extra fields forbidden
+    with pytest.raises(ValidationError):
+        EscalationHandoff.model_validate({**data, "unexpected_attribute": "forbidden"})
