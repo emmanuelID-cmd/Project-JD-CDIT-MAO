@@ -1,0 +1,72 @@
+{
+  "doc_id": "KB-EDC-110",
+  "version": "2.0",
+  "title": "Responding to a data query",
+  "topic": "data_query_response",
+  "product_area": "data_entry",
+  "status": "approved",
+  "data_classification": "synthetic",
+  "owner": "Synthetic Knowledge Owner",
+  "effective_date": "2026-08-01",
+  "review_due": "2027-08-01",
+  "keywords": [
+    "query",
+    "queries",
+    "data query",
+    "respond",
+    "response",
+    "answer",
+    "discrepancy",
+    "open query"
+  ],
+  "sections": [
+    {
+      "section_id": "s1",
+      "heading": "Answer an open data query",
+      "text": "Data queries raised by monitors or data managers appear as a flag icon on the affected field. Site users answer a query by opening the flag, entering a response, and selecting Submit Response. Answering a query does not change the field value.",
+      "steps": [
+        {
+          "step_id": "st1",
+          "action_type": "navigate_ui",
+          "text": "Ask the user to open the form and select the flag icon next to the queried field."
+        },
+        {
+          "step_id": "st2",
+          "action_type": "navigate_ui",
+          "text": "Ask the user to enter a response in the query window and select Submit Response."
+        }
+      ],
+      "information_needed": [
+        {
+          "field": "query_id",
+          "prompt": "The query identifier shown in the query window."
+        }
+      ],
+      "stop_conditions": [
+        {
+          "condition_id": "KB-EDC-110-SC1",
+          "text": "If the user asks support to enter or change the data value on their behalf, stop; data values may only be changed by authorized site staff."
+        }
+      ]
+    },
+    {
+      "section_id": "s2",
+      "heading": "Answered query does not close",
+      "text": "A query closes only after the person who raised it reviews the response. A query showing Answered is waiting for that review and is not stuck.",
+      "steps": [
+        {
+          "step_id": "st1",
+          "action_type": "share_approved_article",
+          "text": "Share this article section explaining that answered queries close after the reviewer reviews the response."
+        }
+      ],
+      "information_needed": [
+        {
+          "field": "query_id",
+          "prompt": "The query identifier shown in the query window."
+        }
+      ],
+      "stop_conditions": []
+    }
+  ]
+}

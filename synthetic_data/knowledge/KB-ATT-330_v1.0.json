@@ -1,0 +1,44 @@
+{
+  "doc_id": "KB-ATT-330",
+  "version": "1.0",
+  "title": "Accepted attachment file types",
+  "topic": "attachment_file_types",
+  "product_area": "documents",
+  "status": "approved",
+  "data_classification": "synthetic",
+  "owner": "Synthetic Knowledge Owner",
+  "effective_date": "2026-07-01",
+  "review_due": "2027-07-01",
+  "keywords": [
+    "file type",
+    "format",
+    "attachment",
+    "attach",
+    "accepted",
+    "extension",
+    "docx",
+    "jpg",
+    "zip"
+  ],
+  "sections": [
+    {
+      "section_id": "s1",
+      "heading": "File type not accepted",
+      "text": "Attachments may be PDF, DOCX, XLSX, JPG, or PNG files. Other file types, including ZIP archives and executable files, are rejected. Converting the file to PDF resolves most rejections.",
+      "steps": [
+        {
+          "step_id": "st1",
+          "action_type": "verify_client_setting",
+          "text": "Ask the user to check the file extension shown in their file browser."
+        },
+        {
+          "step_id": "st2",
+          "action_type": "retry_operation",
+          "text": "Ask the user to save or export the file as PDF and attach it again."
+        }
+      ],
+      "information_needed": [],
+      "stop_conditions": []
+    }
+  ]
+}

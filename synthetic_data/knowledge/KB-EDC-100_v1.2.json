@@ -1,0 +1,81 @@
+{
+  "doc_id": "KB-EDC-100",
+  "version": "1.2",
+  "title": "Saving a case report form page",
+  "topic": "crf_page_save",
+  "product_area": "data_entry",
+  "status": "approved",
+  "data_classification": "synthetic",
+  "owner": "Synthetic Knowledge Owner",
+  "effective_date": "2026-05-15",
+  "review_due": "2027-05-15",
+  "keywords": [
+    "form",
+    "crf",
+    "save",
+    "saving",
+    "required",
+    "field",
+    "validation",
+    "case report form"
+  ],
+  "sections": [
+    {
+      "section_id": "s1",
+      "heading": "Form page will not save",
+      "text": "A case report form page cannot be saved while any required field is empty or contains a value in the wrong format. Fields that block saving are outlined in red and listed in the validation panel at the top of the page.",
+      "steps": [
+        {
+          "step_id": "st1",
+          "action_type": "navigate_ui",
+          "text": "Ask the user to open the validation panel at the top of the form page and review each listed field."
+        },
+        {
+          "step_id": "st2",
+          "action_type": "navigate_ui",
+          "text": "Ask the user to complete or correct each field outlined in red, using the format shown under the field label."
+        },
+        {
+          "step_id": "st3",
+          "action_type": "retry_operation",
+          "text": "Ask the user to select Save again after the listed fields are corrected."
+        }
+      ],
+      "information_needed": [
+        {
+          "field": "form_name",
+          "prompt": "Name of the form page and visit as shown in the page header."
+        },
+        {
+          "field": "exact_error_message",
+          "prompt": "The exact error message shown, copied without any subject or patient details."
+        }
+      ],
+      "stop_conditions": [
+        {
+          "condition_id": "KB-EDC-100-SC1",
+          "text": "If saved values appear on a different subject's form, stop immediately and escalate as a possible data-integrity incident."
+        }
+      ]
+    },
+    {
+      "section_id": "s2",
+      "heading": "Unsaved form entries lost after a timeout",
+      "text": "Form pages do not save automatically. If the session ends while a page is open, unsaved entries are discarded and must be entered again. Saving each page before leaving it prevents loss.",
+      "steps": [
+        {
+          "step_id": "st1",
+          "action_type": "share_approved_article",
+          "text": "Share this article section so the user knows form pages must be saved before the session ends."
+        }
+      ],
+      "information_needed": [
+        {
+          "field": "attempt_time",
+          "prompt": "The date and time of the failed attempt."
+        }
+      ],
+      "stop_conditions": []
+    }
+  ]
+}

@@ -1,6 +1,6 @@
 {
   "contract_version": "0.1.0-proposed",
-  "contribution_id": "TRB-196D2ADE65B5636A",
+  "contribution_id": "TRB-6AAC03E9C75A5A0A",
   "stage": "troubleshooting",
   "agent": "troubleshooting-agent",
   "agent_version": "0.1.0",
@@ -18,7 +18,7 @@
       "contract_version": "0.1.0-proposed"
     },
     {
-      "contribution_id": "KNW-3BA4720C1A2E07E1",
+      "contribution_id": "KNW-851C555FAD53C8AF",
       "stage": "knowledge",
       "contract_version": "0.1.0-proposed"
     }
@@ -220,7 +220,7 @@
       "sources": [
         {
           "kind": "contribution",
-          "source_id": "KNW-3BA4720C1A2E07E1",
+          "source_id": "KNW-851C555FAD53C8AF",
           "version": "0.1.0-proposed",
           "locator": null
         }

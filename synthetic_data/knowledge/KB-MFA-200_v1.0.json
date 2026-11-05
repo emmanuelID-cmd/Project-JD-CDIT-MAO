@@ -1,0 +1,59 @@
+{
+  "doc_id": "KB-MFA-200",
+  "version": "1.0",
+  "title": "Two-step verification after changing phones",
+  "topic": "mfa_new_device",
+  "product_area": "login",
+  "status": "approved",
+  "data_classification": "synthetic",
+  "owner": "Synthetic Knowledge Owner",
+  "effective_date": "2026-09-01",
+  "review_due": "2027-09-01",
+  "keywords": [
+    "two-step",
+    "verification",
+    "mfa",
+    "2fa",
+    "authenticator",
+    "code",
+    "codes",
+    "phone",
+    "device"
+  ],
+  "sections": [
+    {
+      "section_id": "s1",
+      "heading": "Verification codes rejected after a phone change",
+      "text": "Authenticator codes are tied to the device that was enrolled. After a phone change, codes from the new device are rejected until the user is re-enrolled. Re-enrollment requires identity verification by authorized staff.",
+      "steps": [
+        {
+          "step_id": "st1",
+          "action_type": "verify_client_setting",
+          "text": "Ask the user to confirm the phone's date and time are set automatically, because clock drift causes code rejection."
+        },
+        {
+          "step_id": "st2",
+          "action_type": "collect_information",
+          "text": "Record when the phone was changed and whether the old phone is still available."
+        },
+        {
+          "step_id": "st3",
+          "action_type": "identity_verification",
+          "text": "Verify the user's identity using the approved identity verification procedure before any re-enrollment."
+        }
+      ],
+      "information_needed": [
+        {
+          "field": "attempt_time",
+          "prompt": "The date and time of the failed attempt."
+        }
+      ],
+      "stop_conditions": [
+        {
+          "condition_id": "KB-MFA-200-SC1",
+          "text": "If the user asks to turn off two-step verification for their account, stop; support cannot turn it off."
+        }
+      ]
+    }
+  ]
+}

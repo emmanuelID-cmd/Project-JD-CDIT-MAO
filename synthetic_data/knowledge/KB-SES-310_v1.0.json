@@ -1,0 +1,42 @@
+{
+  "doc_id": "KB-SES-310",
+  "version": "1.0",
+  "title": "Automatic sign-out after inactivity",
+  "topic": "idle_timeout",
+  "product_area": "login",
+  "status": "approved",
+  "data_classification": "synthetic",
+  "owner": "Synthetic Knowledge Owner",
+  "effective_date": "2026-06-01",
+  "review_due": "2027-06-01",
+  "keywords": [
+    "timeout",
+    "inactivity",
+    "idle",
+    "signed out",
+    "automatic",
+    "logout",
+    "logged out"
+  ],
+  "sections": [
+    {
+      "section_id": "s1",
+      "heading": "Signed out automatically while working",
+      "text": "Sessions end after 30 minutes without activity, and a warning appears 2 minutes before. Typing in a form without saving does not count as activity. The timeout cannot be extended for individual users.",
+      "steps": [
+        {
+          "step_id": "st1",
+          "action_type": "share_approved_article",
+          "text": "Share this article section explaining the 30-minute inactivity timeout and the 2-minute warning."
+        }
+      ],
+      "information_needed": [],
+      "stop_conditions": [
+        {
+          "condition_id": "KB-SES-310-SC1",
+          "text": "If the user is signed out within a few minutes of signing in while actively working, stop and escalate to L2 as a possible session fault."
+        }
+      ]
+    }
+  ]
+}

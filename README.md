@@ -76,6 +76,9 @@ The current scaffold establishes the API/runtime and database connection foundat
 python -m pip install -e ".[dev]"
 python -m pytest
 python -m cdit_support_mao.lane_harness synthetic_data/cases
+python -m cdit_support_mao.lane_calibration synthetic_data/calibration/knowledge-calibration-v1.json --report docs/lanes/shawn/calibration/KNOWLEDGE-CALIBRATION-REPORT.md --results docs/lanes/shawn/calibration/knowledge-calibration-v1.results.json
 ```
+
+The calibration command measures the provisional confidence bands on a held-out synthetic set. Its output is lane evidence for the evaluation owner's D-08/D-09 protocol; the labels are drafts pending human approval, and the command does not change any threshold.
 
 The lane harness is not the coordinator. It uses labelled Triage and Escalation stand-ins from `synthetic_data/cases/` until Manny's Lane agents and the shared contracts are agreed.

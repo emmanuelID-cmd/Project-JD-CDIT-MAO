@@ -3,7 +3,7 @@
 **Branch:** `shawn/knowledge-troubleshooting-docs`
 **Owner:** Shawn (finalized six-agent split, `docs/planning/TASK-SPLIT.md`)
 **Version:** agents `0.1.0`; contracts `0.1.0-proposed`
-**Status:** Implemented on synthetic data and pushed to the lane branch for team review. Not merged into `developer`; no PR opened yet.
+**Status:** Implemented on synthetic data. The first version was merged into `developer` through PR #2 on 2026-11-04. The calibration and Python 3.13 follow-up (§7, §9) is on the lane branch, pending review.
 
 ## 1. Authorization and scope
 
@@ -23,10 +23,13 @@
 | `src/cdit_support_mao/agents/troubleshooting/` | Versioned Tier 1 policy loader and Troubleshooting agent. |
 | `src/cdit_support_mao/agents/documentation/` | Privacy scanner and Documentation agent. |
 | `src/cdit_support_mao/lane_harness.py` | Lane validation harness and CLI. **Not the coordinator.** It builds labelled Triage and Escalation stand-ins from case files. |
-| `synthetic_data/knowledge/` | 11 synthetic KB article versions (see §6). |
+| `src/cdit_support_mao/lane_calibration.py` | Calibration runner and CLI that produces lane evidence for D-08: band accuracy, abstention, cut-off sweep, and a critical safety gate over every case (§9). |
+| `synthetic_data/knowledge/` | 38 synthetic KB article versions (see §6 and `synthetic_data/README.md`). |
 | `synthetic_data/policy/troubleshooting-policy_v0.1.0.json` | Synthetic Tier 1 action allowlist, staff-only and forbidden action types, request rules, stop conditions. |
 | `synthetic_data/cases/` | 12 synthetic lane cases, each with its expected outcome written before the run. |
-| `tests/` | 97 focused tests. |
+| `synthetic_data/calibration/` | Held-out calibration set `SYN-KCAL` v1.0: 111 cases with draft labels, written before the first run and not yet human-approved. |
+| `docs/lanes/shawn/calibration/` | Generated calibration report and per-case results. |
+| `tests/` | 110 focused tests. |
 
 ## 3. Knowledge agent (A3 — retrieval handoff)
 
@@ -93,25 +96,30 @@
 
 ## 7. Validation evidence (2026-11-04)
 
-Run from the repository root:
+Run from the repository root in the project `.venv` (Python 3.13.17, pydantic 2.14.2, pytest 9.2.0, FastAPI 0.162.0, uvicorn 0.54.0), installed with `python -m pip install -e ".[dev]"`:
 
 ```text
-py -3.12 -m pytest -q -p no:cacheprovider
-97 passed in under 1 second
+python -m pytest -q -p no:cacheprovider
+110 passed
 
-PYTHONPATH=src py -3.12 -m cdit_support_mao.lane_harness synthetic_data/cases
+python -m cdit_support_mao.lane_harness synthetic_data/cases
 12 passed, 0 failed
+
+python -m cdit_support_mao.lane_calibration synthetic_data/calibration/knowledge-calibration-v1.json
+111 cases | answered 54 | accuracy 96.3% | coverage 74.3% | abstention recall 95.1% | critical errors 0 | label problems 0
+
+uvicorn cdit_support_mao.main:app --app-dir src  ->  GET /health  200 {"status":"ok","database":"ok"}
 ```
 
-- **Python version.** The project targets Python 3.13. This machine only has Python 3.12.0, and 3.13 was not installed. Tests ran on 3.12 using pydantic 2.13.4 and pytest 9.1.1, with `pythonpath=src` from `pyproject.toml`. Re-run on 3.13 after `python -m pip install -e ".[dev]"`.
-- **FastAPI.** FastAPI is not installed for 3.12 here. The scaffold `/health` route was not exercised, and these agents do not import FastAPI.
+- **Python versions.** The suite also passes on Python 3.12.0 (110 passed).
+- **Corpus growth.** The knowledge set grew from 11 to 38 article versions for calibration. All 12 lane cases kept their expected outcomes without any agent change. Contract examples were regenerated for the new source set.
 - **Isolation.** A static test asserts that the agent packages import no network or process modules.
 
 ## 8. Known limitations
 
-- Lexical retrieval misses paraphrases and synonyms. A long, chatty `case_summary` lowers coverage and causes abstention, which is safe but can be over-cautious. Triage should send a minimized summary. Replacing or augmenting retrieval needs evaluation and a decision.
+- Lexical retrieval misses paraphrases and synonyms. The calibration set measures this: 8 of 25 paraphrased cases were answered, and the other 17 abstained safely (§9). A long, chatty `case_summary` also lowers coverage. Triage should send a minimized summary. Replacing or augmenting retrieval needs evaluation and a decision.
 - Injection, request, and privacy patterns are regex risk signals tuned on synthetic text. They are a backstop, not a guarantee. Real PHI must never enter the prototype.
-- Confidence thresholds are uncalibrated (D-08). The knowledge set has 11 articles, too small for calibration.
+- Confidence thresholds are still provisional. Calibration evidence now exists (§9), but adopting new cut-offs is the D-08 decision, which belongs to the evaluation owner (Manny).
 - Triage and Escalation inputs are stand-ins until Manny's Lane delivers its agents and the contracts are agreed.
 - Nothing is persisted. Blackboard storage (D-07) and audit events (D-10) are proposals only (§9).
 
@@ -121,10 +129,26 @@ PYTHONPATH=src py -3.12 -m cdit_support_mao.lane_harness synthetic_data/cases
   - SQLite table `contributions(contribution_id PK, run_id, case_id, case_version, stage, contract_version, status, created_at, payload_json)`, insert-only with no updates.
   - Acknowledgments in a separate `acknowledgments(contribution_id, acknowledged_by, acknowledged_at)` table.
   - Retention and access controls remain open.
-- **D-08 Calibration.**
-  - Label at least 100 held-out synthetic cases for relevance and correctness.
-  - Report accuracy per band, plus abstention precision and recall.
-  - Adjust the 0.60/0.85 cut-offs only from that report. Bands stay qualitative until then.
+- **D-08 Calibration (lane evidence only).**
+  - Ownership: the 2026-11-04 planning agreements in `DEFERRED-DECISIONS.md` assign D-08 and D-09 to Manny as evaluation owner. Shawn's Lane supplies agent outputs and this evidence; the method, gate, and acceptance follow Manny's protocol.
+  - Method, done 2026-11-04:
+    - Labelled 111 held-out synthetic cases (`synthetic_data/calibration/`) before the first run: 70 answerable and 41 that should abstain.
+    - The labels are drafts written in Shawn's lane with AI assistance. D-09 requires human-approved labels, so a human must review them before the results count toward a gate.
+    - The abstain cases cover no coverage, near misses, ineligible-only sources, conflicts, and injection.
+    - The runner reports accuracy per band, abstention precision and recall, a reliability table, and cut-off sweeps.
+    - Report: [KNOWLEDGE-CALIBRATION-REPORT.md](calibration/KNOWLEDGE-CALIBRATION-REPORT.md).
+  - Results:
+    - Critical safety gate: 0 errors across all 111 cases.
+    - High band: 29/29 correct (95% CI 88–100%).
+    - Medium band: 23/25 correct. Both errors are unsupported answers at relevance 0.61 and 0.63, just above the 0.60 cut-off. There were no wrong-source answers.
+  - Sweep reading (single author, small sample):
+    - Raising the answer cut-off to 0.65 removes both unsupported answers. The cost is coverage of answerable cases, which falls from 74% to 70%.
+    - Lowering the high cut-off to 0.75 would still have been 43/43 correct.
+  - Proposal, **not decided**:
+    - Keep 0.60/0.85 for now.
+    - Before adopting 0.65 and 0.75, confirm both on a second held-out set (`SYN-KCAL` v2, written by someone else). Changing them against this set would overfit it.
+    - The bigger gap is paraphrase recall, which is a retrieval design question. No threshold fixes it.
+  - Bands stay qualitative until the evaluation owner accepts a report under the D-09 protocol.
 - **D-10 Timestamps and audit.**
   - UTC ISO-8601 with microseconds from the host clock in the prototype.
   - Audit fields: run, case, contribution ID, stage, status, reason codes, and source/policy versions. No ticket text in audit events.
@@ -134,9 +158,10 @@ PYTHONPATH=src py -3.12 -m cdit_support_mao.lane_harness synthetic_data/cases
 - **Artifacts and versions:**
   - Agents `0.1.0`.
   - Contracts `0.1.0-proposed`.
-  - Source set `SRC-9FC8AF62B4B8`.
+  - Source set `SRC-61C4A35E96CF`.
+  - Calibration set `SYN-KCAL` 1.0.
   - Troubleshooting policy `SYN-TS-POLICY 0.1.0` (proposed).
-- **Completed:** the three Shawn-owned agents, their gates, synthetic data, harness, tests, and contract proposal with examples.
+- **Completed:** the three Shawn-owned agents, their gates, synthetic data, harness, tests, and contract proposal with examples. Also calibration evidence for D-08 (draft labels) and a Python 3.13 / `/health` run.
 - **Evidence:** §7, plus `docs/contracts/examples/`.
 - **Assumptions:**
   - Triage supplies the minimized summary, per-field verification flags, and acknowledgment IDs.

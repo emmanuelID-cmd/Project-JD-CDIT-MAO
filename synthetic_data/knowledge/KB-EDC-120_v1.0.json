@@ -1,0 +1,54 @@
+{
+  "doc_id": "KB-EDC-120",
+  "version": "1.0",
+  "title": "Locked or frozen form pages",
+  "topic": "form_lock",
+  "product_area": "data_entry",
+  "status": "approved",
+  "data_classification": "synthetic",
+  "owner": "Synthetic Knowledge Owner",
+  "effective_date": "2026-04-01",
+  "review_due": "2027-04-01",
+  "keywords": [
+    "locked",
+    "frozen",
+    "freeze",
+    "lock",
+    "unlock",
+    "form",
+    "edit",
+    "read-only",
+    "padlock"
+  ],
+  "sections": [
+    {
+      "section_id": "s1",
+      "heading": "A form page is read-only because it is locked",
+      "text": "Data managers lock or freeze form pages after review. A locked page shows a padlock icon and opens read-only. Site users cannot unlock pages; an unlock must be requested from the study data manager through the query process.",
+      "steps": [
+        {
+          "step_id": "st1",
+          "action_type": "collect_information",
+          "text": "Record the form name, visit, and the reason the user needs to edit the locked page."
+        },
+        {
+          "step_id": "st2",
+          "action_type": "share_approved_article",
+          "text": "Share this article section describing how to request an unlock from the study data manager."
+        }
+      ],
+      "information_needed": [
+        {
+          "field": "form_name",
+          "prompt": "Name of the form page and visit as shown in the page header."
+        }
+      ],
+      "stop_conditions": [
+        {
+          "condition_id": "KB-EDC-120-SC1",
+          "text": "Do not unlock form pages for the user; route every unlock request to the study data manager."
+        }
+      ]
+    }
+  ]
+}

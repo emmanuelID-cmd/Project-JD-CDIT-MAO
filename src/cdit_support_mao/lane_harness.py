@@ -117,7 +117,8 @@ class LaneCase(StrictModel):
     triage: TriageStandIn
     escalation: EscalationStandIn
     recorded_actions: tuple[ActionStandIn, ...] = ()
-    expected: ExpectedOutcome
+    # Optional only for generated calibration cases; lane case files must declare it.
+    expected: ExpectedOutcome | None = None
 
 
 @dataclass(frozen=True)
@@ -268,6 +269,8 @@ class LaneHarness:
 def check_expectations(run: LaneRun) -> list[str]:
     """Compare a run with the case file's expected outcome; return mismatch messages."""
     expected = run.case.expected
+    if expected is None:
+        return ["case declares no expected outcome"]
     problems: list[str] = []
 
     def status(name: str, actual: AgentStatus, wanted: AgentStatus | None) -> None:

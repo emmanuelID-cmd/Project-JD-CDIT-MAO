@@ -1,0 +1,52 @@
+{
+  "doc_id": "KB-TRN-250",
+  "version": "1.0",
+  "title": "Training completion not showing",
+  "topic": "training_completion",
+  "product_area": "training",
+  "status": "approved",
+  "data_classification": "synthetic",
+  "owner": "Synthetic Knowledge Owner",
+  "effective_date": "2026-04-15",
+  "review_due": "2027-04-15",
+  "keywords": [
+    "training",
+    "course",
+    "completion",
+    "certificate",
+    "learning",
+    "module",
+    "incomplete"
+  ],
+  "sections": [
+    {
+      "section_id": "s1",
+      "heading": "Completed course still shows as incomplete",
+      "text": "Course completions from the learning portal are copied to user profiles overnight. A course completed today normally appears as complete the next morning. Required training must show as complete before study access is activated.",
+      "steps": [
+        {
+          "step_id": "st1",
+          "action_type": "collect_information",
+          "text": "Record the course name and the date and time the user completed it."
+        },
+        {
+          "step_id": "st2",
+          "action_type": "share_approved_article",
+          "text": "Share this article section explaining the overnight update."
+        }
+      ],
+      "information_needed": [
+        {
+          "field": "course_name",
+          "prompt": "The course name as shown in the learning portal."
+        }
+      ],
+      "stop_conditions": [
+        {
+          "condition_id": "KB-TRN-250-SC1",
+          "text": "If a completion is still missing two business days after completion, stop and escalate to the training administrator."
+        }
+      ]
+    }
+  ]
+}

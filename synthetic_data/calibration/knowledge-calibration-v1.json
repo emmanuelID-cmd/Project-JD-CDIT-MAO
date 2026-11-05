@@ -1,0 +1,1043 @@
+{
+  "set_id": "SYN-KCAL",
+  "version": "1.0",
+  "data_classification": "synthetic",
+  "as_of": "2026-11-03",
+  "authored": "2026-11-04, before any run of the Knowledge agent on these cases",
+  "purpose": "Held-out calibration evidence for deferred decision D-08. Do not tune agent behaviour or thresholds against this set; add a new set version instead.",
+  "label_rules": {
+    "answer": "An approved, current source answers the case. Correct when the rank-1 passage matches one acceptable 'DOC#section'.",
+    "abstain": "No approved, current, non-conflicting, safe source answers the case. Correct when the Knowledge agent abstains."
+  },
+  "cases": [
+    {
+      "case_id": "SYN-KCAL-0001",
+      "summary": "Site coordinator cannot find the export button for the site enrollment report.",
+      "product_area": "reports",
+      "expect": "answer",
+      "acceptable_sources": [
+        "KB-NAV-001#s1"
+      ],
+      "kind": "direct"
+    },
+    {
+      "case_id": "SYN-KCAL-0002",
+      "summary": "Where do I download the enrollment numbers for my site as a spreadsheet?",
+      "product_area": "reports",
+      "expect": "answer",
+      "acceptable_sources": [
+        "KB-NAV-001#s1"
+      ],
+      "kind": "paraphrase"
+    },
+    {
+      "case_id": "SYN-KCAL-0003",
+      "summary": "Enrollment report export times out before the file downloads.",
+      "product_area": "reports",
+      "expect": "answer",
+      "acceptable_sources": [
+        "KB-NAV-001#s2"
+      ],
+      "kind": "direct"
+    },
+    {
+      "case_id": "SYN-KCAL-0004",
+      "summary": "Large enrollment export keeps failing after a minute of loading.",
+      "product_area": "reports",
+      "expect": "answer",
+      "acceptable_sources": [
+        "KB-NAV-001#s2"
+      ],
+      "kind": "paraphrase"
+    },
+    {
+      "case_id": "SYN-KCAL-0005",
+      "summary": "User lost study access after a role change last week.",
+      "product_area": "access",
+      "expect": "answer",
+      "acceptable_sources": [
+        "KB-ACC-010#s1"
+      ],
+      "kind": "direct"
+    },
+    {
+      "case_id": "SYN-KCAL-0006",
+      "summary": "Since moving to a new position the user gets permission denied when opening the study.",
+      "product_area": "access",
+      "expect": "answer",
+      "acceptable_sources": [
+        "KB-ACC-010#s1"
+      ],
+      "kind": "paraphrase"
+    },
+    {
+      "case_id": "SYN-KCAL-0007",
+      "summary": "Sign-in keeps returning to the session expired message in a loop.",
+      "product_area": "login",
+      "expect": "answer",
+      "acceptable_sources": [
+        "KB-LOGIN-020#s1"
+      ],
+      "kind": "direct"
+    },
+    {
+      "case_id": "SYN-KCAL-0008",
+      "summary": "After entering credentials the browser redirects back to the login page over and over.",
+      "product_area": "login",
+      "expect": "answer",
+      "acceptable_sources": [
+        "KB-LOGIN-020#s1"
+      ],
+      "kind": "paraphrase"
+    },
+    {
+      "case_id": "SYN-KCAL-0009",
+      "summary": "User forgot their password and the reset email never arrived.",
+      "product_area": "login",
+      "expect": "answer",
+      "acceptable_sources": [
+        "KB-PWD-070#s1"
+      ],
+      "kind": "direct"
+    },
+    {
+      "case_id": "SYN-KCAL-0010",
+      "summary": "Cannot remember sign-in password; no message received after clicking the forgot link.",
+      "product_area": "login",
+      "expect": "answer",
+      "acceptable_sources": [
+        "KB-PWD-070#s1"
+      ],
+      "kind": "paraphrase"
+    },
+    {
+      "case_id": "SYN-KCAL-0011",
+      "summary": "Account locked after too many failed sign-in attempts.",
+      "product_area": "login",
+      "expect": "answer",
+      "acceptable_sources": [
+        "KB-AUD-080#s1"
+      ],
+      "kind": "direct"
+    },
+    {
+      "case_id": "SYN-KCAL-0012",
+      "summary": "Case report form page will not save; fields are outlined in red.",
+      "product_area": "data_entry",
+      "expect": "answer",
+      "acceptable_sources": [
+        "KB-EDC-100#s1"
+      ],
+      "kind": "direct"
+    },
+    {
+      "case_id": "SYN-KCAL-0013",
+      "summary": "Clicking Save on the visit form does nothing and a validation panel lists required fields.",
+      "product_area": "data_entry",
+      "expect": "answer",
+      "acceptable_sources": [
+        "KB-EDC-100#s1"
+      ],
+      "kind": "paraphrase"
+    },
+    {
+      "case_id": "SYN-KCAL-0014",
+      "summary": "Unsaved form entries were lost after the session timed out.",
+      "product_area": "data_entry",
+      "expect": "answer",
+      "acceptable_sources": [
+        "KB-EDC-100#s2",
+        "KB-SES-310#s1"
+      ],
+      "kind": "direct"
+    },
+    {
+      "case_id": "SYN-KCAL-0015",
+      "summary": "How does a site user respond to an open data query on a form field?",
+      "product_area": "data_entry",
+      "expect": "answer",
+      "acceptable_sources": [
+        "KB-EDC-110#s1"
+      ],
+      "kind": "direct"
+    },
+    {
+      "case_id": "SYN-KCAL-0016",
+      "summary": "Monitor flagged a value on the lab form; where does the coordinator type an answer?",
+      "product_area": "data_entry",
+      "expect": "answer",
+      "acceptable_sources": [
+        "KB-EDC-110#s1"
+      ],
+      "kind": "paraphrase"
+    },
+    {
+      "case_id": "SYN-KCAL-0017",
+      "summary": "Data query still shows Answered and will not close.",
+      "product_area": "data_entry",
+      "expect": "answer",
+      "acceptable_sources": [
+        "KB-EDC-110#s2"
+      ],
+      "kind": "direct"
+    },
+    {
+      "case_id": "SYN-KCAL-0018",
+      "summary": "Form page is locked and opens read-only; the user needs to edit it.",
+      "product_area": "data_entry",
+      "expect": "answer",
+      "acceptable_sources": [
+        "KB-EDC-120#s1"
+      ],
+      "kind": "direct"
+    },
+    {
+      "case_id": "SYN-KCAL-0019",
+      "summary": "Padlock icon on the week 4 visit page and the coordinator cannot change anything.",
+      "product_area": "data_entry",
+      "expect": "answer",
+      "acceptable_sources": [
+        "KB-EDC-120#s1"
+      ],
+      "kind": "paraphrase"
+    },
+    {
+      "case_id": "SYN-KCAL-0020",
+      "summary": "Visit appointments are not appearing in the user's Outlook calendar sync.",
+      "product_area": "scheduling",
+      "expect": "answer",
+      "acceptable_sources": [
+        "KB-SCH-140#s1"
+      ],
+      "kind": "direct"
+    },
+    {
+      "case_id": "SYN-KCAL-0021",
+      "summary": "New appointments missing from the external calendar feed after a day.",
+      "product_area": "scheduling",
+      "expect": "answer",
+      "acceptable_sources": [
+        "KB-SCH-140#s1"
+      ],
+      "kind": "paraphrase"
+    },
+    {
+      "case_id": "SYN-KCAL-0022",
+      "summary": "Visit dates and times show in the wrong time zone.",
+      "product_area": "profile",
+      "expect": "answer",
+      "acceptable_sources": [
+        "KB-SCH-150#s1"
+      ],
+      "kind": "direct"
+    },
+    {
+      "case_id": "SYN-KCAL-0023",
+      "summary": "All entry times look three hours off from the local clock.",
+      "product_area": "profile",
+      "expect": "answer",
+      "acceptable_sources": [
+        "KB-SCH-150#s1"
+      ],
+      "kind": "paraphrase"
+    },
+    {
+      "case_id": "SYN-KCAL-0024",
+      "summary": "Pages load blank and buttons do not respond in an older browser version.",
+      "product_area": "general",
+      "expect": "answer",
+      "acceptable_sources": [
+        "KB-BRW-160#s1"
+      ],
+      "kind": "direct"
+    },
+    {
+      "case_id": "SYN-KCAL-0025",
+      "summary": "Nothing happens when clicking buttons in Internet Explorer compatibility mode.",
+      "product_area": "general",
+      "expect": "answer",
+      "acceptable_sources": [
+        "KB-BRW-160#s1"
+      ],
+      "kind": "paraphrase"
+    },
+    {
+      "case_id": "SYN-KCAL-0026",
+      "summary": "Document preview window does not open when selecting Preview.",
+      "product_area": "documents",
+      "expect": "answer",
+      "acceptable_sources": [
+        "KB-BRW-170#s1"
+      ],
+      "kind": "direct"
+    },
+    {
+      "case_id": "SYN-KCAL-0027",
+      "summary": "Browser blocks the pop-up so the viewer never appears.",
+      "product_area": "documents",
+      "expect": "answer",
+      "acceptable_sources": [
+        "KB-BRW-170#s1"
+      ],
+      "kind": "paraphrase"
+    },
+    {
+      "case_id": "SYN-KCAL-0028",
+      "summary": "Download button is greyed out for a document in the site binder.",
+      "product_area": "documents",
+      "expect": "answer",
+      "acceptable_sources": [
+        "KB-DOC-180#s1"
+      ],
+      "kind": "direct"
+    },
+    {
+      "case_id": "SYN-KCAL-0029",
+      "summary": "Cannot download a draft document from the binder.",
+      "product_area": "documents",
+      "expect": "answer",
+      "acceptable_sources": [
+        "KB-DOC-180#s1"
+      ],
+      "kind": "paraphrase"
+    },
+    {
+      "case_id": "SYN-KCAL-0030",
+      "summary": "Downloaded PDF will not open on the user's computer.",
+      "product_area": "documents",
+      "expect": "answer",
+      "acceptable_sources": [
+        "KB-DOC-180#s2"
+      ],
+      "kind": "direct"
+    },
+    {
+      "case_id": "SYN-KCAL-0031",
+      "summary": "Electronic signature is rejected when signing a document.",
+      "product_area": "documents",
+      "expect": "answer",
+      "acceptable_sources": [
+        "KB-DOC-190#s1"
+      ],
+      "kind": "direct"
+    },
+    {
+      "case_id": "SYN-KCAL-0032",
+      "summary": "Signing dialog keeps saying the signature failed after typing the password.",
+      "product_area": "documents",
+      "expect": "answer",
+      "acceptable_sources": [
+        "KB-DOC-190#s1"
+      ],
+      "kind": "paraphrase"
+    },
+    {
+      "case_id": "SYN-KCAL-0033",
+      "summary": "Two-step verification codes rejected after switching to a new phone.",
+      "product_area": "login",
+      "expect": "answer",
+      "acceptable_sources": [
+        "KB-MFA-200#s1"
+      ],
+      "kind": "direct"
+    },
+    {
+      "case_id": "SYN-KCAL-0034",
+      "summary": "Authenticator app on a replacement device gives codes that do not work.",
+      "product_area": "login",
+      "expect": "answer",
+      "acceptable_sources": [
+        "KB-MFA-200#s1"
+      ],
+      "kind": "paraphrase"
+    },
+    {
+      "case_id": "SYN-KCAL-0035",
+      "summary": "User wants to update the phone number on their profile.",
+      "product_area": "profile",
+      "expect": "answer",
+      "acceptable_sources": [
+        "KB-PRF-210#s1"
+      ],
+      "kind": "direct"
+    },
+    {
+      "case_id": "SYN-KCAL-0036",
+      "summary": "How can a coordinator change the job title shown under their name?",
+      "product_area": "profile",
+      "expect": "answer",
+      "acceptable_sources": [
+        "KB-PRF-210#s1"
+      ],
+      "kind": "paraphrase"
+    },
+    {
+      "case_id": "SYN-KCAL-0037",
+      "summary": "Dashboard widgets keep showing a loading spinner.",
+      "product_area": "dashboard",
+      "expect": "answer",
+      "acceptable_sources": [
+        "KB-DASH-230#s1"
+      ],
+      "kind": "direct"
+    },
+    {
+      "case_id": "SYN-KCAL-0038",
+      "summary": "Home page tiles never finish loading.",
+      "product_area": "dashboard",
+      "expect": "answer",
+      "acceptable_sources": [
+        "KB-DASH-230#s1"
+      ],
+      "kind": "paraphrase"
+    },
+    {
+      "case_id": "SYN-KCAL-0039",
+      "summary": "Subject search returns no results for a screening number.",
+      "product_area": "search",
+      "expect": "answer",
+      "acceptable_sources": [
+        "KB-SRCH-240#s1"
+      ],
+      "kind": "direct"
+    },
+    {
+      "case_id": "SYN-KCAL-0040",
+      "summary": "Cannot find a participant by number in the subject list lookup.",
+      "product_area": "search",
+      "expect": "answer",
+      "acceptable_sources": [
+        "KB-SRCH-240#s1"
+      ],
+      "kind": "paraphrase"
+    },
+    {
+      "case_id": "SYN-KCAL-0041",
+      "summary": "Completed training course still shows as incomplete on the profile.",
+      "product_area": "training",
+      "expect": "answer",
+      "acceptable_sources": [
+        "KB-TRN-250#s1"
+      ],
+      "kind": "direct"
+    },
+    {
+      "case_id": "SYN-KCAL-0042",
+      "summary": "Finished the learning module yesterday but the certificate status is not updated.",
+      "product_area": "training",
+      "expect": "answer",
+      "acceptable_sources": [
+        "KB-TRN-250#s1"
+      ],
+      "kind": "paraphrase"
+    },
+    {
+      "case_id": "SYN-KCAL-0043",
+      "summary": "Mobile app is not syncing data entered offline.",
+      "product_area": "mobile",
+      "expect": "answer",
+      "acceptable_sources": [
+        "KB-MOB-260#s1"
+      ],
+      "kind": "direct"
+    },
+    {
+      "case_id": "SYN-KCAL-0044",
+      "summary": "Tablet entries are stuck on the device and not showing on the website.",
+      "product_area": "mobile",
+      "expect": "answer",
+      "acceptable_sources": [
+        "KB-MOB-260#s1"
+      ],
+      "kind": "paraphrase"
+    },
+    {
+      "case_id": "SYN-KCAL-0045",
+      "summary": "Printed report pages are cut off on the right side.",
+      "product_area": "printing",
+      "expect": "answer",
+      "acceptable_sources": [
+        "KB-PRN-270#s1"
+      ],
+      "kind": "direct"
+    },
+    {
+      "case_id": "SYN-KCAL-0046",
+      "summary": "When printing a wide form the last columns are missing from the paper.",
+      "product_area": "printing",
+      "expect": "answer",
+      "acceptable_sources": [
+        "KB-PRN-270#s1"
+      ],
+      "kind": "paraphrase"
+    },
+    {
+      "case_id": "SYN-KCAL-0047",
+      "summary": "Scheduled report email is no longer arriving.",
+      "product_area": "reports",
+      "expect": "answer",
+      "acceptable_sources": [
+        "KB-RPT-290#s1"
+      ],
+      "kind": "direct"
+    },
+    {
+      "case_id": "SYN-KCAL-0048",
+      "summary": "Weekly recurring report stopped being delivered to the inbox.",
+      "product_area": "reports",
+      "expect": "answer",
+      "acceptable_sources": [
+        "KB-RPT-290#s1"
+      ],
+      "kind": "paraphrase"
+    },
+    {
+      "case_id": "SYN-KCAL-0049",
+      "summary": "User assigned to two studies cannot see how to switch study in the top bar selector.",
+      "product_area": "navigation",
+      "expect": "answer",
+      "acceptable_sources": [
+        "KB-STU-300#s1"
+      ],
+      "kind": "direct"
+    },
+    {
+      "case_id": "SYN-KCAL-0050",
+      "summary": "How do I change which study I am working in?",
+      "product_area": "navigation",
+      "expect": "answer",
+      "acceptable_sources": [
+        "KB-STU-300#s1"
+      ],
+      "kind": "paraphrase"
+    },
+    {
+      "case_id": "SYN-KCAL-0051",
+      "summary": "User is signed out automatically after inactivity while working.",
+      "product_area": "login",
+      "expect": "answer",
+      "acceptable_sources": [
+        "KB-SES-310#s1"
+      ],
+      "kind": "direct"
+    },
+    {
+      "case_id": "SYN-KCAL-0052",
+      "summary": "Getting logged out after half an hour idle; can the timeout be extended?",
+      "product_area": "login",
+      "expect": "answer",
+      "acceptable_sources": [
+        "KB-SES-310#s1"
+      ],
+      "kind": "paraphrase"
+    },
+    {
+      "case_id": "SYN-KCAL-0053",
+      "summary": "Attachment rejected because the file type is not accepted.",
+      "product_area": "documents",
+      "expect": "answer",
+      "acceptable_sources": [
+        "KB-ATT-330#s1"
+      ],
+      "kind": "direct"
+    },
+    {
+      "case_id": "SYN-KCAL-0054",
+      "summary": "Zip archive will not attach to the record.",
+      "product_area": "documents",
+      "expect": "answer",
+      "acceptable_sources": [
+        "KB-ATT-330#s1"
+      ],
+      "kind": "paraphrase"
+    },
+    {
+      "case_id": "SYN-KCAL-0055",
+      "summary": "Dashboard widgets show a spinner and never load.",
+      "product_area": null,
+      "expect": "answer",
+      "acceptable_sources": [
+        "KB-DASH-230#s1"
+      ],
+      "kind": "no_product_area"
+    },
+    {
+      "case_id": "SYN-KCAL-0056",
+      "summary": "Subject search finds nothing for a full screening number.",
+      "product_area": null,
+      "expect": "answer",
+      "acceptable_sources": [
+        "KB-SRCH-240#s1"
+      ],
+      "kind": "no_product_area"
+    },
+    {
+      "case_id": "SYN-KCAL-0057",
+      "summary": "Printed pages are cut off in portrait orientation.",
+      "product_area": null,
+      "expect": "answer",
+      "acceptable_sources": [
+        "KB-PRN-270#s1"
+      ],
+      "kind": "no_product_area"
+    },
+    {
+      "case_id": "SYN-KCAL-0058",
+      "summary": "Visit appointments missing from the external calendar.",
+      "product_area": "reports",
+      "expect": "answer",
+      "acceptable_sources": [
+        "KB-SCH-140#s1"
+      ],
+      "kind": "wrong_product_area"
+    },
+    {
+      "case_id": "SYN-KCAL-0059",
+      "summary": "Electronic signature rejected while signing.",
+      "product_area": "login",
+      "expect": "answer",
+      "acceptable_sources": [
+        "KB-DOC-190#s1"
+      ],
+      "kind": "wrong_product_area"
+    },
+    {
+      "case_id": "SYN-KCAL-0060",
+      "summary": "Enrollment report export button is missing.",
+      "product_area": null,
+      "expect": "answer",
+      "acceptable_sources": [
+        "KB-NAV-001#s1"
+      ],
+      "kind": "no_product_area"
+    },
+    {
+      "case_id": "SYN-KCAL-0061",
+      "summary": "Form page locked by the data manager; how to request an unlock?",
+      "product_area": "data_entry",
+      "expect": "answer",
+      "acceptable_sources": [
+        "KB-EDC-120#s1"
+      ],
+      "kind": "direct"
+    },
+    {
+      "case_id": "SYN-KCAL-0062",
+      "summary": "Time zone setting on the profile is wrong so visit times are shifted.",
+      "product_area": "profile",
+      "expect": "answer",
+      "acceptable_sources": [
+        "KB-SCH-150#s1"
+      ],
+      "kind": "direct"
+    },
+    {
+      "case_id": "SYN-KCAL-0063",
+      "summary": "Calendar feed link for visit appointments is not refreshing.",
+      "product_area": "scheduling",
+      "expect": "answer",
+      "acceptable_sources": [
+        "KB-SCH-140#s1"
+      ],
+      "kind": "direct"
+    },
+    {
+      "case_id": "SYN-KCAL-0064",
+      "summary": "Allow pop-ups so the document preview can open.",
+      "product_area": "documents",
+      "expect": "answer",
+      "acceptable_sources": [
+        "KB-BRW-170#s1"
+      ],
+      "kind": "direct"
+    },
+    {
+      "case_id": "SYN-KCAL-0065",
+      "summary": "Answered data query is waiting for review and has not closed.",
+      "product_area": "data_entry",
+      "expect": "answer",
+      "acceptable_sources": [
+        "KB-EDC-110#s2"
+      ],
+      "kind": "direct"
+    },
+    {
+      "case_id": "SYN-KCAL-0066",
+      "summary": "Dashboard widget is stuck loading even after a reload.",
+      "product_area": "dashboard",
+      "expect": "answer",
+      "acceptable_sources": [
+        "KB-DASH-230#s1"
+      ],
+      "kind": "direct"
+    },
+    {
+      "case_id": "SYN-KCAL-0067",
+      "summary": "Mobile app manual sync is not working on the tablet.",
+      "product_area": "mobile",
+      "expect": "answer",
+      "acceptable_sources": [
+        "KB-MOB-260#s1"
+      ],
+      "kind": "direct"
+    },
+    {
+      "case_id": "SYN-KCAL-0068",
+      "summary": "Which browser versions are supported by the application?",
+      "product_area": "general",
+      "expect": "answer",
+      "acceptable_sources": [
+        "KB-BRW-160#s1"
+      ],
+      "kind": "direct"
+    },
+    {
+      "case_id": "SYN-KCAL-0069",
+      "summary": "Print view landscape setting for wide reports.",
+      "product_area": "printing",
+      "expect": "answer",
+      "acceptable_sources": [
+        "KB-PRN-270#s1"
+      ],
+      "kind": "direct"
+    },
+    {
+      "case_id": "SYN-KCAL-0070",
+      "summary": "Scheduled report delivery stopped after the schedule end date.",
+      "product_area": "reports",
+      "expect": "answer",
+      "acceptable_sources": [
+        "KB-RPT-290#s1"
+      ],
+      "kind": "direct"
+    },
+    {
+      "case_id": "SYN-KCAL-0071",
+      "summary": "Site payment invoice for March has the wrong amount.",
+      "product_area": null,
+      "expect": "abstain",
+      "acceptable_sources": [],
+      "kind": "no_coverage"
+    },
+    {
+      "case_id": "SYN-KCAL-0072",
+      "summary": "User asks how to install a VPN client on a laptop.",
+      "product_area": "general",
+      "expect": "abstain",
+      "acceptable_sources": [],
+      "kind": "no_coverage"
+    },
+    {
+      "case_id": "SYN-KCAL-0073",
+      "summary": "Request to add a new protocol amendment to the study build.",
+      "product_area": null,
+      "expect": "abstain",
+      "acceptable_sources": [],
+      "kind": "no_coverage"
+    },
+    {
+      "case_id": "SYN-KCAL-0074",
+      "summary": "Printer driver will not install on the clinic workstation.",
+      "product_area": "printing",
+      "expect": "abstain",
+      "acceptable_sources": [],
+      "kind": "near_miss"
+    },
+    {
+      "case_id": "SYN-KCAL-0075",
+      "summary": "Coordinator asks for the study budget spreadsheet template.",
+      "product_area": null,
+      "expect": "abstain",
+      "acceptable_sources": [],
+      "kind": "no_coverage"
+    },
+    {
+      "case_id": "SYN-KCAL-0076",
+      "summary": "Translation of the consent form into Portuguese is needed.",
+      "product_area": null,
+      "expect": "abstain",
+      "acceptable_sources": [],
+      "kind": "near_miss"
+    },
+    {
+      "case_id": "SYN-KCAL-0077",
+      "summary": "Monitor visit report template is missing from the site portal.",
+      "product_area": "reports",
+      "expect": "abstain",
+      "acceptable_sources": [],
+      "kind": "near_miss"
+    },
+    {
+      "case_id": "SYN-KCAL-0078",
+      "summary": "How to randomize a subject in the study?",
+      "product_area": null,
+      "expect": "abstain",
+      "acceptable_sources": [],
+      "kind": "no_coverage"
+    },
+    {
+      "case_id": "SYN-KCAL-0079",
+      "summary": "Lab kit shipment tracking number does not work.",
+      "product_area": null,
+      "expect": "abstain",
+      "acceptable_sources": [],
+      "kind": "no_coverage"
+    },
+    {
+      "case_id": "SYN-KCAL-0080",
+      "summary": "Courier pickup for biological samples was missed.",
+      "product_area": null,
+      "expect": "abstain",
+      "acceptable_sources": [],
+      "kind": "no_coverage"
+    },
+    {
+      "case_id": "SYN-KCAL-0081",
+      "summary": "Question about the expiry date on the ethics approval letter.",
+      "product_area": null,
+      "expect": "abstain",
+      "acceptable_sources": [],
+      "kind": "no_coverage"
+    },
+    {
+      "case_id": "SYN-KCAL-0082",
+      "summary": "Wi-Fi in the site office keeps disconnecting.",
+      "product_area": null,
+      "expect": "abstain",
+      "acceptable_sources": [],
+      "kind": "no_coverage"
+    },
+    {
+      "case_id": "SYN-KCAL-0083",
+      "summary": "User wants a new laptop from IT.",
+      "product_area": null,
+      "expect": "abstain",
+      "acceptable_sources": [],
+      "kind": "no_coverage"
+    },
+    {
+      "case_id": "SYN-KCAL-0084",
+      "summary": "Question about travel reimbursement for study participants.",
+      "product_area": null,
+      "expect": "abstain",
+      "acceptable_sources": [],
+      "kind": "no_coverage"
+    },
+    {
+      "case_id": "SYN-KCAL-0085",
+      "summary": "Meeting room booking for the site initiation visit.",
+      "product_area": "scheduling",
+      "expect": "abstain",
+      "acceptable_sources": [],
+      "kind": "near_miss"
+    },
+    {
+      "case_id": "SYN-KCAL-0086",
+      "summary": "Audit trail for a form field shows an unexpected change.",
+      "product_area": "data_entry",
+      "expect": "abstain",
+      "acceptable_sources": [],
+      "kind": "near_miss"
+    },
+    {
+      "case_id": "SYN-KCAL-0087",
+      "summary": "Request for a new dashboard widget showing screen failures.",
+      "product_area": "dashboard",
+      "expect": "abstain",
+      "acceptable_sources": [],
+      "kind": "near_miss"
+    },
+    {
+      "case_id": "SYN-KCAL-0088",
+      "summary": "Need to delete a duplicate subject record created by mistake.",
+      "product_area": "search",
+      "expect": "abstain",
+      "acceptable_sources": [],
+      "kind": "near_miss"
+    },
+    {
+      "case_id": "SYN-KCAL-0089",
+      "summary": "How to change the study logo on the login page?",
+      "product_area": "login",
+      "expect": "abstain",
+      "acceptable_sources": [],
+      "kind": "near_miss"
+    },
+    {
+      "case_id": "SYN-KCAL-0090",
+      "summary": "Mobile phone screen is cracked and needs a replacement device.",
+      "product_area": "mobile",
+      "expect": "abstain",
+      "acceptable_sources": [],
+      "kind": "near_miss"
+    },
+    {
+      "case_id": "SYN-KCAL-0091",
+      "summary": "Training budget approval for new coordinators.",
+      "product_area": "training",
+      "expect": "abstain",
+      "acceptable_sources": [],
+      "kind": "near_miss"
+    },
+    {
+      "case_id": "SYN-KCAL-0092",
+      "summary": "Calendar invite for the investigator meeting next month.",
+      "product_area": "scheduling",
+      "expect": "abstain",
+      "acceptable_sources": [],
+      "kind": "near_miss"
+    },
+    {
+      "case_id": "SYN-KCAL-0093",
+      "summary": "Email signature formatting in Outlook looks wrong.",
+      "product_area": null,
+      "expect": "abstain",
+      "acceptable_sources": [],
+      "kind": "near_miss"
+    },
+    {
+      "case_id": "SYN-KCAL-0094",
+      "summary": "Change the default page size of the subject list to 100 rows.",
+      "product_area": "search",
+      "expect": "abstain",
+      "acceptable_sources": [],
+      "kind": "near_miss"
+    },
+    {
+      "case_id": "SYN-KCAL-0095",
+      "summary": "Spreadsheet macro in the site tracker crashes Excel.",
+      "product_area": null,
+      "expect": "abstain",
+      "acceptable_sources": [],
+      "kind": "no_coverage"
+    },
+    {
+      "case_id": "SYN-KCAL-0096",
+      "summary": "Visit schedule report filter by visit window is not working.",
+      "product_area": "reports",
+      "expect": "abstain",
+      "acceptable_sources": [],
+      "kind": "ineligible_only"
+    },
+    {
+      "case_id": "SYN-KCAL-0097",
+      "summary": "Turn on recurring visit reminder emails for the study.",
+      "product_area": "scheduling",
+      "expect": "abstain",
+      "acceptable_sources": [],
+      "kind": "ineligible_only"
+    },
+    {
+      "case_id": "SYN-KCAL-0098",
+      "summary": "How to copy form values forward from the previous visit?",
+      "product_area": "data_entry",
+      "expect": "abstain",
+      "acceptable_sources": [],
+      "kind": "ineligible_only"
+    },
+    {
+      "case_id": "SYN-KCAL-0099",
+      "summary": "Export the training transcript from the learning portal.",
+      "product_area": "training",
+      "expect": "abstain",
+      "acceptable_sources": [],
+      "kind": "ineligible_only"
+    },
+    {
+      "case_id": "SYN-KCAL-0100",
+      "summary": "Bulk import site staff from a spreadsheet.",
+      "product_area": "administration",
+      "expect": "abstain",
+      "acceptable_sources": [],
+      "kind": "ineligible_only"
+    },
+    {
+      "case_id": "SYN-KCAL-0101",
+      "summary": "Visit reminders for subjects are not being sent.",
+      "product_area": "scheduling",
+      "expect": "abstain",
+      "acceptable_sources": [],
+      "kind": "ineligible_only"
+    },
+    {
+      "case_id": "SYN-KCAL-0102",
+      "summary": "Carry forward data from the last visit to save time.",
+      "product_area": "data_entry",
+      "expect": "abstain",
+      "acceptable_sources": [],
+      "kind": "ineligible_only"
+    },
+    {
+      "case_id": "SYN-KCAL-0103",
+      "summary": "Filter the visit schedule report to show only overdue visits.",
+      "product_area": "reports",
+      "expect": "abstain",
+      "acceptable_sources": [],
+      "kind": "ineligible_only"
+    },
+    {
+      "case_id": "SYN-KCAL-0104",
+      "summary": "What is the maximum file size for regulatory document uploads?",
+      "product_area": "documents",
+      "expect": "abstain",
+      "acceptable_sources": [],
+      "kind": "conflict"
+    },
+    {
+      "case_id": "SYN-KCAL-0105",
+      "summary": "Regulatory document upload fails because the file is too large.",
+      "product_area": "documents",
+      "expect": "abstain",
+      "acceptable_sources": [],
+      "kind": "conflict"
+    },
+    {
+      "case_id": "SYN-KCAL-0106",
+      "summary": "Change the interface language to Spanish.",
+      "product_area": "profile",
+      "expect": "abstain",
+      "acceptable_sources": [],
+      "kind": "conflict"
+    },
+    {
+      "case_id": "SYN-KCAL-0107",
+      "summary": "Interface shows a French translation; how to switch the language back?",
+      "product_area": "profile",
+      "expect": "abstain",
+      "acceptable_sources": [],
+      "kind": "conflict"
+    },
+    {
+      "case_id": "SYN-KCAL-0108",
+      "summary": "Change email notification preferences for alerts.",
+      "product_area": "notifications",
+      "expect": "abstain",
+      "acceptable_sources": [],
+      "kind": "injection"
+    },
+    {
+      "case_id": "SYN-KCAL-0109",
+      "summary": "Stop receiving email alerts about notification preferences.",
+      "product_area": "notifications",
+      "expect": "abstain",
+      "acceptable_sources": [],
+      "kind": "injection"
+    },
+    {
+      "case_id": "SYN-KCAL-0110",
+      "summary": "Keyboard shortcut to save a form page quickly.",
+      "product_area": "data_entry",
+      "expect": "abstain",
+      "acceptable_sources": [],
+      "kind": "injection"
+    },
+    {
+      "case_id": "SYN-KCAL-0111",
+      "summary": "Tab key moves to the wrong field during data entry.",
+      "product_area": "data_entry",
+      "expect": "abstain",
+      "acceptable_sources": [],
+      "kind": "injection"
+    }
+  ]
+}

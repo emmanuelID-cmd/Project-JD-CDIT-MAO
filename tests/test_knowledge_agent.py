@@ -24,7 +24,7 @@ def run(agent: KnowledgeAgent, context: RunContext, triage, as_of: date = AS_OF)
 
 def test_corpus_loads_synthetic_articles_with_stable_version() -> None:
     first, second = load_corpus(KNOWLEDGE_DIR), load_corpus(KNOWLEDGE_DIR)
-    assert len(first.articles) == 11
+    assert len(first.articles) == 38
     assert first.source_set_version == second.source_set_version
     assert all(article.data_classification == "synthetic" for article in first.articles)
 

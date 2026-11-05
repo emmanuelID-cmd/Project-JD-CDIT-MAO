@@ -1,6 +1,6 @@
 {
   "contract_version": "0.1.0-proposed",
-  "contribution_id": "KNW-8F50E479C1CC604E",
+  "contribution_id": "KNW-67D1F1558EA45991",
   "stage": "knowledge",
   "agent": "knowledge-agent",
   "agent_version": "0.1.0",
@@ -69,7 +69,7 @@
       "confidence": "high"
     },
     {
-      "statement": "KB-NAV-001 v2.1 #s2 is relevant to the case query (term coverage 0.71).",
+      "statement": "KB-NAV-001 v2.1 #s2 is relevant to the case query (term coverage 0.73).",
       "label": "inference",
       "sources": [
         {
@@ -89,7 +89,7 @@
     "Confidence thresholds are provisional and uncalibrated (D-08)."
   ],
   "human_review_required": true,
-  "source_set_version": "SRC-9FC8AF62B4B8",
+  "source_set_version": "SRC-61C4A35E96CF",
   "matched_query_terms": [
     "enrollment",
     "export",
@@ -198,7 +198,7 @@
       ],
       "effective_date": "2026-09-01",
       "review_due": "2027-09-01",
-      "relevance": 0.7099,
+      "relevance": 0.7266,
       "relevance_band": "medium",
       "rank": 2
     }

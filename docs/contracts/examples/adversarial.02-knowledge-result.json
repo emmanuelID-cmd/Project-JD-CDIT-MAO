@@ -1,6 +1,6 @@
 {
   "contract_version": "0.1.0-proposed",
-  "contribution_id": "KNW-3BA4720C1A2E07E1",
+  "contribution_id": "KNW-851C555FAD53C8AF",
   "stage": "knowledge",
   "agent": "knowledge-agent",
   "agent_version": "0.1.0",
@@ -42,7 +42,7 @@
     "Confidence thresholds are provisional and uncalibrated (D-08)."
   ],
   "human_review_required": true,
-  "source_set_version": "SRC-9FC8AF62B4B8",
+  "source_set_version": "SRC-61C4A35E96CF",
   "matched_query_terms": [],
   "passages": [],
   "excluded_sources": [],

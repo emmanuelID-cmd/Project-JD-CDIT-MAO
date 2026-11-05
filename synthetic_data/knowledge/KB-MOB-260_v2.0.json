@@ -1,0 +1,60 @@
+{
+  "doc_id": "KB-MOB-260",
+  "version": "2.0",
+  "title": "Mobile app not syncing",
+  "topic": "mobile_app_sync",
+  "product_area": "mobile",
+  "status": "approved",
+  "data_classification": "synthetic",
+  "owner": "Synthetic Knowledge Owner",
+  "effective_date": "2026-05-01",
+  "review_due": "2027-05-01",
+  "keywords": [
+    "mobile",
+    "app",
+    "sync",
+    "syncing",
+    "tablet",
+    "offline"
+  ],
+  "sections": [
+    {
+      "section_id": "s1",
+      "heading": "Mobile app data not syncing",
+      "text": "The mobile app syncs when it is online and the user is signed in. Entries made offline are kept on the device and sync automatically when a connection returns. Reinstalling the app can delete entries that have not synced.",
+      "steps": [
+        {
+          "step_id": "st1",
+          "action_type": "verify_client_setting",
+          "text": "Ask the user to confirm the app version in Settings > About is the current release."
+        },
+        {
+          "step_id": "st2",
+          "action_type": "verify_client_setting",
+          "text": "Ask the user to confirm the device is online and that the app shows Signed In."
+        },
+        {
+          "step_id": "st3",
+          "action_type": "retry_operation",
+          "text": "Ask the user to pull down on the home screen to start a manual sync."
+        }
+      ],
+      "information_needed": [
+        {
+          "field": "app_version",
+          "prompt": "The app version shown in Settings > About."
+        },
+        {
+          "field": "device_type",
+          "prompt": "The device model and operating system version."
+        }
+      ],
+      "stop_conditions": [
+        {
+          "condition_id": "KB-MOB-260-SC1",
+          "text": "Do not advise removing the app while entries are waiting to sync; escalate to L2 if the pending count does not decrease."
+        }
+      ]
+    }
+  ]
+}

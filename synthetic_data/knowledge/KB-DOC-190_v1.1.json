@@ -1,0 +1,57 @@
+{
+  "doc_id": "KB-DOC-190",
+  "version": "1.1",
+  "title": "Electronic signature is rejected",
+  "topic": "esignature",
+  "product_area": "documents",
+  "status": "approved",
+  "data_classification": "synthetic",
+  "owner": "Synthetic Knowledge Owner",
+  "effective_date": "2026-05-01",
+  "review_due": "2027-05-01",
+  "keywords": [
+    "signature",
+    "sign",
+    "signing",
+    "esignature",
+    "electronic",
+    "rejected",
+    "attestation",
+    "reason"
+  ],
+  "sections": [
+    {
+      "section_id": "s1",
+      "heading": "Electronic signature is rejected",
+      "text": "Electronic signatures require users to re-enter their own sign-in password in the signature dialog. Signatures are rejected if the password is mistyped, if the account is locked, or if no signing reason is selected.",
+      "steps": [
+        {
+          "step_id": "st1",
+          "action_type": "navigate_ui",
+          "text": "Ask the user to select a signing reason from the list before entering their password."
+        },
+        {
+          "step_id": "st2",
+          "action_type": "retry_operation",
+          "text": "Ask the user to retry the signature carefully, checking that Caps Lock is off."
+        }
+      ],
+      "information_needed": [
+        {
+          "field": "document_name",
+          "prompt": "The document name as shown in the site binder."
+        },
+        {
+          "field": "attempt_time",
+          "prompt": "The date and time of the failed attempt."
+        }
+      ],
+      "stop_conditions": [
+        {
+          "condition_id": "KB-DOC-190-SC1",
+          "text": "Never ask the user to share their password with support. If the signature still fails, stop and escalate to L2 with the attempt time."
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,42 @@
+{
+  "doc_id": "KB-PRN-270",
+  "version": "1.0",
+  "title": "Printed pages are cut off",
+  "topic": "print_layout",
+  "product_area": "printing",
+  "status": "approved",
+  "data_classification": "synthetic",
+  "owner": "Synthetic Knowledge Owner",
+  "effective_date": "2026-03-01",
+  "review_due": "2027-03-01",
+  "keywords": [
+    "print",
+    "printing",
+    "printed",
+    "cut off",
+    "margin",
+    "landscape",
+    "printer"
+  ],
+  "sections": [
+    {
+      "section_id": "s1",
+      "heading": "Printed form or report is cut off",
+      "text": "Wide forms and reports print correctly only from Print View in landscape orientation. Printing directly from the browser page can cut off the right side.",
+      "steps": [
+        {
+          "step_id": "st1",
+          "action_type": "navigate_ui",
+          "text": "Ask the user to open Print View from the page menu."
+        },
+        {
+          "step_id": "st2",
+          "action_type": "verify_client_setting",
+          "text": "Ask the user to choose landscape orientation and Fit to page width in the print dialog."
+        }
+      ],
+      "information_needed": [],
+      "stop_conditions": []
+    }
+  ]
+}
