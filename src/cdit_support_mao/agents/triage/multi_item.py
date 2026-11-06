@@ -18,6 +18,7 @@ class LinkedTriageItem(StrictModel):
     category_label: Literal["inference", "unknown"] = "unknown"
     category_sources: tuple[SourceRef, ...] = Field(default=(), max_length=8)
     category_basis: str | None = Field(default=None, max_length=500, repr=False)
+    category_evidence_quote: str | None = Field(default=None, min_length=1, max_length=300, repr=False)
     urgency: Literal["low", "medium", "high", "unknown"] = "unknown"
     urgency_label: Literal["inference", "unknown"] = "unknown"
     urgency_sources: tuple[SourceRef, ...] = Field(default=(), max_length=8)
@@ -33,6 +34,20 @@ class LinkedTriageItem(StrictModel):
     conflicts_present: bool = False
     human_review_required: Literal[True] = True
     downstream_allowed: Literal[False] = False
+
+    @property
+    def auditor_review_reasons(self) -> tuple[str, ...]:
+        """Local review metadata; it does not dispatch or authorize an action."""
+        reasons: list[str] = []
+        if self.category_label == "unknown":
+            reasons.append("unknown_category")
+        if self.urgency_label == "unknown":
+            reasons.append("unknown_urgency")
+        if self.destination_label == "unknown":
+            reasons.append("unknown_destination")
+        if self.segmentation == "ambiguous_parent":
+            reasons.append("ambiguous_segmentation")
+        return tuple(reasons)
 
     @model_validator(mode="after")
     def validate_claims(self) -> LinkedTriageItem:
@@ -59,6 +74,12 @@ class LinkedTriageItem(StrictModel):
             (self.destination,self.destination_label,self.destination_sources,self.destination_basis)):
             if label=="unknown" and (value is not None or sources or basis): raise ValueError("unknown_claim_must_not_include_proposal")
             if label=="inference" and (value is None or not basis or not sources): raise ValueError("inference_requires_value_basis_and_sources")
+        if self.category_label == "inference":
+            if (self.category_evidence_quote is None
+                    or self.category_evidence_quote not in self.reported_text):
+                raise ValueError("category_inference_requires_exact_item_quote")
+        elif self.category_evidence_quote is not None:
+            raise ValueError("unknown_category_must_not_include_quote")
         proposed=any(label=="inference" for _,label,_,_ in (
             (self.category,self.category_label,self.category_sources,self.category_basis),
             (self.urgency if self.urgency!="unknown" else None,self.urgency_label,self.urgency_sources,self.urgency_basis),
@@ -105,8 +126,15 @@ class MultiItemTriageCandidate(StrictModel):
                 for evidence in sources:
                     if evidence.kind is SourceKind.CASE_FIELD and (evidence.source_id!=self.context.case_id or evidence.version!=str(self.context.case_version)):
                         raise ValueError("claim_case_source_mismatch")
-                    if evidence.kind is SourceKind.POLICY_RULE and evidence.version!=self.context.policy_version:
-                        raise ValueError("claim_policy_version_mismatch")
+                    if evidence.kind is SourceKind.POLICY_RULE:
+                        if evidence.source_id == "SYN-TICKET-CATEGORY-TAXONOMY":
+                            digest = evidence.locator.removeprefix("category_sha256:") if evidence.locator else ""
+                            if (len(digest) != 64 or any(char not in "0123456789abcdef" for char in digest)
+                                    or evidence.locator != f"category_sha256:{digest}"
+                                    or evidence.version != f"sha256-{digest[:16]}"):
+                                raise ValueError("claim_taxonomy_source_version_mismatch")
+                        elif evidence.version != self.context.policy_version:
+                            raise ValueError("claim_policy_version_mismatch")
         graph={item.item_index:item.depends_on for item in self.items}
         visiting=set()
         visited=set()

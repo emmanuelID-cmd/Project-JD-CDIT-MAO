@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import hashlib
 import json
 from types import SimpleNamespace
 
@@ -8,6 +9,8 @@ import pytest
 from cdit_support_mao.agents.triage.anthropic_adapter import (
     AnthropicTriageError,
     MODEL_ID,
+    SYSTEM_PROMPT,
+    SYSTEM_PROMPT_ID,
     classify_synthetic_items,
 )
 from cdit_support_mao.agents.triage.semantic_contract import (
@@ -109,9 +112,24 @@ def test_adapter_sends_minimized_synthetic_request_and_validates_output():
     call = messages.calls[0]
     assert call["model"] == MODEL_ID
     assert "tools" not in call
-    user_payload = json.loads(call["messages"][0]["content"])
+    exact_user_body = call["messages"][0]["content"]
+    user_payload = json.loads(exact_user_body)
     assert user_payload["items"] == [{"item_index": 1, "text": "I cannot access the trial schedule."}]
     assert "case_id" not in user_payload
+    assert result.request_payload_sha256 == hashlib.sha256(exact_user_body.encode("utf-8")).hexdigest()
+    assert result.prompt_id == SYSTEM_PROMPT_ID == "manny-triage-system-v1"
+    assert call["system"] == SYSTEM_PROMPT
+    assert result.system_prompt_sha256 == hashlib.sha256(SYSTEM_PROMPT.encode("utf-8")).hexdigest()
+    assert "system_prompt" not in result.model_dump()
+    trace_metadata = json.dumps({
+        "prompt_id": result.prompt_id,
+        "system_prompt_sha256": result.system_prompt_sha256,
+        "request_payload_sha256": result.request_payload_sha256,
+    })
+    assert SYSTEM_PROMPT not in trace_metadata
+    assert "I cannot access the trial schedule." not in trace_metadata
+    assert "ANTHROPIC_API_KEY" not in trace_metadata
+    assert "SYNTHETIC_TEST_KEY" not in trace_metadata
 
 
 @pytest.mark.parametrize("stop_reason", ["max_tokens", "stop_sequence", None])

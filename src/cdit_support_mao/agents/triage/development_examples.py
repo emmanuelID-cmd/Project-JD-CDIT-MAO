@@ -9,6 +9,7 @@ from __future__ import annotations
 import hashlib
 import re
 from datetime import datetime
+from pathlib import Path
 from threading import Lock
 from typing import Literal
 
@@ -16,11 +17,14 @@ from pydantic import Field, field_validator, model_validator
 
 from cdit_support_mao.agents.coordinator.handoff import HandoffError, HandoffRegistry
 from cdit_support_mao.agents.triage.segment import extract_request_parts
-from cdit_support_mao.contracts.common import RunContext, StrictModel
+from cdit_support_mao.contracts.common import RunContext, SourceKind, SourceRef, StrictModel
 
 
 class DevelopmentCatalogError(ValueError):
     """Content-free development-catalog failure."""
+
+
+TRUSTED_CATEGORY_SCENARIOS_SHA256 = "010077c54532b166b6116656691c579915897a88d56ab0d56cf7b6cd8f62be60"
 
 
 class DevelopmentExample(StrictModel):
@@ -54,6 +58,60 @@ class DevelopmentReference(StrictModel):
         if self.example_id != f"SYN-EXAMPLE-{self.row:03d}":
             raise ValueError("example_id_row_mismatch")
         return self
+
+
+class DevelopmentCategoryTaxonomy(StrictModel):
+    """Approved synthetic category vocabulary, separate from example labels.
+
+    Only category names are exposed to semantic Triage. Example queries,
+    urgency bands, and condition text remain development examples and are not
+    treated as gold labels or operating policy.
+    """
+
+    categories: tuple[str, ...] = Field(min_length=1, max_length=80)
+    source: SourceRef
+    source_sha256: str = Field(pattern=r"^[0-9a-f]{64}$")
+    taxonomy_sha256: str = Field(pattern=r"^[0-9a-f]{64}$")
+    scope: Literal["synthetic_category_vocabulary_only"] = "synthetic_category_vocabulary_only"
+    operational_policy: Literal[False] = False
+    example_rows_are_labels: Literal[False] = False
+
+    @model_validator(mode="after")
+    def taxonomy_is_version_bound(self) -> DevelopmentCategoryTaxonomy:
+        if len(self.categories) != len(set(self.categories)) or any(not name.strip() for name in self.categories):
+            raise ValueError("invalid_category_taxonomy")
+        expected_taxonomy_digest = hashlib.sha256(
+            "\n".join(self.categories).encode("utf-8")
+        ).hexdigest()
+        expected_version = f"sha256-{expected_taxonomy_digest[:16]}"
+        if (self.source.kind is not SourceKind.POLICY_RULE
+                or self.source.source_id != "SYN-TICKET-CATEGORY-TAXONOMY"
+                or self.source.version != expected_version
+                or self.source.locator != "category_names"
+                or self.taxonomy_sha256 != expected_taxonomy_digest):
+            raise ValueError("category_taxonomy_source_mismatch")
+        return self
+
+
+def load_project_category_taxonomy() -> DevelopmentCategoryTaxonomy:
+    """Load the pinned project taxonomy source; fail closed if it changed.
+
+    The complete case-scenario document is never sent to the model. This loader
+    extracts the category names only and pins the exact synthetic source bytes
+    so an arbitrary caller-supplied taxonomy cannot expand the model vocabulary.
+    Updating the source requires an intentional pin update and review.
+    """
+    source_path = Path(__file__).resolve().parents[4] / "docs" / "requirements" / "CASE-SCENARIOS.md"
+    try:
+        source_bytes = source_path.read_bytes()
+    except OSError:
+        raise DevelopmentCatalogError("trusted_category_taxonomy_unavailable") from None
+    if hashlib.sha256(source_bytes).hexdigest() != TRUSTED_CATEGORY_SCENARIOS_SHA256:
+        raise DevelopmentCatalogError("trusted_category_taxonomy_changed")
+    capability = object()
+    catalog = DevelopmentExampleCatalog(provisioning_capability=capability)
+    catalog.provision(source_bytes, capability=capability)
+    return catalog.category_taxonomy()
 
 
 class DevelopmentLookup(StrictModel):
@@ -128,6 +186,26 @@ class DevelopmentExampleCatalog:
             if self._entries is None or self._digest is None:
                 raise DevelopmentCatalogError("catalog_not_provisioned")
             return self._entries, self._digest
+
+    def category_taxonomy(self) -> DevelopmentCategoryTaxonomy:
+        """Return only the approved category names with source/version binding.
+
+        Example queries, bands, and conditions are deliberately excluded.
+        """
+        entries, digest = self._snapshot()
+        categories = tuple(dict.fromkeys(row.category for row in entries))
+        taxonomy_digest = hashlib.sha256("\n".join(categories).encode("utf-8")).hexdigest()
+        return DevelopmentCategoryTaxonomy(
+            categories=categories,
+            source=SourceRef(
+                kind=SourceKind.POLICY_RULE,
+                source_id="SYN-TICKET-CATEGORY-TAXONOMY",
+                version=f"sha256-{taxonomy_digest[:16]}",
+                locator="category_names",
+            ),
+            source_sha256=digest,
+            taxonomy_sha256=taxonomy_digest,
+        )
 
 
 def lookup_development_examples(
