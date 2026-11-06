@@ -289,3 +289,59 @@ UI lane clarification: Either lane may add/style presentation controls (includin
 ### Requested
 
 - Manny: answers to review §7, especially Q-04 (do the charters satisfy PRD-v3 §3b?) and the rest of Q-05 (who peer-reviews the corpus and lane cases?).
+
+## 2026-11-06T00:15:00-05:00 — Shawn's Lane: linked-item handoff support (S-1, S-2, K-1 to K-7)
+
+- Prepared: 2026-11-06T00:15:00-05:00
+- Branch: `shawn/knowledge-troubleshooting-docs`. Baseline: `developer` at `3583508`, with the lane equal to `developer` after PR #8. Target: `developer` by PR; nothing committed yet.
+
+### Inputs
+
+- Manny's answers, 2026-11-05:
+  - **Q-A:** an item with an inferred category and Unknown urgency may go to Knowledge for read-only retrieval; later processing waits for the Auditor's band and route.
+  - **Q-B:** item-level attention flags with a parent summary; a parent-level flag when segmentation is ambiguous.
+  - **Q-C:** the item ID formula is approved and run-scoped.
+  - **Q-D:** the proposal document should be added.
+  - **Q-04:** charter plus schema is the behaviour specification for deterministic agents, and the prompt drafts are not runtime prompts.
+- These answers do not authorize a pull, push, or branch sync.
+
+### Done
+
+- **Shared contract drafts, pending Manny's review.**
+  - S-1: `TriageItemScope` and `LinkedItemRef` (`contracts/handoffs.py`), with an optional `TriageHandoff.item_scope`.
+  - S-2: `InputRef.content_digest`, filled by `as_input_ref()`.
+  - Both are optional fields; the contract version string is unchanged.
+- **Shawn agents `0.2.0`.**
+  - K-1, K-2, K-3 (Knowledge): the item-scope gate, the echo and the item ID in the contribution ID, and retrieval on the item text only.
+  - K-4 (Troubleshooting) and K-5 (Documentation): same-item joins; Documentation adds the item line, the category basis, the Auditor's band, and attention by reference.
+  - Both stages are held with `missing_dependency` until the Auditor determines the band and route.
+  - `consumed()` requires matching content digests.
+- **K-6.** Charters updated, and Q-04 is recorded as accepted.
+- **K-7.** 5 cases in `synthetic_data/item_cases/` and 43 tests in `tests/test_item_scope.py`.
+- **Tests.**
+  - Three pinned-evidence Troubleshooting tests now re-point their Knowledge input to the triage under test. The digest check correctly rejects their old same-ID content swap.
+  - A mutation check confirmed that disabling each new gate fails at least one test.
+- **Regenerated.** The calibration report and results (version line only) and the contract examples.
+
+### Not completed
+
+- Manny-owned S-3 to S-8 (connector eligibility, source recheck, receipt identity, item bridge, attention scope, `consume` returning the scope). Until they exist, no linked item reaches Shawn's agents outside tests.
+- `TRIAGE-LINKED-ITEM-HANDOFF-PROPOSAL.md` is still not in the repository.
+- New question Q-E: does a new Triage handoff for the same item record the Auditor's decision, or a separate Auditor record?
+- Q-01 to Q-03, Q-06, and the peer-reviewer part of Q-05 remain open.
+
+### Validation
+
+- `.venv\Scripts\python.exe -m pytest -q` (Python 3.13.17): 567 passed.
+- `python -m cdit_support_mao.lane_harness synthetic_data/cases`: 12 passed, 0 failed.
+- `python -m cdit_support_mao.lane_harness synthetic_data/item_cases`: 5 passed, 0 failed.
+- `python -m cdit_support_mao.combined_harness synthetic_data/cases`: 12 of 12 PASS.
+- `python -m cdit_support_mao.lane_calibration … --report … --results …`: 0 critical errors, 0 label problems; all 111 outcomes unchanged.
+
+### Requested
+
+- Manny:
+  - Review S-1 and S-2 before merge.
+  - Answer Q-E.
+  - Add the proposal document.
+  - Implement S-3 to S-8 when ready.

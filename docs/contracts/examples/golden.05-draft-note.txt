@@ -1,6 +1,6 @@
 DRAFT - requires human review. Not saved, not sent, no ticket state changed.
-Case SYN-CASE-0001 (version 1) | Run RUN-SYN-CASE-0001-1 | Policy SYN-SUPPORT-POLICY-0.1 | Draft DRAFT-D96FF04BD0147389
-Prepared 2026-11-03T15:00:00+00:00 by documentation-agent 0.1.0
+Case SYN-CASE-0001 (version 1) | Run RUN-SYN-CASE-0001-1 | Policy SYN-SUPPORT-POLICY-0.1 | Draft DRAFT-9A7850B88187CBF5
+Prepared 2026-11-03T15:00:00+00:00 by documentation-agent 0.2.0
 
 Case facts (verified)
 - reported_issue: Cannot find the export option for the Site Enrollment Report. [verified: SYN-CASE-0001.reported_issue v1]

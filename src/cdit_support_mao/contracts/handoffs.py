@@ -11,6 +11,10 @@ Ownership:
   are produced by Shawn-owned agents.
 - ``RecordedAction`` is a staff-entered interaction fact supplied by the
   coordinator (Manny-owned) from the case record.
+- ``LinkedItemRef`` and ``TriageItemScope`` (proposed S-1, 2026-11-05) let one
+  linked item of a multi-item case message travel as its own Triage handoff.
+  They carry identity, span, eligibility, and by-reference proposal fields only.
+  Manny's Lane owns segmentation, classification, attention, and dispatch.
 """
 
 from __future__ import annotations
@@ -21,15 +25,24 @@ from typing import Literal
 from pydantic import Field, model_validator
 
 from cdit_support_mao.contracts.common import (
+    SHA256_HEX_PATTERN,
     AgentContribution,
+    AgentStatus,
     ClaimLabel,
     ConfidenceBand,
     ReasonCode,
+    RunContext,
     SourceKind,
     SourceRef,
     Stage,
     StrictModel,
+    stable_id,
 )
+
+#: Version of the linked-item scope carried on a Triage handoff (proposed S-1).
+TRIAGE_ITEM_SCOPE_VERSION = "triage-item-scope-0.1-proposed"
+#: Upper bound on linked items per parent message (matches Manny's segmentation limit).
+MAX_LINKED_ITEMS = 8
 
 # --------------------------------------------------------------------------
 # Upstream (Manny-owned) payloads as consumed by Shawn's agents — PROPOSED view
@@ -51,8 +64,116 @@ class CaseFact(StrictModel):
         return self
 
 
+def item_id_for(
+    context: RunContext, parent_digest: str, item_index: int, source_start: int, source_end: int
+) -> str:
+    """Run-scoped linked-item ID, as approved by Manny (Q-C, 2026-11-05).
+
+    A new run, case version, or segmentation may produce a new ID; the ID is not
+    stable across runs and must not be used as a durable ticket identifier.
+    """
+    return stable_id(
+        "ITM", context.run_id, context.case_version, parent_digest, item_index, source_start, source_end
+    )
+
+
+class LinkedItemRef(StrictModel):
+    """Identity of one linked item of a parent case message. Never carries text.
+
+    Knowledge echoes this block (``KnowledgeResult.item_scope_ref``) so every
+    downstream stage can join results item by item without re-reading case text.
+    """
+
+    scope_contract_version: Literal["triage-item-scope-0.1-proposed"] = TRIAGE_ITEM_SCOPE_VERSION
+    item_id: str = Field(pattern=r"^ITM-[0-9A-F]{16}$")
+    item_index: int = Field(strict=True, ge=1, le=MAX_LINKED_ITEMS)
+    item_count: int = Field(strict=True, ge=1, le=MAX_LINKED_ITEMS)
+    parent_source: SourceRef
+    parent_digest: str = Field(pattern=SHA256_HEX_PATTERN, description="SHA-256 of the parent message text")
+    source_start: int = Field(strict=True, ge=0, description="Codepoint offset in the parent message")
+    source_end: int = Field(strict=True, ge=1, description="Exclusive codepoint offset in the parent message")
+
+    @model_validator(mode="after")
+    def _shape(self) -> LinkedItemRef:
+        if self.item_index > self.item_count:
+            raise ValueError("item_index_exceeds_item_count")
+        if self.source_start >= self.source_end:
+            raise ValueError("item_span_empty_or_reversed")
+        if self.parent_source.kind is not SourceKind.CASE_FIELD or self.parent_source.locator != "message":
+            raise ValueError("parent_source_must_be_case_message")
+        return self
+
+    def matches_context(self, context: RunContext) -> bool:
+        """True when the parent source is this run's case message at this case version."""
+        return (
+            self.parent_source.source_id == context.case_id
+            and self.parent_source.version == str(context.case_version)
+        )
+
+    def expected_item_id(self, context: RunContext) -> str:
+        return item_id_for(context, self.parent_digest, self.item_index, self.source_start, self.source_end)
+
+
+class TriageItemScope(StrictModel):
+    """Linked-item scope of one Triage handoff (proposed S-1, 2026-11-05).
+
+    Eligibility for Knowledge (Manny, Q-A): a ``candidate_boundary`` item with an
+    inferred category may go to Knowledge for read-only retrieval while the
+    human Auditor reviews urgency. Later processing (Troubleshooting,
+    Documentation) waits until ``auditor_review`` is ``band_and_route_determined``.
+
+    Category, attention, and Auditor fields are carried *by reference* for
+    Documentation; Knowledge never reads their values.
+    """
+
+    identity: LinkedItemRef
+    segmentation: Literal["candidate_boundary", "ambiguous_parent"]
+    depends_on: tuple[int, ...] = Field(default=(), max_length=MAX_LINKED_ITEMS - 1)
+    item_status: Literal["proposal_for_human_review", "abstained_needs_human"]
+    category_label: Literal["inference", "unknown"]
+    category_basis: str | None = Field(default=None, min_length=1, max_length=500)
+    category_sources: tuple[SourceRef, ...] = Field(default=(), max_length=8)
+    category_evidence_span: tuple[int, int] | None = Field(
+        default=None, description="Codepoint span of the category evidence in the parent message"
+    )
+    auditor_review: Literal["pending", "band_and_route_determined"] = "pending"
+    attention_ref: SourceRef | None = Field(
+        default=None, description="Reference to this item's attention flag (Manny, Q-B); never its text"
+    )
+    parent_attention_flagged: bool = Field(
+        default=False, description="True when any item of the parent has an attention flag (parent summary)"
+    )
+
+    @model_validator(mode="after")
+    def _scope_rules(self) -> TriageItemScope:
+        ident = self.identity
+        if len(set(self.depends_on)) != len(self.depends_on) or any(
+            i < 1 or i > ident.item_count or i == ident.item_index for i in self.depends_on
+        ):
+            raise ValueError("invalid_item_dependency")
+        if self.category_label == "inference" and (not self.category_basis or not self.category_sources):
+            raise ValueError("category_inference_requires_basis_and_sources")
+        if self.category_label == "unknown" and (self.category_basis or self.category_sources):
+            raise ValueError("unknown_category_must_not_include_proposal")
+        if self.segmentation == "ambiguous_parent" and (
+            self.category_label != "unknown" or self.item_status != "abstained_needs_human"
+        ):
+            raise ValueError("ambiguous_segmentation_requires_abstention")
+        if self.category_evidence_span is not None:
+            start, end = self.category_evidence_span
+            if not ident.source_start <= start < end <= ident.source_end:
+                raise ValueError("category_evidence_outside_item_span")
+        if self.attention_ref is not None and not self.parent_attention_flagged:
+            raise ValueError("item_attention_requires_parent_summary")
+        return self
+
+
 class TriageHandoff(AgentContribution):
-    """Fields Shawn's agents read from the Triage contribution (A2)."""
+    """Fields Shawn's agents read from the Triage contribution (A2).
+
+    ``item_scope`` is ``None`` for a single-case handoff (unchanged behaviour).
+    When set, ``case_summary`` is exactly one linked item's text, never the parent.
+    """
 
     stage: Literal[Stage.TRIAGE] = Stage.TRIAGE
     case_summary: str = Field(
@@ -66,6 +187,34 @@ class TriageHandoff(AgentContribution):
     urgency: Literal["low", "medium", "high", "unknown"]
     case_facts: tuple[CaseFact, ...] = ()
     missing_facts: tuple[str, ...] = ()
+    item_scope: TriageItemScope | None = None
+
+    @model_validator(mode="after")
+    def _item_scope_consistent(self) -> TriageHandoff:
+        scope = self.item_scope
+        if scope is None:
+            return self
+        ident = scope.identity
+        if not ident.matches_context(self.context):
+            raise ValueError("item_parent_source_context_mismatch")
+        if ident.item_id != ident.expected_item_id(self.context):
+            raise ValueError("item_id_mismatch")
+        if ident.source_end - ident.source_start != len(self.case_summary):
+            raise ValueError("item_span_length_mismatch")
+        if (self.status is AgentStatus.COMPLETED) != (scope.item_status == "proposal_for_human_review"):
+            raise ValueError("item_status_mismatch")
+        if (scope.category_label == "inference") != bool(self.category and self.category.strip()):
+            raise ValueError("item_category_label_mismatch")
+        if scope.auditor_review == "band_and_route_determined" and self.urgency == "unknown":
+            raise ValueError("auditor_determination_requires_urgency_band")
+        for source in scope.category_sources:
+            if source.kind is SourceKind.CASE_FIELD and (
+                source.source_id != self.context.case_id or source.version != str(self.context.case_version)
+            ):
+                raise ValueError("item_claim_case_source_mismatch")
+            if source.kind is SourceKind.POLICY_RULE and source.version != self.context.policy_version:
+                raise ValueError("item_claim_policy_version_mismatch")
+        return self
 
 
 class EscalationHandoff(AgentContribution):
@@ -173,6 +322,9 @@ class InjectionFlag(StrictModel):
 class KnowledgeResult(AgentContribution):
     stage: Literal[Stage.KNOWLEDGE] = Stage.KNOWLEDGE
     source_set_version: str
+    item_scope_ref: LinkedItemRef | None = Field(
+        default=None, description="Echo of the Triage item identity; None on single-case runs"
+    )
     matched_query_terms: tuple[str, ...] = ()
     passages: tuple[EvidencePassage, ...] = ()
     excluded_sources: tuple[ExcludedSource, ...] = ()

@@ -12,15 +12,21 @@ Each run also records the wall-clock duration of every lane agent call (PRD-v3
 §2d per-run latency). Durations depend on the machine, so they stay out of
 ``LaneRun.as_json()`` and out of committed evidence; the CLIs print a summary.
 
+Linked-item cases (one item of a multi-item case message, proposed S-1) live in
+``synthetic_data/item_cases`` so Manny's evaluation, which reads
+``synthetic_data/cases``, is unaffected.
+
 Usage (from the repository root)::
 
     python -m cdit_support_mao.lane_harness synthetic_data/cases
+    python -m cdit_support_mao.lane_harness synthetic_data/item_cases
     python -m cdit_support_mao.lane_harness synthetic_data/cases/case-01-golden-report-export.json --json
 """
 
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import math
 import statistics
@@ -32,7 +38,7 @@ from datetime import UTC, date, datetime
 from pathlib import Path
 from typing import Literal
 
-from pydantic import ValidationError
+from pydantic import Field, ValidationError
 
 from cdit_support_mao.agents.documentation import DocumentationAgent
 from cdit_support_mao.agents.knowledge import KnowledgeAgent, KnowledgeCorpus, load_corpus
@@ -57,9 +63,12 @@ from cdit_support_mao.contracts.handoffs import (
     DocumentationResult,
     EscalationHandoff,
     KnowledgeResult,
+    LinkedItemRef,
     RecordedAction,
     TriageHandoff,
+    TriageItemScope,
     TroubleshootingResult,
+    item_id_for,
 )
 
 STAND_IN_VERSION = "fixture-0.1"
@@ -72,6 +81,25 @@ class FactStandIn(StrictModel):
     verified: bool
 
 
+class ItemScopeStandIn(StrictModel):
+    """Linked-item stand-in: ``case_summary`` is one item of ``parent_message``.
+
+    The harness derives the parent digest, span end, and item ID; it does not
+    segment or classify (Manny-owned behaviour).
+    """
+
+    parent_message: str = Field(min_length=1, max_length=2000)
+    item_index: int = Field(strict=True, ge=1, le=8)
+    item_count: int = Field(strict=True, ge=1, le=8)
+    source_start: int = Field(strict=True, ge=0)
+    segmentation: Literal["candidate_boundary", "ambiguous_parent"] = "candidate_boundary"
+    depends_on: tuple[int, ...] = ()
+    category_basis: str | None = None
+    auditor_review: Literal["pending", "band_and_route_determined"] = "pending"
+    attention_on_item: bool = False
+    parent_attention_flagged: bool = False
+
+
 class TriageStandIn(StrictModel):
     status: AgentStatus = AgentStatus.COMPLETED
     case_summary: str
@@ -81,6 +109,7 @@ class TriageStandIn(StrictModel):
     urgency: Literal["low", "medium", "high", "unknown"]
     case_facts: tuple[FactStandIn, ...] = ()
     missing_facts: tuple[str, ...] = ()
+    item_scope: ItemScopeStandIn | None = None
 
 
 class EscalationStandIn(StrictModel):
@@ -165,6 +194,55 @@ def case_files(target: Path) -> list[Path]:
     return sorted(target.glob("*.json")) if target.is_dir() else [target]
 
 
+def build_item_scope(context: RunContext, stand_in: TriageStandIn) -> TriageItemScope | None:
+    """Build the proposed ``TriageItemScope`` for a linked-item stand-in (fixture only)."""
+    item = stand_in.item_scope
+    if item is None:
+        return None
+    end = item.source_start + len(stand_in.case_summary)
+    if item.parent_message[item.source_start : end] != stand_in.case_summary:
+        raise ValueError("item stand-in: case_summary is not the declared span of parent_message")
+    parent_source = SourceRef(
+        kind=SourceKind.CASE_FIELD,
+        source_id=context.case_id,
+        version=str(context.case_version),
+        locator="message",
+    )
+    parent_digest = hashlib.sha256(item.parent_message.encode("utf-8")).hexdigest()
+    identity = LinkedItemRef(
+        item_id=item_id_for(context, parent_digest, item.item_index, item.source_start, end),
+        item_index=item.item_index,
+        item_count=item.item_count,
+        parent_source=parent_source,
+        parent_digest=parent_digest,
+        source_start=item.source_start,
+        source_end=end,
+    )
+    inferred = bool(stand_in.category)
+    return TriageItemScope(
+        identity=identity,
+        segmentation=item.segmentation,
+        depends_on=item.depends_on,
+        item_status=(
+            "proposal_for_human_review" if stand_in.status is AgentStatus.COMPLETED else "abstained_needs_human"
+        ),
+        category_label="inference" if inferred else "unknown",
+        category_basis=item.category_basis if inferred else None,
+        category_sources=(parent_source,) if inferred else (),
+        auditor_review=item.auditor_review,
+        attention_ref=(
+            SourceRef(
+                kind=SourceKind.CONTRIBUTION,
+                source_id=stable_id("ATT", context.run_id, identity.item_id, STAND_IN_VERSION),
+                version=STAND_IN_VERSION,
+            )
+            if item.attention_on_item
+            else None
+        ),
+        parent_attention_flagged=item.parent_attention_flagged or item.attention_on_item,
+    )
+
+
 def _stand_in_checkpoint(checkpoint: str, status: AgentStatus) -> CheckpointOutcome:
     passed = status is AgentStatus.COMPLETED
     return CheckpointOutcome(
@@ -188,8 +266,11 @@ class LaneHarness:
             policy_version=case.policy_version,
         )
         stand_in = case.triage
+        item_scope = build_item_scope(context, stand_in)
+        # Item-scoped stand-ins get per-item IDs; single-case IDs keep their form.
+        item_part = (item_scope.identity.item_id,) if item_scope is not None else ()
         triage = TriageHandoff(
-            contribution_id=stable_id("TRI", context.run_id, STAND_IN_VERSION),
+            contribution_id=stable_id("TRI", context.run_id, STAND_IN_VERSION, *item_part),
             agent="triage-stand-in (fixture; not Manny's Triage agent)",
             agent_version=STAND_IN_VERSION,
             context=context,
@@ -217,6 +298,7 @@ class LaneHarness:
                 for fact in stand_in.case_facts
             ),
             missing_facts=stand_in.missing_facts,
+            item_scope=item_scope,
         )
         acknowledged = {triage.contribution_id}
         durations: dict[str, float] = {}
@@ -237,7 +319,7 @@ class LaneHarness:
 
         esc = case.escalation
         escalation = EscalationHandoff(
-            contribution_id=stable_id("ESC", context.run_id, STAND_IN_VERSION),
+            contribution_id=stable_id("ESC", context.run_id, STAND_IN_VERSION, *item_part),
             agent="escalation-stand-in (fixture; not Manny's Escalation agent)",
             agent_version=STAND_IN_VERSION,
             context=context,
@@ -343,6 +425,10 @@ def check_expectations(run: LaneRun) -> list[str]:
         missing = [code for code in wanted if code not in actual]
         if missing:
             problems.append(f"{name} missing reason codes {missing}; got {list(actual)}")
+
+    expected_echo = run.triage.item_scope.identity if run.triage.item_scope is not None else None
+    if run.knowledge.item_scope_ref != expected_echo:
+        problems.append("knowledge item_scope_ref does not echo the triage item identity")
 
     status("knowledge", run.knowledge.status, expected.knowledge_status)
     reasons("knowledge", run.knowledge.checkpoint.reason_codes, expected.knowledge_reasons)

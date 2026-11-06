@@ -17,10 +17,12 @@ from cdit_support_mao.contracts.common import (
     SourceRef,
     Stage,
     band_for,
+    canonical_digest,
     min_band,
     stable_id,
 )
 from cdit_support_mao.contracts.handoffs import (
+    TRIAGE_ITEM_SCOPE_VERSION,
     CaseFact,
     DocumentationResult,
     DraftNote,
@@ -31,6 +33,7 @@ from cdit_support_mao.contracts.handoffs import (
     InformationNeeded,
     InjectionFlag,
     KnowledgeResult,
+    LinkedItemRef,
     ManualFallback,
     NoteLine,
     NoteSection,
@@ -45,13 +48,16 @@ from cdit_support_mao.contracts.handoffs import (
     StopCondition,
     SuggestedStep,
     TriageHandoff,
+    TriageItemScope,
     TroubleshootingResult,
+    item_id_for,
 )
 
 __all__ = [
     "CONFIDENCE_CALIBRATED",
     "CONTRACT_VERSION",
     "PROVISIONAL_BAND_THRESHOLDS",
+    "TRIAGE_ITEM_SCOPE_VERSION",
     "AgentContribution",
     "AgentStatus",
     "CaseFact",
@@ -69,6 +75,7 @@ __all__ = [
     "InjectionFlag",
     "InputRef",
     "KnowledgeResult",
+    "LinkedItemRef",
     "ManualFallback",
     "NoteLine",
     "NoteSection",
@@ -88,8 +95,11 @@ __all__ = [
     "StopCondition",
     "SuggestedStep",
     "TriageHandoff",
+    "TriageItemScope",
     "TroubleshootingResult",
     "band_for",
+    "canonical_digest",
+    "item_id_for",
     "min_band",
     "stable_id",
 ]

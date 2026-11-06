@@ -1,0 +1,42 @@
+{
+  "case_file_version": "0.1",
+  "case_id": "SYN-CASE-0103",
+  "title": "Ambiguous segmentation forced to Knowledge: blocked, nothing retrieved",
+  "scenario_ref": "A2-ITEM-HANDOFF-RECEIVER-REVIEW R-05 (forced ambiguous parent)",
+  "as_of": "2026-11-03",
+  "triage": {
+    "status": "abstained",
+    "case_summary": "Login fails and payroll is wrong",
+    "category_confidence": "low",
+    "urgency": "unknown",
+    "item_scope": {
+      "parent_message": "Login fails and payroll is wrong",
+      "item_index": 1,
+      "item_count": 1,
+      "source_start": 0,
+      "segmentation": "ambiguous_parent",
+      "parent_attention_flagged": true
+    }
+  },
+  "escalation": {
+    "must_escalate": null,
+    "recommendation": "human_review",
+    "reason": "Stand-in: ambiguous segmentation goes to the Auditor."
+  },
+  "recorded_actions": [],
+  "expected": {
+    "knowledge_status": "blocked",
+    "knowledge_reasons": [
+      "upstream_blocked"
+    ],
+    "troubleshooting_status": "blocked",
+    "troubleshooting_reasons": [
+      "upstream_blocked"
+    ],
+    "max_steps": 0,
+    "documentation_status": "blocked",
+    "documentation_reasons": [
+      "upstream_blocked"
+    ]
+  }
+}

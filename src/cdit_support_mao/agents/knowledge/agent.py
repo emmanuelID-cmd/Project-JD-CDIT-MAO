@@ -5,6 +5,11 @@ abstains. It never synthesizes product guidance: passages are returned verbatim
 as untrusted evidence. Abstention triggers: no relevant source, weak evidence,
 only stale/unapproved sources, conflicting sources or versions, and
 instruction-like content in retrieved text.
+
+A Triage handoff may carry one linked item of a multi-item case message
+(``item_scope``). Knowledge then re-checks the item's eligibility, retrieves on
+the item text only, and echoes the item identity (``item_scope_ref``); it never
+reads or repeats the category, urgency, attention, or Auditor values.
 """
 
 from __future__ import annotations
@@ -12,7 +17,7 @@ from __future__ import annotations
 from collections.abc import Set
 from datetime import date, datetime
 
-from cdit_support_mao.agents._gates import unique, upstream_reasons, utc_now
+from cdit_support_mao.agents._gates import item_scope_reasons, unique, upstream_reasons, utc_now
 from cdit_support_mao.agents.knowledge.corpus import (
     KbArticle,
     KnowledgeCorpus,
@@ -47,7 +52,7 @@ from cdit_support_mao.contracts.handoffs import (
 )
 
 AGENT_NAME = "knowledge-agent"
-AGENT_VERSION = "0.1.0"
+AGENT_VERSION = "0.2.0"
 MAX_PASSAGES = 3
 MIN_MATCHED_TERMS = 2
 
@@ -101,6 +106,8 @@ class KnowledgeAgent:
             context.case_version,
             context.policy_version,
             triage.contribution_id,
+            # Item-scoped runs only, so single-case IDs keep their form (K-2).
+            *((triage.item_scope.identity.item_id,) if triage.item_scope is not None else ()),
             self._corpus.source_set_version,
             as_of.isoformat(),
             AGENT_VERSION,
@@ -114,9 +121,15 @@ class KnowledgeAgent:
             "input_refs": (triage.as_input_ref(),),
             "created_at": created_at,
             "source_set_version": self._corpus.source_set_version,
+            "item_scope_ref": triage.item_scope.identity if triage.item_scope is not None else None,
         }
 
-        gate = upstream_reasons(context, [triage], acknowledged, must_be_completed=[triage])
+        gate = unique(
+            [
+                *upstream_reasons(context, [triage], acknowledged, must_be_completed=[triage]),
+                *item_scope_reasons(context, triage),
+            ]
+        )
         if gate:
             return KnowledgeResult(
                 **base,
@@ -134,6 +147,8 @@ class KnowledgeAgent:
                 unknowns=("Approved guidance for this case is unknown.",),
             )
 
+        # The query is the (item) text only. Category, urgency, attention, Auditor
+        # state, and item metadata never filter or reorder retrieval (K-3).
         query = triage.case_summary
         scored = self._index.search(query)
         min_terms = min(MIN_MATCHED_TERMS, max(1, self._index.query_term_count(query)))

@@ -12,7 +12,10 @@ troubleshooting policy. It has no tools and performs no actions. It:
 - abstains when Knowledge abstained or when approved guidance contains a step
   outside Tier 1 authority (a guidance governance problem for humans);
 - separates steps reserved for authorized staff from Tier 1 suggestions;
-- lists stop conditions and information still needed, with provenance.
+- lists stop conditions and information still needed, with provenance;
+- for a linked item, requires the Knowledge result for the same item and holds
+  (BLOCKED, ``missing_dependency``) until the Auditor has determined the item's
+  urgency band and route (Manny, Q-A, 2026-11-05).
 
 Escalation signals are inputs for the Manny-owned Escalation agent; this agent
 does not make the escalation decision.
@@ -23,7 +26,14 @@ from __future__ import annotations
 from collections.abc import Set
 from datetime import datetime
 
-from cdit_support_mao.agents._gates import consumed, unique, upstream_reasons, utc_now
+from cdit_support_mao.agents._gates import (
+    awaiting_auditor,
+    consumed,
+    item_chain_reasons,
+    unique,
+    upstream_reasons,
+    utc_now,
+)
 from cdit_support_mao.agents.troubleshooting.policy import TroubleshootingPolicy
 from cdit_support_mao.contracts.common import (
     AgentStatus,
@@ -52,7 +62,7 @@ from cdit_support_mao.contracts.handoffs import (
 )
 
 AGENT_NAME = "troubleshooting-agent"
-AGENT_VERSION = "0.1.1"
+AGENT_VERSION = "0.2.0"
 
 
 def _step_ref(passage: EvidencePassage, step_id: str) -> SourceRef:
@@ -112,7 +122,16 @@ class TroubleshootingAgent:
         gate = list(upstream_reasons(context, [triage, knowledge], acknowledged, must_be_completed=[triage]))
         if not consumed(knowledge, triage):
             gate.append(ReasonCode.UPSTREAM_CHAIN_MISMATCH)
+        gate += item_chain_reasons(triage, knowledge)
+        held = awaiting_auditor(triage)
+        if held:
+            gate.append(ReasonCode.MISSING_DEPENDENCY)
         if gate:
+            unknowns = ["Supported Tier 1 steps for this case are unknown."]
+            if held:
+                unknowns.append(
+                    "Held: the Auditor has not yet determined this item's urgency band and route."
+                )
             return TroubleshootingResult(
                 **base,
                 status=AgentStatus.BLOCKED,
@@ -126,7 +145,7 @@ class TroubleshootingAgent:
                 ),
                 confidence=ConfidenceBand.LOW,
                 confidence_rationale="No troubleshooting was attempted.",
-                unknowns=("Supported Tier 1 steps for this case are unknown.",),
+                unknowns=tuple(unknowns),
             )
 
         summary = triage.case_summary
