@@ -15,7 +15,8 @@
     {
       "contribution_id": "TRI-CFA88256A7D129F5",
       "stage": "triage",
-      "contract_version": "0.1.0-proposed"
+      "contract_version": "0.1.0-proposed",
+      "content_digest": "6c267f2a30aa878d0f42ce05b9d8e27ae449516a6f48c159aa828fa51219deec"
     }
   ],
   "created_at": "2026-11-03T15:00:00Z",

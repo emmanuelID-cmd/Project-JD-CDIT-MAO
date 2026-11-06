@@ -35,6 +35,9 @@ CONFIDENCE_CALIBRATED = False
 #: Prototype data boundary: only synthetic case identifiers are accepted.
 SYNTHETIC_CASE_ID_PATTERN = r"^SYN-[A-Z0-9][A-Z0-9-]*$"
 
+#: Lowercase hex SHA-256, as produced by :func:`canonical_digest`.
+SHA256_HEX_PATTERN = r"^[0-9a-f]{64}$"
+
 
 class StrictModel(BaseModel):
     """Immutable model that rejects unexpected fields."""
@@ -191,11 +194,18 @@ class CheckpointOutcome(StrictModel):
 
 
 class InputRef(StrictModel):
-    """Records which upstream contribution (and contract version) was consumed."""
+    """Records which upstream contribution (and contract version) was consumed.
+
+    ``content_digest`` (proposed S-2, 2026-11-05) is the canonical SHA-256 of the
+    exact contribution consumed, so a receiver can later prove it used the same
+    content the coordinator acknowledged, not only the same ID. ``None`` is kept
+    for refs recorded before S-2; Shawn's agents require it on every chain check.
+    """
 
     contribution_id: str = Field(min_length=1, max_length=80)
     stage: Stage
     contract_version: str
+    content_digest: str | None = Field(default=None, pattern=SHA256_HEX_PATTERN)
 
 
 class AgentContribution(StrictModel):
@@ -230,12 +240,23 @@ class AgentContribution(StrictModel):
             raise ValueError("status 'completed' if and only if the checkpoint passed")
         return self
 
+    def content_digest(self) -> str:
+        """Canonical SHA-256 of this contribution's JSON form (sorted keys, compact)."""
+        return canonical_digest(self.model_dump(mode="json"))
+
     def as_input_ref(self) -> InputRef:
         return InputRef(
             contribution_id=self.contribution_id,
             stage=self.stage,
             contract_version=self.contract_version,
+            content_digest=self.content_digest(),
         )
+
+
+def canonical_digest(payload: object) -> str:
+    """SHA-256 hex of ``payload`` as canonical JSON: sorted keys, no spaces, UTF-8."""
+    text = json.dumps(payload, sort_keys=True, separators=(",", ":"), ensure_ascii=False)
+    return hashlib.sha256(text.encode("utf-8")).hexdigest()
 
 
 def stable_id(prefix: str, *parts: object) -> str:

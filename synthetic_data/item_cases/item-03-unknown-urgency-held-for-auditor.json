@@ -1,0 +1,43 @@
+{
+  "case_file_version": "0.1",
+  "case_id": "SYN-CASE-0102",
+  "title": "Linked item with Unknown urgency: Knowledge retrieves, later stages wait for the Auditor",
+  "scenario_ref": "A2-ITEM-HANDOFF-RECEIVER-REVIEW R-04 and R-21; Manny Q-A and Q-B answers (2026-11-05)",
+  "as_of": "2026-11-03",
+  "triage": {
+    "case_summary": "Site user cannot find where to export the site enrollment report.",
+    "product_area": "reports",
+    "category": "navigation_how_to",
+    "category_confidence": "medium",
+    "urgency": "unknown",
+    "item_scope": {
+      "parent_message": "Site user cannot find where to export the site enrollment report. Separately, the user forgot their password and the reset email never arrived.",
+      "item_index": 1,
+      "item_count": 2,
+      "source_start": 0,
+      "category_basis": "Stand-in: the item asks where a report export is.",
+      "auditor_review": "pending",
+      "attention_on_item": true
+    }
+  },
+  "escalation": {
+    "must_escalate": null,
+    "recommendation": "human_review",
+    "reason": "Stand-in: urgency is Unknown until the Auditor reviews it."
+  },
+  "recorded_actions": [],
+  "expected": {
+    "knowledge_status": "completed",
+    "top_doc_id": "KB-NAV-001",
+    "troubleshooting_status": "blocked",
+    "troubleshooting_reasons": [
+      "missing_dependency"
+    ],
+    "max_steps": 0,
+    "documentation_status": "blocked",
+    "documentation_reasons": [
+      "missing_dependency",
+      "upstream_blocked"
+    ]
+  }
+}

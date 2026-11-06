@@ -1,4 +1,23 @@
 # Handoffs prepared for push
+## 2026-11-06T00:15:00-05:00 — Shawn's Lane: linked-item handoff support (S-1, S-2, K-1 to K-7)
+
+Summary file: PROJECT-HANDOFF.md
+
+- Git author: xiaoenbi1987 (Shawn).
+- Branch: `shawn/knowledge-troubleshooting-docs`; intended target: `developer` by PR. Verified baseline: `3583508c5682a13a16bc74f133ad758a181133e9` (lane = `developer` after PR #8). Nothing committed or pushed yet.
+- Inputs: Manny's answers of 2026-11-05 to Q-A to Q-D of the A2 receiver review, and to Q-04.
+- Done:
+  - Shared contract drafts, awaiting Manny's review: S-1, `TriageItemScope` and `LinkedItemRef` on `TriageHandoff.item_scope`; S-2, `InputRef.content_digest`.
+  - Shawn agents `0.2.0`:
+    - Knowledge checks item eligibility, retrieves on the item text only, and echoes the item identity.
+    - Troubleshooting and Documentation join only the same item and hold until the Auditor sets the band and route (`missing_dependency`).
+    - Every chain check now compares content digests.
+  - 5 linked-item cases in `synthetic_data/item_cases/`. Manny's `synthetic_data/cases/` set is unchanged.
+  - Records: Q-04 accepted (charters plus schemas). Updated the charters, contract doc, receiver review §8, lane design, and Checklist status note.
+- Regression: all 12 lane cases and 111 calibration outcomes are unchanged. Contract examples changed only in versions, IDs, digests, and new `null` fields.
+- Validation: 567 tests passed on Python 3.13.17; lane harness 12 passed and item cases 5 passed; combined harness 12 of 12 PASS; calibration 0 critical errors.
+- Reviewer next step: Manny to review S-1 and S-2 and answer Q-E (how the Auditor's decision reaches later stages), then add the proposal document. S-3 to S-8 are Manny's.
+
 ## 2026-11-05T18:30:00-05:00 — Shawn's Lane: retrieval measurement (N-02) and agent charters (N-03)
 
 Summary file: PROJECT-HANDOFF.md

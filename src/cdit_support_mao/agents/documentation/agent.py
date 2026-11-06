@@ -9,6 +9,12 @@ ticket state, saves, or sends anything (``save_reviewed_result`` stays disabled)
 The draft is suppressed in favour of a manual fallback when a dependency is
 missing, an input is stale, unacknowledged, or blocked, or sensitive-looking
 data would appear in the note.
+
+For one linked item of a multi-item case message, the draft covers that item
+only: it states "Item n of m", shows the category as a Triage inference with its
+basis and sources, refers to an attention flag without repeating it, and never
+shows another item's text. It is held (``missing_dependency``) until the Auditor
+has determined the item's urgency band and route (Manny, Q-A, 2026-11-05).
 """
 
 from __future__ import annotations
@@ -16,7 +22,14 @@ from __future__ import annotations
 from collections.abc import Iterable, Set
 from datetime import datetime
 
-from cdit_support_mao.agents._gates import consumed, unique, upstream_reasons, utc_now
+from cdit_support_mao.agents._gates import (
+    awaiting_auditor,
+    consumed,
+    item_chain_reasons,
+    unique,
+    upstream_reasons,
+    utc_now,
+)
 from cdit_support_mao.agents.documentation.privacy import scan_for_sensitive_data
 from cdit_support_mao.contracts.common import (
     AgentContribution,
@@ -37,6 +50,7 @@ from cdit_support_mao.contracts.handoffs import (
     DraftNote,
     EscalationHandoff,
     KnowledgeResult,
+    LinkedItemRef,
     ManualFallback,
     NoteLine,
     NoteSection,
@@ -47,7 +61,7 @@ from cdit_support_mao.contracts.handoffs import (
 )
 
 AGENT_NAME = "documentation-agent"
-AGENT_VERSION = "0.1.0"
+AGENT_VERSION = "0.2.0"
 
 _RECOMMENDATION_TEXT = {
     "escalate_l2": "escalate to L2",
@@ -124,8 +138,13 @@ class DocumentationAgent:
             reasons.append(ReasonCode.UPSTREAM_CHAIN_MISMATCH)
         if troubleshooting and not consumed(troubleshooting, *(x for x in (triage, knowledge) if x)):
             reasons.append(ReasonCode.UPSTREAM_CHAIN_MISMATCH)
+        if triage and knowledge:
+            reasons += item_chain_reasons(triage, knowledge)
+        held = triage is not None and awaiting_auditor(triage)
+        if held:
+            reasons.append(ReasonCode.MISSING_DEPENDENCY)
         if reasons:
-            return self._fallback(base, unique(reasons))
+            return self._fallback(base, unique(reasons), held=held)
 
         assert triage and knowledge and troubleshooting and escalation  # narrowed by the gate above
         sections = self._compose(triage, knowledge, troubleshooting, escalation, actions)
@@ -143,7 +162,13 @@ class DocumentationAgent:
         draft = DraftNote(
             draft_id=draft_id,
             sections=sections,
-            rendered_text=self._render(context, draft_id, created_at, sections),
+            rendered_text=self._render(
+                context,
+                draft_id,
+                created_at,
+                sections,
+                triage.item_scope.identity if triage.item_scope is not None else None,
+            ),
         )
         if scan_for_sensitive_data(draft.rendered_text):  # A6 output check on the final text
             return self._fallback(
@@ -211,15 +236,7 @@ class DocumentationAgent:
         sections.append(
             NoteSection(
                 heading="Triage proposal (pending staff confirmation)",
-                lines=(
-                    _inference(
-                        f"Proposed category: {triage.category or 'undetermined'} "
-                        f"(confidence {triage.category_confidence}).",
-                        triage_basis,
-                        triage_ref,
-                    ),
-                    _inference(f"Proposed urgency: {triage.urgency}.", triage_basis, triage_ref),
-                ),
+                lines=self._triage_lines(triage, triage_ref, triage_basis),
             )
         )
 
@@ -343,13 +360,85 @@ class DocumentationAgent:
         return tuple(sections)
 
     @staticmethod
+    def _triage_lines(triage: TriageHandoff, triage_ref: SourceRef, triage_basis: str) -> tuple[NoteLine, ...]:
+        scope = triage.item_scope
+        category_text = (
+            f"Proposed category: {triage.category or 'undetermined'} (confidence {triage.category_confidence})."
+        )
+        if scope is None:
+            return (
+                _inference(category_text, triage_basis, triage_ref),
+                _inference(f"Proposed urgency: {triage.urgency}.", triage_basis, triage_ref),
+            )
+        ident = scope.identity
+        lines = [
+            _inference(
+                f"Item {ident.item_index} of {ident.item_count} (linked to parent case "
+                f"{ident.parent_source.source_id}; linked item {ident.item_id}). "
+                "This note covers this item only.",
+                f"Triage segmentation proposal {triage.contribution_id}; not confirmed by staff.",
+                triage_ref,
+                ident.parent_source,
+            )
+        ]
+        if scope.category_label == "inference" and scope.category_basis:
+            lines.append(
+                _inference(
+                    category_text,
+                    f"{scope.category_basis.rstrip('.')}; {triage_basis}",
+                    triage_ref,
+                    *scope.category_sources,
+                )
+            )
+        else:
+            lines.append(_unknown("Category: unknown; the Auditor reviews this item.", triage_ref))
+        if scope.auditor_review == "band_and_route_determined":
+            lines.append(
+                _inference(
+                    f"Urgency band: {triage.urgency} (determined by the Auditor; recorded in the Triage handoff).",
+                    f"Auditor determination recorded in Triage handoff {triage.contribution_id}; "
+                    "staff confirm it in the case record.",
+                    triage_ref,
+                )
+            )
+        else:
+            lines.append(_inference(f"Proposed urgency: {triage.urgency}.", triage_basis, triage_ref))
+        if scope.attention_ref is not None:
+            lines.append(
+                _inference(
+                    "Attention flag present on this item; see the Triage attention record. "
+                    "Only a human may clear it.",
+                    f"Triage attention flag {scope.attention_ref.cite()} (by reference).",
+                    scope.attention_ref,
+                )
+            )
+        elif scope.parent_attention_flagged:
+            lines.append(
+                _inference(
+                    "Another item of the parent case has an attention flag; review the parent case.",
+                    f"Parent-level attention summary in Triage handoff {triage.contribution_id}.",
+                    triage_ref,
+                )
+            )
+        return tuple(lines)
+
+    @staticmethod
     def _render(
-        context: RunContext, draft_id: str, created_at: datetime, sections: tuple[NoteSection, ...]
+        context: RunContext,
+        draft_id: str,
+        created_at: datetime,
+        sections: tuple[NoteSection, ...],
+        item: LinkedItemRef | None = None,
     ) -> str:
+        header = (
+            f"Case {context.case_id} (version {context.case_version}) | Run {context.run_id} | "
+            f"Policy {context.policy_version} | Draft {draft_id}"
+        )
+        if item is not None:
+            header += f" | Item {item.item_index} of {item.item_count} ({item.item_id})"
         out = [
             DraftNote.model_fields["banner"].default,
-            f"Case {context.case_id} (version {context.case_version}) | Run {context.run_id} | "
-            f"Policy {context.policy_version} | Draft {draft_id}",
+            header,
             f"Prepared {created_at.isoformat()} by {AGENT_NAME} {AGENT_VERSION}",
         ]
         for section in sections:
@@ -369,6 +458,8 @@ class DocumentationAgent:
         base: dict,
         reasons: tuple[ReasonCode, ...],
         findings: tuple[PrivacyFinding, ...] = (),
+        *,
+        held: bool = False,
     ) -> DocumentationResult:
         instructions = [
             "Write the case note manually in the approved system from verified case details.",
@@ -380,6 +471,10 @@ class DocumentationAgent:
             )
         if ReasonCode.MISSING_DEPENDENCY in reasons:
             instructions.append("Re-run documentation after every required upstream stage has completed.")
+        if held:
+            instructions.append(
+                "This linked item is held until the Auditor determines its urgency band and route."
+            )
         return DocumentationResult(
             **base,
             status=AgentStatus.BLOCKED,
