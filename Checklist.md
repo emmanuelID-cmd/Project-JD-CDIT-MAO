@@ -2,10 +2,11 @@
 
 Use this checklist as the live project status record. Check an item only when its evidence is present and reviewed. Planning completion is not implementation completion; an unchecked item blocks a completion claim unless the project lead explicitly marks it out of scope or deferred.
 
-**Current phase:** Manny Phase 4 — Validation and Evaluation complete; entering completion pipeline
+**Current phase:** Manny Phase 2 — Triage in progress; Phase 2 exit gates remain open.
 **Planning deadline:** November 11, 2026
-**Current implementation status:** All six agents (Coordinator, Triage, Knowledge, Troubleshooting, Escalation, Documentation) implemented and verified. Full test suite passes 518 tests on Python 3.13; CombinedWorkflowHarness passes 12/12 cases with 0 safety gate violations; Phase 4 Manny evaluation runner passes 100%.
-**Completion status:** Complete pending final audit and release authorization
+**Current implementation status:** The Python 3.13.15 full synthetic-only suite passes 565 tests (2026-11-06). Phase 2 has a fake-client-tested Coordinator-to-Triage harness with a pinned synthetic taxonomy source, fixture-only attention signal, local Auditor-review reasons for Unknown fields, fail-closed fallback for invalid linked-item binding, and future-call prompt/request digests; the six-agent CombinedWorkflowHarness/app path, linked-item Shared acceptance, the prior smoke call's request-body evidence, and semantic-label gates remain open. Phase 3 routes Unknown urgency to human Auditor review, preserves attention evidence only after live A1 registry validation, cites the verified Under Investigation source, and performs no autonomous status change or third-party contact; integrated acceptance remains pending. Phase 4 is preliminary fixture evidence only: 12 downstream cases use a stand-in Triage handoff, no approved labels were scored, and acceptance is not ready. The Auditor interface/auth flow remains deferred.
+**Antigravity provenance:** The project lead confirms Antigravity only merged PR #6; all other completion/work claims in its handoff are false. Existing repository artifacts are tracked separately and are not attributed to Antigravity.
+**Completion status:** In progress; do not claim project completion or begin release workflow.
 
 ## Shared project baseline
 
@@ -40,15 +41,23 @@ Use this checklist as the live project status record. Check an item only when it
 
 - [x] Confirm owner availability and accept the Coordinator, Triage, and Escalation assignment (Manny’s approved lane sequence).
 - [x] Manny Phase 1: implement and review the process-local synthetic A0/A1 fixture boundary and versioned handoff; Shared receiver review remains an integration gate.
-- [x] Phase 2 local Triage input boundary, conservative linked-item segmentation, unknown/Auditor proposals, and source-span checks are implemented; human dispatch and the UI remain deferred to database/auth setup.
+- [x] Phase 2 local Triage input boundary, conservative linked-item segmentation, unknown/Auditor proposals, and source-span checks are implemented; these components do not constitute Phase 2 exit. Human dispatch and UI remain deferred to database/auth setup.
 - [x] Add exact 80-row development-example references to linked items as unverified IDs; the match does not classify category or urgency, and ambiguous segmentation receives no reference. Focused checks: 30 passed; full synthetic-only suite after current Phase 2 changes: 463 passed.
-- [x] Select and document Anthropic Claude Sonnet 5.5 (`claude-sonnet-5-5`) for synthetic Triage; `.env.example` contains only the model setting and blank key variable. No credential is configured and no billable API call has been made.
+- [x] Select and document Anthropic Claude Sonnet 5.5 (`claude-sonnet-5-5`) for synthetic Triage. The local ignored `.env` was configured by the user, and one explicitly authorized synthetic API smoke call is recorded; no key value is stored in this checklist.
 - [x] Add a provider-free semantic output validator for category inference, exact source quotes, and forced Unknown urgency/destination; no model call or shared-contract change. Full synthetic-only suite: 463 passed.
-- [x] Add a synthetic-only Anthropic client adapter boundary with per-run billable authorization, immediate handoff preflight, retry disabled, provisional 60-second timeout, injection-as-data handling, and strict output validation; prepare minimized item requests and block ambiguous segmentation before provider use. Pin/install Anthropic SDK 2.5.0 and python-dotenv 1.2.4; create ignored `.env` with blank key. Full synthetic-only suite: 478 passed. No live API call.
+- [x] Add a synthetic-only Anthropic client adapter boundary with per-run billable authorization, immediate handoff preflight, retry disabled, provisional 60-second timeout, injection-as-data handling, and strict output validation; prepare minimized item requests and block ambiguous segmentation before provider use. Pin/install Anthropic SDK 2.5.0 and python-dotenv 1.2.4; the ignored `.env` is local-only. One synthetic API smoke call is recorded; see its trace report for limits.
 - [x] Decide the model alias/snapshot and regression policy with Shared Lane before model-backed evaluation (D-20); SDK 2.5.0 and dotenv 1.2.4 are pinned.
 - [x] Define and implement Coordinator behavior, tools, schemas, internal validation, stop conditions, retries, and recovery from the current PRD.
-- [x] Define and implement Triage behavior, policy-grounded outputs, claim-level evidence/confidence, unknown handling, and failure behavior.
-- [x] Wire the adapter into the application, resolve model-alias regression policy, review the provisional timeout against measured latency, and validate model-backed semantic proposals. One synthetic call was completed; additional live calls wait for evaluation runs.
+- [ ] Complete implementation of the already-approved Triage behavior: classify separable requests independently, preserve exact source spans, keep categories as inference, route Unknown/ambiguous items to the Auditor, and attach a reasoned attention flag when plausible urgency warrants it. The runtime now loads the category-only vocabulary from an exact SHA-256-pinned synthetic source, validates the taxonomy at the call boundary, cites the taxonomy's own digest version, joins each proposal to its exact item quote, and excludes example text/bands/conditions from model input. It can attach an optional fixture-only attention signal with source offsets and a mandatory human-context note; this is not a live risk detector or operational urgency policy. Remaining: application/harness wiring, accepted Shared item contract, policy-backed attention behavior, smoke-trace provenance, and approved evaluation labels. Operational urgency/destination remain Unknown until policy is approved.
+- [x] Add `run_triage_runtime` as a callable boundary over acknowledged Coordinator input; fake-client tests verify source-bound candidates, Unknown urgency/destination, mandatory human review, and no downstream/dispatch. The function does not construct a client or load credentials.
+- [x] Build `MannyA0A2Harness` to run synthetic Coordinator intake through acknowledged Triage. It accepts only an injected client, leaves billable-call authorization false by default, stops before Knowledge/Shared, and records metadata-only handoff events. Focused tests verify no-call fallback and a fake-client A2 proposal.
+- [x] Add `SYN-MANNY-TRIAGE-0001`, a user-approved Unknown-severity/possible-major-impact contract case. The A0–A2 fake-client run preserves Unknown, human review, source-bound attention, and no dispatch. It is not a gold label or model-accuracy score.
+- [x] Attach the optional source-bound synthetic attention signal to Triage runtime results. It carries exact message offsets and a human-context note; a match does not verify an incident or urgency, and no match remains not assessed. Validate source/span/context and recheck the handoff before returning; stale snapshots fall back without a signal. Focused boundary tests cover match/no-match, tampering, and cancellation.
+- [x] Align runtime documentation and tests with both stale-handoff windows: stale before candidate creation raises; a stale state detected during semantic preflight returns human review without a provider call. The runtime uses the existing synthetic category vocabulary with source/version provenance; the 80 case texts, bands, and conditions are not model labels.
+- [x] Fail closed to `needs_human_review` when a provider result passes its schema but fails Manny's linked-item binding validation; preserve the unbound candidate and suppress the semantic result. Focused fake-client regression covered; no provider call or Shared contract change.
+- [x] Future synthetic Triage call results carry a stable prompt ID and SHA-256 hashes for the source prompt and exact serialized request body; do not retain raw prompt/request or key in result metadata. Fake-client tests verify the recorded digest equals the exact body sent. This cannot retroactively recover the prior smoke call's missing body hash.
+- [x] Add a retrospective smoke-trace addendum reconciling the fixture alias from exact text equality and recording the source-backed system-prompt hash; the historical request body/hash was not captured and remains unresolved.
+- [ ] Wire the local A0–A2 harness into the six-agent CombinedWorkflowHarness/app and validate an accepted linked-item handoff plus downstream behavior; this remains open pending the shared receiver contract. D-20 is resolved. One synthetic smoke call is recorded, but semantic correctness is unverified and its provenance/label gates remain open.
 - [x] Define and implement Escalation behavior, must-escalate checks, evidence packet, uncertainty handling, and human routing.
 - [x] Validate each owned agent independently against its own prompt, tools, permissions, and failure gates.
 - [x] Publish versioned input/output contracts and handoff examples for the connection points.
@@ -58,12 +67,34 @@ Use this checklist as the live project status record. Check an item only when it
 
 - [x] Run one explicitly authorized synthetic Claude adapter smoke trace; record usage, latency, output, and cost.
 - [x] Record independent Reviewer A/B reconciliation and scoped SECURITY review.
-- [x] Resolve trace provenance gaps, obtain Manny's semantic label, and run the app-wired six-agent integration/security cases.
-- [x] At project completion, run 100 sequential synthetic-only traces; retain pass and failure evidence and stay within the available $40 budget.
-- [x] Compare the outgoing Manny work with origin/developer using git merge-tree; PR preflight found content conflicts in Checklist.md and PROJECT-HANDOFF.md.
-- [x] Open PR #6 to developer; GitHub reports CONFLICTING / DIRTY and no checks reported.
-- [x] Reconcile those shared-document conflicts, then review PR checks before integration.
-- [x] After an authorized merge, fast-forward only clean branches whose ancestry proves it safe.
+- [ ] Resolve smoke-trace provenance gaps: bind SYN-CASE-01 to SYN-TRACE-001, record the exact active prompt and minimized request evidence, and link the per-run authorization record.
+
+- [ ] Obtain Manny's approved semantic label for the smoke fixture; until then, its classification correctness remains unverified.
+- [x] Draft the Manny-owned connection proposal for Shared Lane review in [TRIAGE-LINKED-ITEM-HANDOFF-PROPOSAL.md](docs/lanes/manny/TRIAGE-LINKED-ITEM-HANDOFF-PROPOSAL.md); this does not change or accept the shared contract.
+- [ ] Shawn's Knowledge agent is the receiving agent for the A2 handoff; Shared Lane reviews the connector/schema only. Validate the linked-item handoff with Shared Lane after the proposal review. The existing CombinedWorkflowHarness begins with a fixture TriageHandoff and does not exercise Coordinator-to-semantic-Triage or item-level handoffs. Do not change Shawn-owned agent behavior.
+- [ ] Run and retain the app-wired Coordinator-to-Triage plus downstream integration/security cases after the shared handoff shape is accepted; the one-call Triage smoke did not exercise this workflow.
+- [ ] At project completion, run 100 sequential synthetic-only traces; retain pass and failure evidence and stay within the available $40 budget.
+- [x] PR #6 was merged into `developer` (merge commit `8499f85`). The merge itself is the only Antigravity action confirmed by the project lead; do not treat the merge as evidence that Antigravity performed or validated the implementation work described in its handoff.
+- [ ] Verify PR #6 checks/review and any claimed conflict-resolution work from source records; the earlier “CONFLICTING / DIRTY” note is historical and is not current status.
+- [ ] Fast-forward any remaining non-main branches only after checking ancestry, cleanliness, and the current remote state.
+
+### Manny Phase 3 — Escalation status
+
+- [x] EscalationAgent implementation and focused tests exist. Unknown urgency routes to human Auditor review without assigning a band; attention evidence is preserved only after live A1 registry validation, with pattern ID/span provenance; a verified current Under Investigation fact remains human-managed, with no autonomous status change or third-party contact and P1 precedence preserved. Focused suite: 29 passed; full Python 3.13.15 suite: 565 passed. Integrated Phase 3 acceptance remains open.
+- [x] Bind A5 recorded-action evidence to the current synthetic case/version before it can be labeled verified; preserve source references on unresolved questions. This does not establish production authentication or replace Shared review.
+- [ ] Phase 3 acceptance: connect and validate the actual A2-to-A5 path against the accepted Phase 2/shared handoff, including uncertainty and failure behavior. Phase 3 is not marked complete while this dependency remains open.
+
+### Manny Phase 4 — Evaluation status
+
+- [x] Synthetic evaluation runner and generated report/JSON artifacts exist.
+- [x] Preliminary runner evidence exists for 9 Coordinator checks, 3 benchmark fixtures, 4 Escalation rules, and 12 downstream fixture cases. The runner now compares every downstream result with its case file expected output; 12/12 fixture assertions match. These are engineering-fixture checks, not approved gold labels. The CLI regression asserts exit code 2 and `not_scored`/not-ready status when only preliminary fixtures pass. Focused evaluation and case-harness tests: 22 passed; the full Python suite: 565 passed. No evaluation labels have been scored.
+- [ ] Phase 4 acceptance: the 12-case run is not the PRD target of at least 100 labeled synthetic cases; Manny label approval is pending; and the CombinedWorkflowHarness uses a stand-in TriageHandoff rather than Coordinator-to-semantic-Triage. Do not describe the six-agent workflow or evaluation gate as complete.
+
+**Snapshot comparison:** commit `3138388` (2026-11-05 15:15) recorded Phase 2 active and Phase 3/4 outstanding. Commit `9a2d3f4` later added Escalation code and the fixture harness; commit `37c01c8` added the evaluation runner/report. Those artifacts are retained; their presence does not by itself satisfy phase acceptance.
+
+### Deferred interface scope
+
+- [x] The Auditor UI, authenticated reviewer workflow, and live human-dispatch interface do not exist and remain deferred until database/authentication work. They are not part of the current phase-status correction.
 
 ## Shawn lane — Knowledge, Troubleshooting, Documentation
 
@@ -75,36 +106,38 @@ Use this checklist as the live project status record. Check an item only when it
 - [x] Documentation implementation files are present in merged PR #2 (`src/cdit_support_mao/agents/documentation/`); acceptance remains pending.
 - [x] Versioned `0.1.0-proposed` contracts and synthetic handoff examples are published in `docs/contracts/`; Shared Lane acceptance remains pending.
 - [x] Project lead authorizes this agent implementation phase beyond the local scaffold.
-- [x] Review and accept each agent against PRD A3/A4/A6 and the approved shared contract.
+- [ ] Review and accept each agent against PRD A3/A4/A6 and the approved shared contract. The lane review record still marks acceptance pending.
 - [x] Validate each agent independently on Python 3.13 against prompts, tools, permissions, evidence, and failure gates.
 - [x] Fix agent-internal findings in Shawn's lane; do not modify Manny-owned agent functionality.
 
 ## Shared connection and integration work
 
 - [x] Agree blackboard fields, identifiers, versioning, provenance, confidence, uncertainty, and state lifecycle.
-- [x] Connect Coordinator → Triage → Knowledge and the approved parallel Escalation check.
-- [x] Connect Knowledge → Troubleshooting → Escalation/Documentation and Documentation → Coordinator/human review.
-- [x] Verify connectors preserve case/run/policy/source versions, evidence labels, timestamps, status, and uncertainty without mutation.
-- [x] Test direct pipeline, permitted parallel joins, retries with new input versions, missing handoffs, stale results, conflicts, and safe stop/manual fallback.
+- [ ] Connect Coordinator → semantic Triage → Knowledge and the approved parallel Escalation check after runtime wiring and linked-item contract acceptance. The current CombinedWorkflowHarness begins with a stand-in Triage handoff.
+- [x] Exercise Knowledge → Troubleshooting → Escalation/Documentation in the current downstream fixture harness.
+- [ ] Connect Documentation → Coordinator/human review; the harness produces a draft but has no Coordinator receiver or reviewer interface.
+- [x] Verify the current single-case fixture connectors preserve case/run/policy/source versions, evidence labels, timestamps, status, and uncertainty without mutation. This does not test linked-item scope.
+- [ ] Verify linked-item connectors preserve parent/item IDs, source spans, and per-item evidence/status without mutation after Shared accepts the proposal.
+- [x] Test direct pipeline, permitted parallel joins, retries with new input versions, missing handoffs, stale results, conflicts, and safe stop/manual fallback within the downstream stand-in harness; this does not validate Coordinator-to-semantic-Triage or linked-item integration.
 - [x] Verify cross-lane connectors only; agent prompts, tools, decision logic, and behavior remain with their owners.
-- [x] Define the human-review contract and verify escalation/notification routing against approved policy.
+- [x] Represent mandatory human review and proposed escalation in the handoff contracts. This is contract/output evidence only; no reviewer UI or notification delivery exists.
 - [x] Record integration defects and return agent-internal fixes to the owning lane; no cross-lane functionality edits.
 
 ## Pending decisions / unassigned
 
 - [x] Decide whether to add the optional second-reviewer agent; if approved, assign an owner before work begins (retained as unapproved optional per AGENTS.md).
 - [x] Confirm whether authenticated client-to-developer platform issue reporting is in project scope; keep disabled/optional until scope is confirmed and all submitters are authenticated (D-17 deferred).
-- [x] After initial PRD-v2 finalization, define urgency bands, case groupings, SLA thresholds, and overrides; record them in a reviewed PRD amendment.
+- [ ] Operational urgency bands, routing groupings, thresholds, SLA clocks, and overrides remain open under D-01. The approved P1/P2/P3 elapsed-time values are non-guaranteed follow-up benchmarks, not routing policy or SLA guarantees.
 - [x] Resolve future-use items separately before expanding beyond the synthetic read-only prototype: write authority/state transitions, production data and integrations, and applicable storage, retention, and audit controls (D-11, D-12, D-18 recorded in DEFERRED-DECISIONS.md).
-- [x] Confirm CDIT data/source, security, privacy, hosting, model-provider, and production integration approvals before any production or sensitive-data work.
+- [x] Record CDIT data/source, security, privacy, hosting, model-provider, and production integration approvals as prerequisites before any production or sensitive-data work; no such approval is assumed for this synthetic prototype.
 - [x] Assign any new agent or workstream explicitly; unassigned work stays pending or is assigned to the user by explicit direction, never silently shared.
 
 ## Release / project completion gate
 
-- [x] All P0 requirements and safety constraints are implemented and evidenced, or explicitly deferred by the project lead.
-- [x] Agent-level confidence, hallucination, prompt-injection, permission, failure-state, and recovery evaluations pass their approved gates.
-- [x] End-to-end handoffs, blackboard consistency, parallel joins, timestamping, and human escalation are verified.
-- [x] Documentation, known limitations, open decisions, and lane ownership are current.
+- [ ] All P0 requirements and safety constraints are implemented and evidenced, or explicitly deferred by the project lead. Phase 2 integration and evaluation gates remain open.
+- [ ] Agent-level confidence, hallucination, prompt-injection, permission, failure-state, and recovery evaluations pass their approved gates. Current unit tests pass; the approved semantic label and integrated workflow evidence are still missing.
+- [ ] End-to-end handoffs, blackboard consistency, parallel joins, timestamping, and human escalation are verified. Coordinator-to-semantic-Triage and linked-item downstream integration have not been exercised.
+- [ ] Documentation, known limitations, open decisions, and lane ownership are current and reconciled before project closeout.
 - [ ] Project lead explicitly confirms the project is complete or directs a merge to `main`.
 - [ ] Only after that direction, complete the authorized merge/release workflow. Never infer permission from checklist progress alone.
 

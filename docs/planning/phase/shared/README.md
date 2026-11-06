@@ -1,6 +1,6 @@
 # Shared Phase Plan — Contracts, Connections, Combined Harness
 
-**Status:** Completed and verified. Shared Lane contracts, connectors, combined harness, and evaluation integration verified across all 12 synthetic cases.
+**Status:** In progress. The downstream CombinedWorkflowHarness and single-case connector fixtures exist, but the harness starts from a stand-in TriageHandoff. Actual Coordinator-to-semantic-Triage, accepted linked-item receiver, and full A0–A6 evaluation gates remain open. Shared Lane owns agreed interfaces, state contracts, connectors, and end-to-end test infrastructure, not agent internals.
 
 - [Phase 0 — PRD v2 and evaluation baseline](phase0/PLAN.md)
 - [Phase 1 — Shared-state and connector agreement](phase1/PLAN.md)

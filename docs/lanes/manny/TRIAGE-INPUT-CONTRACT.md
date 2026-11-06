@@ -1,18 +1,18 @@
 # Triage input contract — Manny Phase 2
 
-**Status:** Input boundary in progress. The project lead approved multi-request analysis and a human Auditor for unresolved items; category and urgency behavior are not implemented, and D-01 operational thresholds remain open. This document is not a completed Phase 2 or an accepted Shared Lane integration.
+**Status:** Local input and semantic-proposal components are implemented, but Phase 2 is incomplete. One authorized synthetic Claude adapter smoke call is recorded; its semantic label and actual request-body evidence remain unresolved. Future synthetic model results carry a stable prompt ID and prompt/request SHA-256 digests without the raw request body. `MannyA0A2Harness` calls the semantic runtime with a fake-compatible injected client, but the FastAPI app and six-agent CombinedWorkflowHarness do not call this boundary. The linked-item shared handoff remains a proposal pending Shared review. This document is not a completed Phase 2 or an accepted Shared Lane integration.
 
 ## Purpose and source
 
 Triage consumes a Coordinator handoff only after the receiver acknowledges it. `read_acknowledged_input` asks the process-local registry to recheck the receiver capability, active synthetic session, case scope/version, policy generation, handoff version, and timeout before returning a minimized packet. The packet holds the run context, trace/handoff identifiers, policy generation, case-message source reference, and reported text. It contains no session token or session reference.
 
-The reported text is untrusted case data with claim status `unknown`; its presence in a fixture does not verify that a real-world statement is true. It is not a system instruction. A packet is a snapshot: future Triage execution must revalidate the live handoff immediately before use and prevent a stale/cancelled result from being accepted. Claude Sonnet 5.5 is selected for future synthetic semantic Triage, but no model call, prompt runtime, credential, or external tool is configured by this input contract.
+Claude Sonnet 5.5 is selected for synthetic semantic Triage. One authorized adapter-level synthetic call is recorded in the trace bundle; the draft prompt file was not loaded for that call, and the semantic pipeline is not wired into the application/runtime. This input contract itself does not call a provider or expose tools.
 
 ## Output and policy constraints
 
-The existing `TriageHandoff` in `contracts/handoffs.py` is the working `0.1.0-proposed` integration shape approved for Manny’s baseline; its shared schema has not been changed. `validate_triage_structure` checks schema, A2 and case/run context only. Even a structurally valid output remains ungrounded, requires human review, and cannot be handed downstream on that result alone. Triage must attach source references and label verified claims, inferences, and unknowns truthfully. Confidence is provisional and never grants permission or proves a claim. Unsupported classification, missing or conflicting evidence, and uncertain severity must not be invented or silently down-triaged. Human review remains mandatory.
+The existing TriageHandoff in contracts/handoffs.py is the working 0.1.0-proposed single-item integration shape approved for the Manny baseline; its shared schema has not been changed. The linked-item extension is separately proposed in TRIAGE-LINKED-ITEM-HANDOFF-PROPOSAL.md and awaits Shared review.
 
-Clearly separable requests may be represented as linked items; unsupported items go to an authorized human Auditor while supported independent items remain reviewable. The 80-row `CASE-SCENARIOS.md` catalog is a candidate synthetic taxonomy, not approved CDIT routing policy. Exact urgency thresholds, SLA clocks and overrides remain open under D-01. This input-only step introduces no classification rule, SLA claim, ticket write, notification, or customer response.
+Clearly separable requests may be represented as linked items; unsupported items go to an authorized human Auditor while supported independent items remain reviewable. The 80-row CASE-SCENARIOS.md catalog is a candidate synthetic taxonomy, not approved CDIT routing policy. Suggested, non-guaranteed P1/P2/P3 follow-up benchmarks are recorded separately; operational urgency, SLA clocks, routing thresholds and overrides remain open under D-01. This input-only step introduces no ticket write, notification, or customer response.
 
 ## Engineering checks and handoff
 
@@ -26,7 +26,7 @@ Clearly separable requests may be represented as linked items; unsupported items
 
 `SyntheticFixtureExampleCatalog` compares opaque, trusted-fixture fact codes against versioned fixture examples and returns inference-only candidates with matched, missing, different and unassessed facts. Its review markers are synthetic test metadata, not proof of an actual human review, approval, sanitization or policy; it does not currently consume Auditor decisions or case text. Instance-local sealing does not prove global catalog-version uniqueness. A future integration requires an authorized review process, a trusted version/digest registry and fresh access checks.
 
-No reviewed-example persistence, classification model, automatic learning, database, urgency rule, customer communication or ticket action is implemented. Shared Lane must review any cross-agent contract or receiver behavior.
+No reviewed-example persistence, automated learning, database, operational urgency/routing rule, customer communication or ticket action is implemented. The synthetic semantic helper exists and one provider smoke call was made, but semantic correctness is not established. The provider-free benchmark fixture is not urgency classification. Shared Lane must review any cross-agent contract or receiver behavior.
 
 ## Bounded Phase 2 fixture flow
 
