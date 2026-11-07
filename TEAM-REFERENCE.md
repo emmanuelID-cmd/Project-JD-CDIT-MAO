@@ -1,4 +1,22 @@
 # Handoffs prepared for push
+## 2026-11-06T19:20:25-05:00 — Manny lane publication: Triage, Escalation, evaluation checks, and linked-item integration
+
+Summary file: PROJECT-HANDOFF.md
+
+- Git authors represented: Emmanuel De Jesus <emmanuel.dejesus@pursuit.org> and Shawn Bi (verified from the outgoing Git history).
+- Repository/branch: `emmanuelID-cmd/Project-JD-CDIT-MAO`, `manny/coordinator-triage-escalation`; intended PR target: `developer`.
+- Verified remote baseline: `6bdad272cf0cb882ba0c8f0d09996f0d936a95f9`. Reviewed endpoint before this handoff: `4c065427ad09017354f3fbdad7e93fdf376c4129`. Before this handoff commit, the local branch has 11 commits beyond remote Manny and includes current `developer` (`1085d201cd18576daf4de7ce1d0afa1ce8e0aee1`).
+- Checklist:
+  - [x] Add Manny semantic Triage runtime/harness, deterministic Escalation A5, and evaluation fixture-output/not-scored checks.
+  - [x] Carry Shawn PR #9 receiver changes (S-1/S-2 and item-scope handling) after their merge into `developer`.
+  - [x] Reconcile `Checklist.md` and `PROJECT-HANDOFF.md` to distinguish delivered code/evidence from phase acceptance.
+  - [ ] Complete final integrated runtime acceptance and score the 100 labeled evaluation cases after label approval.
+  - [ ] Implement the deferred separate Auditor decision record.
+  - [ ] Complete the 100-trace project closeout.
+- Phase completion remains open in `Checklist.md` and `PROJECT-HANDOFF.md`.
+- Validation in the recorded work: handoff reports 565 full-suite tests after integration; Shawn PR #9 reports 567 tests plus 12 lane cases, 5 item cases, combined harness 12/12, and unchanged calibration outcomes. No tests were rerun while preparing this push. `git diff --check` is run for the handoff and review metadata before publication.
+- Untracked `PRD Template.md` copies are identical and intentionally excluded from the outgoing commits.
+
 ## 2026-11-06T00:15:00-05:00 — Shawn's Lane: linked-item handoff support (S-1, S-2, K-1 to K-7)
 
 Summary file: PROJECT-HANDOFF.md
