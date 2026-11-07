@@ -1,6 +1,7 @@
 # Knowledge receiver review: item-scoped Triage (A2) handoff
 
 **Status:** Shawn's Lane receiver review, 2026-11-05. This is a review only. No code, shared contract, or Manny-owned file was changed.
+**Update 2026-11-06:** Manny answered Q-A to Q-D on 2026-11-05 (§6). On the Shawn lane branch, pending review: S-1 and S-2 are drafted as optional shared contract fields, and K-1 to K-7 are implemented (agents `0.2.0`). Manny's S-3 to S-8 and the proposal document are still open. See §8.
 **Reviewed at:** `developer` and the Shawn lane at `ff8dc76`.
 **Request:** Review the Manny-to-Knowledge A2 handoff as Knowledge's owner. Decide whether Knowledge can receive one item-scoped Triage handoff while preserving the parent case and run, item ID and index, source span, category proposal and its evidence, uncertainty, and status.
 
@@ -229,13 +230,56 @@ All cases are synthetic.
   - Is `urgency == "low"` only a fixture restriction?
   - Can an item with an inferred category and Unknown urgency go to Knowledge while the Auditor assesses urgency in parallel? PRD-v3 line 144 says Knowledge and escalation "run in parallel where their inputs permit". Or must the item wait for the Auditor?
   - Knowledge does not read urgency, so either rule works for the receiver. The answer decides whether the model path can reach A3 at all (C-5).
+  - **Answer (Manny, 2026-11-05):** Yes. A clearly segmented item with an inferred category and Unknown urgency may go to Knowledge for read-only retrieval while the Auditor reviews urgency. Later processing waits until the Auditor determines the band and route.
 - **Q-B, attention scope.** Should the flag be a parent-level reference on every item, or item-scoped spans (S-7)?
+  - **Answer (Manny, 2026-11-05):** Attention flags apply to High or Unknown urgency. The flag is attached to the relevant item, with a parent-level summary if any item is flagged. If segmentation is ambiguous, the flag stays at the parent level.
 - **Q-C, item ID.** Do you accept `stable_id("ITM", run_id, case_version, parent_digest, item_index, source_start, source_end)`, or do you want a different rule?
+  - **Answer (Manny, 2026-11-05):** Approved. The ID is run-scoped: a new run, case version, or segmentation may produce a new ID.
 - **Q-D, proposal document.** Please add `TRIAGE-LINKED-ITEM-HANDOFF-PROPOSAL.md` to the repository so this review can be checked against it.
+  - **Answer (Manny, 2026-11-05):** The document should be added so the review can be checked against it. It is not in the repository yet. Manny noted that these answers do not authorize a pull, push, or branch sync.
 
 ## 7. Next steps
 
-1. Manny answers Q-A to Q-D, or adds the proposal document.
-2. Both lanes agree on the shared contract changes S-1 and S-2. Shawn can draft them as one small PR into `developer`, with both owners reviewing.
+1. Manny answers Q-A to Q-D, or adds the proposal document. **Answered 2026-11-05; the document is still to be added.**
+2. Both lanes agree on the shared contract changes S-1 and S-2. Shawn can draft them as one small PR into `developer`, with both owners reviewing. **Drafted 2026-11-06 on the Shawn lane; awaiting Manny's review.**
 3. Manny implements S-3 to S-8.
-4. Shawn implements K-1 to K-7 in the lane, with R-01 to R-24 as tests.
+4. Shawn implements K-1 to K-7 in the lane, with R-01 to R-24 as tests. **Done 2026-11-06 on the Shawn lane for the receiver-side cases (§8).**
+
+## 8. Implementation record (2026-11-06, Shawn lane)
+
+**Shared contract drafts, pending Manny's review**
+
+- **S-1.** `TriageItemScope` and `LinkedItemRef` in `contracts/handoffs.py`, with an optional `TriageHandoff.item_scope`. The fields follow §2b, with three changes that come from Manny's answers:
+  - The identity fields sit in a nested `identity` block. Knowledge echoes that block as `KnowledgeResult.item_scope_ref`.
+  - `auditor_review` (`pending` or `band_and_route_determined`) records whether the Auditor has set the band and route (Q-A). `band_and_route_determined` requires an urgency other than `unknown`.
+  - `attention_ref` (this item's flag, by reference) and `parent_attention_flagged` (the parent summary) follow Q-B.
+  - Not carried: urgency and destination labels (still in the Triage contribution), `conflicts_present` (such an item abstains), and development example references (rejected as extra fields).
+- **Schema checks.** The schema checks that the parent source matches the context, that `item_id` matches the approved formula, the span length, status agreement, category label agreement, case and policy versions of category sources, the evidence span, and dependencies.
+- **S-2.** `InputRef.content_digest`, the canonical SHA-256 of the consumed contribution. `as_input_ref()` fills it for every agent, Manny's included. Manny's code compares `input_refs` only with `as_input_ref()` output, so it still matches, and all of Manny's tests and the combined harness pass. The connector's `_fingerprint` is unchanged (Manny's S-2 follow-up).
+
+**Shawn-owned changes (all three agents now `0.2.0`)**
+
+- **K-1.** `item_scope_reasons` in `agents/_gates.py` blocks an ineligible item before retrieval.
+- **K-2.** Knowledge echoes the item identity, and `item_id` joins its contribution ID only for linked items.
+- **K-3.** Retrieval is the item text only; tests show that category, urgency, attention, and Auditor state do not change it.
+- **K-4.** Troubleshooting requires the same item (`item_chain_reasons`).
+- **Auditor hold.** Following Q-A, Troubleshooting and Documentation return `blocked` with the existing `missing_dependency` code until `auditor_review` is `band_and_route_determined`. No new reason code was added.
+- **Digest check.** `consumed()` now requires matching content digests, so the same ID with different content is rejected (R-18, R-19 at the receiver).
+- **K-5.** Documentation writes the item line, the category with its basis and sources, the Auditor's band, and attention by reference.
+- **K-6.** Charters updated.
+- **K-7.** Five cases in `synthetic_data/item_cases/`, kept out of `synthetic_data/cases/` so Manny's evaluation set is unchanged. Tests are in `tests/test_item_scope.py`.
+
+**Regression (R-01)**
+
+- 12 of 12 lane cases pass, and the combined harness passes 12 of 12.
+- All 111 calibration outcomes are identical; only the agent version line changed.
+- The contract examples changed only in versions, IDs, digests, and the new `null` fields.
+
+**Verification cases**
+
+- **Covered by receiver or schema tests:** R-01, R-02, R-05, R-07, R-08, R-10, R-13 to R-17, R-18 and R-19 (receiver side), R-21 (Knowledge and Documentation side), R-22, R-24.
+- **Connector or Manny side, not tested here:** R-03, R-04 (dispatch), R-06, R-09, R-11, R-12, R-20, R-23.
+
+**New question for Manny**
+
+- **Q-E, how the Auditor's decision reaches later stages.** The receiver holds Troubleshooting and Documentation until it receives a Triage handoff for the same item with `auditor_review = band_and_route_determined` and a set urgency. The chain is checked per contribution and digest. A new Triage handoff therefore needs a new Knowledge run, which is deterministic and gives the same passages. Is a new Triage handoff the way you want to record the Auditor's decision, or do you prefer a separate Auditor record? A separate record would be a further contract change.

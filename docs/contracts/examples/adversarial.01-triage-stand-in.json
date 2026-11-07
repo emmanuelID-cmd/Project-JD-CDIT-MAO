@@ -42,5 +42,6 @@
       }
     }
   ],
-  "missing_facts": []
+  "missing_facts": [],
+  "item_scope": null
 }

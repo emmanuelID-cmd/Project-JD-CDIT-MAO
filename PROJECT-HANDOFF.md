@@ -1,3 +1,41 @@
+# Project Handoff — Project-JD-CDIT-MAO
+
+## Current verified state — 2026-11-06
+
+This section supersedes older claims below. The project lead confirms Antigravity did no implementation or validation work; its only action was merging PR #6. Every other completion/work claim in the 17:05 report is false and is retained below only as audit history.
+
+Snapshot comparison: commit 3138388 at 15:15 recorded Phase 2 active with Phase 3 Escalation and Phase 4 evaluation still outstanding. Commit 9a2d3f4 later added Escalation code and a fixture-based CombinedWorkflowHarness; commit 37c01c8 later added the evaluation runner and report. These implementation artifacts are retained, while their integrated phase acceptance remains open.
+
+- Active branch: manny/coordinator-triage-escalation. Current project completion status is Phase 2 — Triage in progress.
+- The Python 3.13.15 full synthetic-only suite passes 565 tests after fast-forwarding Manny to developer (2026-11-06; 28.94s). This is regression evidence, not phase acceptance.
+- `MannyA0A2Harness` now composes Coordinator intake, acknowledged handoff, and semantic Triage using an injected client; fake-client tests cover the end-to-end A0–A2 path. It stops before Knowledge/Shared. The FastAPI app and six-agent CombinedWorkflowHarness still do not call this runtime boundary; the FastAPI app currently exposes `/health` only.
+- Luna 6 High cross-phase review identified Triage candidate/output equality checking at only the last item, a taxonomy citation using the wrong version, and an unenforced taxonomy trust boundary. Manny-local fixes now validate every item, cite the taxonomy digest version, and require the exact pinned synthetic category source before provider execution. The separate Escalation recorded-action check binds sources to the current synthetic case/version; it is not production authentication.
+- Follow-up cross-phase review confirmed the Triage fixes and attention wiring. The optional attention signal validates source offsets/context, remains fixture-only, and drops stale signals on fallback; the last active-state check and return are not atomic, so later consumers must revalidate before use. Remaining known gaps are Phase 2 runtime-to-harness/app integration, end-to-end linked-item integration and security cases, smoke-trace provenance, approved evaluation labels, the human-review interface/auth flow deferred to database/authentication work, production identity guarantees, and Phase 4's full A0–A6 evidence. Shawn's receiver changes are now integrated into Manny's local lane through the merge of `origin/developer` at `1085d20`; end-to-end runtime/harness integration remains open.
+- The CombinedWorkflowHarness starts with a fixture TriageHandoff. It does not run Coordinator into semantic Triage and does not carry linked-item handoffs downstream.
+- One explicitly authorized synthetic Claude smoke call is recorded. The adapter accepted its structure, but the semantic label is unapproved and prompt/request/fixture provenance gaps remain.
+- The linked-item proposal `docs/lanes/manny/TRIAGE-LINKED-ITEM-HANDOFF-PROPOSAL.md` is in Manny's local lane. Shawn's receiver work and approved S-1/S-2 contract fields were merged into `developer` by Project PR #9 at `1085d20`; they are now present in Manny's local branch through the developer sync. Q-E Option B (a separate immutable Auditor decision record) remains deferred follow-on shared-contract work.
+- Phase 2 still needs CombinedWorkflowHarness/app wiring, integration of the accepted item-scoped handoff into Manny's runtime, linked downstream integration/security cases, trace-provenance completion, and Manny's semantic-label decision. Category names are sourced from a pinned synthetic project file; they remain inference and are not operational routing policy. The 100-trace synthetic closeout remains required at project completion.
+- No project-completion or main-release authorization has been given. This is a pre-push handoff; the current Manny commits have not yet been pushed and no Manny PR has been opened.
+
+### Additional continuation evidence — 2026-11-06
+
+- Phase 2: added `SYN-MANNY-TRIAGE-0001`, an A0–A2 contract fixture for Unknown severity with plausible major impact. The fake-client run requires human review, preserves Unknown urgency and a source-span attention signal, and does not dispatch; it does not measure semantic accuracy.
+- Phase 2: invalid post-provider linked-item binding now fails closed to human review and suppresses the semantic result. A retrospective trace addendum reconciles the fixture alias and source-backed prompt hash; the actual request body/hash, machine-linked approval record, and approved semantic label remain unavailable. No additional API call was made.
+- Future synthetic Triage results carry a stable prompt ID and SHA-256 prompt/request digests, without raw prompt, request text, or API key. Fake-client tests match the request digest to the exact serialized body sent. This does not recover the prior smoke call's missing request hash.
+- Phase 3: verified current `Under Investigation` context routes to human review with its source, without changing status or contacting third parties. Unknown urgency routes to the human Auditor without assigning a band; potential attention signals require live A1 registry validation and retain pattern ID/span as inference. P1 precedence is preserved. Focused Escalation tests: 29 passed.
+- Phase 4: the evaluator now compares all 12 downstream fixture runs with their declared expected tool outputs; 12/12 pass. These are fixture assertions, not approved gold-label scoring. A regression test verifies mismatches fail the fixture gate. Evaluation remains `0/100` approved labeled cases and not phase-ready.
+- A CLI regression test asserts preliminary fixture success remains `not_scored` and exits 2. It does not add or score labels.
+- Complete synthetic suite: 565 passed. Phase 2–4 integrated acceptance remains open; Manny's four local commits did not change Shawn-owned agent behavior. Project PR #9 was merged to `developer` at `1085d20`; Manny's lane now includes its four local task commits and the developer merge at `1085d20`; this required a regular merge because the branches had diverged from `3583508`.
+
+### Manny outgoing task commits — pre-push
+
+- `563a691` — Triage runtime and Coordinator-to-Triage synthetic harness.
+- `286a191` — deterministic Escalation rules and synthetic tests.
+- `2ca869a` — evaluator expected-output checks and not-ready CLI regression.
+- `3aed0bd` — planning, checklist, Triage proposal, and evidence reconciliation.
+- Project PR #9 from Shawn's lane is merged into `developer` at `1085d20`. Manny's S-1/S-2 approval and Q-E Option B answer are recorded on the PR; the separate Auditor decision record remains future shared-contract work.
+- Push target: `origin/manny/coordinator-triage-escalation`; PR target after push: `developer`. Manny's local branch now includes the merged developer changes and the four Manny task commits. The local merge is not yet pushed, and no Manny PR is open. No `main` update is authorized.
+
 # Project Handoff — Initial Repository Push
 
 - Prepared: 2026-11-03 15:26:39 -05:00
@@ -289,3 +327,59 @@ UI lane clarification: Either lane may add/style presentation controls (includin
 ### Requested
 
 - Manny: answers to review §7, especially Q-04 (do the charters satisfy PRD-v3 §3b?) and the rest of Q-05 (who peer-reviews the corpus and lane cases?).
+
+## 2026-11-06T00:15:00-05:00 — Shawn's Lane: linked-item handoff support (S-1, S-2, K-1 to K-7)
+
+- Prepared: 2026-11-06T00:15:00-05:00
+- Branch: `shawn/knowledge-troubleshooting-docs`. Baseline: `developer` at `3583508`, with the lane equal to `developer` after PR #8. Target: `developer` by PR; nothing committed yet.
+
+### Inputs
+
+- Manny's answers, 2026-11-05:
+  - **Q-A:** an item with an inferred category and Unknown urgency may go to Knowledge for read-only retrieval; later processing waits for the Auditor's band and route.
+  - **Q-B:** item-level attention flags with a parent summary; a parent-level flag when segmentation is ambiguous.
+  - **Q-C:** the item ID formula is approved and run-scoped.
+  - **Q-D:** the proposal document should be added.
+  - **Q-04:** charter plus schema is the behaviour specification for deterministic agents, and the prompt drafts are not runtime prompts.
+- These answers do not authorize a pull, push, or branch sync.
+
+### Done
+
+- **Shared contract drafts, pending Manny's review.**
+  - S-1: `TriageItemScope` and `LinkedItemRef` (`contracts/handoffs.py`), with an optional `TriageHandoff.item_scope`.
+  - S-2: `InputRef.content_digest`, filled by `as_input_ref()`.
+  - Both are optional fields; the contract version string is unchanged.
+- **Shawn agents `0.2.0`.**
+  - K-1, K-2, K-3 (Knowledge): the item-scope gate, the echo and the item ID in the contribution ID, and retrieval on the item text only.
+  - K-4 (Troubleshooting) and K-5 (Documentation): same-item joins; Documentation adds the item line, the category basis, the Auditor's band, and attention by reference.
+  - Both stages are held with `missing_dependency` until the Auditor determines the band and route.
+  - `consumed()` requires matching content digests.
+- **K-6.** Charters updated, and Q-04 is recorded as accepted.
+- **K-7.** 5 cases in `synthetic_data/item_cases/` and 43 tests in `tests/test_item_scope.py`.
+- **Tests.**
+  - Three pinned-evidence Troubleshooting tests now re-point their Knowledge input to the triage under test. The digest check correctly rejects their old same-ID content swap.
+  - A mutation check confirmed that disabling each new gate fails at least one test.
+- **Regenerated.** The calibration report and results (version line only) and the contract examples.
+
+### Not completed
+
+- Manny-owned S-3 to S-8 (connector eligibility, source recheck, receipt identity, item bridge, attention scope, `consume` returning the scope). Until they exist, no linked item reaches Shawn's agents outside tests.
+- `TRIAGE-LINKED-ITEM-HANDOFF-PROPOSAL.md` is still not in the repository.
+- New question Q-E: does a new Triage handoff for the same item record the Auditor's decision, or a separate Auditor record?
+- Q-01 to Q-03, Q-06, and the peer-reviewer part of Q-05 remain open.
+
+### Validation
+
+- `.venv\Scripts\python.exe -m pytest -q` (Python 3.13.17): 567 passed.
+- `python -m cdit_support_mao.lane_harness synthetic_data/cases`: 12 passed, 0 failed.
+- `python -m cdit_support_mao.lane_harness synthetic_data/item_cases`: 5 passed, 0 failed.
+- `python -m cdit_support_mao.combined_harness synthetic_data/cases`: 12 of 12 PASS.
+- `python -m cdit_support_mao.lane_calibration … --report … --results …`: 0 critical errors, 0 label problems; all 111 outcomes unchanged.
+
+### Requested
+
+- Manny:
+  - Review S-1 and S-2 before merge.
+  - Answer Q-E.
+  - Add the proposal document.
+  - Implement S-3 to S-8 when ready.

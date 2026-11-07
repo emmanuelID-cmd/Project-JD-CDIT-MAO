@@ -2,8 +2,8 @@
 
 **Branch:** `shawn/knowledge-troubleshooting-docs`
 **Owner:** Shawn (finalized six-agent split, `docs/planning/TASK-SPLIT.md`)
-**Version:** Knowledge and Documentation `0.1.0`, Troubleshooting `0.1.1`; contracts `0.1.0-proposed`
-**Status:** Implemented on synthetic data and merged into `developer` through PRs #2, #4, and #5 (2026-11-04 and 2026-11-05). Manny's combined six-agent harness runs these agents with his Coordinator, Triage, and Escalation agents. Measurement additions (N-02) and the agent charters (N-03) are on the lane branch, pending review.
+**Version:** Knowledge, Troubleshooting, and Documentation `0.2.0`; contracts `0.1.0-proposed` with proposed S-1 and S-2
+**Status:** Implemented on synthetic data and merged into `developer` through PRs #2, #4, #5, #7, and #8 (2026-11-04 and 2026-11-05). Manny's combined six-agent harness runs these agents with his Coordinator, Triage, and Escalation agents. Linked-item support (shared drafts S-1 and S-2; Shawn changes K-1 to K-7) is on the lane branch, pending review (2026-11-06; [A2-ITEM-HANDOFF-RECEIVER-REVIEW.md](A2-ITEM-HANDOFF-RECEIVER-REVIEW.md) §8).
 
 ## 1. Authorization and scope
 
@@ -18,19 +18,20 @@
 | Path | Purpose |
 | :--- | :--- |
 | `src/cdit_support_mao/contracts/` | Proposed v0.1 envelope, claim labels, bands, reason codes, and handoff payloads ([HANDOFF-CONTRACTS.md](../../contracts/HANDOFF-CONTRACTS.md)). |
-| `src/cdit_support_mao/agents/_gates.py` | Receiving-side input gates: context match, acknowledgment, blocked upstream, provenance chain. |
+| `src/cdit_support_mao/agents/_gates.py` | Receiving-side input gates: context match, acknowledgment, blocked upstream, provenance chain by ID and content digest, linked-item eligibility, same-item joins, and the Auditor hold. |
 | `src/cdit_support_mao/agents/knowledge/` | Corpus loader (fails closed; synthetic-only), BM25 lexical index, retrieved-text injection scanner, Knowledge agent. |
 | `src/cdit_support_mao/agents/troubleshooting/` | Versioned Tier 1 policy loader and Troubleshooting agent. |
 | `src/cdit_support_mao/agents/documentation/` | Privacy scanner and Documentation agent. |
 | `src/cdit_support_mao/lane_harness.py` | Lane validation harness and CLI. **Not the coordinator.** It builds labelled Triage and Escalation stand-ins from case files and times each lane agent call. |
 | `src/cdit_support_mao/lane_calibration.py` | Calibration runner and CLI that produces lane evidence for D-08: band accuracy, abstention, cut-off sweep, retrieval recall@k, source exclusions, and a critical safety gate over every case (§9). |
-| `docs/lanes/shawn/AGENT-CHARTERS.md` | Per-agent charters: role, inputs, outputs, forbidden actions, stop rules, and a system prompt draft (N-03). |
+| `docs/lanes/shawn/AGENT-CHARTERS.md` | Per-agent charters: role, inputs, outputs, forbidden actions, stop rules (N-03). Accepted with the schemas as the behaviour specification (Q-04); the prompt drafts are not runtime prompts. |
 | `synthetic_data/knowledge/` | 38 synthetic KB article versions (see §6 and `synthetic_data/README.md`). |
 | `synthetic_data/policy/troubleshooting-policy_v0.1.1.json` | Synthetic Tier 1 action allowlist, staff-only and forbidden action types, request rules, stop conditions. |
 | `synthetic_data/cases/` | 12 synthetic lane cases, each with its expected outcome written before the run. |
+| `synthetic_data/item_cases/` | 5 synthetic linked-item cases (two items of one parent, an item held for the Auditor, an ambiguous parent, instruction-like item text). Kept apart so Manny's evaluation set is unchanged. |
 | `synthetic_data/calibration/` | Held-out calibration set `SYN-KCAL` v1.0: 111 cases with draft labels, written before the first run and not yet human-approved. |
 | `docs/lanes/shawn/calibration/` | Generated calibration report and per-case results. |
-| `tests/` | 132 tests in the lane's test files, including one Escalation contract test Manny added to `test_contracts.py`. The full project suite has 524. |
+| `tests/` | 175 tests in the lane's test files, including one Escalation contract test Manny added to `test_contracts.py` and 43 linked-item tests in `test_item_scope.py`. The full project suite has 567. |
 
 ## 3. Knowledge agent (A3 — retrieval handoff)
 
@@ -182,14 +183,15 @@ uvicorn cdit_support_mao.main:app --app-dir src  ->  GET /health  200 {"status":
 ## 10. Handoff record
 
 - **Artifacts and versions:**
-  - Knowledge and Documentation agents `0.1.0`; Troubleshooting agent `0.1.1`.
-  - Contracts `0.1.0-proposed`.
+  - Knowledge, Troubleshooting, and Documentation agents `0.2.0` (linked-item support, 2026-11-06).
+  - Contracts `0.1.0-proposed`, with proposed S-1 (`TriageItemScope`) and S-2 (`InputRef.content_digest`).
   - Source set `SRC-61C4A35E96CF`.
   - Calibration set `SYN-KCAL` 1.0.
   - Troubleshooting policy `SYN-TS-POLICY 0.1.1` (proposed).
 - **Completed:** the three Shawn-owned agents, their gates, synthetic data, harness, tests, and contract proposal with examples. Also calibration evidence for D-08 (draft labels) and a Python 3.13 / `/health` run.
 - **Evidence:** §7, plus `docs/contracts/examples/`.
-- **PRD-v3 alignment:** [PRD-V3-ALIGNMENT-REVIEW.md](PRD-V3-ALIGNMENT-REVIEW.md) (2026-11-04, updated 2026-11-05). It lists findings and open questions. B-01 is fixed (§4), N-02 is done (§7), and N-03 is drafted in [AGENT-CHARTERS.md](AGENT-CHARTERS.md). The other findings are open.
+- **PRD-v3 alignment:** [PRD-V3-ALIGNMENT-REVIEW.md](PRD-V3-ALIGNMENT-REVIEW.md) (2026-11-04, updated 2026-11-05). It lists findings and open questions. B-01 is fixed (§4), N-02 is done (§7), and N-03 is accepted under Q-04 ([AGENT-CHARTERS.md](AGENT-CHARTERS.md)). The other findings are open.
+- **Linked items:** [A2-ITEM-HANDOFF-RECEIVER-REVIEW.md](A2-ITEM-HANDOFF-RECEIVER-REVIEW.md) §8 records Manny's answers, the S-1 and S-2 drafts, and K-1 to K-7. Q-E is open.
 - **Escalation interface note:** Troubleshooting can emit `quoted_policy_override_attempt`. Manny's Escalation agent routes it to human review (rule 6).
 - **Assumptions:**
   - Triage supplies the minimized summary, per-field verification flags, and acknowledgment IDs.

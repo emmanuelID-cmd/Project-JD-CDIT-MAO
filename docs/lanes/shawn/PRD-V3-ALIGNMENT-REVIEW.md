@@ -13,6 +13,10 @@
 - N-02 is done: the calibration report now has recall@k and source exclusions, and both CLIs print per-agent duration.
 - N-03 is drafted: [AGENT-CHARTERS.md](AGENT-CHARTERS.md). Whether it satisfies §3b is still Q-04.
 
+**Update 2026-11-06:**
+- Manny answered Q-04 on 2026-11-05. For deterministic agents, the charter plus the structured output schema is the documented lane-owned behaviour specification. The system prompt drafts in the charters are not runtime prompts. Any model-backed agent would need an actual prompt and schema. The decision does not move any Shawn agent to a model. N-03 is accepted on that basis, and N-04 stays deferred.
+- Q-01 to Q-03 and Q-06, and the peer-reviewer part of Q-05, still have no recorded answers.
+
 ## 1. Scope and method
 
 - **Baseline.** `docs/requirements/PRD.md` is still the source of truth. `PRD-v3.md` is a draft pending team review. This review checks the current agents against v3 so that gaps are known before v3 is approved. It is Phase 2 in `docs/planning/AGENT-IMPLEMENTATION-PHASE-PLAN.md`.
@@ -127,7 +131,7 @@ The lane harness runs every downstream agent even after an upstream abstention. 
 1. **Q-01:** Should an injection found in retrieved content give `abstained_needs_human` (§9 A3) or `blocked_checkpoint` (§9a and F-09)? Please fix the PRD wording either way.
 2. **Q-02:** Can Triage send a minimized retrieval query that excludes quoted or untrusted text, separate from `case_summary`?
 3. **Q-03:** Should dependency failures be an agent status (`failed_dependency`), or does the Coordinator map load exceptions to `failed_dependency_manual_fallback`?
-4. **Q-04:** Does a documented per-agent charter satisfy the §3b "lane-owned prompt" requirement for deterministic agents? Should any Shawn-agent behaviour use a model at all?
+4. **Q-04:** Does a documented per-agent charter satisfy the §3b "lane-owned prompt" requirement for deterministic agents? Should any Shawn-agent behaviour use a model at all? **Answered by Manny, 2026-11-05:** yes for deterministic agents; the charter plus structured schema is the specification, and the system prompt drafts are not runtime prompts. A model-backed agent would need an actual prompt and schema. No Shawn agent moves to a model.
 5. **Q-05:** Who peer-reviews the corpus, lane cases, and calibration labels (§4b, D-09)?
 6. **Q-06:** After `abstained_needs_human`, should Documentation still run to produce the human-question packet, or does the Coordinator stop dependent work (§9a)?
 
@@ -135,7 +139,7 @@ The lane harness runs every downstream agent even after an upstream abstention. 
 
 1. **B-01:** done (Troubleshooting 0.1.1, policy 0.1.1).
 2. **N-02:** done 2026-11-05. Recall@k, exclusion counts, and per-agent duration are measured. This is measurement only.
-3. **N-03:** drafted 2026-11-05 in [AGENT-CHARTERS.md](AGENT-CHARTERS.md); acceptance waits for Q-04.
+3. **N-03:** accepted 2026-11-05 (Q-04): the charter plus schema is the behaviour specification for Shawn's deterministic agents ([AGENT-CHARTERS.md](AGENT-CHARTERS.md)).
 4. **C-01 to C-03:** draft contract v0.2 fields with Shared Lane after Q-03 is answered.
 5. **N-01:** run the retrieval comparison once an independently written `SYN-KCAL` v2 exists. B-02 is measured in the same run.
 6. **B-03:** apply after Q-01 is answered.
