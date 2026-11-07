@@ -15,7 +15,7 @@ Snapshot comparison: commit 3138388 at 15:15 recorded Phase 2 active with Phase 
 - One explicitly authorized synthetic Claude smoke call is recorded. The adapter accepted its structure, but the semantic label is unapproved and prompt/request/fixture provenance gaps remain.
 - The linked-item proposal `docs/lanes/manny/TRIAGE-LINKED-ITEM-HANDOFF-PROPOSAL.md` is in Manny's local lane. Shawn's receiver work and approved S-1/S-2 contract fields were merged into `developer` by Project PR #9 at `1085d20`; they are now present in Manny's local branch through the developer sync. Q-E Option B (a separate immutable Auditor decision record) remains deferred follow-on shared-contract work.
 - Phase 2 still needs CombinedWorkflowHarness/app wiring, integration of the accepted item-scoped handoff into Manny's runtime, linked downstream integration/security cases, trace-provenance completion, and Manny's semantic-label decision. Category names are sourced from a pinned synthetic project file; they remain inference and are not operational routing policy. The 100-trace synthetic closeout remains required at project completion.
-- No project-completion or main-release authorization has been given. This is a pre-push handoff; the current Manny commits have not yet been pushed and no Manny PR has been opened.
+- No project-completion or main-release authorization has been given. Project PR #10 merged into `developer` at `ca90231` (2026-11-06 local time); local and remote Manny, Shawn, and developer refs now match that commit. `main` remains at `1a5cf4a`, untouched. Phase acceptance remains open as listed above.
 
 ### Additional continuation evidence — 2026-11-06
 
