@@ -1,71 +1,64 @@
-# Linked-Item A2 Handoff Contract Proposal
+# Linked-Item A2 Handoff — Manny Connector Plan
 
-**Status:** Draft for Shared Lane review. Proposed only; not an accepted contract. Do not change the shared schema or Shawn-owned agent behavior from this document alone.
+**Status:** Updated 2026-11-06 after project PR #9. Manny approved S-1 (`TriageHandoff.item_scope`) and S-2 (`InputRef.content_digest`); both were merged into `developer`. This document describes the Manny-owned connector and integration work that remains. It does not claim that the connected path has passed receiver acceptance.
 
-**Receiver:** Shawn's Knowledge agent consumes the A2 handoff. Shared Lane reviews connector/schema compatibility only; it does not take ownership of Manny's Triage behavior or Shawn's Knowledge behavior.
+**Receiver and ownership:** Shawn’s Knowledge agent receives eligible A2 item handoffs. Manny owns Coordinator/Triage production, item eligibility, and the connector. Shawn owns any changes inside Knowledge, Troubleshooting, or Documentation. Shared Lane checks only the connection contract, versions, acknowledgments, and routing.
 
-## Purpose
+## Purpose and current gap
 
-The Manny-owned Triage implementation can segment clearly separated requests and preserve each original text span. The current shared TriageHandoff has only one case summary and no linked-item identity or source-span fields. The existing CombinedWorkflowHarness starts from a synthetic TriageHandoff fixture, so it does not test the Coordinator-to-semantic-Triage connection or multi-item downstream handoffs.
+Manny’s Triage runtime can segment clearly separated requests and preserve their original source spans. PR #9 added item scope and content-digest support to the shared contracts and Shawn’s receiver agents. Manny’s item-aware connector is still missing. The existing `CombinedWorkflowHarness` starts from a fixture-created Triage handoff, so it does not prove the Coordinator-to-semantic-Triage or multi-item path.
 
-This proposal defines the smallest connection shape that preserves item identity and source provenance while retaining the existing one-item agent workflow.
+## Accepted handoff behavior
 
-## Recommended shape
+Emit a separate `TriageHandoff` for each eligible linked item. Keep the parent case, run, case version, policy version, and parent message source common; bind each child with its own run-scoped item ID, index/count, exact source span, and content digest. `case_summary` contains that item’s text only.
 
-Add an optional item scope to shared agent contributions, then emit one TriageHandoff per clearly segmented child item. Keep the parent case/run as the common context; use the item scope to bind every downstream contribution to exactly one child.
+The item scope carries segmentation/dependency state, category label/basis/sources, source evidence span, pending Auditor state, the item attention reference, and parent attention summary. The shared model validates item identity and provenance before Knowledge runs.
 
-The item scope should carry:
+- Every material proposal retains verified/inference/unknown status and its evidence or basis. Category remains an inference; the model must provide an exact quote from that item and a value in the approved synthetic category vocabulary.
+- Unknown category, ambiguous segmentation, conflict, invalid source binding, or blocked dependency goes to the human Auditor and is not sent to Knowledge.
+- **Approved Q-A:** an item with an inferred category and Unknown urgency may go to Knowledge for read-only retrieval while the Auditor reviews urgency. Troubleshooting and Documentation remain blocked until the Auditor determines band and route.
+- The model always returns `downstream_allowed=false`. Only Manny’s deterministic connector may prepare an eligible handoff after validating the current case/run/policy, item scope, category evidence, and accepted contract. Preparing a packet does not change the ticket or dispatch externally.
+- An unknown or blocked item does not suppress a clearly independent sibling. Keep all child outcomes joined to the parent, keep the parent incomplete, and never average confidence.
+- No ticket write, customer message, priority change, external dispatch, resolution, or closure is authorized.
 
-- Parent case ID, case version, run ID, and policy version.
-- Stable item ID, item index, and item count.
-- Parent message source reference and exact start/end code-point offsets.
-- Segmentation state: candidate boundary or ambiguous parent.
-- Whether this item depends on other items, with source-backed dependency references.
+For a single-request case, keep the existing `item_scope=None` path. Do not change Shawn-owned agent internals from Manny’s lane.
 
-Each item-scoped TriageHandoff retains the current category, urgency, confidence, evidence, and missing-facts fields, with these constraints:
+## Synthetic example
 
-- Every material claim is labeled verified, inference, or unknown and keeps its source or basis.
-- The model may propose a category only from the allowed taxonomy and with an exact source quote. Its proposal remains an inference.
-- Urgency and destination remain unknown until approved policy supports a proposal. A potential-urgent attention flag is separate from an urgency band and includes a short reason.
-- Any unknown required for routing, ambiguous segmentation, conflicting evidence, or unsupported claim routes the item to human Auditor review and blocks that item's downstream handoff.
-- The model output always keeps downstream_allowed false; a model response never authorizes a handoff. Only the Coordinator/connector may pass an item to Knowledge after validating clear segmentation, source binding, required category/urgency policy, and the accepted contract. If urgency or another required routing fact is unknown, that item goes to the Auditor. Any downstream work remains draft-only and every output still requires human review.
-- Parent completion remains false until every child has a recorded disposition. Results are joined by parent run ID and stable item ID; confidence values are never averaged.
-- No ticket write, customer message, priority change, dispatch, resolution, or closure is authorized.
+Parent `SYN-CASE-041` / run `RUN-041` contains two clearly separated requests.
 
-For a single-request case, the current TriageHandoff remains valid with no item scope. The proposed extension is additive and should be backward compatible.
+- Item 1 has an exact source span and a supported category inference; urgency remains Unknown. It may reach Knowledge for retrieval while Auditor review is pending. Troubleshooting and Documentation wait for the Auditor’s band-and-route decision.
+- Item 2 has an unknown category or ambiguous boundary. It goes to the Auditor and is not sent to Knowledge.
+- Both items retain the parent/run identity and exact source spans. The parent remains incomplete and requires human review.
 
-## Suggested synthetic example
-
-Parent SYN-CASE-041 has run RUN-041 and contains two clearly separated requests.
-
-- Item SYN-CASE-041-01, index 1 of 2, has a source span bound to the first request. Triage proposes a supported category as an inference but keeps urgency unknown; it goes to the Auditor until approved routing policy supplies the required urgency decision.
-- Item SYN-CASE-041-02, index 2 of 2, has a source span bound to the second request. Category or destination is unknown, so this item goes to the Auditor and is not sent downstream.
-- Both outputs retain parent SYN-CASE-041 and the same parent run/version. The parent remains incomplete and requires human review.
-
-These values illustrate packet shape only; they are not routing policy or approved evaluation labels.
+This is a contract example, not an operational routing rule or an evaluation label.
 
 ## Fail-closed rules
 
-- If a source span does not exactly reproduce the item text from the parent message, reject the whole packet.
-- If segmentation is ambiguous, do not produce partial child items; send the intact parent to human review.
-- If a case, policy, handoff, or run version is stale, stop downstream processing.
-- If item IDs duplicate, indexes are missing, dependencies are cyclic, or downstream output changes item scope, preserve the mismatch and stop for human review.
-- Untrusted ticket text and retrieved content remain data. Neither may change policy, roles, tools, or permissions.
-- If an item is unknown or blocked, do not let its state block a clearly independent sibling; preserve both outcomes and keep the parent open.
+- Reject any item whose source span does not exactly reproduce its text from the current parent message.
+- For ambiguous segmentation, keep one intact parent for human review; do not emit partial children.
+- Stop on a stale case, policy, handoff, or run version.
+- Stop on duplicate/missing item identities, invalid dependencies, or a downstream result with mismatched item scope.
+- Treat ticket text, retrieved content, model output, and tool results as untrusted data. None can change policy, roles, tools, or permissions.
+- Preserve a blocked item and its independent siblings separately; keep the parent open.
 
-## Shared review checklist
+## Decisions already recorded
 
-- Confirm whether an item scope belongs on the shared AgentContribution base or in a dedicated linked-item envelope.
-- Confirm the stable item ID and source-span conventions.
-- Confirm that downstream contributions preserve the item scope without changing each agent's internal decision behavior.
-- Confirm that unknown items stop at Auditor review while independently supported items may continue through the draft-only path.
-- Confirm compatibility with the current single-item TriageHandoff and current blackboard versioning.
-- Identify any receiver-owned changes required; return those changes to that agent's owner.
+- **S-1/S-2:** optional item scope and canonical content digest were approved and merged in PR #9.
+- **Q-A:** inferred-category items with Unknown urgency may reach Knowledge; later agents wait for Auditor determination.
+- **Q-B:** attention is item-scoped with a parent summary; when segmentation is ambiguous, keep the attention signal at parent level.
+- **Q-C:** use the approved run-scoped item ID formula from the shared schema.
+- **Q-E:** a separate immutable Auditor decision record (Option B) is deferred follow-on work; it is not a prerequisite for read-only Knowledge retrieval.
 
-## Manny lane work after acceptance
+## Manny implementation and Shared review still open
 
-Manny owns Coordinator and Triage production of the item scope, source-span validation, per-item semantic proposals, unknown/Auditor proposals, and Coordinator joining. Shawn owns any changes required inside Knowledge, Troubleshooting, or Documentation. Shared integration validates only packet shape, version integrity, acknowledgment, and routing. Until Shared accepts the contract and the receiving owner supports it, this file is a proposal and the connected multi-item path remains incomplete.
+- [ ] Build the Manny-owned bridge from the validated Triage candidate/runtime result to one item-scoped `TriageHandoff` per eligible item.
+- [ ] Make the connector item-aware: recheck the live parent and exact span, reject stale/mutated content, track item identity/digest in the receipt, and prevent conflicting duplicate acknowledgments.
+- [ ] Preserve the attention reference for each matching item and a parent-level summary without passing raw match text to Knowledge.
+- [ ] Wire the actual A0–A2 result into the combined workflow; keep fake-client execution for ordinary tests and do not call the paid provider without explicit per-run authorization.
+- [ ] Shawn reviews Knowledge as the receiver after the connected path exists. Shared Lane verifies contract/version integrity, acknowledgment, item joins, stale-state rejection, failure routing, and that the correct item text is queried.
+- [ ] Fix defects by ownership: Manny changes Coordinator/Triage/connector code; Shawn changes Shawn-owned behavior. No production database, authentication, real data, ticket write, notification, or Auditor UI is part of this phase.
 
 ## Evidence boundary
 
-The current Python 3.13 test suite passes 518 tests. Those tests include the current Shared fixture harness, which uses a stand-in Triage input. The one live synthetic Claude smoke trace is structurally valid but has no approved semantic label and has unresolved prompt/request/fixture provenance. Neither result proves the proposed linked-item handoff works end to end.
+The current Checklist records 565 full-suite tests, but that is regression evidence, not Phase 2 acceptance. The combined harness still begins from a stand-in Triage handoff, and the prior synthetic Claude smoke trace has an unapproved semantic label and incomplete prompt/request/fixture provenance. Neither proves the connected item path or model accuracy. The 80-row catalog remains development examples, not approved labels or operational policy.

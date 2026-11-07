@@ -12,7 +12,7 @@ from dataclasses import dataclass
 from datetime import UTC, date, datetime
 import json
 from pathlib import Path
-from typing import Literal
+from typing import TYPE_CHECKING, Literal
 
 from cdit_support_mao.agents.documentation import DocumentationAgent
 from cdit_support_mao.agents.escalation import EscalationAgent
@@ -43,6 +43,11 @@ from cdit_support_mao.contracts.handoffs import (
     TroubleshootingResult,
 )
 from cdit_support_mao.lane_harness import LaneCase, case_files, load_case
+from cdit_support_mao.agents.triage.anthropic_adapter import AnthropicClient
+
+if TYPE_CHECKING:
+    from cdit_support_mao.agents.triage.runtime_harness import MannyA0A2Harness
+    from cdit_support_mao.manny_connected_harness import MannyConnectedRun
 
 STAND_IN_VERSION = "fixture-0.1"
 
@@ -184,6 +189,37 @@ class CombinedWorkflowHarness:
             troubleshooting=troubleshooting,
             escalation=escalation,
             documentation=documentation,
+        )
+
+    def run_manny_connected(
+        self,
+        triage_harness: MannyA0A2Harness,
+        request: object,
+        *,
+        session_token: object,
+        as_of: date,
+        client: AnthropicClient | None = None,
+        billable_call_authorized: bool = False,
+        now: datetime | None = None,
+    ) -> MannyConnectedRun:
+        """Run Manny's real synthetic A0–A3 path through this Knowledge receiver.
+
+        The linked-item Triage handoff is used as the receiver input. Unknown
+        urgency leaves the item awaiting the human Auditor; this method never
+        enters Troubleshooting or Documentation until that decision exists.
+        The fixture-based ``run`` path above remains available for regression.
+        """
+        from cdit_support_mao.manny_connected_harness import MannyConnectedWorkflowHarness
+
+        connected = MannyConnectedWorkflowHarness(
+            triage_harness, self.knowledge_agent, as_of=as_of
+        )
+        return connected.run(
+            request,
+            session_token=session_token,
+            client=client,
+            billable_call_authorized=billable_call_authorized,
+            now=now,
         )
 
 

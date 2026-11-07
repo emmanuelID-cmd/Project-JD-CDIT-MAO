@@ -1,9 +1,10 @@
 """Synthetic Manny-owned A0–A2 runtime harness.
 
 This harness composes Coordinator intake and its acknowledged handoff with the
-Triage runtime. It stops at A2: no Shared/Knowledge handoff is made because the
-linked-item receiver contract remains proposed. It does not construct a model
-client, load credentials, persist data, or perform external actions.
+Triage runtime. It remains the provider-injected A0–A2 building block; the
+connected A0–A3 entry point is in ``combined_harness.run_manny_connected``.
+It does not construct a model client, load credentials, persist data, or
+perform external actions.
 """
 from __future__ import annotations
 
@@ -12,6 +13,7 @@ from datetime import datetime
 
 from cdit_support_mao.agents.coordinator import Coordinator
 from cdit_support_mao.agents.coordinator.handoff import (
+    HandoffError,
     HandoffCheckpoint,
     HandoffEvent,
     HandoffRegistry,
@@ -113,3 +115,19 @@ class MannyA0A2Harness:
             if event.run_id == intake.context.run_id
         )
         return MannyA0A2Run(intake, accepted, triage, events)
+
+    def source_is_current(self, run: MannyA0A2Run, *, now: datetime | None = None) -> bool:
+        """Revalidate the exact acknowledged A0/A1 source before each later stage."""
+        if run.acknowledged_handoff is None or run.intake.context is None or run.triage is None:
+            return False
+        try:
+            self._registry.validate_active(
+                run.acknowledged_handoff.handoff_id,
+                expected_version=run.acknowledged_handoff.state_version,
+                capability=self._receiver_capability,
+                context=run.intake.context,
+                now=now,
+            )
+        except HandoffError:
+            return False
+        return True
