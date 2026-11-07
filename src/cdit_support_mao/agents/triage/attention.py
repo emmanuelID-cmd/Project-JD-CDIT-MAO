@@ -11,7 +11,7 @@ from datetime import datetime
 from threading import Lock
 from typing import Literal
 
-from pydantic import Field
+from pydantic import Field, model_validator
 
 from cdit_support_mao.agents.coordinator.handoff import HandoffError, HandoffRegistry
 from cdit_support_mao.agents.triage.input import read_acknowledged_input
@@ -64,6 +64,12 @@ class AttentionMatch(StrictModel):
     end_codepoint: int = Field(strict=True, ge=1)
     attribution: Literal["untrusted_case_text_match_only"] = "untrusted_case_text_match_only"
 
+    @model_validator(mode="after")
+    def validate_span(self) -> AttentionMatch:
+        if self.start_codepoint >= self.end_codepoint:
+            raise ValueError("attention_span_must_be_nonempty")
+        return self
+
 
 class AttentionSignal(StrictModel):
     trace_id: str
@@ -72,11 +78,22 @@ class AttentionSignal(StrictModel):
     context: RunContext
     status: Literal["potential_attention", "not_assessed"]
     matches: tuple[AttentionMatch, ...]
+    review_note: Literal[
+        "A configured synthetic phrase matched; a human must inspect its full context. This does not verify an incident or assign urgency."
+    ] | None = None
     human_review_required: Literal[True] = True
     urgency: Literal["unknown"] = "unknown"
     downstream_allowed: Literal[False] = False
     dispatched: Literal[False] = False
     incident_verified: Literal[False] = False
+
+    @model_validator(mode="after")
+    def validate_signal(self) -> AttentionSignal:
+        if (self.status == "potential_attention") != bool(self.matches):
+            raise ValueError("attention_status_match_mismatch")
+        if (self.status == "potential_attention") != (self.review_note is not None):
+            raise ValueError("attention_review_note_mismatch")
+        return self
 
 
 def inspect_attention_signal(
@@ -105,7 +122,12 @@ def inspect_attention_signal(
                 start_codepoint=start, end_codepoint=start + len(literal)))
     result = AttentionSignal(trace_id=packet.trace_id, handoff_id=handoff_id,
         handoff_state_version=expected_version, context=context,
-        status="potential_attention" if matches else "not_assessed", matches=tuple(matches))
+        status="potential_attention" if matches else "not_assessed", matches=tuple(matches),
+        review_note=(
+            "A configured synthetic phrase matched; a human must inspect its full context. "
+            "This does not verify an incident or assign urgency."
+            if matches else None
+        ))
     registry.validate_active(handoff_id, expected_version=expected_version,
         capability=receiver_capability, context=context, now=now)
     return result

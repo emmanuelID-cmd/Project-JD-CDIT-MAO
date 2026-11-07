@@ -1,6 +1,6 @@
 # Shared Phase 3 — Integrated Evaluation and Independent Review
 
-**Status:** Completed and verified; executed via `src/cdit_support_mao/manny_evaluation.py` with results recorded in `docs/lanes/manny/evaluation/MANNY-EVALUATION-REPORT.md`.
+**Status:** In progress; only preliminary component/downstream fixture evidence exists. The runner uses a stand-in A2 handoff, has no Manny-approved labeled set, and does not establish full A0–A6 integration or PRD safety-gate completion.
 
 ## Work
 

@@ -66,6 +66,7 @@ def prepare_multi_item_candidate(
             kwargs = dict(
                 category=proposal.proposed_category, category_label="inference",
                 category_sources=(item.source, proposal.policy_source), category_basis=basis,
+                category_evidence_quote=item.reported_text,
                 urgency=proposal.proposed_urgency, urgency_label="inference",
                 urgency_sources=(item.source, proposal.policy_source), urgency_basis=basis,
                 destination=proposal.proposed_destination, destination_label="inference",

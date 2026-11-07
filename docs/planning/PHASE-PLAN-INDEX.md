@@ -1,6 +1,6 @@
-# PRD v2 Project Assessment and Phase Plan Index
+# Historical PRD v2 Planning Index
 
-**Status:** Proposed planning guide. It records sequence and evidence; it does not authorize work beyond the local stack scaffold. PRD v2 must be reviewed and approved before implementation phases start.
+**Status:** Historical planning snapshot from 2026-11-04; superseded for current implementation tracking. The project lead approved PRD-v3 as Manny's lane baseline and authorized Manny's phase sequence. For current requirements and status, read [`AGENTS.md`](../../AGENTS.md), [`Checklist.md`](../../Checklist.md), [`PRD-v3.md`](../requirements/PRD-v3.md), and the owner-specific phase plans below. The historical proposals are retained for context and do not override later decisions.
 
 **Planning decision deadline:** November 11, 2026. This is a planning/go-no-go deadline, not a delivery date for agents, harness, or evaluation.
 
@@ -11,7 +11,7 @@
 - Shared owns agreed interfaces, state contracts, connectors, and end-to-end test infrastructure, not agent internals. Undecided work is not silently assigned to either contributor.
 - PRD requirements, safety constraints, contract acceptance, and evidence-based release decisions remain project gates regardless of use of a phase guide.
 
-## Verified project position — November 4, 2026
+## Historical project position — November 4, 2026 (superseded)
 
 - `docs/requirements/PRD.md` remains the current approved requirements source. `docs/requirements/PRD-v2.md` is now a separate planning draft for review and is not yet approved; `PRD-V2-CLAUDE-CRITIQUE-PLAN.md` remains the critique/correction record.
 - The local Python 3.13/FastAPI/Pydantic/SQLite foundation is scaffolded. Domain schemas, production authentication, external integrations, and the MAO runtime are not established.

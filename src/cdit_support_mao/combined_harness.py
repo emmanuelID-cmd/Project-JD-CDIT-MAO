@@ -1,16 +1,9 @@
-"""Combined Six-Agent Workflow Harness (Shared Lane) — PRD checkpoints A0–A6.
+"""Downstream fixture harness using a stand-in TriageHandoff (A2–A6).
 
-Executes the integrated six-agent workflow across Manny's and Shawn's lanes
-on synthetic cases:
-1. Coordinator / Intake (A0/A1)
-2. Triage (A2)
-3. Knowledge (A3)
-4. Troubleshooting (A4)
-5. Escalation (A5)
-6. Documentation (A6)
-
-This test-only infrastructure verifies end-to-end handoff contracts, versioning,
-deterministic must-escalate evaluation, and draft note generation with zero writes.
+This synthetic test harness runs Knowledge, Troubleshooting, Escalation, and
+Documentation from a fixture-created case-level TriageHandoff. It does not run
+the Coordinator or semantic Triage and does not establish a full A0–A6 run.
+No external writes, notifications, or ticket actions are available here.
 """
 from __future__ import annotations
 
@@ -77,7 +70,7 @@ class CombinedRun:
 
 
 class CombinedWorkflowHarness:
-    """Executes the complete six-agent synthetic workflow."""
+    """Runs the downstream agents from an explicitly fixture-created A2 input."""
 
     def __init__(self, corpus: KnowledgeCorpus, policy: TroubleshootingPolicy) -> None:
         self.knowledge_agent = KnowledgeAgent(corpus)
@@ -195,7 +188,7 @@ class CombinedWorkflowHarness:
 
 
 def main(argv: list[str] | None = None) -> int:
-    parser = argparse.ArgumentParser(description="Run the combined six-agent workflow harness.")
+    parser = argparse.ArgumentParser(description="Run downstream synthetic agents from a fixture TriageHandoff.")
     parser.add_argument("cases", type=Path, help="Case file or directory of synthetic cases")
     parser.add_argument("--json", action="store_true", help="Output full JSON run results")
     args = parser.parse_args(argv)

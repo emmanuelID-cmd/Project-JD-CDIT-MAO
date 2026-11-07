@@ -1,6 +1,6 @@
 # Shared Phase 2 — Combined Workflow Harness
 
-**Status:** Completed and verified; implemented in `src/cdit_support_mao/combined_harness.py` and tested via `tests/test_combined_workflow.py`.
+**Status:** Harness implementation exists; phase exit remains partial. `src/cdit_support_mao/combined_harness.py` and `tests/test_combined_workflow.py` cover downstream agents from a fixture-created TriageHandoff. They do not exercise Coordinator-to-semantic-Triage or the accepted linked-item receiver path, so the plan's full six-component integration and end-to-end evidence gates are not complete.
 
 ## Purpose
 

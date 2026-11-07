@@ -1,6 +1,25 @@
 # Phase 2 — Triage (Manny)
 
-**Status:** In progress on Manny’s Phase 2 branch. The acknowledged Triage input contract is implemented. The project lead approved linked multi-request analysis and human Auditor handling for unknown items; numeric urgency thresholds, SLA clocks, and operational routing remain open under D-01.
+**Status:** In progress on Manny lane. `MannyA0A2Harness` now composes synthetic Coordinator intake, acknowledged handoff, per-item segmentation, semantic proposals, and a version-bound category vocabulary through A2. It binds each inference to the exact ticket quote and taxonomy source while preserving mandatory human review and an optional fixture-only attention signal. Six-agent CombinedWorkflowHarness/app wiring, downstream item handoffs, and Shared receiver acceptance remain open. The approved PRD-v3 behavior is per-item categorization, source-span preservation, Unknown/ambiguous routing to the Auditor, and a reasoned attention flag where plausible urgency warrants it. Shawn's Knowledge agent receives the A2 handoff; Shared Lane reviews the connector contract only. The smoke trace lacks an approved semantic label and complete provenance. Approved benchmarks are suggestions, not guarantees. Operational SLA/routing policy remains open under D-01.
+
+## Additional Manny-owned work — 2026-11-06
+
+- Added `synthetic_data/manny_triage_cases/unknown-high-impact.json` as a case-specific contract fixture. The actual Coordinator-to-Triage A0–A2 harness, using an injected fake provider response, preserves Unknown category/urgency, records local Auditor-review reasons, requires human review, and carries a potential-attention signal with matching source span. The local review reasons are metadata only; the Shared item contract and Auditor interface remain pending. This tests the agreed fallback/attention behavior, not semantic model accuracy or the 100-case gold set.
+
+- If validated semantic output cannot be bound to the local linked-item candidate, runtime now returns a fail-closed `needs_human_review` result, retains only the unbound candidate, and suppresses the semantic result. Fake-client regression passes; no Shared contract change or provider call was made.
+- Future synthetic model results carry a stable prompt ID and SHA-256 digests of the source prompt and exact serialized request body; raw prompt, request text, and key material are excluded from result metadata. Fake-client tests compare the request digest with the exact bytes passed to the provider. This does not backfill the prior smoke call's uncaptured request body.
+- Added `docs/temp/trace/Trace-2026-11-05-Triage-Smoke-Provenance-Addendum.md`. It reconciles the two fixture identifiers by exact text match and records the source-backed prompt hash. It explicitly leaves the actual serialized request/hash unresolved because it was not captured during the call.
+- Full synthetic suite after this and parallel Phase 3/4 changes: 557 passed. Phase 2 remains open for accepted Shared receiver contract, app/combined workflow wiring, Manny-approved labels, and complete request-trace evidence.
+
+Runtime contract note: a stale/invalid handoff found before candidate creation raises the registry's `HandoffError`; if the handoff becomes stale during semantic preflight, the wrapper returns a human-review result without a provider call. The runtime reads the exact project `CASE-SCENARIOS.md` source only when its SHA-256 matches the reviewed pin, then exposes only its category names and a separate category-list digest. A supplied taxonomy must equal that loaded source before the provider can run. Example ticket text, urgency bands, and conditions are not sent as model examples or treated as labels. Each category inference is joined to its exact item source span and cites the taxonomy digest version. This supports the approved synthetic category behavior; it does not establish CDIT operational urgency/routing policy.
+
+## Manny-local A0–A2 runtime harness contract
+
+- **Owner and boundary:** Manny's tests exercise the Coordinator-acknowledged A0/A1 handoff through semantic A2. They do not dispatch an item to Shawn's Knowledge agent or claim Shared receiver acceptance.
+- **Inputs:** synthetic case fixture, current Coordinator handoff/version, the category-only taxonomy from `CASE-SCENARIOS.md`, and an injected fake-compatible client. No credential loading or provider call is part of ordinary test runs.
+- **Observable pass path:** one output per clearly segmented item; exact source spans and quotes; allowed taxonomy membership; category remains inference; urgency/destination Unknown; optional source-bound fixture attention signal; human review required; parent incomplete; downstream and dispatch false.
+- **Stop/fallback cases:** stale or cancelled handoff, invalid/mutated taxonomy, missing taxonomy, ambiguous segmentation, unauthorized billable call, provider error, or malformed/model-mismatched output must fail closed or return human review without downstream work.
+- **Evidence:** `tests/test_manny_triage_flow.py` and `tests/test_manny_triage_runtime_harness.py` cover single and multi-item paths, Coordinator-to-Triage A0–A2 composition, exact source binding, taxonomy provenance/minimization, pinned-source mismatch, missing/mutated taxonomy, stale windows, no-call fallback, fixture attention notes, and fake-provider validation. These are synthetic fixture checks, not semantic accuracy or full six-agent integration evidence.
 
 ## Work
 
@@ -74,14 +93,34 @@
 - One billable Claude call on one synthetic fixture was explicitly authorized and completed. It used one attempt, zero retries, a provisional 60-second timeout, explicit run authorization, and active-handoff preflight.
 - Client configuration tests pass; full suite after setup: 478 passed. One live adapter-level synthetic call completed; see docs/temp/trace/Trace 2026-11-05_14-47-36-120752_-0500 Triage triage-smoke-20261105T144736-0500 Report.md for evidence and limitations.
 
-### Semantic pipeline wiring and D-20 resolution — 2026-11-05
+### Semantic pipeline helper and D-20 resolution — 2026-11-05
 
-- Wired `execute_semantic_triage` in `src/cdit_support_mao/agents/triage/semantic_pipeline.py` to link multi-item candidates to the Anthropic adapter.
+- Added execute_semantic_triage in semantic_pipeline.py to compose multi-item candidates with the Anthropic adapter. Source search found no application/runtime call site; tests call the helper directly with a fake client.
 - Strictly enforced fail-closed behavior: unauthorized calls, missing client, stale handoffs, ambiguous segmentation, and provider errors return `None`, preserving fallback to Auditor review.
 - Mandatory active-handoff preflight callback verifies handoff currency immediately before adapter invocation.
 - Resolved decision D-20: pinned model to `claude-sonnet-5-5`, SDK 2.5.0, 0 retries, 60s timeout, and strict regression policy.
-- Full suite verification: 499 passed on Python 3.13; lane harness 12 passed. Phase 2 implementation scaffolding reaches ~95%. Exit readiness is ~65% pending Phase 4 evaluation batch.
+- Historical helper-level verification: 499 tests and 12 lane-harness cases passed on Python 3.13 at that snapshot; that snapshot's full suite passed 518 tests. Neither result demonstrates application wiring, model-backed semantic correctness, or linked-item Shared acceptance. Withdraw the earlier 95% scaffold and 65% exit-readiness estimates; Phase 2 exit remains unverified.
 
+### Triage runtime source-hardening follow-up — 2026-11-05
+
+- Fixed the runtime result validator so category, label, and exact quote binding is checked for every item, not just the final item. Added a negative two-item regression case.
+- Category citations now retain the taxonomy digest version instead of reusing the case policy version. The linked-item validator checks the digest-backed taxonomy locator/version pair.
+- Added a loader for the exact repository taxonomy source with a pinned whole-file SHA-256. The runtime compares caller-supplied taxonomy to the pinned source and fails closed to human review if the source file is unavailable or changed; a different supplied taxonomy is rejected before any provider call.
+- The runtime can include the existing fixture attention signal with exact source offsets and a note requiring human context review. A match does not verify an incident or assign urgency; no match remains `not_assessed`.
+- Focused Manny Triage/handoff and attention tests: 103 passed on Python 3.13.15. This pre-harness snapshot's full suite passed 537 tests in 26.78s using pytest `--basetemp` under the authorized writable Codex visualization directory. This is code regression evidence only, not model accuracy, Shared acceptance, or phase exit.
+
+### Manny A0–A2 harness composition — 2026-11-05
+
+- Added `MannyA0A2Harness` to compose synthetic Coordinator intake, sender/receiver handoff acknowledgment, pinned taxonomy loading, optional fixture attention, and `run_triage_runtime` without constructing a client, reading credentials, or writing external state.
+- The harness stops at A2. It does not call Knowledge, the six-agent CombinedWorkflowHarness, the FastAPI app, or Shared Lane because the linked-item receiver contract remains proposed.
+- Focused A0–A2 harness tests pass with both no-call fallback and an injected fake client, including explicit authorization required when a fake client is supplied. Focused Phase 2 suites: 106 passed. Full Python 3.13.15 suite: 540 passed in 19.72s using pytest `--basetemp` under the authorized writable Codex visualization directory. This is regression evidence only; Phase 2 exit and six-agent integration remain open.
+
+## Linked-item A2 contract proposal — 2026-11-05
+
+- Drafted [TRIAGE-LINKED-ITEM-HANDOFF-PROPOSAL.md](../../../lanes/manny/TRIAGE-LINKED-ITEM-HANDOFF-PROPOSAL.md) for Shared Lane review, using existing Manny-owned source-span and linked-item candidate fields.
+- The shared contract is not modified or accepted. Shared Lane must confirm the item-scope representation and receiving compatibility before connection code is added.
+- The current CombinedWorkflowHarness is not end-to-end Coordinator-to-semantic-Triage evidence: it starts from a fixture TriageHandoff and exercises the downstream agents against that stand-in.
+- No Shawn-owned prompt, tool, or agent behavior was changed.
 ## Handoff and exit evidence
 
 Send the schema and synthetic examples to Knowledge and Shared Lane. Knowledge consumes only the minimized agreed packet; Shared checks fields, versions, and routing without changing Triage logic. Every material claim is supported or labeled; down-triage rules are tested; unsupported urgency/SLA claims abstain or go to human review; outputs pass contract validation.

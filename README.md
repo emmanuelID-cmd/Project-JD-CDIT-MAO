@@ -4,7 +4,7 @@ Planning workspace for a human-supervised multi-agent orchestration (MAO) assist
 
 ## Project status
 
-The project lead authorized Manny’s synthetic lane phases. Manny’s process-local Coordinator boundary, Triage request preparation, and a guarded Claude client adapter are in progress; the adapter is not wired into the app and has not made an API call. The Anthropic SDK is pinned locally. Shared Lane receiver review remains an integration gate. Escalation, full workflow integration, production authentication, and external systems remain incomplete or deferred. The supplied job description is the source for role duties. No CDIT system, Salesforce instance, private knowledge base, customer ticket, or PHI access is authorized.
+The project lead authorized Manny’s synthetic lane phases. Manny’s process-local Coordinator boundary, Triage request preparation, guarded Claude adapter, Escalation rules, and preliminary evaluation runner are in progress. One explicitly authorized synthetic Claude smoke call is recorded; its semantic label and actual request-body evidence remain unverified. The app and six-agent harness are not wired to Coordinator-to-semantic-Triage, and no live customer or CDIT data is used. The full synthetic-only suite most recently passed 565 tests; this is regression evidence, not phase acceptance. Shared Lane receiver review remains an integration gate. Production authentication and external systems remain incomplete or deferred. The supplied job description is the source for role duties. No CDIT system, Salesforce instance, private knowledge base, customer ticket, or PHI access is authorized.
 
 ## Documents
 

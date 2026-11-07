@@ -42,6 +42,7 @@ def test_supported_independent_item_remains_proposal_but_not_forwardable():
     text = "Need form; portal access fails"
     first = item(1, "Need form", 0, 9, category="forms", category_label="inference",
         category_sources=(POLICY_SOURCE,), category_basis="Exact synthetic fixture rule.",
+        category_evidence_quote="Need form",
         status="proposal_for_human_review", missing_facts=())
     second = item(2, "portal access fails", 11, 30,
         missing_facts=("affected system and impact",))
@@ -66,7 +67,8 @@ def test_stale_parent_source_version_is_rejected():
 def test_policy_reference_must_match_parent_policy_version():
     wrong = SourceRef(kind=SourceKind.POLICY_RULE, source_id="SYN-RULE-02", version="SYN-POLICY-OLD")
     proposed = item(1, "Need form", 0, 9, category="forms", category_label="inference",
-        category_sources=(wrong,), category_basis="Synthetic rule example.", status="proposal_for_human_review", missing_facts=())
+        category_sources=(wrong,), category_basis="Synthetic rule example.", category_evidence_quote="Need form",
+        status="proposal_for_human_review", missing_facts=())
     with pytest.raises(ValidationError, match="claim_policy_version_mismatch"):
         bundle("Need form", [proposed])
 
