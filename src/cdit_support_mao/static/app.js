@@ -13,9 +13,24 @@ async function api(url, options={}) {
 }
 function showMessage(node, message, kind="") { if (!node) return; node.textContent=message; node.className="form-message " + kind; }
 function statusPill(status) { return '<span class="status-pill ' + (status === "unknown" ? "unknown" : "") + '">' + esc(pretty(status)) + '</span>'; }
+function statusOptions(current, allowed) {
+  return (allowed || []).map(value => '<option value="' + esc(value) + '"' + (value === current ? ' selected' : '') + '>' + esc(pretty(value)) + '</option>').join("");
+}
 function cardForCase(item, role) {
-  const summary = item.request_text || "";
-  return '<article class="case-card"><div><h3>' + esc(item.subject) + '</h3><p>' + esc(summary) + '</p><div class="case-meta"><span class="case-id">' + esc(item.case_id) + '</span>' + statusPill(item.status) + statusPill(item.urgency_band) + '<span>Created ' + esc(new Date(item.created_at).toLocaleString()) + '</span>' + (role !== "user" ? '<span>Owner ' + esc(item.owner_account_id) + '</span>' : '') + '</div></div><div class="case-actions"><span class="helper">' + (role === "user" ? "Human support review" : "Read only · no resolution action") + '</span></div></article>';
+  const displayStatus = item.display_status || item.status;
+  const kind = item.record_kind === "development_example" ? '<span class="role-pill">Development example</span>' : '<span class="role-pill">Client request</span>';
+  const rationale = item.catalog_rationale ? '<p class="helper">Example context: ' + esc(item.catalog_rationale) + '</p>' : '';
+  let controls = '';
+  if (role === "user" && item.can_edit) {
+    controls = '<form class="case-edit-form" data-case-edit="' + esc(item.case_id) + '"><label>Request title<input name="subject" maxlength="160" value="' + esc(item.subject) + '" required></label><label>Request details<textarea name="request_text" maxlength="12000" rows="3" required>' + esc(item.request_text) + '</textarea></label><button class="button secondary" type="submit">Save changes</button><span class="form-message" role="status"></span></form>';
+  } else if (role === "user" && item.can_cancel) {
+    controls = '<span class="helper">Editing is locked while support reviews this request.</span><button class="button secondary danger" type="button" data-case-cancel="' + esc(item.case_id) + '">Cancel as unresolved</button>';
+  } else if (role !== "user") {
+    controls = '<form class="case-edit-form" data-case-edit="' + esc(item.case_id) + '"><label>Request title<input name="subject" maxlength="160" value="' + esc(item.subject) + '" required></label><label>Request details<textarea name="request_text" maxlength="12000" rows="3" required>' + esc(item.request_text) + '</textarea></label><div class="row-actions"><button class="button secondary" type="submit">Save case details</button>' + (item.allowed_next_statuses.length ? '<label class="status-control">Change status<select name="next_status" required><option value="">Choose status</option>' + statusOptions("", item.allowed_next_statuses) + '</select></label><button class="button primary" type="button" data-case-status="' + esc(item.case_id) + '">Update status</button>' : '<span class="helper">Closed is terminal.</span>') + '</div><span class="form-message" role="status"></span></form>';
+  } else {
+    controls = '<span class="helper">' + (item.closure_reason === "requester_cancelled_unresolved" ? "Cancelled by you as unresolved." : "This request is no longer editable.") + '</span>';
+  }
+  return '<article class="case-card"><div><div class="case-meta">' + kind + (role !== "user" ? '<span class="case-id">Owner ' + esc(item.owner_account_id) + '</span>' : '') + '</div><h3>' + esc(item.subject) + '</h3><p>' + esc(item.request_text) + '</p>' + rationale + '<div class="case-meta"><span class="case-id">' + esc(item.case_id) + '</span>' + statusPill(displayStatus) + statusPill(item.urgency_band) + '<span>Created ' + esc(new Date(item.created_at).toLocaleString()) + '</span></div></div><div class="case-actions">' + controls + '</div></article>';
 }
 function empty(message) { return '<div class="empty-state"><b>' + esc(message) + '</b><span>There are no synthetic records to show.</span></div>'; }
 function setNav(role) {
@@ -38,9 +53,9 @@ function setNav(role) {
 function renderMetrics(role, cases, accounts=[], alerts=[]) {
   const open = cases.filter(c=>["submitted","in_progress","waiting_on_customer","escalated"].includes(c.status)).length;
   const values = role === "user"
-    ? [["YOUR REQUESTS",cases.length,"Visible to your account"],["IN PROGRESS",open,"Awaiting support review"],["HUMAN REVIEW","On","Agents cannot resolve or change tickets"]]
+    ? [["YOUR REQUESTS",cases.length,"Visible to your account"],["IN REVIEW",open,"Status shown for your requests"],["HUMAN REVIEW","On","Agents cannot resolve or change tickets"]]
     : role === "staff"
-    ? [["CASES IN VIEW",cases.length,"Synthetic records only"],["NEEDS REVIEW",open,"Submitted or awaiting review"],["AGENT AUTHORITY","Draft","No ticket writes or resolution actions"]]
+    ? [["CASES IN VIEW",cases.length,"Synthetic records only"],["NEEDS REVIEW",open,"Submitted or awaiting review"],["AGENT AUTHORITY","Draft","Human case controls; agents remain read-only"]]
     : [["SYNTHETIC ACCOUNTS",accounts.length,"User, Staff, Admin"],["ACTIVE CASES",cases.length,"Human-reviewed support queue"],["OPEN SESSION REQUESTS",alerts.filter(a=>a.review_status==="new").length,"Review only; no time extension"]];
   $("#metrics").innerHTML=values.map((x,i)=>'<article class="metric-card ' + (i===2 ? "accent" : "") + '"><span>' + esc(x[0]) + '</span><b>' + esc(x[1]) + '</b><small>' + esc(x[2]) + '</small></article>').join("");
 }
@@ -52,7 +67,7 @@ function requestForm() {
   return '<section class="panel" id="new-request"><div class="panel-heading"><div><div class="eyebrow">CREATE A CASE</div><h2>Tell us what you need</h2><p class="muted">Synthetic prototype only. Do not enter real personal, health, or customer information.</p></div><span class="panel-icon">＋</span></div><form id="request-form" class="stack-form"><label for="subject">Request title</label><input id="subject" name="subject" maxlength="160" placeholder="e.g. Report export access" required><label for="request-text">What happened or what do you need?</label><textarea id="request-text" name="request_text" maxlength="12000" rows="5" placeholder="Describe your synthetic support request." required></textarea><div class="form-bottom"><span class="helper">Synthetic examples only · 12,000 character maximum</span><button class="button primary" type="submit">Submit request <span aria-hidden="true">→</span></button></div><div id="request-message" class="form-message" role="status" aria-live="polite"></div></form></section>';
 }
 function renderStaffPanels(role) {
-  const header = '<div class="section-head"><div><h2>' + (role==="user" ? "Recent requests" : "Case queue") + '</h2><p class="muted">' + (role==="user" ? "Only requests submitted by this account appear here." : "Cases are read-only here; human reviewers control support actions.") + '</p></div>' + (role==="user" ? '<button class="button secondary" data-scroll="#new-request">＋ New request</button>' : '<button class="button secondary" id="refresh-cases">↻ Refresh</button>') + '</div><div id="case-list" class="case-list" aria-live="polite"><div class="loading-card"><span class="spinner"></span> Loading synthetic cases…</div></div>';
+  const header = '<div class="section-head"><div><h2>' + (role==="user" ? "Recent requests" : "Case queue") + '</h2><p class="muted">' + (role==="user" ? "Only requests submitted by this account appear here." : "Manage the synthetic queue and the 80 tagged development examples. Agent outputs remain proposals.") + '</p></div>' + (role==="user" ? '<button class="button secondary" data-scroll="#new-request">＋ New request</button>' : '<button class="button secondary" id="refresh-cases">↻ Refresh</button>') + '</div><div id="case-list" class="case-list" aria-live="polite"><div class="loading-card"><span class="spinner"></span> Loading synthetic cases…</div></div>';
   let body=header;
   if(role==="user") body+=requestForm();
   if(role!=="user") body+='<section class="panel" id="product-health"><div class="panel-heading"><div><div class="eyebrow">SYSTEM SIGNALS</div><h2>Product Health</h2><p class="muted">Allowlisted synthetic metadata only. Ticket bodies and arbitrary model text are not stored here.</p></div><span class="panel-icon blue">⌁</span></div><div id="health-events" class="health-list"><div class="loading-card"><span class="spinner"></span> Loading metadata…</div></div></section>';
@@ -111,7 +126,25 @@ async function start() {
       const statusSave=e.target.closest("[data-status-save]"); if(statusSave){const id=statusSave.dataset.statusSave;const select=document.querySelector('[data-status-select="' + id + '"]');if(select.value)await adminChange(id,{status:select.value},role);else showMessage($("#admin-message"),"Choose an access status first.");}
       const review=e.target.closest("[data-alert-review]"); if(review)try{await api("/api/admin/session-extension-alerts/"+encodeURIComponent(review.dataset.alertReview)+"/review",{method:"PATCH"});await loadData(role);}catch(err){showMessage($("#admin-message"),err.message,"error");}
     });
-    $("#logout").addEventListener("click",signOut);
+    document.addEventListener("click", async e=>{
+      const cancel=e.target.closest("[data-case-cancel]");
+      if(cancel){
+        if(!window.confirm("Cancel this request as unresolved? This closes your request and cannot be undone."))return;
+        try{await api("/api/cases/"+encodeURIComponent(cancel.dataset.caseCancel)+"/cancel",{method:"POST"});await loadData(role);}catch(error){showMessage(cancel.closest(".case-card").querySelector(".form-message"),error.message,"error");}
+      }
+      const update=e.target.closest("[data-case-status]");
+      if(update){
+        const form=update.closest("form");const status=form.elements.next_status.value;
+        if(!status){showMessage(form.querySelector(".form-message"),"Choose a status first.","error");return;}
+        try{await api("/api/cases/"+encodeURIComponent(update.dataset.caseStatus)+"/status",{method:"PATCH",body:JSON.stringify({status})});await loadData(role);}catch(error){showMessage(form.querySelector(".form-message"),error.message,"error");}
+      }
+    });
+    document.addEventListener("submit", async e=>{
+      const form=e.target.closest("form[data-case-edit]");if(!form)return;
+      e.preventDefault();const caseId=form.dataset.caseEdit;const message=form.querySelector(".form-message");
+      try{await api("/api/cases/"+encodeURIComponent(caseId),{method:"PATCH",body:JSON.stringify({subject:form.elements.subject.value,request_text:form.elements.request_text.value})});await loadData(role);}
+      catch(error){showMessage(message,error.message,"error");}
+    });    $("#logout").addEventListener("click",signOut);
     $("#session-logout").addEventListener("click",signOut);
     $("#session-continue").addEventListener("click",async()=>{try{await api("/auth/continue",{method:"POST"});$("#session-modal").hidden=true;}catch(e){showMessage($("#session-message"),e.message,"error");}});
     $("#session-extend-request").addEventListener("click",async()=>{try{await api("/auth/extension-request",{method:"POST"});showMessage($("#session-message"),"Request recorded for Admin review. Your session was not extended.","success");}catch(e){showMessage($("#session-message"),e.message,"error");}});

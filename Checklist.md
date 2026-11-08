@@ -4,7 +4,8 @@ Use this checklist as the live project status record. Check an item only when it
 
 **Current phase:** Manny Phase 2 - Triage integration in progress; exit gates remain open. PRD-v4 is the current requirements source.
 **Planning deadline:** November 11, 2026
-**Current implementation status:** The local SQLite v1 foundation, local synthetic authentication, server-authorized User/Staff/Admin routes, and three static role previews are implemented on manny/sql-foundation. The full Python 3.13 test suite passes 633 tests; manual browser/accessibility review remains open. No project changes have been pushed. The Manny agent Phase 2 estimate remains as previously recorded; this separate app/database work does not close agent Phase 2, Phase 3, Phase 4, or Shared integration gates.
+**Current implementation status:** SQLite foundation, local synthetic User/Staff/Admin authentication, authorized role routes, and isolated role previews are implemented. Current suite: 638 tests passed; seed, API lifecycle checks, JavaScript syntax, and whitespace checks are green. Manual browser/accessibility review remains open. This app/database work does not close agent Phase 2, Phase 3, Phase 4, or Shared integration gates.
+**Current case-lifecycle update:** All 80 catalog examples are in the local DB as Staff/Admin-only development records. User view remains scoped to their own requests; agent writes remain disabled. Browser/accessibility review remains open.
 **Antigravity provenance:** The project lead confirms Antigravity only merged PR #6; all other completion/work claims in its handoff are false. Existing repository artifacts are tracked separately and are not attributed to Antigravity.
 **Completion status:** In progress; do not claim project completion or begin release workflow.
 
@@ -15,6 +16,9 @@ Use this checklist as the live project status record. Check an item only when it
 - [x] Implement initial SQLite v1 migration for synthetic accounts, sessions, cases, app-only Product Health events/summaries, Admin access audit events, and session extension alerts; include constraints, indexes, checksum migration tracking, seed/reset, and retention purge. Cross-agent workflow/evaluation persistence remains separate pending boundary review.
 - [x] Implement local synthetic authentication and server-side User/Staff/Admin authorization under Manny; verify direct page/API denial and Admin audit events. Approved session and retention rules are specified in PRD-v4.
 - [x] Build the separate three-view no-login showcase using fabricated static data and inert privileged controls.
+- [x] Seed and show all 80 CASE-SCENARIOS entries as Staff/Admin-only development examples, kept separate from User requests and gold evaluation labels; API role visibility checks pass.
+- [x] Verify Staff/Admin human edits and allowed status changes are audited with bounded metadata; verify User own-request edit only while Submitted, In Progress display as In Review, post-transition edit denial, and unresolved cancellation; lifecycle API tests pass.
+- [x] Confirm agent authority remains read-only while Staff/Admin human case management is enabled; [ ] manual browser/accessibility review remains open.
 - [x] Verify auth/API boundaries, user case scoping, Admin audit and session controls, SQL parameter handling, and static preview isolation in focused synthetic tests. Product Health schema remains bounded and existing database tests cover retention and prohibited fields.
 - [ ] Complete manual keyboard/screen-reader and responsive browser review; exercise database-unavailable recovery in the running UI.
 
@@ -161,4 +165,4 @@ Use this checklist as the live project status record. Check an item only when it
 - [ ] Cross-lane edits are limited to agreed connection/interface work and approved visual-only UI changes.
 - [ ] Contributor changes are reviewed into `developer` by pull request.
 - [ ] Do not merge to `main` until the project is complete and the user explicitly authorizes the release; if completion is unclear, ask.
-- [ ] Keep `developer` and owner lanes current only through verified fast-forward updates; never overwrite unique commits.
+- [ ] Keep `developer` and owner lanes current only through verified fast-forward updates; never overwrite unique commits.`n

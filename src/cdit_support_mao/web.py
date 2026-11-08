@@ -98,6 +98,17 @@ class SupportRequest(BaseModel):
     request_text: str = Field(min_length=1, max_length=12000)
 
 
+
+class CaseEditPayload(BaseModel):
+    subject: str | None = Field(default=None, min_length=1, max_length=160)
+    request_text: str | None = Field(default=None, min_length=1, max_length=12000)
+
+
+class StatusUpdatePayload(BaseModel):
+    status: Literal[
+        "submitted", "in_progress", "waiting_on_customer", "under_investigation",
+        "escalated", "resolved", "closed",
+    ]
 class AccountChange(BaseModel):
     role: Literal["user", "staff", "admin"] | None = None
     status: Literal["active", "suspended", "deactivated", "removed"] | None = None
@@ -279,19 +290,68 @@ def request_extension(request: Request, actor: Actor = Depends(current_actor)):
     return {"alert_id": alert_id, "status": "new", "session_extended": False, "expires_at": state["expires_at"]}
 
 
+ALLOWED_STATUS_TRANSITIONS = {
+    "submitted": {"in_progress", "closed"},
+    "in_progress": {"waiting_on_customer", "under_investigation", "escalated", "resolved", "closed"},
+    "waiting_on_customer": {"in_progress", "under_investigation", "escalated", "resolved", "closed"},
+    "under_investigation": {"in_progress", "escalated", "resolved", "closed"},
+    "escalated": {"in_progress", "under_investigation", "resolved", "closed"},
+    "resolved": {"in_progress", "closed"},
+    "closed": set(),
+}
+
+
+def _case_change_event(
+    db: sqlite3.Connection, *, case_id: str, actor: Actor, action: str,
+    before_status: str | None, after_status: str, reason_code: str,
+    subject_changed: bool = False, request_text_changed: bool = False,
+) -> None:
+    db.execute(
+        """INSERT INTO synthetic_case_change_events
+           (event_id, case_id, actor_account_id, action, before_status, after_status,
+            subject_changed, request_text_changed, reason_code, occurred_at)
+           VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)""",
+        ("CASE-EVT-" + uuid.uuid4().hex, case_id, actor.account_id, action,
+         before_status, after_status, int(subject_changed), int(request_text_changed),
+         reason_code, stamp(now_utc())),
+    )
+
+
+def _case_for_role(row: sqlite3.Row, role: str) -> dict:
+    result = dict(row)
+    result["display_status"] = (
+        "in_review" if role == "user" and result["status"] == "in_progress" else result["status"]
+    )
+    result["can_edit"] = bool(
+        role == "user" and result["record_kind"] == "user_request" and result["status"] == "submitted"
+    )
+    result["can_cancel"] = bool(
+        role == "user" and result["record_kind"] == "user_request"
+        and result["status"] not in {"resolved", "closed"}
+    )
+    result["allowed_next_statuses"] = (
+        sorted(ALLOWED_STATUS_TRANSITIONS[result["status"]])
+        if role in {"staff", "admin"} else []
+    )
+    return result
+
+
 @router.get("/api/cases")
 def list_cases(actor: Actor = Depends(require_roles("user", "staff", "admin"))):
+    query = """SELECT c.case_id, c.owner_account_id, c.subject, c.request_text, c.status,
+                      c.urgency_band, c.created_at, c.updated_at, c.record_kind, c.category,
+                      c.catalog_id, c.closure_reason, cat.rationale AS catalog_rationale
+               FROM synthetic_cases c
+               LEFT JOIN synthetic_case_catalog cat ON cat.catalog_id = c.catalog_id"""
     with connect() as db:
         if actor.role == "user":
             rows = db.execute(
-                "SELECT case_id, owner_account_id, subject, request_text, status, urgency_band, created_at, updated_at FROM synthetic_cases WHERE owner_account_id = ? ORDER BY updated_at DESC",
+                query + " WHERE c.owner_account_id = ? AND c.record_kind = 'user_request' ORDER BY c.updated_at DESC",
                 (actor.account_id,),
             ).fetchall()
         else:
-            rows = db.execute(
-                "SELECT case_id, owner_account_id, subject, request_text, status, urgency_band, created_at, updated_at FROM synthetic_cases ORDER BY updated_at DESC"
-            ).fetchall()
-    return [dict(row) for row in rows]
+            rows = db.execute(query + " ORDER BY c.updated_at DESC").fetchall()
+    return [_case_for_role(row, actor.role) for row in rows]
 
 
 @router.post("/api/cases", status_code=201)
@@ -303,11 +363,17 @@ def submit_case(payload: SupportRequest, actor: Actor = Depends(require_roles("u
     if not subject or not request_text:
         raise HTTPException(status_code=422, detail="Subject and request are required")
     with connect() as db:
+        db.execute("BEGIN IMMEDIATE")
         db.execute(
             """INSERT INTO synthetic_cases
-               (case_id, owner_account_id, subject, request_text, status, urgency_band, is_synthetic, created_at, updated_at)
-               VALUES (?, ?, ?, ?, 'submitted', 'unknown', 1, ?, ?)""",
+               (case_id, owner_account_id, subject, request_text, status, urgency_band,
+                is_synthetic, created_at, updated_at, record_kind)
+               VALUES (?, ?, ?, ?, 'submitted', 'unknown', 1, ?, ?, 'user_request')""",
             (case_id, actor.account_id, subject, request_text, now, now),
+        )
+        _case_change_event(
+            db, case_id=case_id, actor=actor, action="user_submitted",
+            before_status=None, after_status="submitted", reason_code="initial_submission",
         )
         db.commit()
     return {"case_id": case_id, "status": "submitted", "urgency_band": "unknown"}
@@ -318,18 +384,133 @@ def get_case(case_id: str, actor: Actor = Depends(require_roles("user", "staff",
     with connect() as db:
         if actor.role == "user":
             row = db.execute(
-                "SELECT case_id, owner_account_id, subject, request_text, status, urgency_band, created_at, updated_at FROM synthetic_cases WHERE case_id = ? AND owner_account_id = ?",
+                """SELECT c.*, cat.rationale AS catalog_rationale FROM synthetic_cases c
+                   LEFT JOIN synthetic_case_catalog cat ON cat.catalog_id = c.catalog_id
+                   WHERE c.case_id = ? AND c.owner_account_id = ? AND c.record_kind = 'user_request'""",
                 (case_id, actor.account_id),
             ).fetchone()
         else:
             row = db.execute(
-                "SELECT case_id, owner_account_id, subject, request_text, status, urgency_band, created_at, updated_at FROM synthetic_cases WHERE case_id = ?",
+                """SELECT c.*, cat.rationale AS catalog_rationale FROM synthetic_cases c
+                   LEFT JOIN synthetic_case_catalog cat ON cat.catalog_id = c.catalog_id
+                   WHERE c.case_id = ?""",
                 (case_id,),
             ).fetchone()
     if row is None:
         raise HTTPException(status_code=404, detail="Case not found")
-    return dict(row)
+    return _case_for_role(row, actor.role)
 
+
+@router.patch("/api/cases/{case_id}")
+def edit_case(case_id: str, payload: CaseEditPayload, actor: Actor = Depends(require_roles("user", "staff", "admin"))):
+    fields = payload.model_fields_set
+    if not fields:
+        raise HTTPException(status_code=422, detail="Provide a subject or request description")
+    subject_changed = "subject" in fields
+    request_changed = "request_text" in fields
+    subject = payload.subject.strip() if subject_changed and payload.subject is not None else None
+    request_text = payload.request_text.strip() if request_changed and payload.request_text is not None else None
+    if subject_changed and not subject or request_changed and not request_text:
+        raise HTTPException(status_code=422, detail="Subject and request description cannot be blank")
+    with connect() as db:
+        db.execute("BEGIN IMMEDIATE")
+        row = db.execute(
+            """SELECT status, record_kind, subject, request_text FROM synthetic_cases
+               WHERE case_id = ? AND (? <> 'user' OR owner_account_id = ?)""",
+            (case_id, actor.role, actor.account_id),
+        ).fetchone()
+        if row is None or (actor.role == "user" and row["record_kind"] != "user_request"):
+            db.rollback()
+            raise HTTPException(status_code=404, detail="Case not found")
+        if actor.role == "user" and row["status"] != "submitted":
+            db.rollback()
+            raise HTTPException(status_code=409, detail="This request is in review and can no longer be edited")
+        updates = []
+        values = []
+        if subject_changed:
+            updates.append("subject = ?")
+            values.append(subject)
+        if request_changed:
+            updates.append("request_text = ?")
+            values.append(request_text)
+        updates.append("updated_at = ?")
+        values.extend([stamp(now_utc()), case_id])
+        db.execute("UPDATE synthetic_cases SET " + ", ".join(updates) + " WHERE case_id = ?", values)
+        action = "user_edited" if actor.role == "user" else actor.role + "_edited"
+        _case_change_event(
+            db, case_id=case_id, actor=actor, action=action,
+            before_status=row["status"], after_status=row["status"],
+            reason_code="content_correction", subject_changed=subject_changed,
+            request_text_changed=request_changed,
+        )
+        db.commit()
+    return {"case_id": case_id, "updated": True, "status": row["status"]}
+
+
+@router.post("/api/cases/{case_id}/cancel")
+def cancel_case(case_id: str, actor: Actor = Depends(require_roles("user"))):
+    with connect() as db:
+        db.execute("BEGIN IMMEDIATE")
+        row = db.execute(
+            """SELECT status FROM synthetic_cases WHERE case_id = ?
+               AND owner_account_id = ? AND record_kind = 'user_request'""",
+            (case_id, actor.account_id),
+        ).fetchone()
+        if row is None:
+            db.rollback()
+            raise HTTPException(status_code=404, detail="Case not found")
+        if row["status"] in {"resolved", "closed"}:
+            db.rollback()
+            raise HTTPException(status_code=409, detail="This request is already complete and cannot be cancelled")
+        now = stamp(now_utc())
+        db.execute(
+            "UPDATE synthetic_cases SET status = 'closed', closure_reason = 'requester_cancelled_unresolved', updated_at = ? WHERE case_id = ?",
+            (now, case_id),
+        )
+        _case_change_event(
+            db, case_id=case_id, actor=actor, action="requester_cancelled",
+            before_status=row["status"], after_status="closed",
+            reason_code="requester_cancellation",
+        )
+        db.commit()
+    return {"case_id": case_id, "status": "closed", "closure_reason": "requester_cancelled_unresolved"}
+
+
+@router.patch("/api/cases/{case_id}/status")
+def update_case_status(
+    case_id: str, payload: StatusUpdatePayload,
+    actor: Actor = Depends(require_roles("staff", "admin")),
+):
+    with connect() as db:
+        db.execute("BEGIN IMMEDIATE")
+        row = db.execute("SELECT status FROM synthetic_cases WHERE case_id = ?", (case_id,)).fetchone()
+        if row is None:
+            db.rollback()
+            raise HTTPException(status_code=404, detail="Case not found")
+        before = row["status"]
+        after = payload.status
+        if after == before:
+            db.rollback()
+            return {"case_id": case_id, "status": before, "changed": False}
+        if after not in ALLOWED_STATUS_TRANSITIONS[before]:
+            db.rollback()
+            raise HTTPException(status_code=409, detail=f"Status transition from {before} to {after} is not allowed")
+        closure_reason = (
+            "staff_closed" if after == "closed" and actor.role == "staff"
+            else "admin_closed" if after == "closed"
+            else None
+        )
+        db.execute(
+            "UPDATE synthetic_cases SET status = ?, closure_reason = ?, updated_at = ? WHERE case_id = ?",
+            (after, closure_reason, stamp(now_utc()), case_id),
+        )
+        action = actor.role + "_status_updated"
+        _case_change_event(
+            db, case_id=case_id, actor=actor, action=action,
+            before_status=before, after_status=after, reason_code="human_status_change",
+        )
+        db.commit()
+    return {"case_id": case_id, "status": after, "changed": True}
 
 @router.get("/api/admin/accounts")
 def list_accounts(actor: Actor = Depends(require_roles("admin"))):

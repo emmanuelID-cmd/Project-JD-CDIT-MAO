@@ -1,4 +1,16 @@
 # Project Handoff — Project-JD-CDIT-MAO
+## Verified current state before SQL foundation publication — 2026-11-08
+
+This entry supersedes earlier current-status statements below where they conflict. It records the local state before publication; it is not a push-time confirmation.
+
+- Repository: `emmanuelID-cmd/Project-JD-CDIT-MAO`; active branch: `manny/sql-foundation`; intended PR target: `developer`.
+- Current source baseline for the SQL branch: `a363724`; four local commits through `41c39c9` are by Emmanuel De Jesus and are also on local `manny/coordinator-triage-escalation`. The working tree contains the case-catalog and human case-lifecycle extension. No rebase or reset was performed.
+- Shawn's PR #14 merged into `developer` at `a52ecf1`. Local `developer` and Shawn's lane, plus Shawn's remote lane, were fast-forwarded to `a52ecf1`. `main` remains at `1a5cf4a`. The Manny lane was not advanced because it contains the SQL commits and pending work absent from `developer`.
+- Done in the current outgoing work: seed the 80 CASE-SCENARIOS rows as Staff/Admin-only development examples; add human-only case editing/status transitions with audit events; keep User requests owner-scoped, editable only while Submitted, and cancellable as unresolved before terminal resolution; update PRD-v4, planning, checklist, and setup docs. Agent writes remain disabled.
+- Not completed: publish the SQL branch, open/review/merge its PR, complete manual browser/accessibility and database-unavailable recovery review, or close the separate agent and Shared phase gates. No real customer/CDIT data or live model call was used.
+- Validation: full synthetic project suite, 638 passed; `git diff --check` clean. This records local validation only; final publication checks remain pending.
+- The remote `manny/sql-foundation` branch does not yet exist; this is an initial-push candidate from the verified `a363724` branch point. No push or PR for this SQL work has occurred yet.
+
 ## Verified status before F-1/F-2 follow-up publication - 2026-11-08
 
 This section supersedes earlier status statements below where they conflict. Antigravity's only confirmed action remains merging PR #6; no Antigravity implementation or validation is credited.

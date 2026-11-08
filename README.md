@@ -4,7 +4,7 @@ Planning workspace for a human-supervised multi-agent orchestration (MAO) assist
 
 ## Project status
 
-PRD-v4 is the current requirements source. Manny owns the SQL foundation and local app/auth/UI work; the Manny agent phases remain separately tracked in Checklist.md. This branch contains the SQLite v1 foundation, local synthetic authentication, server-authorized User/Staff/Admin routes, and three static unauthenticated previews. The full Python test suite passes 633 tests. Manual browser/accessibility review remains open. No project changes have been pushed, and no real customer or CDIT data is used.
+PRD-v4 is the current requirements source. Manny owns the SQL foundation and local app/auth/UI work; the Manny agent phases remain separately tracked in Checklist.md. The SQL foundation includes local synthetic authentication, server-authorized User/Staff/Admin routes, an 80-row Staff/Admin-only development example catalog, human-only case status/edit controls, and three static unauthenticated previews. User accounts see only their own requests, can edit while Submitted, see In Progress as In Review, and may cancel their own unresolved request. Agents remain read-only. Current verification is tracked in Checklist.md; manual browser/accessibility review remains open. No real customer or CDIT data is used.
 
 ## Documents
 
@@ -77,7 +77,7 @@ python -m cdit_support_mao.db_cli set-password SYN-STAFF-001
 python -m cdit_support_mao.db_cli set-password SYN-ADMIN-001
 ```
 
-The CLI prompts for the password twice and stores only a salted password hash. Run the local app and open http://127.0.0.1:8000/login. User accounts see and submit their own synthetic requests. Staff and Admin share the support back end and Product Health view; Admin also manages synthetic account roles/status and reviews session extension requests. Every protected page and API checks role access on the server.
+The CLI prompts for the password twice and stores only a salted password hash. Run the local app and open http://127.0.0.1:8000/login. User accounts see and submit only their own synthetic requests, can edit them only while Submitted, see In Progress as In Review, and may cancel their own unresolved request. Staff and Admin share the support back end and Product Health view; both can manage synthetic case details/status and review the 80 tagged development examples. Admin also manages synthetic account roles/status and reviews session extension requests. Agent outputs remain propose-only; these are human application actions. Every protected page and API checks role access on the server.
 
 The unauthenticated showcase is separate: /preview/user, /preview/staff, and /preview/admin. Those pages contain fabricated examples and disabled illustrative controls. They make no authenticated API or database requests and cannot create a session or change account access. This is a local synthetic prototype, not production authentication or a deployment-ready security system.
 

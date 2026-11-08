@@ -48,7 +48,7 @@ def test_user_case_scope_and_staff_admin_route_boundaries(tmp_path, monkeypatch)
     assert client.get("/api/cases/SYN-CASE-OTHER").status_code == 404
     client.post("/auth/logout")
     login(client, "staff.demo")
-    assert len(client.get("/api/cases").json()) == 3
+    assert len(client.get("/api/cases").json()) == 83
     assert client.get("/api/admin/accounts").status_code == 403
 
 

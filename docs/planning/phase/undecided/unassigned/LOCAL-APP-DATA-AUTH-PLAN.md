@@ -27,9 +27,9 @@ Build a local-only application foundation around the existing Python 3.13/FastAP
 
 - SQL foundation v1 is implemented on the authorized local SQL branch with checksum migrations, synthetic seeds, reset, retention purge, and bounded Product Health/account-audit tables.
 - Local synthetic authentication is implemented with salted scrypt hashes, no default passwords, 30-minute idle/8-hour absolute session limits, 15/5-minute reminders, logout and access-change revocation, plus an Admin review alert that never extends a session.
-- Authenticated User, Staff, and Admin routes share the project shell and are authorized server-side. User sees/submits own synthetic requests; Staff/Admin see the shared case and Product Health views; Admin additionally manages synthetic account role/status and reviews extension alerts.
+- Authenticated User, Staff, and Admin routes share the project shell and are authorized server-side. User sees only their own synthetic requests, edits only before review, sees In Progress as In Review, and may cancel their own unresolved request; Staff/Admin manage local synthetic case details/status and see all 80 tagged development examples plus the shared Product Health view; Admin additionally manages synthetic account role/status and reviews extension alerts. Agent writes remain prohibited.
 - Static previews exist at /preview/user, /preview/staff, and /preview/admin; they are script-free, use fabricated text, disable illustrative controls, and run under a restrictive CSP.
-- The full Python suite passes 633 tests, including route-role denial, preview isolation, session behavior, access audits, user record scoping, and SQL parameterization. Manual browser/accessibility review and database-unavailable recovery review remain open.
+- Before the case-catalog/status extension, the full Python suite passed 633 tests, including route-role denial, preview isolation, session behavior, access audits, user record scoping, and SQL parameterization. The current branch adds 80 tagged development examples and human-only case lifecycle controls; its verification is tracked in Checklist.md. Manual browser/accessibility review and database-unavailable recovery review remain open.
 
 ## Acceptance criteria
 
@@ -57,3 +57,10 @@ Build a local-only application foundation around the existing Python 3.13/FastAP
   Do not persist cross-agent handoff/event fields until Shared approves the contract.
 - Approved: seed only synthetic accounts, disable public registration, store password hashes only, and enforce access server-side. Use 30-minute idle and 8-hour absolute session expiry with 15- and 5-minute warnings; do not extend automatically. An extension request creates an Admin review alert and timestamp only.
   Invalidate sessions on logout, suspension/deactivation/removal, or role change. Production authentication and real credentials remain out of scope.
+
+## Approved local case lifecycle extension (2026-11-08)
+
+- Seed the 80 CASE-SCENARIOS entries as development examples, separate from client-submitted requests and evaluation labels. Only Staff/Admin can see these examples.
+- Staff/Admin can edit local synthetic case details/status. User can edit own request only while Submitted; In Progress is displayed to User as In Review, after which content edits are disabled. User can cancel own unresolved request as Closed/Requester Cancelled.
+- Keep agent behavior propose-only/read-only. Record human case changes using bounded audit metadata without copying request bodies.
+- The PRD-v4 §4e transition map governs prototype UI state updates; it is an app safeguard, not operational policy.

@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import hashlib
+import json
 import sqlite3
 from contextlib import closing
 from datetime import datetime, timezone, timedelta
@@ -13,6 +14,41 @@ from cdit_support_mao.config import database_path
 class MigrationError(RuntimeError):
     """Raised when local schema history is inconsistent with packaged migrations."""
 
+
+# One earlier local v2 migration used different source bytes but created this exact schema.
+# Accept only that recorded checksum and only after verifying the complete structural signature.
+_LEGACY_MIGRATION_CHECKSUMS = {
+    2: {"b200a572c5f07a3cf4fbd2108a608582426b8a804fa422c12d2f383da81523d8"},
+}
+
+
+def _matches_legacy_case_catalog_schema(connection: sqlite3.Connection) -> bool:
+    required_columns = {
+        "synthetic_cases": {"record_kind", "category", "catalog_id", "closure_reason"},
+        "synthetic_case_catalog": {
+            "catalog_id", "row_number", "category", "example_query", "default_band",
+            "rationale", "source_document", "source_version", "is_synthetic",
+        },
+        "synthetic_case_change_events": {
+            "event_id", "case_id", "actor_account_id", "action", "before_status",
+            "after_status", "subject_changed", "request_text_changed", "reason_code", "occurred_at",
+        },
+    }
+    for table, expected in required_columns.items():
+        actual = {row[1] for row in connection.execute(f"PRAGMA table_info({table})")}
+        if not expected.issubset(actual):
+            return False
+    required_objects = {
+        "synthetic_case_catalog_band_idx", "synthetic_case_change_events_case_time_idx",
+        "synthetic_cases_catalog_id_uq", "synthetic_cases_kind_status_idx",
+        "synthetic_case_catalog_kind_insert", "synthetic_case_catalog_kind_update",
+    }
+    actual_objects = {
+        row[0] for row in connection.execute(
+            "SELECT name FROM sqlite_master WHERE name NOT LIKE 'sqlite_%'"
+        )
+    }
+    return required_objects.issubset(actual_objects)
 
 def connect(path: str | Path | None = None) -> sqlite3.Connection:
     """Open a local SQLite database with foreign-key enforcement enabled."""
@@ -73,7 +109,14 @@ def initialize_database(path: str | Path | None = None) -> int:
             ).fetchone()
             if row is not None:
                 if row["name"] != name or row["checksum_sha256"] != checksum:
-                    raise MigrationError(f"applied migration {version} differs from packaged source")
+                    compatible_legacy = (
+                        row["name"] == name
+                        and row["checksum_sha256"] in _LEGACY_MIGRATION_CHECKSUMS.get(version, set())
+                        and version == 2
+                        and _matches_legacy_case_catalog_schema(connection)
+                    )
+                    if not compatible_legacy:
+                        raise MigrationError(f"applied migration {version} differs from packaged source")
                 continue
             try:
                 connection.executescript("BEGIN IMMEDIATE;\n" + data.decode("utf-8"))
@@ -106,10 +149,9 @@ def seed_synthetic_data(path: str | Path | None = None, *, now: datetime | None 
                    VALUES (?, ?, ?, 'setup_required', NULL, ?, ?)""",
                 (account_id, username, role, created, created),
             )
-        connection.execute(
+        initial_case = connection.execute(
             """INSERT OR IGNORE INTO synthetic_cases
-               (case_id, owner_account_id, subject, request_text, status, urgency_band,
-                is_synthetic, created_at, updated_at)
+               (case_id, owner_account_id, subject, request_text, status, urgency_band, is_synthetic, created_at, updated_at)
                VALUES (?, ?, ?, ?, 'submitted', 'unknown', 1, ?, ?)""",
             (
                 "SYN-CASE-001", "SYN-USER-001", "Synthetic report-export question",
@@ -117,6 +159,46 @@ def seed_synthetic_data(path: str | Path | None = None, *, now: datetime | None 
                 created, created,
             ),
         )
+        if initial_case.rowcount == 1:
+            connection.execute(
+                """INSERT OR IGNORE INTO synthetic_case_change_events
+                   (event_id, case_id, actor_account_id, action, before_status, after_status, reason_code, occurred_at)
+                   VALUES (?, ?, ?, 'user_submitted', NULL, 'submitted', 'initial_submission', ?)""",
+                ("EV-CASE-001-INIT", "SYN-CASE-001", "SYN-USER-001", created),
+            )
+        catalog_path = Path(__file__).parent / "catalogs" / "case-condition-catalog-v1.json"
+        catalog_rows = json.loads(catalog_path.read_text(encoding="utf-8"))
+        for example in catalog_rows:
+            connection.execute(
+                """INSERT OR IGNORE INTO synthetic_case_catalog
+                   (catalog_id, row_number, category, example_query, default_band, rationale,
+                    source_document, source_version, is_synthetic)
+                   VALUES (?, ?, ?, ?, ?, ?, ?, ?, 1)""",
+                (
+                    example["catalog_id"], example["row_number"], example["category"],
+                    example["example_query"], example["default_band"], example["rationale"],
+                    example["source_document"], example["source_version"],
+                ),
+            )
+            case_id = f"SYN-CASE-EX-{example['row_number']:03d}"
+            seeded = connection.execute(
+                """INSERT OR IGNORE INTO synthetic_cases
+                   (case_id, owner_account_id, subject, request_text, status, urgency_band,
+                    is_synthetic, created_at, updated_at, record_kind, category, catalog_id)
+                   VALUES (?, 'SYN-STAFF-001', ?, ?, 'submitted', ?, 1, ?, ?, 'development_example', ?, ?)""",
+                (
+                    case_id, f"Example {example['row_number']:02d}: {example['category']}",
+                    example["example_query"], example["default_band"], created, created,
+                    example["category"], example["catalog_id"],
+                ),
+            )
+            if seeded.rowcount == 1:
+                connection.execute(
+                    """INSERT OR IGNORE INTO synthetic_case_change_events
+                       (event_id, case_id, actor_account_id, action, before_status, after_status, reason_code, occurred_at)
+                       VALUES (?, ?, 'SYN-STAFF-001', 'example_seeded', NULL, 'submitted', 'synthetic_catalog_seed', ?)""",
+                    (f"EV-CASE-EX-{example['row_number']:03d}-INIT", case_id, created),
+                )
         connection.execute(
             """INSERT OR IGNORE INTO product_health_events
                (event_id, occurred_at, event_type, component, component_version,
@@ -125,7 +207,7 @@ def seed_synthetic_data(path: str | Path | None = None, *, now: datetime | None 
             ("SYN-EVENT-SEED-001", created),
         )
         connection.commit()
-    return {"accounts": len(accounts), "cases": 1, "product_health_events": 1}
+    return {"accounts": len(accounts), "cases": 1 + len(catalog_rows), "catalog_examples": len(catalog_rows), "product_health_events": 1}
 
 
 def _subtract_months(instant: datetime, months: int) -> datetime:
@@ -169,7 +251,8 @@ def reset_synthetic_data(path: str | Path | None = None) -> dict[str, int]:
     initialize_database(path)
     tables = (
         "session_extension_alerts", "account_access_events", "sessions",
-        "synthetic_cases", "product_health_summaries", "product_health_events",
+        "synthetic_case_change_events", "synthetic_cases", "synthetic_case_catalog",
+        "product_health_summaries", "product_health_events",
         "synthetic_accounts",
     )
     with closing(connect(path)) as connection:

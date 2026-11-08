@@ -4,6 +4,7 @@ import sqlite3
 import pytest
 
 from cdit_support_mao.database import (
+    MigrationError,
     connect,
     initialize_database,
     purge_expired_metadata,
@@ -18,13 +19,13 @@ def instant(value):
 
 def test_migration_is_idempotent_and_enables_required_tables(tmp_path):
     path = tmp_path / "local.sqlite3"
-    assert initialize_database(path) == 1
-    assert initialize_database(path) == 1
+    assert initialize_database(path) == 2
+    assert initialize_database(path) == 2
     with connect(path) as db:
         assert db.execute("PRAGMA foreign_keys").fetchone()[0] == 1
         tables = {r[0] for r in db.execute("SELECT name FROM sqlite_master WHERE type='table'")}
-        assert {"schema_migrations", "synthetic_accounts", "sessions", "synthetic_cases", "product_health_events", "product_health_summaries", "account_access_events", "session_extension_alerts"} <= tables
-        assert db.execute("SELECT COUNT(*) FROM schema_migrations").fetchone()[0] == 1
+        assert {"schema_migrations", "synthetic_accounts", "sessions", "synthetic_cases", "product_health_events", "product_health_summaries", "account_access_events", "session_extension_alerts", "synthetic_case_catalog", "synthetic_case_change_events"} <= tables
+        assert db.execute("SELECT COUNT(*) FROM schema_migrations").fetchone()[0] == 2
 
 
 def test_seed_is_synthetic_idempotent_and_product_health_has_no_content_fields(tmp_path):
@@ -36,14 +37,15 @@ def test_seed_is_synthetic_idempotent_and_product_health_has_no_content_fields(t
         assert [(r["role"], r["status"], r["password_hash"]) for r in accounts] == [
             ("admin", "setup_required", None), ("staff", "setup_required", None), ("user", "setup_required", None)
         ]
-        case = db.execute("SELECT request_text, is_synthetic FROM synthetic_cases").fetchone()
+        case = db.execute("SELECT request_text, is_synthetic FROM synthetic_cases WHERE case_id='SYN-CASE-001'").fetchone()
         assert case["is_synthetic"] == 1 and case["request_text"].startswith("SYNTHETIC FIXTURE:")
         event = db.execute("SELECT * FROM product_health_events").fetchone()
         columns = {r["name"] for r in db.execute("PRAGMA table_info(product_health_events)")}
         assert {"event_id", "occurred_at", "event_type", "component", "component_version", "status_code", "error_code", "duration_ms"} == columns
         assert "request_text" not in columns and "prompt" not in columns and "payload" not in columns
         assert event["event_id"] == "SYN-EVENT-SEED-001"
-        assert db.execute("SELECT COUNT(*) FROM synthetic_cases").fetchone()[0] == 1
+        assert db.execute("SELECT COUNT(*) FROM synthetic_cases").fetchone()[0] == 81
+        assert db.execute("SELECT COUNT(*) FROM synthetic_case_catalog").fetchone()[0] == 80
 
 
 def test_schema_constraints_reject_non_synthetic_case_and_active_without_password(tmp_path):
@@ -92,7 +94,7 @@ def test_retention_uses_accelerated_clock_and_correct_buckets(tmp_path):
     with connect(path) as db:
         assert db.execute("SELECT event_id FROM product_health_events WHERE event_id='PH-KEEP'").fetchone()
         assert db.execute("SELECT event_id FROM account_access_events WHERE event_id='AUD-KEEP'").fetchone()
-        assert db.execute("SELECT COUNT(*) FROM schema_migrations").fetchone()[0] == 1
+        assert db.execute("SELECT COUNT(*) FROM schema_migrations").fetchone()[0] == 2
 
 
 def test_reset_deletes_only_allowlisted_synthetic_rows_and_preserves_schema(tmp_path):
@@ -100,6 +102,26 @@ def test_reset_deletes_only_allowlisted_synthetic_rows_and_preserves_schema(tmp_
     seed_synthetic_data(path)
     counts = reset_synthetic_data(path)
     assert counts["synthetic_accounts"] == 3
+    assert counts["synthetic_cases"] == 81
+    assert counts["synthetic_case_catalog"] == 80
     with connect(path) as db:
-        assert db.execute("SELECT COUNT(*) FROM schema_migrations").fetchone()[0] == 1
+        assert db.execute("SELECT COUNT(*) FROM schema_migrations").fetchone()[0] == 2
         assert db.execute("SELECT COUNT(*) FROM synthetic_cases").fetchone()[0] == 0
+        assert db.execute("SELECT COUNT(*) FROM synthetic_case_catalog").fetchone()[0] == 0
+
+
+def test_known_legacy_case_catalog_checksum_requires_complete_schema_signature(tmp_path):
+    path = tmp_path / "legacy-catalog.sqlite3"
+    initialize_database(path)
+    with connect(path) as db:
+        db.execute(
+            "UPDATE schema_migrations SET checksum_sha256 = ? WHERE version = 2",
+            ("b200a572c5f07a3cf4fbd2108a608582426b8a804fa422c12d2f383da81523d8",),
+        )
+        db.commit()
+    assert initialize_database(path) == 2
+    with connect(path) as db:
+        db.execute("DROP INDEX synthetic_cases_kind_status_idx")
+        db.commit()
+    with pytest.raises(MigrationError, match="differs from packaged source"):
+        initialize_database(path)
