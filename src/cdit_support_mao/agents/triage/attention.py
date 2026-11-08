@@ -1,9 +1,9 @@
 """Bounded, synthetic fixture attention signals; never a priority policy.
 
 Literal matches are case-sensitive and identify only text appearing in an untrusted report. Absence of
-matches does not assess risk, and a match does not establish an incident.
-Only the first occurrence per literal is returned; IDs lack cross-instance
-version or digest guarantees. Inspect the full parent for context.
+matches does not assess risk, and a match does not establish an incident. The first
+occurrence of each configured literal is returned for each bounded item span; IDs
+lack cross-instance version or digest guarantees. Inspect the full parent for context.
 """
 from __future__ import annotations
 
@@ -99,7 +99,9 @@ class AttentionSignal(StrictModel):
 def inspect_attention_signal(
     registry: HandoffRegistry, *, handoff_id: str, expected_version: int,
     receiver_capability: object, context: RunContext,
-    fixture_patterns: FixtureAttentionPatterns, now: datetime | None = None,
+    fixture_patterns: FixtureAttentionPatterns,
+    item_spans: tuple[tuple[int, int], ...] | None = None,
+    now: datetime | None = None,
 ) -> AttentionSignal:
     """Inspect fixture literals in the authorized full source; do not dispatch.
 
@@ -114,12 +116,19 @@ def inspect_attention_signal(
     packet = read_acknowledged_input(registry, handoff_id=handoff_id,
         expected_version=expected_version, receiver_capability=receiver_capability,
         context=context, now=now)
+    spans = item_spans or ((0, len(packet.reported_message)),)
+    if (len(spans) > 8 or any(
+        start < 0 or start >= end or end > len(packet.reported_message)
+        for start, end in spans
+    ) or any(spans[index][1] > spans[index + 1][0] for index in range(len(spans) - 1))):
+        raise HandoffError("invalid_attention_item_spans")
     matches = []
     for pattern_id, literal in patterns:
-        start = packet.reported_message.find(literal)
-        if start >= 0:
-            matches.append(AttentionMatch(fixture_pattern_id=pattern_id, source=packet.source,
-                start_codepoint=start, end_codepoint=start + len(literal)))
+        for span_start, span_end in spans:
+            start = packet.reported_message.find(literal, span_start, span_end)
+            if start >= 0:
+                matches.append(AttentionMatch(fixture_pattern_id=pattern_id, source=packet.source,
+                    start_codepoint=start, end_codepoint=start + len(literal)))
     result = AttentionSignal(trace_id=packet.trace_id, handoff_id=handoff_id,
         handoff_state_version=expected_version, context=context,
         status="potential_attention" if matches else "not_assessed", matches=tuple(matches),

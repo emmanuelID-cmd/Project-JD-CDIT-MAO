@@ -12,6 +12,7 @@ from cdit_support_mao.agents.coordinator import (
 )
 from cdit_support_mao.agents.coordinator.handoff import HandoffRegistry
 from cdit_support_mao.agents.knowledge import KnowledgeAgent, load_corpus
+from cdit_support_mao.agents.triage.attention import FixtureAttentionPatterns
 from cdit_support_mao.agents.triage.runtime_harness import MannyA0A2Harness
 from cdit_support_mao.agents.troubleshooting import load_policy
 from cdit_support_mao.combined_harness import CombinedWorkflowHarness
@@ -69,7 +70,7 @@ class FakeClient:
         return self
 
 
-def make_harness(message, *, knowledge_agent):
+def make_harness(message, *, knowledge_agent, fixture_patterns=None):
     owner, sender, receiver = object(), object(), object()
     sessions = FixtureSessionAuthority(provisioning_capability=owner, ttl_seconds=3600)
     token = sessions.issue(FixtureSession(
@@ -86,6 +87,7 @@ def make_harness(message, *, knowledge_agent):
     )
     upstream = MannyA0A2Harness(
         coordinator, registry, sender_capability=sender, receiver_capability=receiver,
+        fixture_patterns=fixture_patterns,
     )
     connected = MannyConnectedWorkflowHarness(upstream, knowledge_agent, as_of=date(2026, 11, 6))
     request = {"case_id": "SYN-CASE-06", "case_version": 1, "policy_version": "SYN-POLICY-1",
@@ -244,3 +246,27 @@ def test_combined_workflow_exposes_manny_connected_route_to_knowledge():
     assert result.items[0].knowledge is not None
     assert result.items[0].knowledge.item_scope_ref.item_id == result.items[0].dispatch.item_id
     assert result.status == "awaiting_auditor_review"
+
+
+def test_connected_harness_attaches_repeated_attention_literal_to_each_item(knowledge_agent):
+    owner = object()
+    patterns = FixtureAttentionPatterns(provisioning_capability=owner)
+    patterns.add("SYN-ATTENTION-01", "outage", capability=owner)
+    patterns.seal(capability=owner)
+    message = "The report export broke in the outage; I cannot access MFA since the outage"
+    harness, request, token = make_harness(
+        message, knowledge_agent=knowledge_agent, fixture_patterns=patterns
+    )
+
+    result = harness.run(
+        request, session_token=token, client=FakeClient(),
+        billable_call_authorized=True, now=NOW,
+    )
+
+    assert len(result.items) == 2
+    expected = [message.index("outage"), message.rindex("outage")]
+    for item, start in zip(result.items, expected, strict=True):
+        scope = item.dispatch.handoff.item_scope
+        assert scope.parent_attention_flagged is True
+        assert scope.attention_ref is not None
+        assert scope.attention_ref.locator == f"attention-flag:{start}-{start + len('outage')}"
