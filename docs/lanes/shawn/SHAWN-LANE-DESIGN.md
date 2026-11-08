@@ -2,7 +2,7 @@
 
 **Branch:** `shawn/knowledge-troubleshooting-docs`
 **Owner:** Shawn (finalized six-agent split, `docs/planning/TASK-SPLIT.md`)
-**Version:** Knowledge, Troubleshooting, and Documentation `0.2.0`; contracts `0.1.0-proposed` with proposed S-1 and S-2
+**Version:** Knowledge and Troubleshooting `0.2.0`, Documentation `0.2.1`; contracts `0.1.0-proposed` with S-1, S-2, and S-1.1 (item scope `0.2-proposed`)
 **Status:** Implemented on synthetic data and merged into `developer` through PRs #2, #4, #5, #7, and #8 (2026-11-04 and 2026-11-05). Manny's combined six-agent harness runs these agents with his Coordinator, Triage, and Escalation agents. Linked-item support (shared drafts S-1 and S-2; Shawn changes K-1 to K-7) is on the lane branch, pending review (2026-11-06; [A2-ITEM-HANDOFF-RECEIVER-REVIEW.md](A2-ITEM-HANDOFF-RECEIVER-REVIEW.md) §8).
 
 ## 1. Authorization and scope
@@ -183,8 +183,8 @@ uvicorn cdit_support_mao.main:app --app-dir src  ->  GET /health  200 {"status":
 ## 10. Handoff record
 
 - **Artifacts and versions:**
-  - Knowledge, Troubleshooting, and Documentation agents `0.2.0` (linked-item support, 2026-11-06).
-  - Contracts `0.1.0-proposed`, with proposed S-1 (`TriageItemScope`) and S-2 (`InputRef.content_digest`).
+  - Knowledge, Troubleshooting, and Documentation agents `0.2.0` (linked-item support, 2026-11-06). Documentation `0.2.1` adds the S-1.1 attention check line (2026-11-08).
+  - Contracts `0.1.0-proposed`, with S-1 (`TriageItemScope`), S-2 (`InputRef.content_digest`), and S-1.1 (`attention_check` and the taxonomy citation; item scope `0.2-proposed`).
   - Source set `SRC-61C4A35E96CF`.
   - Calibration set `SYN-KCAL` 1.0.
   - Troubleshooting policy `SYN-TS-POLICY 0.1.1` (proposed).

@@ -15,10 +15,14 @@ Ownership:
   linked item of a multi-item case message travel as its own Triage handoff.
   They carry identity, span, eligibility, and by-reference proposal fields only.
   Manny's Lane owns segmentation, classification, attention, and dispatch.
+- S-1.1 (approved by Manny, 2026-11-08) moves the item scope to version 0.2: an
+  ``attention_check`` status and a content-addressed category taxonomy citation.
+  Legacy 0.1 scopes stay accepted under the S-1 rules.
 """
 
 from __future__ import annotations
 
+import re
 from datetime import date
 from typing import Literal
 
@@ -39,10 +43,31 @@ from cdit_support_mao.contracts.common import (
     stable_id,
 )
 
-#: Version of the linked-item scope carried on a Triage handoff (proposed S-1).
-TRIAGE_ITEM_SCOPE_VERSION = "triage-item-scope-0.1-proposed"
+#: Version of the linked-item scope carried on a Triage handoff (S-1.1, Manny Q4).
+TRIAGE_ITEM_SCOPE_VERSION = "triage-item-scope-0.2-proposed"
+#: Legacy S-1 scope version, still accepted under the S-1 validation rules (Manny Q4).
+LEGACY_TRIAGE_ITEM_SCOPE_VERSION = "triage-item-scope-0.1-proposed"
 #: Upper bound on linked items per parent message (matches Manny's segmentation limit).
 MAX_LINKED_ITEMS = 8
+#: Source ID of the pinned synthetic category taxonomy (S-1.1, F-4, Manny Q2).
+CATEGORY_TAXONOMY_SOURCE_ID = "SYN-TICKET-CATEGORY-TAXONOMY"
+_TAXONOMY_LOCATOR = re.compile(r"category_sha256:([0-9a-f]{64})")
+
+#: What the attention literal check did for one item (S-1.1, F-3, Manny Q1).
+AttentionCheck = Literal["potential_attention", "no_configured_match", "check_not_run"]
+
+
+def is_category_taxonomy_ref(source: SourceRef) -> bool:
+    """True for a self-consistent, content-addressed category taxonomy reference.
+
+    Mirrors Triage's own rule (``agents/triage/multi_item.py``): the locator names
+    the full taxonomy digest and the version is its first 16 hex characters. This
+    checks shape only; Triage's pinned loader decides whether the taxonomy is trusted.
+    """
+    if source.kind is not SourceKind.POLICY_RULE or source.source_id != CATEGORY_TAXONOMY_SOURCE_ID:
+        return False
+    match = _TAXONOMY_LOCATOR.fullmatch(source.locator or "")
+    return match is not None and source.version == f"sha256-{match.group(1)[:16]}"
 
 # --------------------------------------------------------------------------
 # Upstream (Manny-owned) payloads as consumed by Shawn's agents — PROPOSED view
@@ -84,7 +109,9 @@ class LinkedItemRef(StrictModel):
     downstream stage can join results item by item without re-reading case text.
     """
 
-    scope_contract_version: Literal["triage-item-scope-0.1-proposed"] = TRIAGE_ITEM_SCOPE_VERSION
+    scope_contract_version: Literal[
+        "triage-item-scope-0.1-proposed", "triage-item-scope-0.2-proposed"
+    ] = TRIAGE_ITEM_SCOPE_VERSION
     item_id: str = Field(pattern=r"^ITM-[0-9A-F]{16}$")
     item_index: int = Field(strict=True, ge=1, le=MAX_LINKED_ITEMS)
     item_count: int = Field(strict=True, ge=1, le=MAX_LINKED_ITEMS)
@@ -113,6 +140,11 @@ class LinkedItemRef(StrictModel):
     def expected_item_id(self, context: RunContext) -> str:
         return item_id_for(context, self.parent_digest, self.item_index, self.source_start, self.source_end)
 
+    @property
+    def is_legacy_scope(self) -> bool:
+        """True for a 0.1 scope, which keeps the S-1 validation rules."""
+        return self.scope_contract_version == LEGACY_TRIAGE_ITEM_SCOPE_VERSION
+
 
 class TriageItemScope(StrictModel):
     """Linked-item scope of one Triage handoff (proposed S-1, 2026-11-05).
@@ -124,6 +156,11 @@ class TriageItemScope(StrictModel):
 
     Category, attention, and Auditor fields are carried *by reference* for
     Documentation; Knowledge never reads their values.
+
+    ``attention_check`` (S-1.1, scope 0.2 only) says what the attention literal
+    check did for this item. ``no_configured_match`` is never a risk assessment,
+    and ``check_not_run`` is information for Staff/Admin, not an extra hold (Q3).
+    It is optional until Manny's connector always supplies it (Q5).
     """
 
     identity: LinkedItemRef
@@ -142,6 +179,10 @@ class TriageItemScope(StrictModel):
     )
     parent_attention_flagged: bool = Field(
         default=False, description="True when any item of the parent has an attention flag (parent summary)"
+    )
+    attention_check: AttentionCheck | None = Field(
+        default=None,
+        description="S-1.1: what the attention literal check did for this item; None means Triage did not say",
     )
 
     @model_validator(mode="after")
@@ -165,6 +206,13 @@ class TriageItemScope(StrictModel):
                 raise ValueError("category_evidence_outside_item_span")
         if self.attention_ref is not None and not self.parent_attention_flagged:
             raise ValueError("item_attention_requires_parent_summary")
+        if self.attention_check is not None:
+            if ident.is_legacy_scope:
+                raise ValueError("attention_check_requires_scope_0_2")
+            if (self.attention_check == "potential_attention") != (self.attention_ref is not None):
+                raise ValueError("attention_check_ref_mismatch")
+            if self.attention_check == "check_not_run" and self.parent_attention_flagged:
+                raise ValueError("attention_check_not_run_but_parent_flagged")
         return self
 
 
@@ -212,7 +260,15 @@ class TriageHandoff(AgentContribution):
                 source.source_id != self.context.case_id or source.version != str(self.context.case_version)
             ):
                 raise ValueError("item_claim_case_source_mismatch")
-            if source.kind is SourceKind.POLICY_RULE and source.version != self.context.policy_version:
+            if source.kind is not SourceKind.POLICY_RULE:
+                continue
+            # S-1.1 (scope 0.2): the taxonomy is cited by its own content-addressed
+            # version. Every other policy source keeps the run's policy version, and
+            # a legacy 0.1 scope keeps the S-1 rule for all policy sources.
+            if not ident.is_legacy_scope and source.source_id == CATEGORY_TAXONOMY_SOURCE_ID:
+                if not is_category_taxonomy_ref(source):
+                    raise ValueError("item_claim_taxonomy_source_mismatch")
+            elif source.version != self.context.policy_version:
                 raise ValueError("item_claim_policy_version_mismatch")
         return self
 

@@ -15,6 +15,9 @@ only: it states "Item n of m", shows the category as a Triage inference with its
 basis and sources, refers to an attention flag without repeating it, and never
 shows another item's text. It is held (``missing_dependency``) until the Auditor
 has determined the item's urgency band and route (Manny, Q-A, 2026-11-05).
+When the item has no attention flag, one line states what the attention check did
+(S-1.1): no match is never a risk assessment, and a check that did not run is
+information for Staff/Admin only. It adds no hold (Manny, S-1.1 Q3, 2026-11-08).
 """
 
 from __future__ import annotations
@@ -61,7 +64,7 @@ from cdit_support_mao.contracts.handoffs import (
 )
 
 AGENT_NAME = "documentation-agent"
-AGENT_VERSION = "0.2.0"
+AGENT_VERSION = "0.2.1"
 
 _RECOMMENDATION_TEXT = {
     "escalate_l2": "escalate to L2",
@@ -89,6 +92,31 @@ def _inference(text: str, basis: str, *sources: SourceRef) -> NoteLine:
 
 def _unknown(text: str, *sources: SourceRef) -> NoteLine:
     return NoteLine(text=text, label=ClaimLabel.UNKNOWN, sources=tuple(sources))
+
+
+_ATTENTION_CHECK_TEXT = {
+    "no_configured_match": (
+        "Attention check: no configured phrase matched this item. This is not a risk assessment."
+    ),
+    "check_not_run": (
+        "Attention check: did not run for this item. Information only; "
+        "the Auditor's urgency review still applies."
+    ),
+}
+
+
+def _attention_check_line(triage: TriageHandoff, triage_ref: SourceRef) -> NoteLine:
+    """One Staff/Admin information line for an item without an attention flag (S-1.1).
+
+    It never clears or implies a flag and adds no hold (Manny, S-1.1 Q3).
+    """
+    check = triage.item_scope.attention_check if triage.item_scope is not None else None
+    text = _ATTENTION_CHECK_TEXT.get(check) if check is not None else None
+    if text is None:
+        return _unknown("Attention check: Triage did not say whether it ran for this item.", triage_ref)
+    return _inference(
+        text, f"Attention check status recorded in Triage handoff {triage.contribution_id}.", triage_ref
+    )
 
 
 class DocumentationAgent:
@@ -420,6 +448,8 @@ class DocumentationAgent:
                     triage_ref,
                 )
             )
+        if scope.attention_ref is None:
+            lines.append(_attention_check_line(triage, triage_ref))
         return tuple(lines)
 
     @staticmethod
