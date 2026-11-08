@@ -124,19 +124,18 @@ def build_item_knowledge_handoffs(
                     )
                     break
 
-        policy_snapshot_ref = SourceRef(
-            kind=SourceKind.POLICY_RULE,
-            source_id=context.policy_version,
-            version=context.policy_version,
-            locator=(
-                "category-taxonomy-sha256:"
-                + (result.category_taxonomy.taxonomy_sha256 if result.category_taxonomy else "unavailable")
-            ),
+        # Keep the exact sources validated by Triage. In particular, S-1.1
+        # recognizes the content-addressed category taxonomy source; replacing
+        # it with a policy-version stand-in loses provenance and used to produce
+        # an impossible "unavailable" placeholder (F-9).
+        category_sources = tuple(item.category_sources)
+        attention_check = (
+            "check_not_run"
+            if attention is None
+            else "potential_attention"
+            if item_attention is not None
+            else "no_configured_match"
         )
-        case_sources = tuple(
-            source for source in item.category_sources if source.kind is SourceKind.CASE_FIELD
-        )
-        category_sources = (*case_sources, policy_snapshot_ref)
         scope = TriageItemScope(
             identity=identity,
             segmentation=item.segmentation,
@@ -149,6 +148,7 @@ def build_item_knowledge_handoffs(
             auditor_review="pending",
             attention_ref=item_attention,
             parent_attention_flagged=parent_flagged,
+            attention_check=attention_check,
         )
         claim = Claim(
             statement=f"Proposed support category: {item.category}",
