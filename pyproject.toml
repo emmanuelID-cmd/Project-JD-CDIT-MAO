@@ -27,4 +27,4 @@ pythonpath = ["src"]
 testpaths = ["tests"]
 
 [tool.setuptools.package-data]
-cdit_support_mao = ["migrations/*.sql"]
+cdit_support_mao = ["migrations/*.sql", "static/*"]

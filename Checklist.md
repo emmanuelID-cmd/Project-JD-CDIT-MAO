@@ -4,7 +4,7 @@ Use this checklist as the live project status record. Check an item only when it
 
 **Current phase:** Manny Phase 2 - Triage integration in progress; exit gates remain open. PRD-v4 is the current requirements source.
 **Planning deadline:** November 11, 2026
-**Current implementation status:** The Python 3.13.15 full synthetic-only suite passes 618 tests (2026-11-08). Phase 2 connects Coordinator to Triage to item-scoped Knowledge in `CombinedWorkflowHarness.run_manny_connected` while preserving item identity/span/digest, inference evidence, Unknown urgency, human review, and parent-incomplete status. PR #12 and the F-1/F-2 fixes are included in the current merged baseline at `a363724`. Phase 2 remains open pending Shared connection acceptance, the S-1.1 decision for F-3/F-4, and approved evaluation evidence; the prior 85% estimate has not been recalculated by this documentation update. N1-N3 are complete at an estimated 85% Phase 2 exit readiness. Shared connection acceptance, Manny-approved evaluation labels, and complete Phase 2 evidence remain open. The replacement Sonnet 5.5 smoke call returned Unknown for Auditor review and remains unscored. Phase 3 integration and Phase 4 full evaluation acceptance remain pending; the Auditor interface/auth flow remains deferred.
+**Current implementation status:** The local SQLite v1 foundation, local synthetic authentication, server-authorized User/Staff/Admin routes, and three static role previews are implemented on manny/sql-foundation. The full Python 3.13 test suite passes 633 tests; manual browser/accessibility review remains open. No project changes have been pushed. The Manny agent Phase 2 estimate remains as previously recorded; this separate app/database work does not close agent Phase 2, Phase 3, Phase 4, or Shared integration gates.
 **Antigravity provenance:** The project lead confirms Antigravity only merged PR #6; all other completion/work claims in its handoff are false. Existing repository artifacts are tracked separately and are not attributed to Antigravity.
 **Completion status:** In progress; do not claim project completion or begin release workflow.
 
@@ -13,9 +13,10 @@ Use this checklist as the live project status record. Check an item only when it
 - [x] PRD-v4 defines the authenticated local User/Staff/Admin app, SQLite foundation, minimal Product Health metadata, and separate unauthenticated role showcase.
 - [x] Local SQL planning branch `manny/sql-foundation` created from Manny lane commit `a363724`; SQL and connected Manny branches currently share the same commit, with no unique branch commits created.
 - [x] Implement initial SQLite v1 migration for synthetic accounts, sessions, cases, app-only Product Health events/summaries, Admin access audit events, and session extension alerts; include constraints, indexes, checksum migration tracking, seed/reset, and retention purge. Cross-agent workflow/evaluation persistence remains separate pending boundary review.
-- [ ] Implement local synthetic authentication and server-side User/Staff/Admin authorization under Manny; verify direct page/API denial and Admin audit events. Approved session and retention rules are specified in PRD-v4.
-- [ ] Build the separate three-view no-login showcase using fabricated static data and inert privileged controls.
-- [ ] Verify Product Health data minimization, SQL query safety, role matrix, recovery, accessibility, and responsive/error states.
+- [x] Implement local synthetic authentication and server-side User/Staff/Admin authorization under Manny; verify direct page/API denial and Admin audit events. Approved session and retention rules are specified in PRD-v4.
+- [x] Build the separate three-view no-login showcase using fabricated static data and inert privileged controls.
+- [x] Verify auth/API boundaries, user case scoping, Admin audit and session controls, SQL parameter handling, and static preview isolation in focused synthetic tests. Product Health schema remains bounded and existing database tests cover retention and prohibited fields.
+- [ ] Complete manual keyboard/screen-reader and responsive browser review; exercise database-unavailable recovery in the running UI.
 
 - [x] PRD is the current requirements source and includes milestones, agent gates, confidence/factuality, prompt-injection controls, case authority, blackboard state, and handoffs.
 - [x] PRD-v3 is retained as the historical prior requirements version; PRD-v4 is the current project baseline, approved 2026-11-08.

@@ -23,6 +23,14 @@ Build a local-only application foundation around the existing Python 3.13/FastAP
 7. **Security and UX verification** - Test the complete role x route x action matrix, direct URL/API access, account-change audit records, prohibited persistence, SQL parameterization, and zero protected-resource access from the showcase. Review keyboard access, responsive layout, loading/empty/error/denied/recovery states, and consistent navigation. Test only synthetic fixtures.
 8. **Integration and handoff** - Connect Product Health metadata to the existing workflow only after Shared approves event fields and versions. Run focused database/auth/UI tests and the affected integration checks. Record evidence and unresolved retention/session policy decisions; update the checklist only for verified results.
 
+## Implementation progress
+
+- SQL foundation v1 is implemented on the authorized local SQL branch with checksum migrations, synthetic seeds, reset, retention purge, and bounded Product Health/account-audit tables.
+- Local synthetic authentication is implemented with salted scrypt hashes, no default passwords, 30-minute idle/8-hour absolute session limits, 15/5-minute reminders, logout and access-change revocation, plus an Admin review alert that never extends a session.
+- Authenticated User, Staff, and Admin routes share the project shell and are authorized server-side. User sees/submits own synthetic requests; Staff/Admin see the shared case and Product Health views; Admin additionally manages synthetic account role/status and reviews extension alerts.
+- Static previews exist at /preview/user, /preview/staff, and /preview/admin; they are script-free, use fabricated text, disable illustrative controls, and run under a restrictive CSP.
+- The full Python suite passes 633 tests, including route-role denial, preview isolation, session behavior, access audits, user record scoping, and SQL parameterization. Manual browser/accessibility review and database-unavailable recovery review remain open.
+
 ## Acceptance criteria
 
 - PRD-v4 is the sole active requirements source; PRD-v3 remains unchanged and is labeled historical wherever it is linked as a current baseline.
