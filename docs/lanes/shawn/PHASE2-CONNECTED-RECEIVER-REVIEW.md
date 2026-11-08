@@ -74,3 +74,8 @@ The probes ran against the PR code with the real Coordinator, Triage runtime, a 
 
 - **For Manny:** Should F-1 be fixed by normalizing in code or by `.gitattributes`? The second touches a repository-wide file, so it needs Shared agreement.
 - **For both lanes:** For F-3 and F-4, should Shawn draft one small S-1.1 contract PR, an attention status plus a taxonomy citation rule, for joint review?
+
+**Update 2026-11-08:**
+
+- Manny fixed F-1 and F-2 in `122d44b`, and PR #12 merged as `a363724`.
+- Manny asked Shawn to draft S-1.1 for review only. The draft is [S-1.1-ITEM-SCOPE-PROPOSAL.md](S-1.1-ITEM-SCOPE-PROPOSAL.md). It changes no shared contract until Manny approves it.
