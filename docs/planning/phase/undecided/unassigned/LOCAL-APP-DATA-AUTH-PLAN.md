@@ -1,6 +1,6 @@
 # Local App, SQL Foundation, Authentication, and Role Showcase Plan
 
-**Status:** Scope approved. Manny owns the SQL foundation; app/auth/UI ownership remains unassigned pending project-lead assignment. Shared reviews only cross-agent data/event contracts. This plan does not change Manny/Shawn agent ownership.
+**Status:** Scope approved. Manny owns SQL and app/auth/UI work in his lane unless he explicitly redirects or requests Shawn's participation. Shared reviews only cross-agent data/event contracts. This plan does not change Manny/Shawn agent ownership.
 **Requirements source:** [`PRD-v4.md`](../../../../requirements/PRD-v4.md). PRD-v3 is retained as historical context.
 **Branch rule:** The authorized local branch `manny/sql-foundation` was created from Manny's verified lane tip `a363724` on 2026-11-08. While Manny is the sole SQL author, keep this branch and connected local Manny lanes linear and fast-forwarded to the same commit before switching. Never merge/rebase/reset divergent work to force alignment. No push is authorized by this plan.
 
@@ -15,7 +15,7 @@ Build a local-only application foundation around the existing Python 3.13/FastAP
 ## Steps
 
 1. **PRD-v4 and source pointers** - Create the approved v4 requirements document, preserve PRD-v3 unchanged, and update current instructions/indexes to name v4 as the source of truth. Keep dated historical reviews and handoff evidence accurate as historical records.
-2. **SQL foundation** - On `manny/sql-foundation`, translate the logical entity list into a versioned SQLite schema. Define keys, foreign keys, constraints, indexes, migration versioning, synthetic seed/reset data, and local recovery behavior. Proposed entities: `synthetic_accounts`, `synthetic_cases`, `knowledge_documents`, `knowledge_chunks`, `policy_versions`, `workflow_runs`, `agent_handoffs`, `evaluation_cases`, `evaluation_results`, `product_health_events`, and `account_access_events`. Confirm which agent event fields may persist with Shared before implementing any cross-agent record shape.
+2. **SQL foundation** - Initial v1 migration is implemented on `manny/sql-foundation`: `synthetic_accounts`, `sessions`, `synthetic_cases`, app-only `product_health_events` and aggregated `product_health_summaries`, `account_access_events`, and `session_extension_alerts`. It includes constraints, indexes, migration checksums, explicit synthetic seed/reset, and retention purge. Remaining proposed entities (`knowledge_documents`, `knowledge_chunks`, `policy_versions`, `workflow_runs`, `agent_handoffs`, `evaluation_cases`, and `evaluation_results`) need their lane/Shared boundaries reviewed before persistence; do not store cross-agent payloads in v1.
 3. **Data minimization and Product Health contract** - Define an allowlist for synthetic run/event IDs, timestamps, stage/status, bounded category/reason codes, component/model/policy/source versions, performance measurements, and account-access-change metadata. Explicitly exclude real identities, raw ticket text, attachments, credentials, arbitrary prompts/model payloads, and unrestricted free text. Add synthetic-only seeds and prohibited-field tests.
 4. **Local synthetic authentication and authorization** - Implement seeded prototype accounts and the session lifecycle; route each role to its view. Enforce role and record scope in server-side dependencies/repositories, not only in navigation. Admin-only synthetic account role/status controls emit auditable before/after events. No production identity provider, public registration, or real credentials.
 5. **Authenticated interfaces** - Implement the client-facing User view and shared Staff/Admin back end. Admin-specific account and Product Health controls appear only after server authorization. Add login, logout, denied, expired, empty, database unavailable, and safe-recovery states.
@@ -41,17 +41,11 @@ Build a local-only application foundation around the existing Python 3.13/FastAP
 - Adding a fourth role, separate Staff tiers, or access-only zones.
 - Making showcase controls functional or using the showcase as an authorization mechanism.
 
-## Unknowns
+## Decisions and remaining design work
 
-- Unknown: Owner for app/auth/UI implementation.
-  Recommendation: Keep only the app/auth/UI portion in `phase/undecided/unassigned` until the project lead assigns it; Manny remains the SQL owner and Shared coordinates cross-agent event contracts.
-  Basis: The project lead authorized the Manny-owned `manny/sql-foundation` branch, while existing lane assignment does not assign general application UI ownership.
-  Verification action: Project lead assigns app/auth/UI owner before that implementation starts.
-- Unknown: Exact schema columns, retention interval, and deletion/reset cadence for Product Health metadata.
-  Recommendation: Allowlist fields from PRD-v4; use local project-lifetime retention with a reset/purge path until a shorter duration is approved.
-  Basis: PRD-v4 permits minimal metadata but sets no exact duration or finalized DDL.
-  Verification action: Review schema and retention statement before first persistent record is written.
-- Unknown: Local synthetic credential provisioning and session expiry details.
-  Recommendation: Seed synthetic accounts, disable public registration, hash synthetic passwords, use server-side authorization, and provide explicit logout/reset; never use real credentials.
-  Basis: PRD-v4 excludes production authentication while requiring local synthetic account identity.
-  Verification action: Approve the local auth configuration and session policy during implementation design.
+- Approved: Manny owns SQL and app/auth/UI work in his lane unless he explicitly redirects or requests Shawn's participation.
+  Shared review remains required before persisting cross-agent handoff/event fields.
+- Open design task: Manny defines concrete SQLite columns, keys, indexes, migration mechanics, synthetic seeds/reset, and recovery behavior. The approved retention periods and reset path are specified in PRD-v4 §4d.
+  Do not persist cross-agent handoff/event fields until Shared approves the contract.
+- Approved: seed only synthetic accounts, disable public registration, store password hashes only, and enforce access server-side. Use 30-minute idle and 8-hour absolute session expiry with 15- and 5-minute warnings; do not extend automatically. An extension request creates an Admin review alert and timestamp only.
+  Invalidate sessions on logout, suspension/deactivation/removal, or role change. Production authentication and real credentials remain out of scope.

@@ -4,7 +4,7 @@ Planning workspace for a human-supervised multi-agent orchestration (MAO) assist
 
 ## Project status
 
-The project lead authorized Manny's synthetic lane phases. Manny's Coordinator-to-semantic-Triage runtime is connected through an item-scoped connector to the Knowledge receiver in `CombinedWorkflowHarness.run_manny_connected`; N1-N3 are complete, with Phase 2 exit readiness estimated at 85%. Shawn reviewed PR #12 and accepted with findings; F-1's CRLF-sensitive taxonomy pin and F-2's first-item-only attention behavior are fixed in Manny commit `122d44b` with regressions, pending updated PR verification. The full synthetic-only suite passes 618 tests on Python 3.13.15; this is regression evidence, not phase acceptance. Shared connection acceptance and Manny-approved 100-case evaluation evidence remain open. One authorized Claude Sonnet 5.5 smoke call returned Unknown for Auditor review and remains unscored. No live customer or CDIT data is used. The Auditor interface/auth flow and external integrations remain deferred.
+The project lead authorized Manny's synthetic lane phases. Manny's Coordinator-to-Triage runtime is connected through item-scoped Knowledge in `CombinedWorkflowHarness.run_manny_connected`; Phase 2 exit readiness remains estimated at 85%, with Shared acceptance and evaluation evidence open. The CRLF fixture follow-up is committed locally on `manny/sql-foundation` as `ca089be`; the full synthetic-only suite passes 618 tests on Python 3.13.15. The initial local SQLite foundation is also committed locally on this branch as `68835a3` plus subsequent unpushed SQL work; `manny/coordinator-triage-escalation` is fast-forwarded to the same SQL tip. No project changes have been pushed. No live customer or CDIT data is used.
 
 ## Documents
 
@@ -65,7 +65,7 @@ Copy-Item .env.example .env
 uvicorn cdit_support_mao.main:app --reload --app-dir src --env-file .env
 ```
 
-The API health endpoint is `http://127.0.0.1:8000/health`; interactive API documentation is at `http://127.0.0.1:8000/docs`. SQLite is created on first health check at `data/cdit_support.db` by default. Set `CDIT_DATABASE_PATH` to change the local path. Only synthetic data is permitted. The database helper intentionally defines no ticket, user, role, audit, or agent tables yet; those schemas need an approved design.
+The API health endpoint is `http://127.0.0.1:8000/health`; interactive API documentation is at `http://127.0.0.1:8000/docs`. Initialize the versioned local schema explicitly with `python -m cdit_support_mao.db_cli init`, then create the synthetic demo fixtures with `python -m cdit_support_mao.db_cli seed`. The default database path is `data/cdit_support.db`; set `CDIT_DATABASE_PATH` to change it. `/health` checks connectivity only and does not run migrations. `python -m cdit_support_mao.db_cli purge` applies approved metadata retention; resetting synthetic rows requires `python -m cdit_support_mao.db_cli reset --confirm-synthetic-only`.
 
 The repository ignores `.env`; a blank local copy is present for `ANTHROPIC_API_KEY`. Add the key locally to that file and never commit or send it in chat. The pinned Anthropic client factory reads the local file but makes no request during import or app startup. A model request requires explicit per-run authorization and a fresh handoff preflight.
 

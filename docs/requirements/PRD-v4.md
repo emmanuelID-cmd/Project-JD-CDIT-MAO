@@ -4,6 +4,7 @@
 
 **Agent name:** CDIT Support Desk Assistant (working name)
 **Owners:** Manny (Manny's Lane), Shawn (Shawn's Lane), Shared Lane
+**App/auth/UI owner:** Manny, confirmed 2026-11-08; this remains within Manny's lane unless he explicitly redirects or requests Shawn's participation.
 **Date:** 2026-11-08
 **Status:** Approved by the project lead as the current synthetic-prototype requirements baseline on 2026-11-08. PRD-v4 supersedes PRD-v3 for current requirements. Shared contract acceptance and implementation-phase gates remain separately tracked. Production authentication, real-data use, and live integration remain outside this approval.
 
@@ -210,7 +211,7 @@ Alternative considered: begin with hosted PostgreSQL, hosted vector search, and 
 
 - Use fabricated support tickets, fabricated/versioned knowledge articles, deterministic synthetic policies, and public clinical-trial metadata for scenario context only. Public metadata is not CDIT product guidance.
 - No CDIT-specific product/module or workflow behavior may be asserted without a supplied, approved source. When evidence is missing, label the point unknown/simulated and abstain from product claims.
-- Product Health may retain only minimal synthetic/system metadata needed for investigation, correction, and change planning: synthetic run/event IDs, timestamps, status/category, component/version, bounded error/performance codes, and access-change metadata. Do not retain ticket bodies, attachments, arbitrary free-text payloads, credentials, direct user identity, customer records, or confidential information. The local database may contain fabricated fixtures required for the prototype; it must not import or retain real case content.
+- Product Health may retain only minimal synthetic/system metadata needed for investigation, correction, and change planning: synthetic run/event IDs, timestamps, status/category, component/version, bounded error/performance codes, and access-change metadata. Retention is 30 days for detailed synthetic run/error metadata, 90 days for synthetic account/access-change audit events, and up to 12 months for aggregated non-identifying performance/evaluation summaries. Provide an explicit reset/purge path. Verify expiration using an injected/accelerated test clock so the full lifecycle test completes in under two minutes; this test clock must not change configured retention durations. Do not retain ticket bodies, attachments, arbitrary free-text payloads, credentials, direct user identity, customer records, or confidential information. The local database may contain fabricated fixtures required for the prototype; it must not import or retain real case content.
 - Real customer tickets, PHI, credentials, CDIT-private documents, and production service data are excluded. Reassess data, provider, privacy, security, and regulatory requirements before any later scope change to real data or operational integration.
 
 ## 4e. Authenticated app and role-view showcase
@@ -221,6 +222,7 @@ Alternative considered: begin with hosted PostgreSQL, hosted vector search, and 
 - Enforce authorization on the server for every page, API, and record lookup. Hiding a navigation item is not authorization. User records are scoped to that synthetic account; Staff and Admin access follows the approved local permission matrix.
 - Admin may inspect synthetic account roles/status and perform the locally approved grant, update, promote, demote, suspend, deactivate, or remove actions. Successful changes create an audit event. Agents cannot perform these actions.
 - The Admin view may present the Product Health metadata summary. Product Health is a viewing purpose within the existing account model, not another account category. Never expose raw ticket text, credentials, or unrestricted model content through this view.
+- Use a 30-minute idle timeout and an 8-hour absolute session limit. Warn the user 15 minutes and 5 minutes before whichever limit will expire first; let the user continue the session within those limits. Session extension beyond the 8-hour maximum is deferred. Keep the approved alert path for a user requesting an extension and record the request timestamp for Admin review; do not extend automatically or send email. Invalidate sessions on logout, account suspension/deactivation/removal, or role change.
 - Provide login, logout, unauthorized/forbidden, expired-session, empty-data, database-unavailable, and safe-recovery states. A failed or invalid authentication attempt does not reveal whether a protected account exists.
 
 ### Unauthenticated role-view showcase
@@ -251,8 +253,8 @@ Detailed user needs and prioritized use cases are maintained once in the [compan
 ## 4g. Explicit assumptions and deferred dependencies
 
 - SQLite is the approved local database choice; the listed entities remain logical until the SQL-foundation phase approves concrete columns, constraints, indexes, schema-version migrations, seed/reset behavior, and backup/recovery checks.
-- Local authentication is for synthetic prototype accounts only. Session lifetime, synthetic credential provisioning/reset, lockout behavior, and the exact Admin action matrix must be documented before implementation; recommend seeded synthetic accounts, no public registration, and no production credentials.
-- Product Health metadata fields are allowlisted and content-minimized. Exact local retention/reset interval remains open; recommend a documented short-lived project retention rule and an explicit reset/purge path. Never store real records to test the metadata path.
+- Local authentication is for synthetic prototype accounts only. Use seeded accounts, no public registration, synthetic password hashes, the session lifecycle in §4e, and the approved Admin action matrix. Do not use production credentials.
+- Product Health metadata fields are allowlisted and content-minimized. Apply the retention periods in §4d and an explicit reset/purge path; verify them with the sub-two-minute accelerated test clock. Never store real records to test the metadata path.
 - The role showcase is a separate no-login visual deliverable with fabricated content; it is not the authenticated application and does not demonstrate authorization correctness.
 - The existing backend stack is Python 3.13/FastAPI/Pydantic. The frontend rendering technology is not specified in the project manifest; select it before UI implementation without changing the API or database permission boundaries.
 

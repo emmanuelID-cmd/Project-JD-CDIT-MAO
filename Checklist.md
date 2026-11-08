@@ -12,8 +12,8 @@ Use this checklist as the live project status record. Check an item only when it
 
 - [x] PRD-v4 defines the authenticated local User/Staff/Admin app, SQLite foundation, minimal Product Health metadata, and separate unauthenticated role showcase.
 - [x] Local SQL planning branch `manny/sql-foundation` created from Manny lane commit `a363724`; SQL and connected Manny branches currently share the same commit, with no unique branch commits created.
-- [ ] Approve concrete SQLite columns, constraints, migrations, metadata retention, synthetic seed/reset, and recovery behavior before persistence implementation.
-- [ ] Implement local synthetic authentication and server-side User/Staff/Admin authorization; verify direct page/API denial and Admin audit events.
+- [x] Implement initial SQLite v1 migration for synthetic accounts, sessions, cases, app-only Product Health events/summaries, Admin access audit events, and session extension alerts; include constraints, indexes, checksum migration tracking, seed/reset, and retention purge. Cross-agent workflow/evaluation persistence remains separate pending boundary review.
+- [ ] Implement local synthetic authentication and server-side User/Staff/Admin authorization under Manny; verify direct page/API denial and Admin audit events. Approved session and retention rules are specified in PRD-v4.
 - [ ] Build the separate three-view no-login showcase using fabricated static data and inert privileged controls.
 - [ ] Verify Product Health data minimization, SQL query safety, role matrix, recovery, accessibility, and responsive/error states.
 
