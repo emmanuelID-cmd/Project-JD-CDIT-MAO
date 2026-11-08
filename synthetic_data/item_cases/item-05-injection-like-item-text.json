@@ -15,7 +15,8 @@
       "item_count": 2,
       "source_start": 57,
       "category_basis": "Stand-in: the item asks to bypass rules.",
-      "auditor_review": "band_and_route_determined"
+      "auditor_review": "band_and_route_determined",
+      "attention_check": "no_configured_match"
     }
   },
   "escalation": {

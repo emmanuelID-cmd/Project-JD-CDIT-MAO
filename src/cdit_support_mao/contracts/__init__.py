@@ -22,6 +22,8 @@ from cdit_support_mao.contracts.common import (
     stable_id,
 )
 from cdit_support_mao.contracts.handoffs import (
+    CATEGORY_TAXONOMY_SOURCE_ID,
+    LEGACY_TRIAGE_ITEM_SCOPE_VERSION,
     TRIAGE_ITEM_SCOPE_VERSION,
     CaseFact,
     DocumentationResult,
@@ -50,12 +52,15 @@ from cdit_support_mao.contracts.handoffs import (
     TriageHandoff,
     TriageItemScope,
     TroubleshootingResult,
+    is_category_taxonomy_ref,
     item_id_for,
 )
 
 __all__ = [
+    "CATEGORY_TAXONOMY_SOURCE_ID",
     "CONFIDENCE_CALIBRATED",
     "CONTRACT_VERSION",
+    "LEGACY_TRIAGE_ITEM_SCOPE_VERSION",
     "PROVISIONAL_BAND_THRESHOLDS",
     "TRIAGE_ITEM_SCOPE_VERSION",
     "AgentContribution",
@@ -99,6 +104,7 @@ __all__ = [
     "TroubleshootingResult",
     "band_for",
     "canonical_digest",
+    "is_category_taxonomy_ref",
     "item_id_for",
     "min_band",
     "stable_id",

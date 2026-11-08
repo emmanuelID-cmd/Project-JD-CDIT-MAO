@@ -98,6 +98,8 @@ class ItemScopeStandIn(StrictModel):
     auditor_review: Literal["pending", "band_and_route_determined"] = "pending"
     attention_on_item: bool = False
     parent_attention_flagged: bool = False
+    #: S-1.1 attention check status; derived as ``potential_attention`` for a flagged item.
+    attention_check: Literal["no_configured_match", "check_not_run"] | None = None
 
 
 class TriageStandIn(StrictModel):
@@ -240,6 +242,7 @@ def build_item_scope(context: RunContext, stand_in: TriageStandIn) -> TriageItem
             else None
         ),
         parent_attention_flagged=item.parent_attention_flagged or item.attention_on_item,
+        attention_check="potential_attention" if item.attention_on_item else item.attention_check,
     )
 
 

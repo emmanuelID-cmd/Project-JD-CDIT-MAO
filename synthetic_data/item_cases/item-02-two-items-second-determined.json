@@ -16,7 +16,8 @@
       "item_count": 2,
       "source_start": 78,
       "category_basis": "Stand-in: the item reports a missing password reset email.",
-      "auditor_review": "band_and_route_determined"
+      "auditor_review": "band_and_route_determined",
+      "attention_check": "check_not_run"
     }
   },
   "escalation": {

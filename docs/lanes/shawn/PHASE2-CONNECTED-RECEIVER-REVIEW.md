@@ -79,3 +79,4 @@ The probes ran against the PR code with the real Coordinator, Triage runtime, a 
 
 - Manny fixed F-1 and F-2 in `122d44b`, and PR #12 merged as `a363724`.
 - Manny asked Shawn to draft S-1.1 for review only. The draft is [S-1.1-ITEM-SCOPE-PROPOSAL.md](S-1.1-ITEM-SCOPE-PROPOSAL.md). It changes no shared contract until Manny approves it.
+- Manny approved S-1.1 the same day (proposal §7). Shawn's side is implemented on the lane (proposal §8). F-3, F-4, and F-9 close once Manny's connector change lands.

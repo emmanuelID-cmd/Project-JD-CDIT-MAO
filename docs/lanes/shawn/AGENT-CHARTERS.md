@@ -2,7 +2,7 @@
 
 **Owner:** Shawn's Lane (Knowledge, Troubleshooting, Documentation)
 **Date:** 2026-11-05; updated 2026-11-06 for linked-item handoffs
-**Agents:** Knowledge `0.2.0`, Troubleshooting `0.2.0`, Documentation `0.2.0`; contracts `0.1.0-proposed` with proposed S-1 and S-2
+**Agents:** Knowledge `0.2.0`, Troubleshooting `0.2.0`, Documentation `0.2.1`; contracts `0.1.0-proposed` with S-1, S-2, and S-1.1 (item scope `0.2-proposed`)
 **Status:** Accepted for deterministic agents. This answers PRD-v3 alignment finding N-03. Manny answered Q-04 on 2026-11-05: for deterministic agents, the charter plus the structured output schema is the documented lane-owned behaviour specification ([PRD-V3-ALIGNMENT-REVIEW.md](PRD-V3-ALIGNMENT-REVIEW.md) §7).
 
 ## 1. What a charter is
@@ -96,7 +96,7 @@ case, quoted from the top approved passage the Knowledge agent returned.
 | Purpose | Assemble a draft case note from labelled upstream content, or return a manual fallback. |
 | Reads | The Triage, Knowledge, Troubleshooting, and Escalation contributions for the same run, and staff-recorded actions. |
 | Produces | `DocumentationResult`: a `DraftNote` whose every line is labelled, with a banner stating that it is not saved, not sent, and changed no ticket state; or a `ManualFallback` with reason codes and instructions; `privacy_findings` (category and location only). |
-| Linked items | The note covers one item: an "Item n of m" line, the category as a Triage inference with its basis and sources, the Auditor's urgency band as an inference, and the attention flag by reference only. |
+| Linked items | The note covers one item: an "Item n of m" line, the category as a Triage inference with its basis and sources, the Auditor's urgency band as an inference, and the attention flag by reference only. Without a flag, one information line states what the attention check did (S-1.1). A check that did not run adds no hold. |
 | Must never | Invent facts. State that a step was performed unless staff recorded it. Save, send, or change ticket state (`save_reviewed_result` stays disabled). Store a sensitive value it detected. Show another linked item's text. Restate or clear an attention flag. |
 | Blocks with manual fallback when | An upstream contribution is missing, stale, unacknowledged, blocked, or off the provenance chain. PHI-like or credential-like text would appear in the note (`sensitive_data_detected`). A linked item still waits for the Auditor (`missing_dependency`), or the Knowledge echo names another item (`upstream_chain_mismatch`). |
 | Documents, not blocks | An abstained upstream result. "No approved guidance" is a valid fact for a human reviewer. |
@@ -124,5 +124,5 @@ labelled outputs of the other agents and the actions staff recorded.
 
 - **Q-04, answered 2026-11-05.** The charter plus schema satisfies PRD-v3 §3b for these deterministic agents. No agent uses a model.
 - **Model adapter (N-04).** None exists, and the Q-04 decision does not call for one. A model-backed agent would need an actual prompt, a schema, and provider approval (D-12).
-- **Linked items.** The S-1 and S-2 contract fields are proposed and await Manny's review. Manny's connector and bridge work (S-3 to S-8) is not yet in place, so no linked item reaches these agents outside tests.
+- **Linked items.** Manny approved S-1 and S-2 on 2026-11-06 and S-1.1 on 2026-11-08. His connected harness (PR #12) now sends linked items to Knowledge. Until his connector change lands, those items show "Triage did not say" for the attention check, and the category still cites the policy-version stand-in.
 - **Status values (C-01, B-03).** Knowledge abstains on retrieved injection; PRD-v3 §9a lists it under `blocked_checkpoint` (Q-01). Missing corpus or policy files raise errors instead of a contribution (Q-03).

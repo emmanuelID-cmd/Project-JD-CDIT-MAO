@@ -16,7 +16,8 @@
       "item_count": 2,
       "source_start": 0,
       "category_basis": "Stand-in: the item asks where a report export is.",
-      "auditor_review": "band_and_route_determined"
+      "auditor_review": "band_and_route_determined",
+      "attention_check": "no_configured_match"
     }
   },
   "escalation": {
