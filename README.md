@@ -10,7 +10,7 @@ The project lead authorized Manny's synthetic lane phases. Manny's Coordinator-t
 
 - `docs/requirements/PRD.md` — v1 historical requirements; later approved decisions govern Manny’s lane.
 - `docs/requirements/PRD-v2.md` — retained planning baseline for traceability; not approved as the current requirements source.
-- `docs/requirements/PRD-v3.md` — project-lead-approved synthetic build baseline for Manny’s lane; team-wide review remains pending.
+- `docs/requirements/PRD-v4.md` - current project requirements source, approved 2026-11-08; PRD-v3 is retained as historical context.
 - `docs/planning/TASK-SPLIT.md` — proposed Manny, Shawn, and Shared lane responsibilities.
 - `docs/lanes/manny/COORDINATOR-A0-A1.md` — Manny’s Phase 1 fixture boundary, contract, and harness links.
 - `AGENTS.md` — local collaboration and repository guidance.

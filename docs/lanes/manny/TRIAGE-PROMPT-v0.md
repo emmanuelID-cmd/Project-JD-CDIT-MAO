@@ -1,6 +1,6 @@
 # Triage system-prompt contract v0 — Manny Phase 2
 
-**Status:** Draft for design review; not loaded into a running agent. The project lead selected Anthropic Claude Sonnet 5.5 (`claude-sonnet-5-5`) for synthetic Triage. The draft prompt is not loaded into the application. The pinned local adapter completed one explicitly authorized smoke call using a separate inline prompt on a synthetic fixture; this did not test this draft prompt. Application wiring remains incomplete. PRD-v3 and its approved multi-request/Auditor amendment are the Manny baseline; Shared Lane review of receiver compatibility remains pending. The current `0.1.0-proposed` handoff is a working interface, not an accepted multi-item contract.
+**Status:** Draft for design review; not loaded into a running agent. The project lead selected Anthropic Claude Sonnet 5.5 (`claude-sonnet-5-5`) for synthetic Triage. The draft prompt is not loaded into the application. The pinned local adapter completed one explicitly authorized smoke call using a separate inline prompt on a synthetic fixture; this did not test this draft prompt. Application wiring remains incomplete. PRD-v4 and its approved multi-request/Auditor amendment are the Manny baseline; Shared Lane review of receiver compatibility remains pending. The current `0.1.0-proposed` handoff is a working interface, not an accepted multi-item contract.
 
 ## Purpose and boundaries
 
@@ -46,7 +46,7 @@ A future per-item proposal needs the parent run/case and policy versions; item i
 
 | Requirement | Design expectation | Evidence status |
 | --- | --- | --- |
-| PRD-v3 A2, claims and confidence | Preserve source, label, uncertainty and evidence; confidence grants no authority | Draft only; grounding and model execution not implemented |
+| PRD-v4 A2, claims and confidence | Preserve source, label, uncertainty and evidence; confidence grants no authority | Draft only; grounding and model execution not implemented |
 | Multi-request and human Auditor | Separate supported independent items; abstain on unknowns; preserve parent dependencies | Local segmentation and review-proposal fixtures exist; no actual human dispatch or acceptance |
 | Prompt-injection boundary | Treat all case and retrieved text as untrusted; no unauthorized tool or data access | Prompt wording is not proof; boundary and adversarial tests remain necessary |
 | Shared connection | Preserve context, versions and acknowledgment | Existing `0.1.0-proposed` single-result schema only; multi-item review pending |

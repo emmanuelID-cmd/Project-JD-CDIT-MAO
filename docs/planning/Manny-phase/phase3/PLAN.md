@@ -1,6 +1,6 @@
 # Phase 3 — Escalation (Manny)
 
-**Status:** Escalation implementation and unit-test evidence exist locally; Phase 3 is not accepted or complete. The current A2 input and linked-item handoff are not integrated, so the planned integrated A2-to-A5 handoff and shared receiver checks remain blocked on Phase 2. The Auditor UI and authenticated review interface are deferred and are not being built now.
+**Status:** Escalation implementation and unit-test evidence exist; the connected Coordinator-to-Triage-to-item-scoped-Knowledge path is present in the merged baseline. Phase 3 remains incomplete pending its integrated escalation checks, Shared connection acceptance, and phase exit evidence. The Auditor UI/authenticated review interface is planned in the separate local app/database/auth workstream.
 
 ## Implementation evidence — 2026-11-05
 

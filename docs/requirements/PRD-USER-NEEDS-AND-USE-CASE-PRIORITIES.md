@@ -1,6 +1,6 @@
 # CDIT Support MAO — User Needs and Use Case Priorities
 
-> Companion artifact to [`PRD-v2.md`](./PRD-v2.md). User needs derive from the supplied job description and remain hypotheses, not validated CDIT research. Priorities describe the synthetic project prototype, not approved CDIT service commitments.
+> Companion artifact to [`PRD-v4.md`](./PRD-v4.md). User needs derive from the supplied job description and remain hypotheses, not validated CDIT research. Priorities describe the synthetic project prototype, not approved CDIT service commitments.
 
 ## User Needs — design anchor
 
@@ -16,6 +16,7 @@ The product should help support staff prepare accurate, timely work while keepin
 | UN-06 | Admin | As Admin, I need to inspect and manage synthetic account permissions because privileged access changes must be visible and accountable. | Supports local role/access administration without creating multiple staff tiers. | Admin-only grant/update/promote/demote/suspend/deactivate/remove actions are authorized and recorded; unauthorized attempts are denied. |
 | UN-07 | User | As User, I need to submit a synthetic support request and see only my own permitted request/status because I need a client-facing path into the support workflow. | Defines the client view without including the separate platform-to-developer issue-reporting feature. | User can submit/view their own synthetic request; access to another user's or staff-only data is denied. |
 | UN-08 | Product Health | As Product Health, I need minimal synthetic/system metadata about runs, status, versions, errors, performance, and access changes because I need to investigate, correct, or improve the prototype without retaining ticket content. | Enables project-level investigation while minimizing retained data. | Required metadata is queryable; ticket bodies, attachments, direct identities, and actual records are absent. |
+| UN-09 | Project reviewer | As a project reviewer, I need linked static User, Staff, and Admin previews without signing in because I need to compare the intended views without receiving application access. | Makes the three role views easy to inspect without distributing demo accounts or granting app access. | Three previews load without login or protected API/database access; privileged actions are inert. |
 
 ## Priority definitions
 
@@ -38,6 +39,8 @@ The product should help support staff prepare accurate, timely work while keepin
 | UC-09 | [P0] | Record and inspect minimal Product Health metadata and synthetic evaluation results. | Product Health / project team | UN-08 | Synthetic run/event IDs, timestamps, status/category, component/version, errors/performance, and access-change metadata are queryable; case content and real identities are excluded. |
 | UC-10 | [P0] | Evaluate agent and combined-workflow behavior against human-approved synthetic labels and a deterministic script. | Project team | UN-01–UN-08 | Results report gate counts, denominators, uncertainty, grounding, escalation, injection/permission, fallback, latency/cost, and peer review on the tested set. |
 | UC-11 | [P2] | Consider a second reviewer/model only in a separately approved future comparison. | Project team | UN-02–UN-05 | Remains deferred; not part of the six-agent runtime. |
+
+| UC-12 | [P0] | Inspect linked static User, Staff, and Admin previews without signing in; preview controls do not perform actions. | Project reviewer | UN-09 | 3/3 previews load without login; no authenticated API/database request occurs; privileged controls are inert. |
 
 ## Priority rationale and dependencies
 

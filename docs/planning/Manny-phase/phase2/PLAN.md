@@ -34,7 +34,7 @@ Runtime contract note: a stale/invalid handoff found before candidate creation r
 
 - Define a Triage-specific input/output schema, allowed policy fields, required evidence, verified/inference/unknown labels, and failure outputs.
 - Propose category and urgency with rationale, missing facts, and source references; do not invent SLA, account facts, or product behavior. Split supported multiple requests into linked items and prepare a human Auditor packet for unresolved items.
-- Encode approved deterministic urgency-upgrade floors and ambiguous-severity routing outside model judgment. If the approved PRD-v3 baseline has not defined them, record a blocker instead of inventing thresholds.
+- Encode approved deterministic urgency-upgrade floors and ambiguous-severity routing outside model judgment. If PRD-v4 has not defined them, record a blocker instead of inventing thresholds.
 - Keep human review mandatory and confidence non-authoritative. Any confidence signal is evidence/validator-derived and calibrated only through approved held-out evaluation.
 - Add machine-checkable expected-output tests for ordinary, incomplete, ambiguous, severity-1, conflicting-policy, injection, and missing-detail-pressure cases.
 
@@ -76,7 +76,7 @@ Runtime contract note: a stale/invalid handoff found before candidate creation r
 - The reference is metadata for human comparison only. It does not classify a ticket or supply policy; category, urgency, and destination remain unknown unless a separate authorized inference provides them. Ambiguously segmented parents receive no example reference. Parent completion and downstream dispatch remain blocked.
 - Focused adapter/schema/development-catalog checks: 30 passed. Full synthetic-only suite after this change: 453 passed.
 - Historical estimate at the 2026-11-05 snapshot: local implementation scaffold 70–75%; Phase 2 exit readiness 40–45%. This is superseded by the 2026-11-06 N1–N3 implementation and the current estimate at the top of this plan; it is retained only as dated progress history.
-- The project lead selected Claude Sonnet 5.5 (`claude-sonnet-5-5`) for synthetic Triage; PRD-v3 and D-12 are aligned. `.env.example` documents the model and key variable, but no real credential is configured. The draft prompt is not loaded into the app. An adapter-level smoke call was made once on a synthetic fixture after explicit user authorization; the adapter remains unwired into the application. The call does not establish semantic correctness or six-agent integration.
+- The project lead selected Claude Sonnet 5.5 (`claude-sonnet-5-5`) for synthetic Triage; PRD-v4 and D-12 are aligned. `.env.example` documents the model and key variable, but no real credential is configured. The draft prompt is not loaded into the app. An adapter-level smoke call was made once on a synthetic fixture after explicit user authorization; the adapter remains unwired into the application. The call does not establish semantic correctness or six-agent integration.
 
 ### Provider-free semantic output contract — 2026-11-05
 

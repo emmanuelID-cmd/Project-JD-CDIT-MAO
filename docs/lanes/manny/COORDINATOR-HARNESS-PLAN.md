@@ -2,7 +2,7 @@
 
 ## Baseline and environment
 
-PRD-v3 A0/A1, Manny Phase 1, and handoff version `0.1.0-proposed` define the current synthetic fixture checks. The runtime is Python 3.13 with Pydantic and pytest. No model, external API, database, actual agent dispatch or side effect is exercised. The fixture authority and handoff ledger are process-local; timing is supplied by the caller, and automatic retries are disabled.
+PRD-v4 A0/A1, Manny Phase 1, and handoff version `0.1.0-proposed` define the current synthetic fixture checks. The runtime is Python 3.13 with Pydantic and pytest. No model, external API, database, actual agent dispatch or side effect is exercised. The fixture authority and handoff ledger are process-local; timing is supplied by the caller, and automatic retries are disabled.
 
 ## Requirement-to-check map
 

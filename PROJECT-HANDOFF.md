@@ -99,7 +99,7 @@ Snapshot comparison: commit 3138388 at 15:15 recorded Phase 2 active with Phase 
 
 ## AI handoff instruction — current requirements source
 
-At the start of every AI/agent task, read the most up-to-date approved project PRD in the active branch. For Manny's current lane, that is `docs/requirements/PRD-v3.md`; PRD.md and PRD-v2 are historical. Follow later explicit user decisions together with that PRD. Do not rely on this handoff, older PRD copies, or memory when they differ from the current source. Check the active branch and PRD revision before work; if requirements are missing, stale, or contradictory, record the issue in `Checklist.md` and ask only when the decision blocks safe progress. Follow lane ownership and cross-lane restrictions in the current PRD, `AGENTS.md`, and `docs/planning/TASK-SPLIT.md`.
+At the start of every AI/agent task, read the most up-to-date approved project PRD in the active branch. PRD-v4 is the current requirements source; PRD, PRD-v2, and PRD-v3 are historical. Follow later explicit user decisions together with PRD-v4. Do not rely on this handoff, older PRD copies, or memory when they differ from the current source. Check the active branch and PRD revision before work; if requirements are missing, stale, or contradictory, record the issue in `Checklist.md` and ask only when the decision blocks safe progress. Follow lane ownership and cross-lane restrictions in PRD-v4, `AGENTS.md`, and `docs/planning/TASK-SPLIT.md`. Dated status entries below preserve their historical PRD references and must not be treated as the current requirements source.
 
 ## Current lane assignment
 

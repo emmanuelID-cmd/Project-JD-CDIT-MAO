@@ -2,17 +2,24 @@
 
 Use this checklist as the live project status record. Check an item only when its evidence is present and reviewed. Planning completion is not implementation completion; an unchecked item blocks a completion claim unless the project lead explicitly marks it out of scope or deferred.
 
-**Current phase:** Manny Phase 2 — Triage in progress; Phase 2 exit gates remain open.
+**Current phase:** Manny Phase 2 - Triage integration in progress; exit gates remain open. PRD-v4 is the current requirements source.
 **Planning deadline:** November 11, 2026
-**Current implementation status:** The Python 3.13.15 full synthetic-only suite passes 618 tests (2026-11-08). Phase 2 connects Coordinator to Triage to item-scoped Knowledge in `CombinedWorkflowHarness.run_manny_connected` while preserving item identity/span/digest, inference evidence, Unknown urgency, human review, and parent-incomplete status. Shawn's PR #12 receiver review accepted with findings; Manny fixed F-1 (CRLF-sensitive source hash) and F-2 (attention limited to the first matching item) in commit `122d44b`, with focused regression coverage. Updated PR review remains pending. N1-N3 are complete at an estimated 85% Phase 2 exit readiness. Shared connection acceptance, Manny-approved evaluation labels, and complete Phase 2 evidence remain open. The replacement Sonnet 5.5 smoke call returned Unknown for Auditor review and remains unscored. Phase 3 integration and Phase 4 full evaluation acceptance remain pending; the Auditor interface/auth flow remains deferred.
+**Current implementation status:** The Python 3.13.15 full synthetic-only suite passes 618 tests (2026-11-08). Phase 2 connects Coordinator to Triage to item-scoped Knowledge in `CombinedWorkflowHarness.run_manny_connected` while preserving item identity/span/digest, inference evidence, Unknown urgency, human review, and parent-incomplete status. PR #12 and the F-1/F-2 fixes are included in the current merged baseline at `a363724`. Phase 2 remains open pending Shared connection acceptance, the S-1.1 decision for F-3/F-4, and approved evaluation evidence; the prior 85% estimate has not been recalculated by this documentation update. N1-N3 are complete at an estimated 85% Phase 2 exit readiness. Shared connection acceptance, Manny-approved evaluation labels, and complete Phase 2 evidence remain open. The replacement Sonnet 5.5 smoke call returned Unknown for Auditor review and remains unscored. Phase 3 integration and Phase 4 full evaluation acceptance remain pending; the Auditor interface/auth flow remains deferred.
 **Antigravity provenance:** The project lead confirms Antigravity only merged PR #6; all other completion/work claims in its handoff are false. Existing repository artifacts are tracked separately and are not attributed to Antigravity.
 **Completion status:** In progress; do not claim project completion or begin release workflow.
 
 ## Shared project baseline
 
+- [x] PRD-v4 defines the authenticated local User/Staff/Admin app, SQLite foundation, minimal Product Health metadata, and separate unauthenticated role showcase.
+- [x] Local SQL planning branch `manny/sql-foundation` created from Manny lane commit `a363724`; SQL and connected Manny branches currently share the same commit, with no unique branch commits created.
+- [ ] Approve concrete SQLite columns, constraints, migrations, metadata retention, synthetic seed/reset, and recovery behavior before persistence implementation.
+- [ ] Implement local synthetic authentication and server-side User/Staff/Admin authorization; verify direct page/API denial and Admin audit events.
+- [ ] Build the separate three-view no-login showcase using fabricated static data and inert privileged controls.
+- [ ] Verify Product Health data minimization, SQL query safety, role matrix, recovery, accessibility, and responsive/error states.
+
 - [x] PRD is the current requirements source and includes milestones, agent gates, confidence/factuality, prompt-injection controls, case authority, blackboard state, and handoffs.
-- [x] PRD-v2 is retained for history; the project lead selected PRD-v3 as Manny’s lane baseline.
-- [x] The project lead approved `PRD-v3.md` as Manny’s synthetic-lane build baseline; team-wide review remains pending.
+- [x] PRD-v3 is retained as the historical prior requirements version; PRD-v4 is the current project baseline, approved 2026-11-08.
+- [x] The project lead approved `PRD-v4.md` as the current synthetic-prototype requirements source; dated PRD-v3 decisions remain historical.
 - [x] User Needs and prioritized use cases have a linked companion file.
 - [x] Synthetic evaluation and routing examples are in `docs/requirements/CASE-SCENARIOS.md`.
 - [x] Deferred policy and implementation decisions are tracked in `docs/planning/DEFERRED-DECISIONS.md`.
@@ -71,7 +78,7 @@ Use this checklist as the live project status record. Check an item only when it
 
 - [ ] Obtain Manny's approved semantic label for the smoke fixture; until then, its classification correctness remains unverified.
 - [x] Draft the Manny-owned connection proposal for Shared Lane review in [TRIAGE-LINKED-ITEM-HANDOFF-PROPOSAL.md](docs/lanes/manny/TRIAGE-LINKED-ITEM-HANDOFF-PROPOSAL.md); this does not change or accept the shared contract.
-- [ ] Receiver/shared gate: Shawn reviewed PR #12 and accepted with findings; Manny's F-1/F-2 fixes are in commit `122d44b` and await updated PR verification. Shared Lane still needs to check schema/version integrity, acknowledgements, item joins, stale-state rejection, failure routing, and the end-to-end handoff. Do not change Shawn-owned agent behavior. Follow the [ordered Phase 2 exit checklist](docs/planning/Manny-phase/phase2/EXIT-CHECKLIST.md).
+- [ ] Receiver/shared gate: Shawn reviewed PR #12 and accepted with findings; Manny's F-1/F-2 fixes are included in merged PR #12 at `a363724`. Shared Lane still needs to check schema/version integrity, acknowledgements, item joins, stale-state rejection, failure routing, and the end-to-end handoff. Do not change Shawn-owned agent behavior. Follow the [ordered Phase 2 exit checklist](docs/planning/Manny-phase/phase2/EXIT-CHECKLIST.md).
 - [ ] Run and retain the app-wired Coordinator-to-Triage plus downstream integration/security cases after the shared handoff shape is accepted; the one-call Triage smoke did not exercise this workflow.
 - [ ] At project completion, run 100 sequential synthetic-only traces; retain pass and failure evidence and stay within the available $40 budget.
 - [x] PR #6 was merged into `developer` (merge commit `8499f85`). The merge itself is the only Antigravity action confirmed by the project lead; do not treat the merge as evidence that Antigravity performed or validated the implementation work described in its handoff.

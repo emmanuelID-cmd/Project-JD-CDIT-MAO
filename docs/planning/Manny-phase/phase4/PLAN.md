@@ -30,4 +30,7 @@ These results describe the asserted checks over the current fixture set only. Th
 
 ## Boundaries
 
+This phase validates the synthetic agent workflow. It does not close PRD-v4 local database, authentication, role-interface, or no-auth showcase acceptance; those checks belong to the separate local app workstream.
+
+
 This preliminary report records component and downstream fixture evidence only. It does not verify Coordinator-to-semantic-Triage, item-scoped compatibility, or full cross-lane integration; Shared receiver acceptance remains pending. Real data and production integrations remain out of scope.

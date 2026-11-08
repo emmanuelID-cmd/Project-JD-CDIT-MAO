@@ -1,4 +1,6 @@
 # Handoffs prepared for push
+
+**Current requirements source (2026-11-08):** [`docs/requirements/PRD-v4.md`](docs/requirements/PRD-v4.md). Dated PRD-v3 statements below describe the baseline at their recorded handoff time.
 ## 2026-11-08T00:35:34-05:00 - Manny fixes Shawn receiver findings F-1/F-2
 
 Summary file: PROJECT-HANDOFF.md
