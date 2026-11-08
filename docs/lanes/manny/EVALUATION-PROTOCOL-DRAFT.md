@@ -1,12 +1,12 @@
 # Manny Phase 4 — Synthetic Evaluation Protocol (Draft)
 
-**Status:** Draft planning artifact for Manny's lane. This protocol does not approve labels, select a model/provider, execute evaluations, or authorize use of real case data. PRD-v4 is the current baseline. This protocol was drafted against v3 and must be reconciled with v4 database/auth/role-showcase gates before Phase 4 acceptance. Evaluation is synthetic-only.
+**Status (2026-11-08):** Draft planning artifact for Manny's lane, reconciled to PRD-v4's database/authentication, role-showcase, and synthetic-data boundaries. The protocol does not approve labels, execute scoring, or authorize real case data. Evaluation is synthetic-only.
 
 ## Purpose and boundaries
 
 Measure Manny-owned Coordinator, Triage, and Escalation behavior individually and in the Manny-lane workflow against PRD-v4 requirements. Results describe only the frozen synthetic cases actually tested. They do not establish CDIT policy compliance, real-world reliability, production readiness, or performance for users.
 
-No evaluator agent or evaluation-model tool is proposed. Use human-authored expected labels, a deterministic comparison script, and human review. Manny owns and must approve the expected labels before they count as evaluation truth. A project teammate peer-reviews disputed labels and an agreed sample; this is a quality check, not a second runtime agent. Draft labels and candidate scenarios remain unapproved until Manny records approval.
+No evaluator agent or evaluation-model tool is proposed. Use human-authored expected labels and a deterministic comparison script. Manny is the single label author, reviewer, and approver for this synthetic-only assignment. Draft labels and candidate scenarios remain unapproved until Manny records approval. Report that the labels received single-person review; do not imply independent peer review. A later real-world evaluation may use an independent evaluator only after separate authorization and data approval.
 
 Do not put real tickets, PHI, credentials, CDIT-only materials, or confidential company data in the test set. Preserve prompt injection as untrusted synthetic content. Do not enable online learning from evaluation runs.
 
@@ -16,7 +16,7 @@ Maintain separate, versioned sets for development examples, label-review cases, 
 
 Each synthetic case record should include a stable case ID, case version, scenario category, source/evidence references and versions, expected item boundaries and dependencies where applicable, expected category and urgency or `unknown`, must-escalate/human-review expectation, required citations, forbidden claims/actions, relevant checkpoint outcomes, and the rationale for each expected label. Keep the reporter statement distinguished from verified fixture facts.
 
-The exact case taxonomy, label schema, independent positive and negative examples per gate, total approved count, and reviewer sampling plan are **TBD**. PRD-v4's target of at least 100 labeled cases remains a target; it is not achieved by the current scenario catalog. Manny approves labels; a teammate reviews disputed labels and the sample once that sample rule is agreed. Record label revision, reviewer, resolution, and date. Never score against unapproved draft labels as if they were gold labels.
+The exact case taxonomy, label schema, positive and negative examples per gate, total approved count, and sample counts are **TBD**. PRD-v4's target of at least 100 labeled cases remains a target; it is not achieved by the current scenario catalog. Manny authors, reviews, and approves the labels. Record the label revision, author/approver, resolution, and date. Never score against unapproved draft labels as if they were gold labels.
 
 ## Claim and gate metrics
 
@@ -46,7 +46,7 @@ Counts and case IDs supporting each gate must be stated. “Zero failures in the
 
 Prepare seeded synthetic drafts containing known material mistakes: unsupported claim, wrong source/version, missing uncertainty, incorrect category/band, and omitted conflict. Keep the seed key hidden from the reviewing participant until scoring is complete. Record whether the reviewer detects and corrects each planted issue, misses it, or changes a correct statement incorrectly. Report detection and harmful-change counts with denominators by error type.
 
-The reviewer sample size, reviewer-error target, blinding procedure, and adjudication method are **TBD** for Manny's approval. Reviewers must use only synthetic cases. This measures the defined exercise, not the general skill of a workforce.
+The reviewer sample size, reviewer-error target, and blinding procedure are **TBD** for Manny's approval. Manny may perform the current synthetic exercise alone; if planted-error locations cannot remain unknown to him until review, mark that measure not measured. Do not claim independent human validation. This measures only the defined exercise, not the general skill of a workforce.
 
 ## Retrieval and source freshness
 
@@ -67,7 +67,7 @@ Latency budgets, cost budgets, percentile(s), warm/cold start treatment, run rep
 ## Run procedure and reporting
 
 1. Freeze and identify PRD version, code revision, prompt/version, contract version, fixture/policy version, retrieval corpus version, label-set revision, holdout membership, and runtime environment.
-2. Have Manny approve the expected labels and record peer-review status before treating the set as evaluative evidence.
+2. Have Manny approve the expected labels and record that the current synthetic set received single-person review before treating it as evaluative evidence.
 3. Run the deterministic baseline and applicable lane tests; preserve raw result artifacts only within the approved synthetic-data boundary.
 4. Validate schemas, case/run/version binding, citations, checkpoints, forbidden actions, and fallback outcomes with deterministic assertions.
 5. Calculate each metric from its recorded numerator and denominator; report missing/empty denominators and skipped cases explicitly.

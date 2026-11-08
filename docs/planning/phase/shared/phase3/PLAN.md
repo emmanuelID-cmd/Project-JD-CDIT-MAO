@@ -1,6 +1,6 @@
 # Shared Phase 3 — Integrated Evaluation and Independent Review
 
-**Status:** In progress; current acceptance requirements are in PRD-v4. Preliminary component/downstream fixture evidence does not establish the full A0-A6 integration or PRD safety-gate completion.
+**Status (2026-11-08):** The 100-case draft and integrated synthetic harness are available. Evaluation remains unscored because Manny must approve the draft expected labels/source expectations first. The 686 passing Python tests and 4 passing draft-validator checks establish engineering checks only; they do not establish PRD accuracy gates or real-world performance. Current acceptance requirements are in PRD-v4.
 
 ## Work
 

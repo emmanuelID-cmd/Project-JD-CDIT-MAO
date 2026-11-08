@@ -1,12 +1,12 @@
-# Shared Phase 0 — PRD v2 and Evaluation Baseline
+# Shared Phase 0 - Requirements and Evaluation Baseline (PRD-v4)
 
-**Status:** Shared Phase 0 was checked against PRD-v3 at the time; PRD-v4 is the current requirements source. Historical phase evidence remains historical.
+**Status (2026-11-08):** PRD-v4 is the current requirements source. Shared contract changes S-1/S-2 and S-1.1 are merged. The evaluation protocol and a 100-case draft with per-gate positive/negative counts exist; the labels remain unapproved and unscored. Connected synthetic integration tests pass, while the assigned-case permission condition and final evaluation acceptance remain open. Earlier phase notes are historical snapshots.
 
 ## Work
 
-- Crosswalk approved PRD v2, user needs, A0–A7, scenarios, deferred decisions, lane ownership, and contract proposals.
+- Crosswalk current PRD-v4, user needs, A0-A7, scenarios, deferred decisions, lane ownership, and accepted contracts; PRD-v2 is historical context only.
 - Agree interface/version promotion criteria and list open contract questions. Each lane owns its agent-side schema/behavior.
-- Coordinate with Manny, who owns the synthetic evaluation definitions/protocol: machine-checkable expected outcomes, per-gate positive/negative sample counts, human-approved reference labels, deterministic evaluation script, holdout separation, and metric definitions. A project teammate peer-reviews disagreements and a sample using synthetic fixtures; no external evaluator is required. The AI cross-labeler option remains deferred under D-14.
+- Coordinate with Manny, who owns the synthetic evaluation definitions/protocol: machine-checkable expected outcomes, per-gate positive/negative sample counts, human-approved reference labels, deterministic evaluation script, holdout separation, and metric definitions. For this synthetic assignment, Manny is the single label author, reviewer, and approver; report the lack of independent peer review. No evaluator agent is required, and the AI cross-labeler option remains deferred under D-14.
 - Define trace fields/privacy limits, run/case/policy/source versions, test commands on Python 3.13, budgets, and combined-harness acceptance.
 - Define material-claim classes/denominators, retrieval recall@k, source freshness, latency/cost, and reviewer over-reliance measures without relaxing quality gates.
 
