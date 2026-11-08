@@ -3,6 +3,7 @@ from __future__ import annotations
 
 import hashlib
 import hmac
+import json
 import os
 import secrets
 import sqlite3
@@ -12,7 +13,7 @@ from datetime import datetime, timedelta, timezone
 from typing import Literal
 
 from fastapi import APIRouter, Depends, HTTPException, Request, Response
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, ConfigDict, Field, model_validator
 
 from cdit_support_mao.database import connect, initialize_database
 
@@ -109,6 +110,47 @@ class StatusUpdatePayload(BaseModel):
         "submitted", "in_progress", "waiting_on_customer", "under_investigation",
         "escalated", "resolved", "closed",
     ]
+
+
+class AuditorDecisionPayload(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+    item_id: str = Field(min_length=1, max_length=128)
+    item_index: int = Field(ge=1, le=8)
+    item_count: int = Field(ge=1, le=8)
+    expected_previous_decision_version: int = Field(default=0, ge=0)
+    expected_case_version: str = Field(min_length=1, max_length=64)
+    source_id: str = Field(min_length=1, max_length=128)
+    source_version: str = Field(min_length=1, max_length=64)
+    source_start: int = Field(ge=0)
+    source_end: int = Field(gt=0)
+    policy_version: str = Field(min_length=1, max_length=64)
+    category: str = Field(min_length=1, max_length=120)
+    urgency_band: Literal["low", "medium", "high"]
+    destination: str = Field(min_length=1, max_length=120)
+    rationale: str = Field(min_length=1, max_length=2000)
+    evidence: str = Field(min_length=1, max_length=2000)
+    conditions: list[str] = Field(default_factory=list, max_length=20)
+    exceptions: list[str] = Field(default_factory=list, max_length=20)
+
+    @model_validator(mode="after")
+    def validate_item_scope(self):
+        if self.item_index > self.item_count:
+            raise ValueError("item_index must not exceed item_count")
+        if self.source_end <= self.source_start:
+            raise ValueError("source_end must be after source_start")
+        for values in (self.conditions, self.exceptions):
+            if any(not item.strip() or len(item) > 240 for item in values):
+                raise ValueError("conditions and exceptions must be non-empty and at most 240 characters")
+        for field in ("item_id", "source_id", "source_version", "policy_version", "category", "destination", "rationale", "evidence"):
+            value = getattr(self, field).strip()
+            if not value:
+                raise ValueError(f"{field} must not be blank")
+            setattr(self, field, value)
+        self.conditions = [item.strip() for item in self.conditions]
+        self.exceptions = [item.strip() for item in self.exceptions]
+        return self
+
+
 class AccountChange(BaseModel):
     role: Literal["user", "staff", "admin"] | None = None
     status: Literal["active", "suspended", "deactivated", "removed"] | None = None
@@ -352,6 +394,106 @@ def list_cases(actor: Actor = Depends(require_roles("user", "staff", "admin"))):
         else:
             rows = db.execute(query + " ORDER BY c.updated_at DESC").fetchall()
     return [_case_for_role(row, actor.role) for row in rows]
+
+
+@router.get("/api/auditor/taxonomy")
+def auditor_taxonomy(actor: Actor = Depends(require_roles("staff", "admin"))):
+    """Return the approved synthetic category vocabulary used by the local case catalog."""
+    with connect() as db:
+        rows = db.execute(
+            "SELECT DISTINCT category FROM synthetic_case_catalog ORDER BY category COLLATE NOCASE"
+        ).fetchall()
+    return {"categories": [row["category"] for row in rows]}
+
+
+@router.get("/api/auditor/decisions")
+def list_auditor_decisions(actor: Actor = Depends(require_roles("staff", "admin"))):
+    """List append-only synthetic decision history for the existing Staff/Admin queue."""
+    with connect() as db:
+        rows = db.execute(
+            """SELECT decision_id, case_id, item_id, decision_version, item_index, item_count,
+                      case_version, source_id, source_version, source_start, source_end,
+                      source_digest_sha256, policy_version, category, urgency_band, destination,
+                      rationale, evidence, conditions_json, exceptions_json, reviewer_account_id,
+                      recorded_at
+               FROM synthetic_auditor_decisions
+               ORDER BY recorded_at DESC, decision_id"""
+        ).fetchall()
+    result = []
+    for row in rows:
+        item = dict(row)
+        item["conditions"] = json.loads(item.pop("conditions_json"))
+        item["exceptions"] = json.loads(item.pop("exceptions_json"))
+        result.append(item)
+    return result
+
+
+@router.post("/api/cases/{case_id}/items/auditor-decisions", status_code=201)
+def record_auditor_decision(
+    case_id: str, payload: AuditorDecisionPayload,
+    actor: Actor = Depends(require_roles("staff", "admin")),
+):
+    """Record a human item-level routing decision without changing the ticket."""
+    now = stamp(now_utc())
+    decision_id = "AUD-" + uuid.uuid4().hex
+    with connect() as db:
+        db.execute("BEGIN IMMEDIATE")
+        case = db.execute(
+            "SELECT request_text, updated_at, is_synthetic FROM synthetic_cases WHERE case_id = ?",
+            (case_id,),
+        ).fetchone()
+        if case is None or case["is_synthetic"] != 1:
+            db.rollback()
+            raise HTTPException(status_code=404, detail="Synthetic case not found")
+        if case["updated_at"] != payload.expected_case_version:
+            db.rollback()
+            raise HTTPException(status_code=409, detail="Case changed since this review form was loaded; refresh and review again")
+        if payload.source_end > len(case["request_text"]):
+            db.rollback()
+            raise HTTPException(status_code=422, detail="Source span is outside the current case text")
+        item_text = case["request_text"][payload.source_start:payload.source_end]
+        if not item_text.strip():
+            db.rollback()
+            raise HTTPException(status_code=422, detail="Source span must identify non-empty case text")
+        category = db.execute(
+            "SELECT 1 FROM synthetic_case_catalog WHERE category = ? COLLATE NOCASE LIMIT 1",
+            (payload.category,),
+        ).fetchone()
+        if category is None:
+            db.rollback()
+            raise HTTPException(status_code=422, detail="Choose a category from the synthetic taxonomy")
+        previous = db.execute(
+            "SELECT COALESCE(MAX(decision_version), 0) AS version FROM synthetic_auditor_decisions WHERE case_id = ? AND item_id = ?",
+            (case_id, payload.item_id),
+        ).fetchone()["version"]
+        if previous != payload.expected_previous_decision_version:
+            db.rollback()
+            raise HTTPException(status_code=409, detail="A newer decision exists; refresh the decision history")
+        source_digest = hashlib.sha256(case["request_text"].encode("utf-8")).hexdigest()
+        db.execute(
+            """INSERT INTO synthetic_auditor_decisions
+               (decision_id, case_id, item_id, decision_version, item_index, item_count,
+                case_version, source_id, source_version, source_start, source_end,
+                source_digest_sha256, policy_version, category, urgency_band, destination,
+                rationale, evidence, conditions_json, exceptions_json, reviewer_account_id,
+                recorded_at, is_synthetic)
+               VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 1)""",
+            (
+                decision_id, case_id, payload.item_id, previous + 1, payload.item_index,
+                payload.item_count, case["updated_at"], payload.source_id, payload.source_version,
+                payload.source_start, payload.source_end, source_digest, payload.policy_version,
+                payload.category, payload.urgency_band, payload.destination, payload.rationale,
+                payload.evidence, json.dumps(payload.conditions, ensure_ascii=False, separators=(",", ":")),
+                json.dumps(payload.exceptions, ensure_ascii=False, separators=(",", ":")),
+                actor.account_id, now,
+            ),
+        )
+        db.commit()
+    return {
+        "decision_id": decision_id, "case_id": case_id, "item_id": payload.item_id,
+        "decision_version": previous + 1, "reviewer_account_id": actor.account_id,
+        "recorded_at": now, "ticket_changed": False,
+    }
 
 
 @router.post("/api/cases", status_code=201)

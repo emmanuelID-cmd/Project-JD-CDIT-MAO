@@ -19,13 +19,13 @@ def instant(value):
 
 def test_migration_is_idempotent_and_enables_required_tables(tmp_path):
     path = tmp_path / "local.sqlite3"
-    assert initialize_database(path) == 2
-    assert initialize_database(path) == 2
+    assert initialize_database(path) == 3
+    assert initialize_database(path) == 3
     with connect(path) as db:
         assert db.execute("PRAGMA foreign_keys").fetchone()[0] == 1
         tables = {r[0] for r in db.execute("SELECT name FROM sqlite_master WHERE type='table'")}
-        assert {"schema_migrations", "synthetic_accounts", "sessions", "synthetic_cases", "product_health_events", "product_health_summaries", "account_access_events", "session_extension_alerts", "synthetic_case_catalog", "synthetic_case_change_events"} <= tables
-        assert db.execute("SELECT COUNT(*) FROM schema_migrations").fetchone()[0] == 2
+        assert {"schema_migrations", "synthetic_accounts", "sessions", "synthetic_cases", "product_health_events", "product_health_summaries", "account_access_events", "session_extension_alerts", "synthetic_case_catalog", "synthetic_case_change_events", "synthetic_auditor_decisions"} <= tables
+        assert db.execute("SELECT COUNT(*) FROM schema_migrations").fetchone()[0] == 3
 
 
 def test_seed_is_synthetic_idempotent_and_product_health_has_no_content_fields(tmp_path):
@@ -94,7 +94,7 @@ def test_retention_uses_accelerated_clock_and_correct_buckets(tmp_path):
     with connect(path) as db:
         assert db.execute("SELECT event_id FROM product_health_events WHERE event_id='PH-KEEP'").fetchone()
         assert db.execute("SELECT event_id FROM account_access_events WHERE event_id='AUD-KEEP'").fetchone()
-        assert db.execute("SELECT COUNT(*) FROM schema_migrations").fetchone()[0] == 2
+        assert db.execute("SELECT COUNT(*) FROM schema_migrations").fetchone()[0] == 3
 
 
 def test_reset_deletes_only_allowlisted_synthetic_rows_and_preserves_schema(tmp_path):
@@ -105,7 +105,7 @@ def test_reset_deletes_only_allowlisted_synthetic_rows_and_preserves_schema(tmp_
     assert counts["synthetic_cases"] == 81
     assert counts["synthetic_case_catalog"] == 80
     with connect(path) as db:
-        assert db.execute("SELECT COUNT(*) FROM schema_migrations").fetchone()[0] == 2
+        assert db.execute("SELECT COUNT(*) FROM schema_migrations").fetchone()[0] == 3
         assert db.execute("SELECT COUNT(*) FROM synthetic_cases").fetchone()[0] == 0
         assert db.execute("SELECT COUNT(*) FROM synthetic_case_catalog").fetchone()[0] == 0
 
@@ -119,7 +119,7 @@ def test_known_legacy_case_catalog_checksum_requires_complete_schema_signature(t
             ("b200a572c5f07a3cf4fbd2108a608582426b8a804fa422c12d2f383da81523d8",),
         )
         db.commit()
-    assert initialize_database(path) == 2
+    assert initialize_database(path) == 3
     with connect(path) as db:
         db.execute("DROP INDEX synthetic_cases_kind_status_idx")
         db.commit()
