@@ -7,7 +7,12 @@ import pytest
 
 from cdit_support_mao.agents.coordinator import Coordinator, FixtureCaseVersions, FixturePolicyVersions, FixtureSession, FixtureSessionAuthority
 from cdit_support_mao.agents.coordinator.handoff import HandoffError, HandoffRegistry
-from cdit_support_mao.agents.triage.development_examples import DevelopmentCatalogError, DevelopmentExampleCatalog, lookup_development_examples
+from cdit_support_mao.agents.triage.development_examples import (
+    DevelopmentCatalogError,
+    DevelopmentExampleCatalog,
+    load_project_category_taxonomy,
+    lookup_development_examples,
+)
 
 NOW = datetime(2026, 11, 4, 12, tzinfo=UTC)
 SOURCE = Path(__file__).resolve().parents[1] / "docs/requirements/CASE-SCENARIOS.md"
@@ -156,3 +161,20 @@ def test_modified_valid_bytes_do_not_claim_verified_file_origin():
     assert ref.source_origin == "unverified_provisioner_claim"
     assert ref.claimed_source_path == "docs/requirements/CASE-SCENARIOS.md"
     assert "source_path" not in ref.model_dump()
+
+
+def test_project_taxonomy_pin_accepts_crlf_checkout(monkeypatch):
+    lf_source = SOURCE.read_bytes()
+    crlf_source = lf_source.replace(b"\n", b"\r\n")
+    original_read_bytes = Path.read_bytes
+
+    def read_bytes_with_crlf(path):
+        if path.resolve() == SOURCE.resolve():
+            return crlf_source
+        return original_read_bytes(path)
+
+    monkeypatch.setattr(Path, "read_bytes", read_bytes_with_crlf)
+    taxonomy = load_project_category_taxonomy()
+
+    assert taxonomy.source_sha256 == hashlib.sha256(lf_source).hexdigest()
+    assert taxonomy.categories

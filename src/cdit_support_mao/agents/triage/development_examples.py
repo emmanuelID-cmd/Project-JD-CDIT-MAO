@@ -97,15 +97,17 @@ def load_project_category_taxonomy() -> DevelopmentCategoryTaxonomy:
     """Load the pinned project taxonomy source; fail closed if it changed.
 
     The complete case-scenario document is never sent to the model. This loader
-    extracts the category names only and pins the exact synthetic source bytes
-    so an arbitrary caller-supplied taxonomy cannot expand the model vocabulary.
-    Updating the source requires an intentional pin update and review.
+    normalizes CRLF to LF, extracts the category names only, and pins the
+    normalized synthetic source bytes so Windows checkout settings do not change
+    the trust decision. Updating source content requires an intentional pin update
+    and review; an arbitrary caller-supplied taxonomy cannot expand the vocabulary.
     """
     source_path = Path(__file__).resolve().parents[4] / "docs" / "requirements" / "CASE-SCENARIOS.md"
     try:
         source_bytes = source_path.read_bytes()
     except OSError:
         raise DevelopmentCatalogError("trusted_category_taxonomy_unavailable") from None
+    source_bytes = source_bytes.replace(b"\r\n", b"\n")
     if hashlib.sha256(source_bytes).hexdigest() != TRUSTED_CATEGORY_SCENARIOS_SHA256:
         raise DevelopmentCatalogError("trusted_category_taxonomy_changed")
     capability = object()

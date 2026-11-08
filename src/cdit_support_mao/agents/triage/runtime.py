@@ -133,6 +133,7 @@ def run_triage_runtime(
             receiver_capability=receiver_capability,
             context=context,
             fixture_patterns=fixture_patterns,
+            item_spans=tuple((item.source_start, item.source_end) for item in candidate.items),
             now=now,
         )
     if category_taxonomy is None:

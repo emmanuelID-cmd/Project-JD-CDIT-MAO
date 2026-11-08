@@ -1,4 +1,45 @@
 # Handoffs prepared for push
+## 2026-11-08T00:35:34-05:00 - Manny fixes Shawn receiver findings F-1/F-2
+
+Summary file: PROJECT-HANDOFF.md
+
+- Git author: Emmanuel De Jesus <emmanuel.dejesus@pursuit.org> (repository Git identity and authored history verified).
+- Repository/branch: `emmanuelID-cmd/Project-JD-CDIT-MAO`, `manny/coordinator-triage-escalation`; PR #12 targets `developer`.
+- Verified destination baseline: `origin/manny/coordinator-triage-escalation` at `a0373c4f427c80d6e8e49bac08c070ead4be4b5e`. Outgoing code commit: `122d44bf7acf404f5b2e91285af4364b8ef23a8d`.
+- Shawn's PR #13 is merged into `developer` at `285c87a6e6e878789bc3024802ecdfce58996db6`. The remote-only path is her receiver-review document. Merge-tree preflight is clean; no pull was performed because the branches diverged and a pull would make a merge commit.
+- Done:
+  - [x] Normalize line endings before validating the pinned synthetic taxonomy source (F-1).
+  - [x] Attach a matching attention reference separately to each linked item containing the literal (F-2).
+  - [x] Add regression tests for simulated CRLF bytes and the repeated attention literal across two linked items.
+  - [x] Update the Checklist, README, and ordered Phase 2 exit checklist with the review findings and evidence.
+- Not completed:
+  - [ ] Publish the fix commit and handoff to the existing PR #12, then obtain updated review.
+  - [ ] Decide whether Shawn should draft the proposed shared S-1.1 for F-3/F-4; no shared contract change is authorized by this entry.
+  - [ ] Complete Shared connection acceptance and approved 100-case evaluation evidence.
+- Phase status: F-1/F-2 are implemented locally. Phase 2 remains open at 85% estimated exit readiness.
+- Validation: focused tests 49 passed; full synthetic-only suite 618 passed on Python 3.13.15; `git diff --check` passed. The smoke call remains Unknown/unscored and was not repeated.
+- Preserved but excluded: untracked root and `docs/templates/` PRD templates.
+
+## 2026-11-07T00:12:26-05:00 — Manny Phase 2 connected Triage handoff (N1–N3)
+
+Summary file: PROJECT-HANDOFF.md
+
+- Git author represented: Emmanuel De Jesus <emmanuel.dejesus@pursuit.org> (verified repository Git identity and prior authored history).
+- Repository/branch: `emmanuelID-cmd/Project-JD-CDIT-MAO`, `manny/coordinator-triage-escalation`; intended PR target: `developer`.
+- Verified remote baseline: `origin/manny/coordinator-triage-escalation` at `47371ed5e2ae85aae8bab44c1d63ebe71903fb90`; fetched branch was aligned with local HEAD before work (0 ahead/0 behind). No pull was needed. No open Manny-to-developer PR existed at pre-push review. Outgoing implementation commit: `997d968d2290f3a81245a100b9c28463ecb1ebc5`.
+- Done:
+  - [x] Connect Manny's Coordinator/Triage runtime through the item-scoped connector to the Knowledge receiver in `CombinedWorkflowHarness.run_manny_connected`.
+  - [x] Preserve item/parent/run/version/span, category inference sources, content digest, attention reference, Unknown urgency, Auditor gate, and parent-incomplete state across the connected synthetic path.
+  - [x] Add connected harness coverage for linked items, Unknown/ambiguous paths, stale input, injection-as-data stop, provenance, and no external side effects.
+  - [x] Update the Phase 2 ordered exit checklist and correct the stale model-ID statement; document the replacement smoke call separately as unscored.
+- Not completed:
+  - [ ] Shawn's Knowledge receiver review and Shared Lane end-to-end connection acceptance.
+  - [ ] Manny's approved labels and full 100-case Phase 2 evaluation evidence.
+  - [ ] Remaining Phase 3/4 integrated acceptance and final 100-trace closeout.
+- Phase status: N1–N3 complete; estimated Phase 2 exit readiness 85%; Phase 2 remains open. This handoff does not accept another lane's behavior or mark project completion.
+- Validation: `.venv\Scripts\python.exe -m pytest -q` from the project root — 616 passed on Python 3.13.15; `git diff --check` passed; changed Markdown files passed trailing-whitespace and fenced-block checks. The smoke output is Unknown and unscored; it does not establish semantic accuracy.
+- Preserved but excluded: untracked root and `docs/templates/` PRD templates.
+
 ## 2026-11-06T19:28:55-05:00 — Correct current handoff after PR #10 integration
 
 Summary file: PROJECT-HANDOFF.md

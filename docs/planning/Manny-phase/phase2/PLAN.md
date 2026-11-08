@@ -1,7 +1,16 @@
 # Phase 2 — Triage (Manny)
 
-**Status:** In progress on Manny lane. `MannyA0A2Harness` now composes synthetic Coordinator intake, acknowledged handoff, per-item segmentation, semantic proposals, and a version-bound category vocabulary through A2. It binds each inference to the exact ticket quote and taxonomy source while preserving mandatory human review and an optional fixture-only attention signal. Six-agent CombinedWorkflowHarness/app wiring, downstream item handoffs, and Shared receiver acceptance remain open. The approved PRD-v3 behavior is per-item categorization, source-span preservation, Unknown/ambiguous routing to the Auditor, and a reasoned attention flag where plausible urgency warrants it. Shawn's Knowledge agent receives the A2 handoff; Shared Lane reviews the connector contract only. The smoke trace lacks an approved semantic label and complete provenance. Approved benchmarks are suggestions, not guarantees. Operational SLA/routing policy remains open under D-01.
+**Status:** In progress on Manny lane. `MannyA0A2Harness` composes synthetic Coordinator intake, acknowledged handoff, per-item segmentation, semantic proposals, and the version-bound category vocabulary through A2. `CombinedWorkflowHarness.run_manny_connected` now builds validated item-scoped handoffs and runs the actual Knowledge receiver at A3, preserving parent/run/version, item spans, category inference evidence, Unknown urgency, digest, attention references, and mandatory human review. Shawn/Shared acceptance of the connected path remains open. Troubleshooting/Documentation wait for the human Auditor's band-and-route decision. The authenticated app/Auditor interface remains deferred until database/auth work. The historical 2026-11-05 smoke trace remains incomplete; its authorized 2026-11-06 replacement has captured prompt/request digests but returned Unknown category and remains unscored. Approved semantic evaluation labels remain open. Approved benchmarks are suggestions, not guarantees. Operational SLA/routing policy remains open under D-01.
 
+## Ordered exit checklist
+
+See [`EXIT-CHECKLIST.md`](./EXIT-CHECKLIST.md) for the dependency-ordered remaining gates, owners, direct decisions, and cumulative readiness forecasts. After N1–N3, the current qualitative estimate is 85% Phase 2 exit readiness; Shawn/Shared acceptance and the approved evaluation evidence remain open. Earlier 70–75% scaffold / 45–50% readiness estimates are historical.
+
+## Connected Sonnet 5.5 smoke call — 2026-11-06
+
+- One user-authorized call ran through `CombinedWorkflowHarness.run_manny_connected` with the pinned `claude-sonnet-5-5` model. The response passed the structured contract but returned category `unknown`; the connected workflow sent the item to human Auditor review and did not invoke Knowledge, Troubleshooting, or Documentation.
+- See [the synthetic trace report](../../../temp/trace/Trace-2026-11-06-Synthetic-Connected-Triage-Smoke.md) for the run/trace IDs, token counts, elapsed time, and prompt/request digests. It contains no API key or raw serialized request.
+- The output is a safe abstention, not a scored accuracy result. Manny's expected label is not yet approved.
 ## Additional Manny-owned work — 2026-11-06
 
 - Added `synthetic_data/manny_triage_cases/unknown-high-impact.json` as a case-specific contract fixture. The actual Coordinator-to-Triage A0–A2 harness, using an injected fake provider response, preserves Unknown category/urgency, records local Auditor-review reasons, requires human review, and carries a potential-attention signal with matching source span. The local review reasons are metadata only; the Shared item contract and Auditor interface remain pending. This tests the agreed fallback/attention behavior, not semantic model accuracy or the 100-case gold set.
@@ -36,7 +45,7 @@ Runtime contract note: a stale/invalid handoff found before candidate creation r
 - Manny approved the 80-row ticket catalog as development examples only. An exact-match fixture lookup references examples with a digest and explicitly unverified source origin; it does not approve labels or policy.
 - Created a Triage prompt draft for review. Anthropic Claude Sonnet 5.5 has since been selected and a client adapter has been added, but it is not wired into the app; no credential or model call is configured. Local components remain point-in-time snapshots and do not perform a real human handoff, ticket write, or external dispatch.
 - The user approved deferring the actual Auditor interface until database and authentication setup; this is not a Phase 2 interface build gate. Local fixture proposals and handoff checks remain Phase 2 work.
-- The user approved deferring Shared Lane receiver review to the integration gate. The linked-item shared contract remains unaccepted.
+- Shared contract fields S-1/S-2 were approved by Manny and merged in project PR #9. Shawn receiver code is present; acceptance of Manny’s connected item-scoped handoff remains a later Shared integration gate, as approved by the user.
 - Phase 2 remains in progress: policy-grounded category and urgency proposals, A2 grounding and no-down-triage rules, accepted multi-item handoffs, and Manny-approved evaluation labels are not complete. The interactive Auditor interface and authenticated review flow are deferred to database/authentication work. Preserve these gates rather than treating fixture tests as phase acceptance.
 - Added an explicitly provisioned synthetic policy fixture. An exact, source-bound single-item match can propose a category, urgency and Knowledge review stage as an inference; missing or conflicting policy abstains. It is not approved operational policy and does not authorize dispatch.
 - Added a process-local Coordinator-to-Knowledge acknowledgment fixture and tested it with Shawn’s Knowledge agent using a separately declared nonurgent synthetic A2 stand-in. The declaration is not proof of grounding, real approval or Shared receiver acceptance; current unknown-only Triage outputs are not forwarded.
@@ -66,7 +75,7 @@ Runtime contract note: a stale/invalid handoff found before candidate creation r
 - Added an optional per-item reference to an exact row in the 80-row development catalog. The emitted ID is stable (`SYN-EXAMPLE-###`) and travels with the source digest, claimed source path, unverified source-origin marker, and untrusted-example status.
 - The reference is metadata for human comparison only. It does not classify a ticket or supply policy; category, urgency, and destination remain unknown unless a separate authorized inference provides them. Ambiguously segmented parents receive no example reference. Parent completion and downstream dispatch remain blocked.
 - Focused adapter/schema/development-catalog checks: 30 passed. Full synthetic-only suite after this change: 453 passed.
-- Current estimates: Phase 2 local implementation scaffold 70–75%; Phase 2 exit readiness 40–45%. Exit gates still include model-backed semantic Triage behavior, accepted Shared contract, approved evaluation labels, and policy-grounded cases. These percentages are qualitative progress estimates, not acceptance evidence.
+- Historical estimate at the 2026-11-05 snapshot: local implementation scaffold 70–75%; Phase 2 exit readiness 40–45%. This is superseded by the 2026-11-06 N1–N3 implementation and the current estimate at the top of this plan; it is retained only as dated progress history.
 - The project lead selected Claude Sonnet 5.5 (`claude-sonnet-5-5`) for synthetic Triage; PRD-v3 and D-12 are aligned. `.env.example` documents the model and key variable, but no real credential is configured. The draft prompt is not loaded into the app. An adapter-level smoke call was made once on a synthetic fixture after explicit user authorization; the adapter remains unwired into the application. The call does not establish semantic correctness or six-agent integration.
 
 ### Provider-free semantic output contract — 2026-11-05
@@ -112,15 +121,17 @@ Runtime contract note: a stale/invalid handoff found before candidate creation r
 ### Manny A0–A2 harness composition — 2026-11-05
 
 - Added `MannyA0A2Harness` to compose synthetic Coordinator intake, sender/receiver handoff acknowledgment, pinned taxonomy loading, optional fixture attention, and `run_triage_runtime` without constructing a client, reading credentials, or writing external state.
-- The harness stops at A2. It does not call Knowledge, the six-agent CombinedWorkflowHarness, the FastAPI app, or Shared Lane because the linked-item receiver contract remains proposed.
+- The base harness stops at A2. The new `CombinedWorkflowHarness.run_manny_connected` uses its A0–A2 result to create source-validated item-scoped A2 handoffs and run Shawn's actual Knowledge receiver at A3. Shawn/Shared receiver acceptance remains pending. No FastAPI endpoint was added because the production/authenticated app path remains deferred.
 - Focused A0–A2 harness tests pass with both no-call fallback and an injected fake client, including explicit authorization required when a fake client is supplied. Focused Phase 2 suites: 106 passed. Full Python 3.13.15 suite: 540 passed in 19.72s using pytest `--basetemp` under the authorized writable Codex visualization directory. This is regression evidence only; Phase 2 exit and six-agent integration remain open.
 
 ## Linked-item A2 contract proposal — 2026-11-05
 
 - Drafted [TRIAGE-LINKED-ITEM-HANDOFF-PROPOSAL.md](../../../lanes/manny/TRIAGE-LINKED-ITEM-HANDOFF-PROPOSAL.md) for Shared Lane review, using existing Manny-owned source-span and linked-item candidate fields.
-- The shared contract is not modified or accepted. Shared Lane must confirm the item-scope representation and receiving compatibility before connection code is added.
+- The proposal was superseded by project PR #9: Manny approved S-1 (`TriageHandoff.item_scope`) and S-2 (`InputRef.content_digest`), and both were merged to `developer`. Shawn's Knowledge receiver support is present. The remaining gate is acceptance of Manny's actual connected item-scoped handoff after N1–N3 produce a reviewable path.
 - The current CombinedWorkflowHarness is not end-to-end Coordinator-to-semantic-Triage evidence: it starts from a fixture TriageHandoff and exercises the downstream agents against that stand-in.
 - No Shawn-owned prompt, tool, or agent behavior was changed.
+
+**Current disposition:** This section records the original proposal history. Its former statement that the shared contract was still unaccepted is superseded by PR #9 and must not be used as a current blocker.
 ## Handoff and exit evidence
 
 Send the schema and synthetic examples to Knowledge and Shared Lane. Knowledge consumes only the minimized agreed packet; Shared checks fields, versions, and routing without changing Triage logic. Every material claim is supported or labeled; down-triage rules are tested; unsupported urgency/SLA claims abstain or go to human review; outputs pass contract validation.

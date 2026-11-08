@@ -1,4 +1,29 @@
 # Project Handoff — Project-JD-CDIT-MAO
+## Verified status before F-1/F-2 follow-up publication - 2026-11-08
+
+This section supersedes earlier status statements below where they conflict. Antigravity's only confirmed action remains merging PR #6; no Antigravity implementation or validation is credited.
+
+- Active lane: `manny/coordinator-triage-escalation`. Verified remote Manny baseline: `a0373c4f427c80d6e8e49bac08c070ead4be4b5e`; local fix commit `122d44bf7acf404f5b2e91285af4364b8ef23a8d` is one commit ahead and has not yet been pushed.
+- Shawn's PR #13 is merged into `developer` at `285c87a6e6e878789bc3024802ecdfce58996db6`. Its only tree change relative to Manny is `docs/lanes/shawn/PHASE2-CONNECTED-RECEIVER-REVIEW.md`. A conflict-aware merge-tree check is clean. The pull was not performed; histories are diverged (4 Manny-only and 2 developer-only commits from their merge base), so integrating `developer` into Manny creates a normal merge commit, not a fast-forward.
+- Shawn accepted the connected receiver in PR #12 with findings. F-1 now normalizes CRLF to LF before hashing the pinned synthetic `CASE-SCENARIOS.md`; F-2 now checks the first configured attention literal within every validated item span. Regression tests cover a simulated CRLF checkout and a repeated literal in two linked items.
+- Focused tests: 49 passed. Full synthetic-only suite: 618 passed on Python 3.13.15. No live model call was made for these fixes.
+- PR #12 remains open against `developer`; the previous PR head was mergeable and no status checks were listed. It is not merged. The updated PR head awaits publication/review.
+- Phase 2 exit remains open at an estimated 85%. Shared connection acceptance, full approved evaluation evidence, and label decisions remain open. Shawn's proposed S-1.1 for F-3/F-4 is awaiting the project lead's decision; no shared contract was changed.
+- The untracked root and `docs/templates/` PRD templates are preserved and excluded.
+
+
+## Verified state before Phase 2 publication — 2026-11-07
+
+This update supersedes earlier status statements below where they conflict. Antigravity's only confirmed action remains merging PR #6; no Antigravity implementation or validation is credited.
+
+- Active branch: `manny/coordinator-triage-escalation`. Verified pre-work remote baseline: `origin/manny/coordinator-triage-escalation` at `47371ed5e2ae85aae8bab44c1d63ebe71903fb90`; fetch showed 0 incoming and 0 outgoing commits, so no pull was needed. The connected-harness work commit is `997d968d2290f3a81245a100b9c28463ecb1ebc5` and is not yet pushed. No open Manny-to-developer PR existed at pre-push review.
+- N1–N3 are complete: the Manny A0–A2 runtime now flows through the item-scoped connector into the Knowledge receiver in `CombinedWorkflowHarness.run_manny_connected`. The connection preserves parent/run/case identity, item ID/index/count and exact span, category inference provenance, content digest, attention reference, Unknown urgency, Auditor review requirement, and parent-incomplete status.
+- Connected synthetic checks cover single and linked items, Unknown/ambiguous routing, stale source, prompt-injection stop, provenance/digest joins, and no ticket writes, external dispatches, or customer notifications. The full synthetic-only suite passed 616 tests from the project root on Python 3.13.15. This is a test harness path, not production API/authentication or a user interface.
+- Phase 2 exit readiness is estimated at 85%. Shawn's receiver review and Shared connection acceptance remain open; Phase 2 is not complete. The ordered gates and cumulative completion estimates are in `docs/planning/Manny-phase/phase2/EXIT-CHECKLIST.md`.
+- The authorized replacement smoke call used the pinned active `claude-sonnet-5-5`, returned Unknown category, and routed for Auditor review. Its report is `docs/temp/trace/Trace-2026-11-06-Synthetic-Connected-Triage-Smoke.md`; the output is not a gold label and was not scored. The separate 2026-11-05 trace's missing request body remains unrecoverable and excluded from acceptance evidence.
+- Evaluation labeling and approval remain Manny-owned. The synthetic 100-case acceptance scoring is still pending. Phase 3 integration acceptance, Phase 4 full labeled evaluation, database/auth UI, and the 100-trace project closeout remain open/deferred as stated in `Checklist.md`.
+- The two untracked PRD template copies (`PRD Template.md` and `docs/templates/PRD Template.md`) remain preserved and excluded from this outgoing work.
+- Push destination is only `origin/manny/coordinator-triage-escalation`; the review PR target is `developer`. No merge to `developer` or `main` is part of this handoff.
 
 ## Current verified state — 2026-11-06
 
