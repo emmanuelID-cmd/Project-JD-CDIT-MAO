@@ -1,6 +1,6 @@
 # Manny Phase 2 — Ordered Exit Checklist
 
-**Current state (2026-11-07):** Manny's connected A0–A3 harness and N1–N3 synthetic verification are complete. Phase 2 **exit readiness is estimated at 85%**. This is a planning estimate, not a test metric; receiver acceptance, evaluation labels, and complete semantic evaluation evidence remain open.
+**Current state (2026-11-08):** Manny's connected A0–A3 harness and N1–N3 synthetic verification are complete. Phase 2 **exit readiness is estimated at 85%**. This is a planning estimate, not a test metric; receiver acceptance, evaluation labels, and complete semantic evaluation evidence remain open.
 
 **Forecast rule:** Percentages below are cumulative expected Phase 2 exit readiness after each whole step passes, assuming no rework. They are not additive, and a passing unit test alone does not satisfy a gate.
 
@@ -22,9 +22,11 @@ Owner: **Manny**. Shawn is not a prerequisite for this implementation step.
 
 Owners: **Manny for the connector; Shawn for her Knowledge receiver; Shared Lane for connection checks.** Start this review after Step 1 has a concrete connected path to inspect.
 
-- [ ] Shawn reviews that Knowledge receives the correct item text and preserves the accepted identity, parent, span, source/version, digest, attention reference, and Auditor status without using category/urgency to bias retrieval.
+- [x] Shawn reviewed the connected receiver in PR #12 and accepted with findings: Knowledge receives the correct item text and preserves identity, parent, span, source/version, digest, and Auditor status without using category/urgency to bias retrieval. Manny fixed F-1 and F-2 in commit `122d44b`; updated PR verification remains pending.
 - [ ] Shared checks schema/version integrity, acknowledgements, item joins, stale-state rejection, failure routing, and end-to-end handoff behavior.
-- [ ] Resolve findings by ownership: Manny fixes Coordinator/Triage/connector defects; Shawn fixes Knowledge/Troubleshooting/Documentation behavior in her lane. Do not edit her agent internals from Manny's lane.
+- [x] Manny fixed F-1 and F-2: normalize CRLF before checking the trusted synthetic taxonomy pin, and find the first configured attention literal separately within each item span. Focused regressions: 49 passed; full suite: 618 passed.
+- [ ] Review proposed shared S-1.1 treatment for F-3 (distinguish `flagged`, `none_found`, and `not_assessed`) and F-4 (taxonomy source citation). No shared contract change is made until the project lead approves the proposal.
+- [ ] Resolve any remaining findings by ownership: Manny fixes Coordinator/Triage/connector defects; Shawn fixes Knowledge/Troubleshooting/Documentation behavior in her lane. Do not edit her agent internals from Manny's lane.
 - [ ] Shawn or another project teammate peer-reviews the synthetic labels/results as required by the evaluation protocol; Manny remains the label owner and approver.
 
 **After Step 2:** expected Phase 2 exit readiness is about **95%**. A blocked or rejected receiver review keeps this step open; it does not require stopping unrelated Manny-owned work before review begins.

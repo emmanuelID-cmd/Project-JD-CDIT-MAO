@@ -1,4 +1,16 @@
 # Project Handoff — Project-JD-CDIT-MAO
+## Verified status before F-1/F-2 follow-up publication - 2026-11-08
+
+This section supersedes earlier status statements below where they conflict. Antigravity's only confirmed action remains merging PR #6; no Antigravity implementation or validation is credited.
+
+- Active lane: `manny/coordinator-triage-escalation`. Verified remote Manny baseline: `a0373c4f427c80d6e8e49bac08c070ead4be4b5e`; local fix commit `122d44bf7acf404f5b2e91285af4364b8ef23a8d` is one commit ahead and has not yet been pushed.
+- Shawn's PR #13 is merged into `developer` at `285c87a6e6e878789bc3024802ecdfce58996db6`. Its only tree change relative to Manny is `docs/lanes/shawn/PHASE2-CONNECTED-RECEIVER-REVIEW.md`. A conflict-aware merge-tree check is clean. The pull was not performed; histories are diverged (4 Manny-only and 2 developer-only commits from their merge base), so integrating `developer` into Manny creates a normal merge commit, not a fast-forward.
+- Shawn accepted the connected receiver in PR #12 with findings. F-1 now normalizes CRLF to LF before hashing the pinned synthetic `CASE-SCENARIOS.md`; F-2 now checks the first configured attention literal within every validated item span. Regression tests cover a simulated CRLF checkout and a repeated literal in two linked items.
+- Focused tests: 49 passed. Full synthetic-only suite: 618 passed on Python 3.13.15. No live model call was made for these fixes.
+- PR #12 remains open against `developer`; the previous PR head was mergeable and no status checks were listed. It is not merged. The updated PR head awaits publication/review.
+- Phase 2 exit remains open at an estimated 85%. Shared connection acceptance, full approved evaluation evidence, and label decisions remain open. Shawn's proposed S-1.1 for F-3/F-4 is awaiting the project lead's decision; no shared contract was changed.
+- The untracked root and `docs/templates/` PRD templates are preserved and excluded.
+
 
 ## Verified state before Phase 2 publication — 2026-11-07
 
