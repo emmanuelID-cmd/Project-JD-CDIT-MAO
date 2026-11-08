@@ -1,10 +1,10 @@
 # Manny Phase 4 — Synthetic Evaluation Protocol (Draft)
 
-**Status:** Draft planning artifact for Manny's lane. This protocol does not approve labels, select a model/provider, execute evaluations, or authorize use of real case data. PRD-v3 is the current baseline. Evaluation is synthetic-only.
+**Status:** Draft planning artifact for Manny's lane. This protocol does not approve labels, select a model/provider, execute evaluations, or authorize use of real case data. PRD-v4 is the current baseline. This protocol was drafted against v3 and must be reconciled with v4 database/auth/role-showcase gates before Phase 4 acceptance. Evaluation is synthetic-only.
 
 ## Purpose and boundaries
 
-Measure Manny-owned Coordinator, Triage, and Escalation behavior individually and in the Manny-lane workflow against PRD-v3 requirements. Results describe only the frozen synthetic cases actually tested. They do not establish CDIT policy compliance, real-world reliability, production readiness, or performance for users.
+Measure Manny-owned Coordinator, Triage, and Escalation behavior individually and in the Manny-lane workflow against PRD-v4 requirements. Results describe only the frozen synthetic cases actually tested. They do not establish CDIT policy compliance, real-world reliability, production readiness, or performance for users.
 
 No evaluator agent or evaluation-model tool is proposed. Use human-authored expected labels, a deterministic comparison script, and human review. Manny owns and must approve the expected labels before they count as evaluation truth. A project teammate peer-reviews disputed labels and an agreed sample; this is a quality check, not a second runtime agent. Draft labels and candidate scenarios remain unapproved until Manny records approval.
 
@@ -16,7 +16,7 @@ Maintain separate, versioned sets for development examples, label-review cases, 
 
 Each synthetic case record should include a stable case ID, case version, scenario category, source/evidence references and versions, expected item boundaries and dependencies where applicable, expected category and urgency or `unknown`, must-escalate/human-review expectation, required citations, forbidden claims/actions, relevant checkpoint outcomes, and the rationale for each expected label. Keep the reporter statement distinguished from verified fixture facts.
 
-The exact case taxonomy, label schema, independent positive and negative examples per gate, total approved count, and reviewer sampling plan are **TBD**. PRD-v3's target of at least 100 labeled cases remains a target; it is not achieved by the current scenario catalog. Manny approves labels; a teammate reviews disputed labels and the sample once that sample rule is agreed. Record label revision, reviewer, resolution, and date. Never score against unapproved draft labels as if they were gold labels.
+The exact case taxonomy, label schema, independent positive and negative examples per gate, total approved count, and reviewer sampling plan are **TBD**. PRD-v4's target of at least 100 labeled cases remains a target; it is not achieved by the current scenario catalog. Manny approves labels; a teammate reviews disputed labels and the sample once that sample rule is agreed. Record label revision, reviewer, resolution, and date. Never score against unapproved draft labels as if they were gold labels.
 
 ## Claim and gate metrics
 
@@ -50,7 +50,7 @@ The reviewer sample size, reviewer-error target, blinding procedure, and adjudic
 
 ## Retrieval and source freshness
 
-For any evaluation that uses retrieval, pin the synthetic corpus version, document/source IDs, versions, effective dates, review dates, and the evaluation `as_of` time. Define stale-source criteria before scoring: exact version mismatch, source outside its effective period, missed review date under the approved fixture rule, or an unapproved/retired source. Exact freshness policy remains **TBD** where PRD-v3 has not defined it.
+For any evaluation that uses retrieval, pin the synthetic corpus version, document/source IDs, versions, effective dates, review dates, and the evaluation `as_of` time. Define stale-source criteria before scoring: exact version mismatch, source outside its effective period, missed review date under the approved fixture rule, or an unapproved/retired source. Exact freshness policy remains **TBD** where PRD-v4 has not defined it.
 
 Measure retrieval recall@k against the approved expected relevant source IDs: relevant expected sources retrieved in the top k divided by all expected relevant sources for cases where that denominator is defined and nonzero. Also report source conflicts, stale-source abstentions, injection flags, and unsupported source use separately. The k value(s), source relevance labels, denominator rules, and target are **TBD**. Lexical overlap or retrieval score is not proof that a passage supports a claim.
 
@@ -78,6 +78,6 @@ A reproducible evaluator runner/report, approved 100-case set, label rubric, den
 
 ## Exit evidence and limits
 
-Phase 4 may exit only when the approved synthetic set and labels are versioned, required gates and denominators are defined, runs are reproducible, results meet PRD-v3 must-pass criteria, all seeded review errors are scored against approved thresholds, and unresolved findings have owners. Shared Lane still owns combined six-agent workflow acceptance and receiver review; Manny's report does not certify Shawn's internals or the combined product.
+Phase 4 may exit only when the approved synthetic set and labels are versioned, required gates and denominators are defined, runs are reproducible, results meet PRD-v4 must-pass criteria, all seeded review errors are scored against approved thresholds, and unresolved findings have owners. Shared Lane still owns combined six-agent workflow acceptance and receiver review; Manny's report does not certify Shawn's internals or the combined product.
 
 This is a protocol draft, not an evaluation result. No cases were labeled or scored by creating this file.

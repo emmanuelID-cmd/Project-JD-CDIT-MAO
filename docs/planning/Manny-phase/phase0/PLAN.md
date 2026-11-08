@@ -1,6 +1,6 @@
 # Phase 0 — PRD v3 Baseline and Authorization (Manny)
 
-**Status:** Project lead approved PRD-v3 as Manny’s build baseline, contract `0.1.0-proposed`, and the synthetic lane scope on 2026-11-04. Shared Lane interface review remains pending; Phase 0 contains no code implementation.
+**Status:** Phase 0 was approved against PRD-v3 on 2026-11-04. PRD-v4 is now the current requirements source and supersedes v3 for ongoing implementation; contract `0.1.0-proposed` and synthetic scope remain subject to their recorded shared acceptance gates.
 
 ## Purpose
 

@@ -1,6 +1,6 @@
 # Historical PRD v2 Planning Index
 
-**Status:** Historical planning snapshot from 2026-11-04; superseded for current implementation tracking. The project lead approved PRD-v3 as Manny's lane baseline and authorized Manny's phase sequence. For current requirements and status, read [`AGENTS.md`](../../AGENTS.md), [`Checklist.md`](../../Checklist.md), [`PRD-v3.md`](../requirements/PRD-v3.md), and the owner-specific phase plans below. The historical proposals are retained for context and do not override later decisions.
+**Status:** Historical planning snapshot from 2026-11-04; superseded for current implementation tracking. PRD-v4 is the current requirements source. For current status, read [`AGENTS.md`](../../AGENTS.md), [`Checklist.md`](../../Checklist.md), [`PRD-v4.md`](../requirements/PRD-v4.md), and the owner-specific phase plans. Historical proposals and dated PRD-v3 decisions are retained as context and do not override PRD-v4.
 
 **Planning decision deadline:** November 11, 2026. This is a planning/go-no-go deadline, not a delivery date for agents, harness, or evaluation.
 

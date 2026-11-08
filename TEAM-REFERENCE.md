@@ -1,4 +1,24 @@
 # Handoffs prepared for push
+
+**Current requirements source (2026-11-08):** [`docs/requirements/PRD-v4.md`](docs/requirements/PRD-v4.md). Dated PRD-v3 statements below describe the baseline at their recorded handoff time.
+## 2026-11-08T14:17:06-05:00 - Manny SQL foundation: synthetic case catalog and human lifecycle
+
+Summary file: PROJECT-HANDOFF.md
+
+- Git author: Emmanuel De Jesus <emmanuel.dejesus@pursuit.org>. Authored commits `ca089be`, `68835a3`, `17e1df5`, `41c39c9`, and `5f70e52`, covering the CRLF test fix, PRD-v4 SQL plan, SQLite foundation, synthetic role workspaces, and case catalog/lifecycle extension.
+- Repository: `emmanuelID-cmd/Project-JD-CDIT-MAO`; source branch: `manny/sql-foundation`; PR target: `developer`.
+- The SQL branch was created from the verified Manny-lane point `a363724`. The remote SQL branch does not yet exist; this is prepared for its initial push. `developer` is at `a52ecf1` after Shawn's PR #14 merge. No push or SQL PR has occurred yet.
+- Done:
+  - [x] Add the 80-row synthetic CASE-SCENARIOS catalog, migration, seed/reset support, and Staff/Admin queue visibility.
+  - [x] Add human-only case edits and status transitions with audit events; keep User requests owner-scoped and enforce the Submitted edit boundary and unresolved cancellation path.
+  - [x] Update PRD-v4, Checklist, README, deferred decisions, local app plan, and PROJECT-HANDOFF.
+  - [x] Run `.venv\Scripts\python.exe -m pytest -q` — 638 passed; `git diff --cached --check` — clean; `node --check src/cdit_support_mao/static/app.js` — passed.
+- Not completed:
+  - [ ] Push the SQL branch, create/review/merge its PR into `developer`, then fast-forward eligible non-main branches.
+  - [ ] Manual browser/accessibility and database-unavailable recovery review.
+  - [ ] Separate Manny agent and Shared phase acceptance gates.
+- No real/CDIT data, model calls, agent write tools, external integrations, or outbound messages were used. `main` was not changed.
+
 ## 2026-11-08T00:35:34-05:00 - Manny fixes Shawn receiver findings F-1/F-2
 
 Summary file: PROJECT-HANDOFF.md

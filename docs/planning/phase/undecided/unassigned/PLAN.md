@@ -13,7 +13,12 @@
 7. **Approved:** after initial PRD-v2 finalization, hold the urgency-design discussion and add the decided bands to a reviewed PRD amendment before dependent routing implementation.
 8. **Approved:** Product Health uses only minimal synthetic/system metadata for internal investigation, correction, and change planning; do not collect or retain actual user/ticket records. No real-world interview or field activity is in scope.
 
-## Phase 1 — Before shared build/evaluation
+
+## Approved local app and SQL foundation workstream
+
+The local synthetic database/authenticated app and separate no-auth role showcase are specified in [LOCAL-APP-DATA-AUTH-PLAN.md](LOCAL-APP-DATA-AUTH-PLAN.md). Scope is approved; Manny owns SQL foundation, while app/auth/UI ownership remains unassigned. The authorized `manny/sql-foundation` branch is created from Manny's lane. Apply its local fast-forward-only synchronization rule while Manny is the sole SQL author.
+
+## Phase 1 - Before shared build/evaluation
 
 - **Project lead + data/infra owner (unassigned):** resolve D-07 storage/version/lifecycle/retention/access; do not assume SQLite suffices for every concurrency/audit need.
 - **Shared + lane owners:** agree acknowledgment, state/version envelope, policy/source version ownership, vocabulary, and contract promotion.

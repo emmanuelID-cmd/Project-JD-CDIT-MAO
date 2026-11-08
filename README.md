@@ -4,13 +4,13 @@ Planning workspace for a human-supervised multi-agent orchestration (MAO) assist
 
 ## Project status
 
-The project lead authorized Manny's synthetic lane phases. Manny's Coordinator-to-semantic-Triage runtime is connected through an item-scoped connector to the Knowledge receiver in `CombinedWorkflowHarness.run_manny_connected`; N1-N3 are complete, with Phase 2 exit readiness estimated at 85%. Shawn reviewed PR #12 and accepted with findings; F-1's CRLF-sensitive taxonomy pin and F-2's first-item-only attention behavior are fixed in Manny commit `122d44b` with regressions, pending updated PR verification. The full synthetic-only suite passes 618 tests on Python 3.13.15; this is regression evidence, not phase acceptance. Shared connection acceptance and Manny-approved 100-case evaluation evidence remain open. One authorized Claude Sonnet 5.5 smoke call returned Unknown for Auditor review and remains unscored. No live customer or CDIT data is used. The Auditor interface/auth flow and external integrations remain deferred.
+PRD-v4 is the current requirements source. Manny owns the SQL foundation and local app/auth/UI work; the Manny agent phases remain separately tracked in Checklist.md. The SQL foundation includes local synthetic authentication, server-authorized User/Staff/Admin routes, an 80-row Staff/Admin-only development example catalog, human-only case status/edit controls, and three static unauthenticated previews. User accounts see only their own requests, can edit while Submitted, see In Progress as In Review, and may cancel their own unresolved request. Agents remain read-only. Current verification is tracked in Checklist.md; manual browser/accessibility review remains open. No real customer or CDIT data is used.
 
 ## Documents
 
 - `docs/requirements/PRD.md` — v1 historical requirements; later approved decisions govern Manny’s lane.
 - `docs/requirements/PRD-v2.md` — retained planning baseline for traceability; not approved as the current requirements source.
-- `docs/requirements/PRD-v3.md` — project-lead-approved synthetic build baseline for Manny’s lane; team-wide review remains pending.
+- `docs/requirements/PRD-v4.md` - current project requirements source, approved 2026-11-08; PRD-v3 is retained as historical context.
 - `docs/planning/TASK-SPLIT.md` — proposed Manny, Shawn, and Shared lane responsibilities.
 - `docs/lanes/manny/COORDINATOR-A0-A1.md` — Manny’s Phase 1 fixture boundary, contract, and harness links.
 - `AGENTS.md` — local collaboration and repository guidance.
@@ -26,7 +26,7 @@ Use human-approved synthetic labels to measure triage accuracy, grounding, escal
 
 ## Local Git
 
-Inspect `git status` before staging. Do not commit, push, create remote repositories, or publish until the user approves the concrete files and collaboration plan.
+Inspect git status before staging. Approved completed phases may be committed locally; pushes still require explicit authorization and the project lane workflow.
 ## Planning schedule
 
 The planning deadline is **November 11, 2026**. The planning package defines milestones and exit conditions for scope/roles, synthetic workflows, architecture and security review, integrated PRD review, and planning sign-off. A later, narrow authorization started the local foundation scaffold; this does not authorize production deployment, live integration, or PHI use.
@@ -65,11 +65,25 @@ Copy-Item .env.example .env
 uvicorn cdit_support_mao.main:app --reload --app-dir src --env-file .env
 ```
 
-The API health endpoint is `http://127.0.0.1:8000/health`; interactive API documentation is at `http://127.0.0.1:8000/docs`. SQLite is created on first health check at `data/cdit_support.db` by default. Set `CDIT_DATABASE_PATH` to change the local path. Only synthetic data is permitted. The database helper intentionally defines no ticket, user, role, audit, or agent tables yet; those schemas need an approved design.
+The API health endpoint is `http://127.0.0.1:8000/health`; interactive API documentation is at `http://127.0.0.1:8000/docs`. Initialize the versioned local schema explicitly with `python -m cdit_support_mao.db_cli init`, then create the synthetic demo fixtures with `python -m cdit_support_mao.db_cli seed`. The default database path is `data/cdit_support.db`; set `CDIT_DATABASE_PATH` to change it. `/health` checks connectivity only and does not run migrations. `python -m cdit_support_mao.db_cli purge` applies approved metadata retention; resetting synthetic rows requires `python -m cdit_support_mao.db_cli reset --confirm-synthetic-only`.
+
+### Local synthetic role accounts and interfaces
+
+The application seeds three local accounts with no default passwords: user.demo, staff.demo, and admin.demo. After initializing and seeding the local database, configure a unique local synthetic password for each account from a terminal:
+
+```powershell
+python -m cdit_support_mao.db_cli set-password SYN-USER-001
+python -m cdit_support_mao.db_cli set-password SYN-STAFF-001
+python -m cdit_support_mao.db_cli set-password SYN-ADMIN-001
+```
+
+The CLI prompts for the password twice and stores only a salted password hash. Run the local app and open http://127.0.0.1:8000/login. User accounts see and submit only their own synthetic requests, can edit them only while Submitted, see In Progress as In Review, and may cancel their own unresolved request. Staff and Admin share the support back end and Product Health view; both can manage synthetic case details/status and review the 80 tagged development examples. Admin also manages synthetic account roles/status and reviews session extension requests. Agent outputs remain propose-only; these are human application actions. Every protected page and API checks role access on the server.
+
+The unauthenticated showcase is separate: /preview/user, /preview/staff, and /preview/admin. Those pages contain fabricated examples and disabled illustrative controls. They make no authenticated API or database requests and cannot create a session or change account access. This is a local synthetic prototype, not production authentication or a deployment-ready security system.
 
 The repository ignores `.env`; a blank local copy is present for `ANTHROPIC_API_KEY`. Add the key locally to that file and never commit or send it in chat. The pinned Anthropic client factory reads the local file but makes no request during import or app startup. A model request requires explicit per-run authorization and a fresh handoff preflight.
 
-The current scaffold establishes the API/runtime and database connection foundation. Coordinator, Triage, Escalation, and the Claude Triage adapter belong to Manny's lane; Knowledge, Troubleshooting, Documentation, and retrieval belong to Shawn's lane. Shared state and handoff contracts require coordination before integration.
+The local prototype now includes the API/runtime, SQLite foundation, synthetic role authentication, and role-specific views. Coordinator, Triage, Escalation, and the Claude Triage adapter belong to Manny's lane; Knowledge, Troubleshooting, Documentation, and retrieval belong to Shawn's lane. Shared state and handoff contracts require coordination before integration.
 
 ## Shawn's Lane agents (pending review)
 

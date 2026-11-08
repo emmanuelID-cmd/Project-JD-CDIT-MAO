@@ -1,6 +1,6 @@
 # Coordinator A0/A1 — synthetic fixture boundary
 
-**Status:** Phase 1 local synthetic fixture implementation reviewed. Shared Lane receiver review remains an integration gate. This is a process-local fixture runtime, not production authentication or a durable blackboard. PRD-v3 is the project lead's approved Manny build baseline; contract `0.1.0-proposed` is the accepted working interface version, without changing Shawn-owned schemas.
+**Status:** Phase 1 local synthetic fixture implementation reviewed. Shared Lane receiver review remains an integration gate. This is a process-local fixture runtime, not production authentication or a durable blackboard. PRD-v4 is the project lead's approved Manny build baseline; contract `0.1.0-proposed` is the accepted working interface version, without changing Shawn-owned schemas.
 
 ## Scope and trust
 

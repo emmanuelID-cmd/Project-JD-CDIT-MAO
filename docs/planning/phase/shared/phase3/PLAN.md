@@ -1,6 +1,6 @@
 # Shared Phase 3 — Integrated Evaluation and Independent Review
 
-**Status:** In progress; only preliminary component/downstream fixture evidence exists. The runner uses a stand-in A2 handoff, has no Manny-approved labeled set, and does not establish full A0–A6 integration or PRD safety-gate completion.
+**Status:** In progress; current acceptance requirements are in PRD-v4. Preliminary component/downstream fixture evidence does not establish the full A0-A6 integration or PRD safety-gate completion.
 
 ## Work
 

@@ -1,4 +1,16 @@
 # Project Handoff — Project-JD-CDIT-MAO
+## Verified current state before SQL foundation publication — 2026-11-08
+
+This entry supersedes earlier current-status statements below where they conflict. It records the local state before publication; it is not a push-time confirmation.
+
+- Repository: `emmanuelID-cmd/Project-JD-CDIT-MAO`; active branch: `manny/sql-foundation`; intended PR target: `developer`.
+- Current source baseline for the SQL branch: `a363724`; four local commits through `41c39c9` are by Emmanuel De Jesus and are also on local `manny/coordinator-triage-escalation`. The working tree contains the case-catalog and human case-lifecycle extension. No rebase or reset was performed.
+- Shawn's PR #14 merged into `developer` at `a52ecf1`. Local `developer` and Shawn's lane, plus Shawn's remote lane, were fast-forwarded to `a52ecf1`. `main` remains at `1a5cf4a`. The Manny lane was not advanced because it contains the SQL commits and pending work absent from `developer`.
+- Done in the current outgoing work: seed the 80 CASE-SCENARIOS rows as Staff/Admin-only development examples; add human-only case editing/status transitions with audit events; keep User requests owner-scoped, editable only while Submitted, and cancellable as unresolved before terminal resolution; update PRD-v4, planning, checklist, and setup docs. Agent writes remain disabled.
+- Not completed: publish the SQL branch, open/review/merge its PR, complete manual browser/accessibility and database-unavailable recovery review, or close the separate agent and Shared phase gates. No real customer/CDIT data or live model call was used.
+- Validation: full synthetic project suite, 638 passed; `git diff --check` clean. This records local validation only; final publication checks remain pending.
+- The remote `manny/sql-foundation` branch does not yet exist; this is an initial-push candidate from the verified `a363724` branch point. No push or PR for this SQL work has occurred yet.
+
 ## Verified status before F-1/F-2 follow-up publication - 2026-11-08
 
 This section supersedes earlier status statements below where they conflict. Antigravity's only confirmed action remains merging PR #6; no Antigravity implementation or validation is credited.
@@ -99,7 +111,7 @@ Snapshot comparison: commit 3138388 at 15:15 recorded Phase 2 active with Phase 
 
 ## AI handoff instruction — current requirements source
 
-At the start of every AI/agent task, read the most up-to-date approved project PRD in the active branch. For Manny's current lane, that is `docs/requirements/PRD-v3.md`; PRD.md and PRD-v2 are historical. Follow later explicit user decisions together with that PRD. Do not rely on this handoff, older PRD copies, or memory when they differ from the current source. Check the active branch and PRD revision before work; if requirements are missing, stale, or contradictory, record the issue in `Checklist.md` and ask only when the decision blocks safe progress. Follow lane ownership and cross-lane restrictions in the current PRD, `AGENTS.md`, and `docs/planning/TASK-SPLIT.md`.
+At the start of every AI/agent task, read the most up-to-date approved project PRD in the active branch. PRD-v4 is the current requirements source; PRD, PRD-v2, and PRD-v3 are historical. Follow later explicit user decisions together with PRD-v4. Do not rely on this handoff, older PRD copies, or memory when they differ from the current source. Check the active branch and PRD revision before work; if requirements are missing, stale, or contradictory, record the issue in `Checklist.md` and ask only when the decision blocks safe progress. Follow lane ownership and cross-lane restrictions in PRD-v4, `AGENTS.md`, and `docs/planning/TASK-SPLIT.md`. Dated status entries below preserve their historical PRD references and must not be treated as the current requirements source.
 
 ## Current lane assignment
 

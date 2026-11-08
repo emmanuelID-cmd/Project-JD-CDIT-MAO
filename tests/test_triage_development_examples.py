@@ -18,6 +18,10 @@ NOW = datetime(2026, 11, 4, 12, tzinfo=UTC)
 SOURCE = Path(__file__).resolve().parents[1] / "docs/requirements/CASE-SCENARIOS.md"
 
 
+def read_source_lf():
+    return SOURCE.read_bytes().replace(b"\r\n", b"\n")
+
+
 def pipeline(message):
     owner, sender, receiver = object(), object(), object()
     sessions = FixtureSessionAuthority(provisioning_capability=owner, ttl_seconds=3600)
@@ -34,7 +38,7 @@ def pipeline(message):
     handoff = registry.prepare(intake,capability=sender,session_token=token,now=NOW)
     ack = registry.acknowledge(handoff.handoff_id,expected_version=1,capability=receiver,context=intake.context,now=NOW)
     catalog = DevelopmentExampleCatalog(provisioning_capability=owner)
-    catalog.provision(SOURCE.read_bytes(),capability=owner)
+    catalog.provision(read_source_lf(),capability=owner)
     return registry,ack,intake,sender,receiver,versions,owner,catalog
 
 
@@ -48,7 +52,7 @@ def lookup(p,index=1,**overrides):
 def test_actual_table_parses_all_80_rows_with_exact_source_digest():
     owner = object()
     catalog = DevelopmentExampleCatalog(provisioning_capability=owner)
-    source = SOURCE.read_bytes()
+    source = read_source_lf()
     catalog.provision(source,capability=owner)
     rows,digest = catalog._snapshot()
     assert len(rows) == 80 and [r.row for r in rows] == list(range(1,81))
@@ -63,7 +67,7 @@ def test_exact_sample_is_reference_only_not_case_classification():
     assert result.status == "exact_reference_only" and len(result.references) == 1
     ref = result.references[0]
     assert (ref.row,ref.example_category,ref.example_band) == (17,"Missing wages","Medium [P2]")
-    assert ref.source_sha256 == hashlib.sha256(SOURCE.read_bytes()).hexdigest()
+    assert ref.source_sha256 == hashlib.sha256(read_source_lf()).hexdigest()
     assert ref.sample_status == "unverified_synthetic_development_example"
     assert (result.category,result.urgency,result.destination) == ("unknown","unknown","unknown")
     assert result.human_review_required and not result.dispatched and not result.downstream_allowed
@@ -99,12 +103,12 @@ def test_catalog_is_trusted_provisioned_sealed_and_requires_complete_table():
     owner = object()
     catalog = DevelopmentExampleCatalog(provisioning_capability=owner)
     with pytest.raises(DevelopmentCatalogError,match="unauthorized_fixture_provision"):
-        catalog.provision(SOURCE.read_bytes(),capability=object())
+        catalog.provision(read_source_lf(),capability=object())
     with pytest.raises(DevelopmentCatalogError,match="invalid_source_table"):
         catalog.provision(b"not the 80-row table",capability=owner)
-    catalog.provision(SOURCE.read_bytes(),capability=owner)
+    catalog.provision(read_source_lf(),capability=owner)
     with pytest.raises(DevelopmentCatalogError,match="catalog_already_provisioned"):
-        catalog.provision(SOURCE.read_bytes(),capability=owner)
+        catalog.provision(read_source_lf(),capability=owner)
 
 
 def test_stale_and_wrong_receiver_stop_lookup():
@@ -130,7 +134,7 @@ def test_late_cancellation_blocks_return(monkeypatch):
 
 
 def test_invalid_duplicate_row_band_and_category_rejected():
-    raw = SOURCE.read_bytes()
+    raw = read_source_lf()
     duplicate = raw.replace(b"| 80 | Performance-review", b"| 79 | Performance-review")
     invalid_band = raw.replace(b"| 17 | Missing wages |", b"| 17 | Missing wages |", 1).replace(b"| Medium [P2] | Time-sensitive individual impact;", b"| Critical [P0] | Time-sensitive individual impact;", 1)
     blank_category = raw.replace(b"| 17 | Missing wages |", b"| 17 |   |", 1)
@@ -151,8 +155,8 @@ def test_other_parent_item_never_validates_equivalence_or_rules():
 
 def test_modified_valid_bytes_do_not_claim_verified_file_origin():
     p = pipeline("My expected pay did not arrive today.")
-    changed = SOURCE.read_bytes().replace(b"## Generic ticket-condition catalog", b"## Generic ticket-condition catalog", 1) + b"\n<!-- synthetic fixture modification -->\n"
-    assert changed != SOURCE.read_bytes()
+    changed = read_source_lf().replace(b"## Generic ticket-condition catalog", b"## Generic ticket-condition catalog", 1) + b"\n<!-- synthetic fixture modification -->\n"
+    assert changed != read_source_lf()
     fixture = DevelopmentExampleCatalog(provisioning_capability=p[6])
     fixture.provision(changed, capability=p[6])
     result = lookup(p, catalog=fixture)
@@ -164,7 +168,7 @@ def test_modified_valid_bytes_do_not_claim_verified_file_origin():
 
 
 def test_project_taxonomy_pin_accepts_crlf_checkout(monkeypatch):
-    lf_source = SOURCE.read_bytes()
+    lf_source = read_source_lf()
     crlf_source = lf_source.replace(b"\n", b"\r\n")
     original_read_bytes = Path.read_bytes
 

@@ -1,6 +1,6 @@
 # Shared Phase 0 — PRD v2 and Evaluation Baseline
 
-**Status:** Completed and verified against PRD-v3 baseline.
+**Status:** Shared Phase 0 was checked against PRD-v3 at the time; PRD-v4 is the current requirements source. Historical phase evidence remains historical.
 
 ## Work
 

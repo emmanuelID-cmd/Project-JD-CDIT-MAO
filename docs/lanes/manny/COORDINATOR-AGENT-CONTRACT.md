@@ -2,7 +2,7 @@
 
 ## Requirements and ownership
 
-PRD-v3 A0/A1 and the Manny Phase 1 plan govern synthetic intake, scope checks, untrusted data, versioned handoffs, safe stops and human review. Manny owns Coordinator behavior; Shared Lane reviews connection contracts. Existing `0.1.0-proposed` handoff types remain unchanged. No seven-agent or second reviewer path is added.
+PRD-v4 A0/A1 and the Manny Phase 1 plan govern synthetic intake, scope checks, untrusted data, versioned handoffs, safe stops and human review. Manny owns Coordinator behavior; Shared Lane reviews connection contracts. Existing `0.1.0-proposed` handoff types remain unchanged. No seven-agent or second reviewer path is added.
 
 | Requirement | Observable boundary | Evidence |
 | --- | --- | --- |
