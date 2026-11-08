@@ -22,9 +22,10 @@ Owner: **Manny**. Shawn is not a prerequisite for this implementation step.
 
 Owners: **Manny for the connector; Shawn for her Knowledge receiver; Shared Lane for connection checks.** Start this review after Step 1 has a concrete connected path to inspect.
 
-- [x] Shawn reviewed the connected receiver in PR #12 and accepted with findings: Knowledge receives the correct item text and preserves identity, parent, span, source/version, digest, and Auditor status without using category/urgency to bias retrieval. Manny fixed F-1 and F-2 in commit `122d44b`; updated PR verification remains pending.
+- [x] Shawn reviewed the connected receiver in PR #12 and accepted with findings: Knowledge receives the correct item text and preserves identity, parent, span, source/version, digest, and Auditor status without using category/urgency to bias retrieval. Manny's F-1/F-2 fixes are included in merged PR #12 at `a363724`.
 - [ ] Shared checks schema/version integrity, acknowledgements, item joins, stale-state rejection, failure routing, and end-to-end handoff behavior.
 - [x] Manny fixed F-1 and F-2: normalize CRLF before checking the trusted synthetic taxonomy pin, and find the first configured attention literal separately within each item span. Focused regressions: 49 passed; full suite: 618 passed.
+- [x] Normalize CRLF in the raw CASE-SCENARIOS fixtures used by the Manny Triage flow and development-example tests. Focused Triage modules: 40 passed; full suite: 618 passed (2026-11-08). Shawn's Windows checkout rerun remains to confirm the reported failures are resolved there.
 - [ ] Review proposed shared S-1.1 treatment for F-3 (distinguish `flagged`, `none_found`, and `not_assessed`) and F-4 (taxonomy source citation). No shared contract change is made until the project lead approves the proposal.
 - [ ] Resolve any remaining findings by ownership: Manny fixes Coordinator/Triage/connector defects; Shawn fixes Knowledge/Troubleshooting/Documentation behavior in her lane. Do not edit her agent internals from Manny's lane.
 - [ ] Shawn or another project teammate peer-reviews the synthetic labels/results as required by the evaluation protocol; Manny remains the label owner and approver.

@@ -53,7 +53,7 @@ def category_taxonomy():
     capability = object()
     catalog = DevelopmentExampleCatalog(provisioning_capability=capability)
     scenarios = Path(__file__).resolve().parents[1] / "docs" / "requirements" / "CASE-SCENARIOS.md"
-    catalog.provision(scenarios.read_bytes(), capability=capability)
+    catalog.provision(scenarios.read_bytes().replace(b"\r\n", b"\n"), capability=capability)
     return catalog.category_taxonomy()
 
 
