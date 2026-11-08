@@ -23,6 +23,7 @@ from cdit_support_mao.contracts import (
     RunContext,
     TriageHandoff,
 )
+from test_item_scope import ITEM_2, item_case
 
 NOW = datetime(2026, 11, 4, 12, tzinfo=UTC)
 
@@ -171,6 +172,88 @@ def test_unverified_or_stale_investigation_status_does_not_route_as_authorized(
         assert handoff.recommendation == "no_escalation_proposed"
         assert "human_investigation_in_progress" not in handoff.triggers
         assert not any("Under Investigation" in claim.statement for claim in handoff.claims)
+
+
+def _run_actual_escalation_on_lane(harness, case):
+    lane = harness.run(case, now=NOW)
+    escalation = EscalationAgent().run(
+        lane.context,
+        triage=lane.triage,
+        knowledge=lane.knowledge,
+        troubleshooting=lane.troubleshooting,
+        acknowledged={
+            lane.triage.contribution_id,
+            lane.knowledge.contribution_id,
+            lane.troubleshooting.contribution_id,
+        },
+        now=NOW,
+    )
+    return lane, escalation
+
+
+def test_a5_keeps_pending_item_urgency_unknown_for_auditor(harness) -> None:
+    lane = harness.run(item_case(urgency="unknown", auditor_review="pending"), now=NOW)
+    # PRD permits deterministic escalation and Knowledge to run in parallel;
+    # A4 remains held, so A5 receives only the acknowledged A2/A3 inputs here.
+    escalation = EscalationAgent().run(
+        lane.context,
+        triage=lane.triage,
+        knowledge=lane.knowledge,
+        acknowledged={lane.triage.contribution_id, lane.knowledge.contribution_id},
+        now=NOW,
+    )
+
+    assert lane.triage.item_scope is not None
+    assert lane.triage.item_scope.auditor_review == "pending"
+    assert lane.troubleshooting.status is AgentStatus.BLOCKED
+    assert escalation.must_escalate is None
+    assert escalation.recommendation == "human_review"
+    assert "urgency_unknown" in escalation.triggers
+    assert "Urgency remains unknown pending human Auditor review." in escalation.unknowns
+    assert lane.triage.as_input_ref() in escalation.input_refs
+
+
+def test_a5_uses_auditor_resolved_item_band_and_keeps_item_provenance(harness) -> None:
+    lane, escalation = _run_actual_escalation_on_lane(
+        harness,
+        item_case(urgency="high", auditor_review="band_and_route_determined"),
+    )
+
+    assert lane.triage.item_scope is not None
+    assert lane.triage.item_scope.auditor_review == "band_and_route_determined"
+    assert lane.triage.urgency == "high"
+    assert escalation.must_escalate is True
+    assert escalation.recommendation == "escalate_support_lead"
+    assert "high_urgency_p1" in escalation.triggers
+    assert lane.triage.as_input_ref() in escalation.input_refs
+
+
+def test_a5_contributions_remain_distinct_for_two_auditor_resolved_items(harness) -> None:
+    first_lane, first_escalation = _run_actual_escalation_on_lane(
+        harness,
+        item_case(urgency="low", auditor_review="band_and_route_determined"),
+    )
+    second_lane, second_escalation = _run_actual_escalation_on_lane(
+        harness,
+        item_case(
+            ITEM_2,
+            index=2,
+            category="password_help",
+            product_area="login",
+            urgency="medium",
+            auditor_review="band_and_route_determined",
+        ),
+    )
+
+    assert first_lane.context == second_lane.context
+    assert first_lane.triage.item_scope is not None
+    assert second_lane.triage.item_scope is not None
+    assert first_lane.triage.item_scope.identity.item_id != second_lane.triage.item_scope.identity.item_id
+    assert first_escalation.contribution_id != second_escalation.contribution_id
+    assert first_lane.triage.as_input_ref() in first_escalation.input_refs
+    assert second_lane.triage.as_input_ref() in second_escalation.input_refs
+    assert first_lane.triage.as_input_ref() not in second_escalation.input_refs
+    assert second_lane.triage.as_input_ref() not in first_escalation.input_refs
 
 
 ATTENTION_TRACE_ID = "TRACE-00000000-0000-0000-0000-000000000001"
