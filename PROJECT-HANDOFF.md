@@ -1,4 +1,13 @@
 # Project Handoff — Project-JD-CDIT-MAO
+## Current verified integration state - 2026-11-08
+
+This section supersedes older status snapshots below where they conflict. The dated entries remain historical records of their preparation-time state.
+
+- PR #15 merged into `developer` as `1a9239910c5862cde6f995dfebcb9208ea515117`. Shawn's S-1.1 implementation is merged; it is no longer awaiting a decision.
+- S-1.1 introduces item-scope contract version 0.2 while accepting 0.1 under the S-1 rules, adds informational `attention_check`, and adds the narrow taxonomy citation exception.
+- After the merge, `developer`, `manny/coordinator-triage-escalation`, `manny/sql-foundation`, and `shawn/knowledge-troubleshooting-docs` were fast-forwarded to the same commit. `main` remains unchanged.
+- The working tree was clean before this status-note edit. No source or agent behavior changed in this documentation correction.
+
 ## Verified current state before SQL foundation publication — 2026-11-08
 
 This entry supersedes earlier current-status statements below where they conflict. It records the local state before publication; it is not a push-time confirmation.

@@ -1,6 +1,9 @@
 # Handoffs prepared for push
 
 **Current requirements source (2026-11-08):** [`docs/requirements/PRD-v4.md`](docs/requirements/PRD-v4.md). Dated PRD-v3 statements below describe the baseline at their recorded handoff time.
+
+**Current integration state (verified 2026-11-08):** Shawn's PR #15 merged into `developer` as `1a9239910c5862cde6f995dfebcb9208ea515117`; S-1.1 is implemented and no longer undecided. All four non-main branches are aligned at that commit, and `main` is unchanged. See the current-state section at the top of [PROJECT-HANDOFF.md](PROJECT-HANDOFF.md). Older dated entries below describe their historical snapshot state.
+
 ## 2026-11-08T14:17:06-05:00 - Manny SQL foundation: synthetic case catalog and human lifecycle
 
 Summary file: PROJECT-HANDOFF.md
