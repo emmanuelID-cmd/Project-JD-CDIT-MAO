@@ -253,3 +253,42 @@ def _replace(run, **changes):
     from dataclasses import replace
 
     return replace(run, **changes)
+
+
+# --- SYN-KCAL v2: held-out measurement set for L-1 and L-2 (baseline recorded 2026-11-09) ---
+
+V2_SET_PATH = REPO_ROOT / "synthetic_data" / "calibration" / "knowledge-calibration-v2.json"
+V2_REPORT_PATH = REPO_ROOT / "docs" / "lanes" / "shawn" / "calibration" / "KNOWLEDGE-CALIBRATION-REPORT-v2.md"
+V2_RESULTS_PATH = REPO_ROOT / "docs" / "lanes" / "shawn" / "calibration" / "knowledge-calibration-v2.results.json"
+V2_KINDS = {"short_query", "padded_query", "numeric_detail", "stale_shadow"}
+
+
+@pytest.fixture(scope="module")
+def calibration_v2():
+    return load_calibration_set(V2_SET_PATH)
+
+
+@pytest.fixture(scope="module")
+def calibration_v2_run(calibration_v2, corpus, policy) -> CalibrationRun:
+    return run_calibration(calibration_v2, corpus, policy, fingerprint=set_fingerprint(V2_SET_PATH))
+
+
+def test_v2_targets_the_item_path_and_does_not_reuse_v1(calibration, calibration_v2) -> None:
+    assert (calibration_v2.version, str(calibration_v2.as_of)) == ("2.0", "2026-11-10")
+    assert V2_KINDS <= {case.kind for case in calibration_v2.cases}
+    # Linked items reach Knowledge without a product area, so v2 never sets one.
+    assert all(case.product_area is None for case in calibration_v2.cases)
+    assert not {c.case_id for c in calibration_v2.cases} & {c.case_id for c in calibration.cases}
+    norm = lambda text: " ".join(text.lower().split())  # noqa: E731
+    assert not {norm(c.summary) for c in calibration_v2.cases} & {norm(c.summary) for c in calibration.cases}
+
+
+def test_v2_labels_and_safety_gate(calibration_v2_run) -> None:
+    assert calibration_v2_run.label_problems == []
+    assert calibration_v2_run.critical_errors == []
+
+
+def test_v2_committed_baseline_is_current(calibration_v2_run) -> None:
+    """Re-run the CLI on v2 after any corpus, policy, or agent change, as for v1."""
+    assert V2_REPORT_PATH.read_text(encoding="utf-8").replace("\r\n", "\n") == render_report(calibration_v2_run)
+    assert V2_RESULTS_PATH.read_text(encoding="utf-8").replace("\r\n", "\n") == results_json(calibration_v2_run)

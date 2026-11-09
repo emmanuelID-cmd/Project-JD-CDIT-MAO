@@ -79,6 +79,12 @@ CaseKind = Literal[
     "ineligible_only",
     "conflict",
     "injection",
+    # SYN-KCAL v2 (L-1, L-2): item-length, padded, and numeric requests, and requests whose
+    # only on-topic article is ineligible while a current article shares generic words.
+    "short_query",
+    "padded_query",
+    "numeric_detail",
+    "stale_shadow",
 ]
 Outcome = Literal[
     "correct_answer", "wrong_answer", "false_abstention", "correct_abstention", "unsupported_answer"
