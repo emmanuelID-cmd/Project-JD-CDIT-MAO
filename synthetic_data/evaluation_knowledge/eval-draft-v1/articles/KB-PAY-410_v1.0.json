@@ -6,7 +6,7 @@
   "product_area": "payroll",
   "status": "approved",
   "data_classification": "synthetic",
-  "owner": "Synthetic Knowledge Owner",
+  "owner": "Synthetic evaluation fixture (test-only; not CDIT policy)",
   "effective_date": "2026-11-09",
   "review_due": "2027-11-09",
   "keywords": [
@@ -22,36 +22,36 @@
     {
       "section_id": "s1",
       "heading": "Pay appears short or wrong",
-      "text": "Tier 1 staff record what the user reports and route the request to payroll staff. Tier 1 staff do not calculate, confirm, or correct pay, and do not fill in missing dates or hours.",
+      "text": "Staff record what the User reports and hand the case to an Admin for human review. Staff do not calculate, confirm, or correct pay, and do not fill in missing dates or hours.",
       "steps": [
         {
           "step_id": "st1",
           "action_type": "collect_information",
-          "text": "Record the pay period, the difference the user reports, and the hours the user says they entered, exactly as the user states them."
+          "text": "Record the pay period, the difference the User reports, and the hours the User says they entered, exactly as the User states them."
         }
       ],
       "information_needed": [
         {
           "field": "pay_period",
-          "prompt": "The pay period the user says is affected."
+          "prompt": "The pay period the User says is affected."
         },
         {
           "field": "reported_difference",
-          "prompt": "The amount the user believes is missing or wrong, as stated by the user."
+          "prompt": "The amount the User believes is missing or wrong, as stated by the User."
         },
         {
           "field": "hours_entered",
-          "prompt": "The dates and hours the user says they entered."
+          "prompt": "The dates and hours the User says they entered."
         }
       ],
       "stop_conditions": [
         {
           "condition_id": "KB-PAY-410-SC1",
-          "text": "If dates or hours are missing, ask the user for them. Never estimate or fill them in."
+          "text": "If dates or hours are missing, ask the User for them. Never estimate or fill them in."
         },
         {
           "condition_id": "KB-PAY-410-SC2",
-          "text": "Route every pay discrepancy to payroll staff. Tier 1 does not close the request."
+          "text": "Hand every pay discrepancy to an Admin for human review. Staff do not close the request."
         }
       ]
     }

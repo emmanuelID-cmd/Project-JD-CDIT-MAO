@@ -6,7 +6,7 @@
   "product_area": "forms",
   "status": "approved",
   "data_classification": "synthetic",
-  "owner": "Synthetic Knowledge Owner",
+  "owner": "Synthetic evaluation fixture (test-only; not CDIT policy)",
   "effective_date": "2026-11-09",
   "review_due": "2027-11-09",
   "keywords": [
@@ -22,29 +22,29 @@
     {
       "section_id": "s1",
       "heading": "Get a blank copy of a standard form",
-      "text": "Blank standard forms are in Forms > Standard Forms. The list includes the Employee Update Form (FRM-EU-01) and the Leave Request Form (FRM-LR-02). Users download a blank copy themselves; Tier 1 shares the location, not a filled-in form.",
+      "text": "Blank standard forms are in Forms > Standard Forms. The list includes the Employee Update Form (FRM-EU-01) and the Leave Request Form (FRM-LR-02). Users download a blank copy themselves; Staff share the location, not a filled-in form.",
       "steps": [
         {
           "step_id": "st1",
           "action_type": "share_approved_article",
-          "text": "Tell the user that blank standard forms are in Forms > Standard Forms."
+          "text": "Tell the User that blank standard forms are in Forms > Standard Forms."
         },
         {
           "step_id": "st2",
           "action_type": "navigate_ui",
-          "text": "Ask the user to open Forms, then Standard Forms, and download the blank form they need."
+          "text": "Ask the User to open Forms, then Standard Forms, and download the blank form they need."
         }
       ],
       "information_needed": [
         {
           "field": "form_name",
-          "prompt": "The name of the form the user needs, as stated by the user."
+          "prompt": "The name of the form the User needs, as stated by the User."
         }
       ],
       "stop_conditions": [
         {
           "condition_id": "KB-FRM-420-SC1",
-          "text": "If the user asks Tier 1 to fill in or submit a form for them, or the form is not listed, stop and route the request to staff."
+          "text": "If the User asks Staff to fill in or submit a form for them, or the form is not listed, stop and hand the case to an Admin for human review."
         }
       ]
     }

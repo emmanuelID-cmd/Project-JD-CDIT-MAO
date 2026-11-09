@@ -6,7 +6,7 @@
   "product_area": "incident",
   "status": "approved",
   "data_classification": "synthetic",
-  "owner": "Synthetic Knowledge Owner",
+  "owner": "Synthetic evaluation fixture (test-only; not CDIT policy)",
   "effective_date": "2026-11-09",
   "review_due": "2027-11-09",
   "keywords": [
@@ -21,7 +21,7 @@
     {
       "section_id": "s1",
       "heading": "Several users at one site cannot open the same feature",
-      "text": "When many users at one site cannot open the same feature, treat the report as a possible service outage. Tier 1 staff collect the details below and send the report to the human incident path. Tier 1 staff do not run single-user troubleshooting steps or promise a fix time. The Auditor decides the urgency.",
+      "text": "When many users at one site cannot open the same feature, treat the report as a possible service outage. Staff collect the details below and hand the report to an Admin for human review. Staff do not run single-user troubleshooting steps or promise a fix time. Urgency is decided in human Auditor review.",
       "steps": [
         {
           "step_id": "st1",
@@ -50,7 +50,7 @@
       "stop_conditions": [
         {
           "condition_id": "KB-INC-450-SC1",
-          "text": "Send the report to the human incident path. Do not handle it as a routine single-user request."
+          "text": "Hand the report to an Admin for human review. Do not handle it as a routine single-user request."
         }
       ]
     }
