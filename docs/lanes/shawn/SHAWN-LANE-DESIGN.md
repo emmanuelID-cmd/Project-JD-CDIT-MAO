@@ -208,7 +208,7 @@ uvicorn cdit_support_mao.main:app --app-dir src  ->  GET /health  200 {"status":
   - Knowledge, Troubleshooting, and Documentation agents `0.2.0` (linked-item support, 2026-11-06). Documentation `0.2.1` adds the S-1.1 attention check line (2026-11-08). Knowledge `0.3.0` stops counting identifier tokens as topic terms (L-1, 2026-11-09).
   - Contracts `0.1.0-proposed`, with S-1 (`TriageItemScope`), S-2 (`InputRef.content_digest`), and S-1.1 (`attention_check` and the taxonomy citation; item scope `0.2-proposed`).
   - Source set `SRC-61C4A35E96CF`.
-  - Calibration sets `SYN-KCAL` 1.0 and 2.0. 2.0 records the L-1/L-2 baseline (2026-11-09).
+  - Calibration sets `SYN-KCAL` 1.0, 2.0, and 3.0. 2.0 recorded the first L-1/L-2 baseline. 3.0 is held out for the second L-1/L-2 batch; its baseline with Knowledge `0.3.0` is [KNOWLEDGE-CALIBRATION-REPORT-v3.md](calibration/KNOWLEDGE-CALIBRATION-REPORT-v3.md) (2026-11-09).
   - Troubleshooting policy `SYN-TS-POLICY 0.1.2` (proposed, 2026-11-09). 0.1.1 is kept for callers that still name it.
 - **Completed:** the three Shawn-owned agents, their gates, synthetic data, harness, tests, and contract proposal with examples. Also calibration evidence for D-08 (draft labels) and a Python 3.13 / `/health` run.
 - **Evidence:** §7, plus `docs/contracts/examples/`.

@@ -292,3 +292,42 @@ def test_v2_committed_baseline_is_current(calibration_v2_run) -> None:
     """Re-run the CLI on v2 after any corpus, policy, or agent change, as for v1."""
     assert V2_REPORT_PATH.read_text(encoding="utf-8").replace("\r\n", "\n") == render_report(calibration_v2_run)
     assert V2_RESULTS_PATH.read_text(encoding="utf-8").replace("\r\n", "\n") == results_json(calibration_v2_run)
+
+
+# --- SYN-KCAL v3: held-out set for the second L-1/L-2 batch (baseline recorded 2026-11-09) ---
+
+V3_SET_PATH = REPO_ROOT / "synthetic_data" / "calibration" / "knowledge-calibration-v3.json"
+V3_REPORT_PATH = REPO_ROOT / "docs" / "lanes" / "shawn" / "calibration" / "KNOWLEDGE-CALIBRATION-REPORT-v3.md"
+V3_RESULTS_PATH = REPO_ROOT / "docs" / "lanes" / "shawn" / "calibration" / "knowledge-calibration-v3.results.json"
+
+
+@pytest.fixture(scope="module")
+def calibration_v3():
+    return load_calibration_set(V3_SET_PATH)
+
+
+@pytest.fixture(scope="module")
+def calibration_v3_run(calibration_v3, corpus, policy) -> CalibrationRun:
+    return run_calibration(calibration_v3, corpus, policy, fingerprint=set_fingerprint(V3_SET_PATH))
+
+
+def test_v3_is_new_and_targets_the_item_path(calibration, calibration_v2, calibration_v3) -> None:
+    assert (calibration_v3.version, str(calibration_v3.as_of)) == ("3.0", "2026-11-10")
+    assert {"paraphrase", "padded_query", "stale_shadow", "no_coverage"} <= {c.kind for c in calibration_v3.cases}
+    assert all(case.product_area is None for case in calibration_v3.cases)
+    earlier = {c.case_id for c in calibration.cases} | {c.case_id for c in calibration_v2.cases}
+    assert not {c.case_id for c in calibration_v3.cases} & earlier
+    norm = lambda text: " ".join(text.lower().split())  # noqa: E731
+    earlier_text = {norm(c.summary) for c in calibration.cases} | {norm(c.summary) for c in calibration_v2.cases}
+    assert not {norm(c.summary) for c in calibration_v3.cases} & earlier_text
+
+
+def test_v3_labels_and_safety_gate(calibration_v3_run) -> None:
+    assert calibration_v3_run.label_problems == []
+    assert calibration_v3_run.critical_errors == []
+
+
+def test_v3_committed_report_is_current(calibration_v3_run) -> None:
+    """Re-run the CLI on v3 after any corpus, policy, or agent change, as for v1 and v2."""
+    assert V3_REPORT_PATH.read_text(encoding="utf-8").replace("\r\n", "\n") == render_report(calibration_v3_run)
+    assert V3_RESULTS_PATH.read_text(encoding="utf-8").replace("\r\n", "\n") == results_json(calibration_v3_run)
