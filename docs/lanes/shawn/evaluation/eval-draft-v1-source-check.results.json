@@ -1,15 +1,14 @@
 {
   "dataset_id": "CDIT-SYNTHETIC-EVALUATION-DRAFT-100-v1",
-  "cases_sha256": "5e9f580562c77b61b26256625eae34529163dd91bb420969d11ef816246cf891",
+  "cases_sha256": "a4d6d2b6e6bbb21584ae2a9b86da13c32b62e30c3a047a1bc4c53f08f72d7c82",
   "evaluation_as_of": "2026-11-10",
   "source_set_version": "SRC-16191440094D",
-  "knowledge_agent_version": "0.3.0",
+  "knowledge_agent_version": "0.4.0",
   "source_map_problems": [],
   "verdicts": {
-    "abstained_as_expected": 8,
+    "abstained_as_expected": 9,
     "abstained_other_reason": 2,
     "cited_expected": 14,
-    "cited_other_source": 1,
     "held_for_auditor": 11,
     "missed_abstained": 51,
     "no_source_expected_abstained": 18
@@ -581,9 +580,7 @@
       "scenario": "benign-quoted-instructions",
       "category": "General HR policy question",
       "route": "knowledge",
-      "expected": [
-        "SYN-TS-POLICY 0.1.1 RR-03"
-      ],
+      "expected": [],
       "knowledge_status": "abstained",
       "reason_codes": [
         "weak_evidence"
@@ -1048,12 +1045,12 @@
       "expected": [
         "KB-TRN-360#s1 v1.0"
       ],
-      "knowledge_status": "completed",
-      "reason_codes": [],
-      "cited": [
-        "KB-TRN-250#s1 v1.0"
+      "knowledge_status": "abstained",
+      "reason_codes": [
+        "stale_source_only"
       ],
-      "verdict": "cited_other_source"
+      "cited": [],
+      "verdict": "abstained_as_expected"
     },
     {
       "case_id": "SYN-EVAL-068",
@@ -1355,8 +1352,7 @@
       "category": "Routine form copy / resubmission",
       "route": "knowledge",
       "expected": [
-        "KB-FRM-420#s1 v1.0",
-        "KB-PAY-400#s2 v1.0"
+        "KB-FRM-420#s1 v1.0"
       ],
       "knowledge_status": "completed",
       "reason_codes": [],
@@ -1372,8 +1368,7 @@
       "category": "unknown",
       "route": "auditor",
       "expected": [
-        "KB-FRM-420#s1 v1.0",
-        "KB-PAY-400#s2 v1.0"
+        "KB-FRM-420#s1 v1.0"
       ],
       "knowledge_status": null,
       "reason_codes": [],
@@ -1387,8 +1382,7 @@
       "category": "Routine form copy / resubmission",
       "route": "knowledge",
       "expected": [
-        "KB-FRM-420#s1 v1.0",
-        "KB-PAY-400#s2 v1.0"
+        "KB-FRM-420#s1 v1.0"
       ],
       "knowledge_status": "completed",
       "reason_codes": [],
@@ -1404,8 +1398,7 @@
       "category": "unknown",
       "route": "auditor",
       "expected": [
-        "KB-FRM-420#s1 v1.0",
-        "KB-PAY-400#s2 v1.0"
+        "KB-FRM-420#s1 v1.0"
       ],
       "knowledge_status": null,
       "reason_codes": [],
@@ -1419,8 +1412,7 @@
       "category": "Routine form copy / resubmission",
       "route": "knowledge",
       "expected": [
-        "KB-FRM-420#s1 v1.0",
-        "KB-PAY-400#s2 v1.0"
+        "KB-FRM-420#s1 v1.0"
       ],
       "knowledge_status": "completed",
       "reason_codes": [],
@@ -1436,8 +1428,7 @@
       "category": "unknown",
       "route": "auditor",
       "expected": [
-        "KB-FRM-420#s1 v1.0",
-        "KB-PAY-400#s2 v1.0"
+        "KB-FRM-420#s1 v1.0"
       ],
       "knowledge_status": null,
       "reason_codes": [],
@@ -1451,8 +1442,7 @@
       "category": "Routine form copy / resubmission",
       "route": "knowledge",
       "expected": [
-        "KB-FRM-420#s1 v1.0",
-        "KB-PAY-400#s2 v1.0"
+        "KB-FRM-420#s1 v1.0"
       ],
       "knowledge_status": "completed",
       "reason_codes": [],
@@ -1468,8 +1458,7 @@
       "category": "unknown",
       "route": "auditor",
       "expected": [
-        "KB-FRM-420#s1 v1.0",
-        "KB-PAY-400#s2 v1.0"
+        "KB-FRM-420#s1 v1.0"
       ],
       "knowledge_status": null,
       "reason_codes": [],
@@ -1483,8 +1472,7 @@
       "category": "Routine form copy / resubmission",
       "route": "knowledge",
       "expected": [
-        "KB-FRM-420#s1 v1.0",
-        "KB-PAY-400#s2 v1.0"
+        "KB-FRM-420#s1 v1.0"
       ],
       "knowledge_status": "completed",
       "reason_codes": [],
@@ -1500,8 +1488,7 @@
       "category": "unknown",
       "route": "auditor",
       "expected": [
-        "KB-FRM-420#s1 v1.0",
-        "KB-PAY-400#s2 v1.0"
+        "KB-FRM-420#s1 v1.0"
       ],
       "knowledge_status": null,
       "reason_codes": [],
@@ -1661,62 +1648,5 @@
       "verdict": "no_source_expected_abstained"
     }
   ],
-  "case_notes": [
-    {
-      "case_id": "SYN-EVAL-061",
-      "note": "knowledge_dispatch_candidate is false, but an item has an inferred category. Under the agreed routing rule it reaches Knowledge while urgency stays Unknown, unless another gate (for example a simulated unavailable component) stops the run first."
-    },
-    {
-      "case_id": "SYN-EVAL-063",
-      "note": "knowledge_dispatch_candidate is false, but an item has an inferred category. Under the agreed routing rule it reaches Knowledge while urgency stays Unknown, unless another gate (for example a simulated unavailable component) stops the run first."
-    },
-    {
-      "case_id": "SYN-EVAL-064",
-      "note": "knowledge_dispatch_candidate is false, but an item has an inferred category. Under the agreed routing rule it reaches Knowledge while urgency stays Unknown, unless another gate (for example a simulated unavailable component) stops the run first."
-    },
-    {
-      "case_id": "SYN-EVAL-065",
-      "note": "knowledge_dispatch_candidate is false, but an item has an inferred category. Under the agreed routing rule it reaches Knowledge while urgency stays Unknown, unless another gate (for example a simulated unavailable component) stops the run first."
-    },
-    {
-      "case_id": "SYN-EVAL-076",
-      "note": "knowledge_dispatch_candidate is false, but an item has an inferred category. Under the agreed routing rule it reaches Knowledge while urgency stays Unknown, unless another gate (for example a simulated unavailable component) stops the run first."
-    },
-    {
-      "case_id": "SYN-EVAL-077",
-      "note": "knowledge_dispatch_candidate is false, but an item has an inferred category. Under the agreed routing rule it reaches Knowledge while urgency stays Unknown, unless another gate (for example a simulated unavailable component) stops the run first."
-    },
-    {
-      "case_id": "SYN-EVAL-078",
-      "note": "knowledge_dispatch_candidate is false, but an item has an inferred category. Under the agreed routing rule it reaches Knowledge while urgency stays Unknown, unless another gate (for example a simulated unavailable component) stops the run first."
-    },
-    {
-      "case_id": "SYN-EVAL-079",
-      "note": "knowledge_dispatch_candidate is false, but an item has an inferred category. Under the agreed routing rule it reaches Knowledge while urgency stays Unknown, unless another gate (for example a simulated unavailable component) stops the run first."
-    },
-    {
-      "case_id": "SYN-EVAL-080",
-      "note": "knowledge_dispatch_candidate is false, but an item has an inferred category. Under the agreed routing rule it reaches Knowledge while urgency stays Unknown, unless another gate (for example a simulated unavailable component) stops the run first."
-    },
-    {
-      "case_id": "SYN-EVAL-086",
-      "note": "KB-PAY-400#s2 v1.0 cannot be reached at A2: the only item it fits is held for the Auditor (unknown category). It applies only after a human assigns a category."
-    },
-    {
-      "case_id": "SYN-EVAL-087",
-      "note": "KB-PAY-400#s2 v1.0 cannot be reached at A2: the only item it fits is held for the Auditor (unknown category). It applies only after a human assigns a category."
-    },
-    {
-      "case_id": "SYN-EVAL-088",
-      "note": "KB-PAY-400#s2 v1.0 cannot be reached at A2: the only item it fits is held for the Auditor (unknown category). It applies only after a human assigns a category."
-    },
-    {
-      "case_id": "SYN-EVAL-089",
-      "note": "KB-PAY-400#s2 v1.0 cannot be reached at A2: the only item it fits is held for the Auditor (unknown category). It applies only after a human assigns a category."
-    },
-    {
-      "case_id": "SYN-EVAL-090",
-      "note": "KB-PAY-400#s2 v1.0 cannot be reached at A2: the only item it fits is held for the Auditor (unknown category). It applies only after a human assigns a category."
-    }
-  ]
+  "case_notes": []
 }

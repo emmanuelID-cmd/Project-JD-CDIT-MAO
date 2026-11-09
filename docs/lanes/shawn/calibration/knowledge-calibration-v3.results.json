@@ -5,14 +5,14 @@
   "label_status": "draft, not yet human-approved (D-09)",
   "source_set_version": "SRC-61C4A35E96CF",
   "policy": "SYN-TS-POLICY 0.1.2",
-  "knowledge_agent_version": "0.3.0",
+  "knowledge_agent_version": "0.4.0",
   "as_of": "2026-11-10",
   "summary": {
-    "answered": 14,
-    "correct": 11,
-    "answer_accuracy": 0.7857142857142857,
-    "answer_coverage": 0.2682926829268293,
-    "abstention_precision": 0.4,
+    "answered": 18,
+    "correct": 15,
+    "answer_accuracy": 0.8333333333333334,
+    "answer_coverage": 0.36585365853658536,
+    "abstention_precision": 0.43902439024390244,
     "abstention_recall": 1.0,
     "unsupported_answers": 0,
     "wrong_answers": 3
@@ -35,16 +35,16 @@
     },
     "returned_recall_at_k": {
       "1": {
-        "hits": 11,
-        "rate": 0.2682926829268293
+        "hits": 15,
+        "rate": 0.36585365853658536
       },
       "3": {
-        "hits": 13,
-        "rate": 0.3170731707317073
+        "hits": 17,
+        "rate": 0.4146341463414634
       },
       "5": {
-        "hits": 13,
-        "rate": 0.3170731707317073
+        "hits": 17,
+        "rate": 0.4146341463414634
       }
     },
     "answerable_not_ranked": 0,
@@ -79,83 +79,94 @@
   "sweep": [
     {
       "cutoff": 0.4,
-      "answered": 32,
+      "answered": 31,
       "correct": 23,
-      "answer_accuracy": 0.71875,
+      "answer_accuracy": 0.7419354838709677,
       "answer_coverage": 0.5609756097560976,
-      "abstention_precision": 0.5925925925925926,
-      "abstention_recall": 0.8888888888888888,
-      "unsupported_answers": 2,
+      "abstention_precision": 0.6071428571428571,
+      "abstention_recall": 0.9444444444444444,
+      "unsupported_answers": 1,
       "wrong_answers": 7
     },
     {
       "cutoff": 0.45,
       "answered": 27,
-      "correct": 21,
-      "answer_accuracy": 0.7777777777777778,
-      "answer_coverage": 0.5121951219512195,
-      "abstention_precision": 0.5,
-      "abstention_recall": 0.8888888888888888,
-      "unsupported_answers": 2,
-      "wrong_answers": 4
-    },
-    {
-      "cutoff": 0.5,
-      "answered": 23,
-      "correct": 18,
-      "answer_accuracy": 0.782608695652174,
-      "answer_coverage": 0.43902439024390244,
-      "abstention_precision": 0.4722222222222222,
+      "correct": 22,
+      "answer_accuracy": 0.8148148148148148,
+      "answer_coverage": 0.5365853658536586,
+      "abstention_precision": 0.53125,
       "abstention_recall": 0.9444444444444444,
       "unsupported_answers": 1,
       "wrong_answers": 4
     },
     {
+      "cutoff": 0.5,
+      "answered": 23,
+      "correct": 19,
+      "answer_accuracy": 0.8260869565217391,
+      "answer_coverage": 0.4634146341463415,
+      "abstention_precision": 0.5,
+      "abstention_recall": 1.0,
+      "unsupported_answers": 0,
+      "wrong_answers": 4
+    },
+    {
       "cutoff": 0.55,
-      "answered": 17,
-      "correct": 13,
-      "answer_accuracy": 0.7647058823529411,
-      "answer_coverage": 0.3170731707317073,
-      "abstention_precision": 0.42857142857142855,
+      "answered": 20,
+      "correct": 16,
+      "answer_accuracy": 0.8,
+      "answer_coverage": 0.3902439024390244,
+      "abstention_precision": 0.46153846153846156,
       "abstention_recall": 1.0,
       "unsupported_answers": 0,
       "wrong_answers": 4
     },
     {
       "cutoff": 0.6,
-      "answered": 14,
-      "correct": 11,
-      "answer_accuracy": 0.7857142857142857,
-      "answer_coverage": 0.2682926829268293,
-      "abstention_precision": 0.4,
+      "answered": 18,
+      "correct": 15,
+      "answer_accuracy": 0.8333333333333334,
+      "answer_coverage": 0.36585365853658536,
+      "abstention_precision": 0.43902439024390244,
       "abstention_recall": 1.0,
       "unsupported_answers": 0,
       "wrong_answers": 3
     },
     {
       "cutoff": 0.65,
-      "answered": 10,
-      "correct": 8,
-      "answer_accuracy": 0.8,
-      "answer_coverage": 0.1951219512195122,
-      "abstention_precision": 0.3673469387755102,
+      "answered": 14,
+      "correct": 12,
+      "answer_accuracy": 0.8571428571428571,
+      "answer_coverage": 0.2926829268292683,
+      "abstention_precision": 0.4,
       "abstention_recall": 1.0,
       "unsupported_answers": 0,
       "wrong_answers": 2
     },
     {
       "cutoff": 0.7,
-      "answered": 8,
-      "correct": 6,
-      "answer_accuracy": 0.75,
-      "answer_coverage": 0.14634146341463414,
-      "abstention_precision": 0.35294117647058826,
+      "answered": 11,
+      "correct": 9,
+      "answer_accuracy": 0.8181818181818182,
+      "answer_coverage": 0.21951219512195122,
+      "abstention_precision": 0.375,
       "abstention_recall": 1.0,
       "unsupported_answers": 0,
       "wrong_answers": 2
     },
     {
       "cutoff": 0.75,
+      "answered": 6,
+      "correct": 4,
+      "answer_accuracy": 0.6666666666666666,
+      "answer_coverage": 0.0975609756097561,
+      "abstention_precision": 0.33962264150943394,
+      "abstention_recall": 1.0,
+      "unsupported_answers": 0,
+      "wrong_answers": 2
+    },
+    {
+      "cutoff": 0.8,
       "answered": 4,
       "correct": 2,
       "answer_accuracy": 0.5,
@@ -166,45 +177,34 @@
       "wrong_answers": 2
     },
     {
-      "cutoff": 0.8,
-      "answered": 3,
-      "correct": 1,
-      "answer_accuracy": 0.3333333333333333,
-      "answer_coverage": 0.024390243902439025,
-      "abstention_precision": 0.32142857142857145,
-      "abstention_recall": 1.0,
-      "unsupported_answers": 0,
-      "wrong_answers": 2
-    },
-    {
       "cutoff": 0.85,
-      "answered": 2,
-      "correct": 1,
-      "answer_accuracy": 0.5,
-      "answer_coverage": 0.024390243902439025,
-      "abstention_precision": 0.3157894736842105,
+      "answered": 3,
+      "correct": 2,
+      "answer_accuracy": 0.6666666666666666,
+      "answer_coverage": 0.04878048780487805,
+      "abstention_precision": 0.32142857142857145,
       "abstention_recall": 1.0,
       "unsupported_answers": 0,
       "wrong_answers": 1
     },
     {
       "cutoff": 0.9,
-      "answered": 2,
-      "correct": 1,
-      "answer_accuracy": 0.5,
-      "answer_coverage": 0.024390243902439025,
-      "abstention_precision": 0.3157894736842105,
+      "answered": 3,
+      "correct": 2,
+      "answer_accuracy": 0.6666666666666666,
+      "answer_coverage": 0.04878048780487805,
+      "abstention_precision": 0.32142857142857145,
       "abstention_recall": 1.0,
       "unsupported_answers": 0,
       "wrong_answers": 1
     },
     {
       "cutoff": 0.95,
-      "answered": 2,
-      "correct": 1,
-      "answer_accuracy": 0.5,
-      "answer_coverage": 0.024390243902439025,
-      "abstention_precision": 0.3157894736842105,
+      "answered": 3,
+      "correct": 2,
+      "answer_accuracy": 0.6666666666666666,
+      "answer_coverage": 0.04878048780487805,
+      "abstention_precision": 0.32142857142857145,
       "abstention_recall": 1.0,
       "unsupported_answers": 0,
       "wrong_answers": 1
@@ -891,19 +891,20 @@
       "acceptable_sources": [
         "KB-BRW-170#s1"
       ],
-      "knowledge_status": "abstained",
-      "reason_codes": [
-        "weak_evidence"
+      "knowledge_status": "completed",
+      "reason_codes": [],
+      "passages": [
+        "KB-BRW-170#s1 v1.0",
+        "KB-DOC-180#s1 v2.2"
       ],
-      "passages": [],
-      "top_relevance": null,
-      "band": "low",
-      "outcome": "false_abstention",
-      "correct_in_top_3": false,
+      "top_relevance": 1.0,
+      "band": "high",
+      "outcome": "correct_answer",
+      "correct_in_top_3": true,
       "ranking_rank": 1,
-      "returned_rank": null,
+      "returned_rank": 1,
       "excluded_reasons": [],
-      "troubleshooting_status": "abstained",
+      "troubleshooting_status": "completed",
       "documentation_status": "completed",
       "critical_errors": []
     },
@@ -983,17 +984,17 @@
       "acceptable_sources": [
         "KB-AUD-080#s1"
       ],
-      "knowledge_status": "abstained",
-      "reason_codes": [
-        "weak_evidence"
+      "knowledge_status": "completed",
+      "reason_codes": [],
+      "passages": [
+        "KB-AUD-080#s1 v1.0"
       ],
-      "passages": [],
-      "top_relevance": null,
-      "band": "low",
-      "outcome": "false_abstention",
-      "correct_in_top_3": false,
+      "top_relevance": 0.6879,
+      "band": "medium",
+      "outcome": "correct_answer",
+      "correct_in_top_3": true,
       "ranking_rank": 1,
-      "returned_rank": null,
+      "returned_rank": 1,
       "excluded_reasons": [],
       "troubleshooting_status": "abstained",
       "documentation_status": "completed",
@@ -1029,19 +1030,19 @@
       "acceptable_sources": [
         "KB-TRN-250#s1"
       ],
-      "knowledge_status": "abstained",
-      "reason_codes": [
-        "weak_evidence"
+      "knowledge_status": "completed",
+      "reason_codes": [],
+      "passages": [
+        "KB-TRN-250#s1 v1.0"
       ],
-      "passages": [],
-      "top_relevance": null,
-      "band": "low",
-      "outcome": "false_abstention",
-      "correct_in_top_3": false,
+      "top_relevance": 0.6469,
+      "band": "medium",
+      "outcome": "correct_answer",
+      "correct_in_top_3": true,
       "ranking_rank": 1,
-      "returned_rank": null,
+      "returned_rank": 1,
       "excluded_reasons": [],
-      "troubleshooting_status": "abstained",
+      "troubleshooting_status": "completed",
       "documentation_status": "completed",
       "critical_errors": []
     },
@@ -1057,7 +1058,7 @@
       "passages": [
         "KB-SRCH-240#s1 v1.0"
       ],
-      "top_relevance": 0.6376,
+      "top_relevance": 0.7932,
       "band": "medium",
       "outcome": "correct_answer",
       "correct_in_top_3": true,
@@ -1075,19 +1076,19 @@
       "acceptable_sources": [
         "KB-EDC-110#s2"
       ],
-      "knowledge_status": "abstained",
-      "reason_codes": [
-        "weak_evidence"
+      "knowledge_status": "completed",
+      "reason_codes": [],
+      "passages": [
+        "KB-EDC-110#s2 v2.0"
       ],
-      "passages": [],
-      "top_relevance": null,
-      "band": "low",
-      "outcome": "false_abstention",
-      "correct_in_top_3": false,
+      "top_relevance": 0.7096,
+      "band": "medium",
+      "outcome": "correct_answer",
+      "correct_in_top_3": true,
       "ranking_rank": 1,
-      "returned_rank": null,
+      "returned_rank": 1,
       "excluded_reasons": [],
-      "troubleshooting_status": "abstained",
+      "troubleshooting_status": "completed",
       "documentation_status": "completed",
       "critical_errors": []
     },

@@ -5,16 +5,16 @@
   "label_status": "draft, not yet human-approved (D-09)",
   "source_set_version": "SRC-61C4A35E96CF",
   "policy": "SYN-TS-POLICY 0.1.2",
-  "knowledge_agent_version": "0.3.0",
+  "knowledge_agent_version": "0.4.0",
   "as_of": "2026-11-03",
   "summary": {
-    "answered": 54,
+    "answered": 53,
     "correct": 52,
-    "answer_accuracy": 0.9629629629629629,
+    "answer_accuracy": 0.9811320754716981,
     "answer_coverage": 0.7428571428571429,
-    "abstention_precision": 0.6842105263157895,
-    "abstention_recall": 0.9512195121951219,
-    "unsupported_answers": 2,
+    "abstention_precision": 0.6896551724137931,
+    "abstention_recall": 0.975609756097561,
+    "unsupported_answers": 1,
     "wrong_answers": 0
   },
   "retrieval": {
@@ -70,7 +70,7 @@
         "cases": 4
       }
     },
-    "abstained_stale_source_only": 3,
+    "abstained_stale_source_only": 4,
     "abstained_unapproved_source_only": 2,
     "ineligible_passages_returned": 0
   },
@@ -79,57 +79,57 @@
   "sweep": [
     {
       "cutoff": 0.4,
-      "answered": 69,
-      "correct": 65,
-      "answer_accuracy": 0.9420289855072463,
-      "answer_coverage": 0.9285714285714286,
-      "abstention_precision": 0.8809523809523809,
-      "abstention_recall": 0.9024390243902439,
-      "unsupported_answers": 4,
-      "wrong_answers": 0
-    },
-    {
-      "cutoff": 0.45,
-      "answered": 62,
-      "correct": 59,
-      "answer_accuracy": 0.9516129032258065,
-      "answer_coverage": 0.8428571428571429,
-      "abstention_precision": 0.7755102040816326,
+      "answered": 67,
+      "correct": 64,
+      "answer_accuracy": 0.9552238805970149,
+      "answer_coverage": 0.9142857142857143,
+      "abstention_precision": 0.8636363636363636,
       "abstention_recall": 0.926829268292683,
       "unsupported_answers": 3,
       "wrong_answers": 0
     },
     {
-      "cutoff": 0.5,
-      "answered": 59,
-      "correct": 57,
-      "answer_accuracy": 0.9661016949152542,
-      "answer_coverage": 0.8142857142857143,
-      "abstention_precision": 0.75,
+      "cutoff": 0.45,
+      "answered": 61,
+      "correct": 59,
+      "answer_accuracy": 0.9672131147540983,
+      "answer_coverage": 0.8428571428571429,
+      "abstention_precision": 0.78,
       "abstention_recall": 0.9512195121951219,
       "unsupported_answers": 2,
+      "wrong_answers": 0
+    },
+    {
+      "cutoff": 0.5,
+      "answered": 59,
+      "correct": 58,
+      "answer_accuracy": 0.9830508474576272,
+      "answer_coverage": 0.8285714285714286,
+      "abstention_precision": 0.7692307692307693,
+      "abstention_recall": 0.975609756097561,
+      "unsupported_answers": 1,
       "wrong_answers": 0
     },
     {
       "cutoff": 0.55,
-      "answered": 58,
+      "answered": 57,
       "correct": 56,
-      "answer_accuracy": 0.9655172413793104,
+      "answer_accuracy": 0.9824561403508771,
       "answer_coverage": 0.8,
-      "abstention_precision": 0.7358490566037735,
-      "abstention_recall": 0.9512195121951219,
-      "unsupported_answers": 2,
+      "abstention_precision": 0.7407407407407407,
+      "abstention_recall": 0.975609756097561,
+      "unsupported_answers": 1,
       "wrong_answers": 0
     },
     {
       "cutoff": 0.6,
-      "answered": 54,
+      "answered": 53,
       "correct": 52,
-      "answer_accuracy": 0.9629629629629629,
+      "answer_accuracy": 0.9811320754716981,
       "answer_coverage": 0.7428571428571429,
-      "abstention_precision": 0.6842105263157895,
-      "abstention_recall": 0.9512195121951219,
-      "unsupported_answers": 2,
+      "abstention_precision": 0.6896551724137931,
+      "abstention_recall": 0.975609756097561,
+      "unsupported_answers": 1,
       "wrong_answers": 0
     },
     {
@@ -145,22 +145,22 @@
     },
     {
       "cutoff": 0.7,
-      "answered": 45,
-      "correct": 45,
+      "answered": 46,
+      "correct": 46,
       "answer_accuracy": 1.0,
-      "answer_coverage": 0.6428571428571429,
-      "abstention_precision": 0.6212121212121212,
+      "answer_coverage": 0.6571428571428571,
+      "abstention_precision": 0.6307692307692307,
       "abstention_recall": 1.0,
       "unsupported_answers": 0,
       "wrong_answers": 0
     },
     {
       "cutoff": 0.75,
-      "answered": 43,
-      "correct": 43,
+      "answered": 44,
+      "correct": 44,
       "answer_accuracy": 1.0,
-      "answer_coverage": 0.6142857142857143,
-      "abstention_precision": 0.6029411764705882,
+      "answer_coverage": 0.6285714285714286,
+      "abstention_precision": 0.6119402985074627,
       "abstention_recall": 1.0,
       "unsupported_answers": 0,
       "wrong_answers": 0
@@ -320,7 +320,7 @@
       "passages": [
         "KB-ACC-010#s1 v1.3"
       ],
-      "top_relevance": 0.6524,
+      "top_relevance": 0.7801,
       "band": "medium",
       "outcome": "correct_answer",
       "correct_in_top_3": true,
@@ -2435,21 +2435,21 @@
       "kind": "ineligible_only",
       "expect": "abstain",
       "acceptable_sources": [],
-      "knowledge_status": "completed",
-      "reason_codes": [],
-      "passages": [
-        "KB-TRN-250#s1 v1.0"
+      "knowledge_status": "abstained",
+      "reason_codes": [
+        "stale_source_only"
       ],
-      "top_relevance": 0.6119,
-      "band": "medium",
-      "outcome": "unsupported_answer",
-      "correct_in_top_3": false,
+      "passages": [],
+      "top_relevance": null,
+      "band": "low",
+      "outcome": "correct_abstention",
+      "correct_in_top_3": null,
       "ranking_rank": null,
       "returned_rank": null,
       "excluded_reasons": [
         "source_stale"
       ],
-      "troubleshooting_status": "completed",
+      "troubleshooting_status": "abstained",
       "documentation_status": "completed",
       "critical_errors": []
     },

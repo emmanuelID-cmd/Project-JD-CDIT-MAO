@@ -73,3 +73,32 @@ The PRD treats unsupported answers as worse than abstentions, so the guard's tra
 After this measurement, v3.0 is no longer held out.
 
 ## 5. Result
+
+Measured once on 2026-11-09 with Knowledge `0.4.0` (both changes), Troubleshooting policy 0.1.2, the runtime corpus `SRC-61C4A35E96CF`, and each set's own `as_of`. Decision step 1 applied.
+
+| Set | Critical errors | Correct answers | Wrong + unsupported | False abstentions | Correct abstentions | Criteria |
+| :--- | ---: | ---: | ---: | ---: | ---: | :--- |
+| `SYN-KCAL` v1.0 | 0 | 52 → 52 | 2 → 1 | 18 → 18 | 39 → 40 | Met |
+| `SYN-KCAL` v3.0 | 0 | 11 → 15 | 3 → 3 | 27 → 23 | 18 → 18 | Met |
+
+**Adopted as Knowledge `0.4.0`.**
+
+- **On v1:** the guard turned the unsupported answer `SYN-KCAL-0099` into a correct abstention (`ineligible_only`). Every other case has the same outcome. The one remaining unsupported answer is `SYN-KCAL-0078`, at medium band, relevance 0.63.
+- **On v3:** all four gains are padded requests (`SYN-KCAL-2034`, `2038`, `2040`, and `2042`; padded requests go from 2 to 6 of 12). The three wrong answers are unchanged:
+  - `2009` lands on a neighbouring article;
+  - `2017` and `2019` land on the other section of the right article.
+
+  All 18 abstain cases still abstain. Reworded requests are unchanged at 8 of 26 (out of scope).
+- **Evaluation draft source check (information):**
+  - case 067 moves from a wrong-source answer (`KB-TRN-250`) to the expected `stale_source_only` abstention;
+  - every other verdict is unchanged;
+  - expected-source citations stay at 14 of 65, because those items end with "Please review this request and tell me the next step", which is not courtesy text.
+- **Also regenerated:** v2.0 now shows 28 correct with 1 wrong; `SYN-KCAL-1075` now abstains. v2.0 was design data, so this is not a measurement.
+
+**Still open:**
+
+- reworded requests, which need a synonym vocabulary or another retrieval method;
+- wrong-section answers within one article;
+- v1's `SYN-KCAL-0078`.
+
+v3.0 is no longer held out, so any further retrieval change needs a new set version.

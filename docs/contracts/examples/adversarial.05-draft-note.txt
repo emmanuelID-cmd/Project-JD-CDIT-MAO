@@ -1,5 +1,5 @@
 DRAFT - requires human review. Not saved, not sent, no ticket state changed.
-Case SYN-CASE-0003 (version 1) | Run RUN-SYN-CASE-0003-1 | Policy SYN-SUPPORT-POLICY-0.1 | Draft DRAFT-1D1F7E380FD37BF6
+Case SYN-CASE-0003 (version 1) | Run RUN-SYN-CASE-0003-1 | Policy SYN-SUPPORT-POLICY-0.1 | Draft DRAFT-F596D70619D52798
 Prepared 2026-11-03T15:00:00+00:00 by documentation-agent 0.2.1
 
 Case facts (verified)

@@ -1,6 +1,6 @@
 {
   "contract_version": "0.1.0-proposed",
-  "contribution_id": "DOC-338E3CA074587843",
+  "contribution_id": "DOC-E89392EDD4872175",
   "stage": "documentation",
   "agent": "documentation-agent",
   "agent_version": "0.2.1",
@@ -19,16 +19,16 @@
       "content_digest": "6c267f2a30aa878d0f42ce05b9d8e27ae449516a6f48c159aa828fa51219deec"
     },
     {
-      "contribution_id": "KNW-B296F0757AACE471",
+      "contribution_id": "KNW-1756DB62D279BA0B",
       "stage": "knowledge",
       "contract_version": "0.1.0-proposed",
-      "content_digest": "72d48f5c57fe9ce17873e1259ef37afdfbf5031b4c71ddd7a291b6c47360fdcb"
+      "content_digest": "c32fa37fa059a1865dbaebd9a327fed502a1f764b3762d88bffae4ab6d2b085a"
     },
     {
-      "contribution_id": "TRB-F062C8E80E1B466D",
+      "contribution_id": "TRB-D9B39C5345B7D06D",
       "stage": "troubleshooting",
       "contract_version": "0.1.0-proposed",
-      "content_digest": "e80d81461ddec129dd82d8a5e995b7a3210b2df7b31d96c2ee240bf6ab2a8f0c"
+      "content_digest": "bdf2a7f1909177f9b5816e251addce237b50eea87c5bedde09d20cc7b72cbb96"
     },
     {
       "contribution_id": "ESC-0E7A137880BA6CCC",
@@ -57,13 +57,13 @@
         },
         {
           "kind": "contribution",
-          "source_id": "KNW-B296F0757AACE471",
+          "source_id": "KNW-1756DB62D279BA0B",
           "version": "0.1.0-proposed",
           "locator": null
         },
         {
           "kind": "contribution",
-          "source_id": "TRB-F062C8E80E1B466D",
+          "source_id": "TRB-D9B39C5345B7D06D",
           "version": "0.1.0-proposed",
           "locator": null
         },
@@ -85,7 +85,7 @@
   ],
   "human_review_required": true,
   "draft": {
-    "draft_id": "DRAFT-E10D9D573237E23D",
+    "draft_id": "DRAFT-B30080502EB5AF60",
     "banner": "DRAFT - requires human review. Not saved, not sent, no ticket state changed.",
     "sections": [
       {
@@ -317,7 +317,7 @@
         ]
       }
     ],
-    "rendered_text": "DRAFT - requires human review. Not saved, not sent, no ticket state changed.\nCase SYN-CASE-0001 (version 1) | Run RUN-SYN-CASE-0001-1 | Policy SYN-SUPPORT-POLICY-0.1 | Draft DRAFT-E10D9D573237E23D\nPrepared 2026-11-03T15:00:00+00:00 by documentation-agent 0.2.1\n\nCase facts (verified)\n- reported_issue: Cannot find the export option for the Site Enrollment Report. [verified: SYN-CASE-0001.reported_issue v1]\n- study_id: SYN-STUDY-0042 [verified: SYN-CASE-0001.study_id v1]\n\nTriage proposal (pending staff confirmation)\n- Proposed category: navigation_how_to (confidence high). [inference: Triage proposal TRI-CFA88256A7D129F5; not confirmed by staff.]\n- Proposed urgency: low. [inference: Triage proposal TRI-CFA88256A7D129F5; not confirmed by staff.]\n\nApproved guidance consulted\n- Export the Site Enrollment Report - Where to find the enrollment report export [verified: KB-NAV-001 v2.1 #s1]\n- Export the Site Enrollment Report - Export fails or times out [verified: KB-NAV-001 v2.1 #s2]\n\nSuggested Tier 1 steps (not performed)\n- 1. Ask the user to open Reports from the main navigation menu and select Enrollment. [verified: KB-NAV-001 v2.1 #s1/st1]\n- 2. Ask the user to select Site Enrollment Report and wait for the report view to load. [verified: KB-NAV-001 v2.1 #s1/st2]\n- 3. Ask the user to select Export in the top-right toolbar and choose CSV or PDF. [verified: KB-NAV-001 v2.1 #s1/st3]\n\nActions taken (recorded by staff)\n- No staff-recorded actions were supplied; do not assume any step was performed. [unknown]\n\nInformation still needed\n- user_role: The user's assigned role as shown on their profile page. [unknown]\n\nStop conditions and escalation\n- Escalation proposal: no escalation proposed. Reason: Stand-in: no must-escalate rule matched the synthetic case. [inference: Escalation proposal ESC-0E7A137880BA6CCC; a human decides.]\n- Stop condition: If the Export button is missing for a user whose role should include it, stop and escalate as a possible permission configuration issue. [verified: KB-NAV-001 v2.1 #s1]\n- Stop condition: If the exported data appears to belong to another site, stop immediately and escalate as a possible data-access incident. [verified: KB-NAV-001 v2.1 #s1]\n\nUnverified or unresolved\n- Reported, not verified - user_role: Site Coordinator [unknown]\n"
+    "rendered_text": "DRAFT - requires human review. Not saved, not sent, no ticket state changed.\nCase SYN-CASE-0001 (version 1) | Run RUN-SYN-CASE-0001-1 | Policy SYN-SUPPORT-POLICY-0.1 | Draft DRAFT-B30080502EB5AF60\nPrepared 2026-11-03T15:00:00+00:00 by documentation-agent 0.2.1\n\nCase facts (verified)\n- reported_issue: Cannot find the export option for the Site Enrollment Report. [verified: SYN-CASE-0001.reported_issue v1]\n- study_id: SYN-STUDY-0042 [verified: SYN-CASE-0001.study_id v1]\n\nTriage proposal (pending staff confirmation)\n- Proposed category: navigation_how_to (confidence high). [inference: Triage proposal TRI-CFA88256A7D129F5; not confirmed by staff.]\n- Proposed urgency: low. [inference: Triage proposal TRI-CFA88256A7D129F5; not confirmed by staff.]\n\nApproved guidance consulted\n- Export the Site Enrollment Report - Where to find the enrollment report export [verified: KB-NAV-001 v2.1 #s1]\n- Export the Site Enrollment Report - Export fails or times out [verified: KB-NAV-001 v2.1 #s2]\n\nSuggested Tier 1 steps (not performed)\n- 1. Ask the user to open Reports from the main navigation menu and select Enrollment. [verified: KB-NAV-001 v2.1 #s1/st1]\n- 2. Ask the user to select Site Enrollment Report and wait for the report view to load. [verified: KB-NAV-001 v2.1 #s1/st2]\n- 3. Ask the user to select Export in the top-right toolbar and choose CSV or PDF. [verified: KB-NAV-001 v2.1 #s1/st3]\n\nActions taken (recorded by staff)\n- No staff-recorded actions were supplied; do not assume any step was performed. [unknown]\n\nInformation still needed\n- user_role: The user's assigned role as shown on their profile page. [unknown]\n\nStop conditions and escalation\n- Escalation proposal: no escalation proposed. Reason: Stand-in: no must-escalate rule matched the synthetic case. [inference: Escalation proposal ESC-0E7A137880BA6CCC; a human decides.]\n- Stop condition: If the Export button is missing for a user whose role should include it, stop and escalate as a possible permission configuration issue. [verified: KB-NAV-001 v2.1 #s1]\n- Stop condition: If the exported data appears to belong to another site, stop immediately and escalate as a possible data-access incident. [verified: KB-NAV-001 v2.1 #s1]\n\nUnverified or unresolved\n- Reported, not verified - user_role: Site Coordinator [unknown]\n"
   },
   "manual_fallback": null,
   "privacy_findings": []

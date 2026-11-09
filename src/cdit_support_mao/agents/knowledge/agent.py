@@ -54,7 +54,10 @@ from cdit_support_mao.contracts.handoffs import (
 AGENT_NAME = "knowledge-agent"
 # 0.3.0 (2026-11-09, L-1): query tokens that contain a digit are case identifiers and no
 # longer count as topic terms in the relevance gate. Cut-offs are unchanged (D-08).
-AGENT_VERSION = "0.3.0"
+# 0.4.0 (2026-11-09, L-1/L-2 batch 2): courtesy words are not topic terms either, and the
+# ineligible-anchor guard withholds an off-topic answer when the request's most specific
+# word appears only in an ineligible source.
+AGENT_VERSION = "0.4.0"
 MAX_PASSAGES = 3
 MIN_MATCHED_TERMS = 2
 
@@ -202,6 +205,40 @@ class KnowledgeAgent:
             else:
                 reason = ReasonCode.NO_RELEVANT_SOURCE
             return self._abstain(base, (reason,), unknowns)
+
+        # Ineligible-anchor guard (L-2): when the request's most specific word is not in the
+        # best eligible section but is in an ineligible one, the on-topic source cannot be
+        # used, so a current answer from another topic is withheld.
+        anchor = self._index.anchor_term(query)
+        if anchor is not None and anchor not in eligible[0].matched_terms:
+            shadow = [s for s in scored if anchor in s.matched_terms and ineligibility_reason(s.article, as_of)]
+            if shadow:
+                known = {(item.doc_id, item.version, item.section_id) for item in excluded}
+                shadow_excluded = []
+                for item in shadow:
+                    key = (item.article.doc_id, item.article.version, item.section.section_id)
+                    if key not in known:
+                        known.add(key)
+                        shadow_excluded.append(
+                            ExcludedSource(
+                                doc_id=item.article.doc_id,
+                                version=item.article.version,
+                                section_id=item.section.section_id,
+                                reason=ineligibility_reason(item.article, as_of),
+                            )
+                        )
+                all_excluded = tuple(excluded) + tuple(shadow_excluded)
+                base["excluded_sources"] = all_excluded
+                reason = (
+                    ReasonCode.STALE_SOURCE_ONLY
+                    if any(item.reason in _STALE_REASONS for item in all_excluded)
+                    else ReasonCode.UNAPPROVED_SOURCE_ONLY
+                )
+                unknowns.append(
+                    "The request's most specific term matches only an ineligible source; "
+                    "an answer from another topic is withheld."
+                )
+                return self._abstain(base, (reason,), unknowns)
 
         selected = eligible[:MAX_PASSAGES]
 

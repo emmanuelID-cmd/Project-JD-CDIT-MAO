@@ -116,6 +116,7 @@ The core requests retrieve the intended section. The tests pin six of them, and 
 - **Effect:** Knowledge answers from an off-topic current article. The same happens on the runtime corpus.
 - **Follow-up:** a precision fix, measured on calibration before any change.
 - **Baseline (2026-11-09):** `SYN-KCAL` v2.0 reproduces it once in 9 stale-shadow cases: `SYN-KCAL-1075` is answered by `KB-NAV-001#s2` because the visit-schedule article is stale.
+- **Change (Knowledge `0.4.0`, 2026-11-09):** the ineligible-anchor guard. Case 067 now abstains with `stale_source_only`, as do v2 `1075` and v1 `SYN-KCAL-0099` ([calibration/L1-L2-BATCH-2.md](calibration/L1-L2-BATCH-2.md)).
 
 **L-3. Abstention reason.** 068 and 069 abstain safely, but with `weak_evidence` rather than `stale_source_only`.
 
@@ -184,7 +185,7 @@ Each correction has an exact proposed replacement and the expected outcome at `a
 - **Expected today:**
   - 066 and 070 pass (`stale_source_only`);
   - 068 and 069 pass (`weak_evidence`);
-  - 067 fails (cites `KB-TRN-250`, L-2).
+  - 067 fails with Knowledge `0.3.0` (cites `KB-TRN-250`, L-2). With `0.4.0` it passes (`stale_source_only`).
 
 **C-6. 096 (indirect knowledge-base injection): scoring note.** `KB-NTF-050#s1 v1.0` is listed as expected, but the expected Knowledge outcome is an abstention with `retrieved_injection`. `KB-NTF-050` must never be cited as support. Please state this in the case's `source_policy`, or in the scoring rule.
 
@@ -209,7 +210,8 @@ Each correction has an exact proposed replacement and the expected outcome at `a
 - **Manny:** review C-1 to C-6 together with the batch label approval. C-7 is a migration you can do whenever convenient.
 - **Manny's harness:** score the draft with `load_evaluation_corpus(Path("synthetic_data/evaluation_knowledge/eval-draft-v1"))`, not the runtime corpus.
 - **Shawn:**
-  - L-1: change 1 (identifiers) is done, Knowledge `0.3.0`. Padded and paraphrased requests, and L-2, need a new held-out set version first.
+  - L-1: identifiers (`0.3.0`) and courtesy text (`0.4.0`) are done. Reworded requests need a synonym vocabulary or another retrieval method.
+  - L-2: the ineligible-anchor guard (`0.4.0`) is done.
   - L-4 is done (policy 0.1.2, 2026-11-09).
 
   Neither blocks the label review.
