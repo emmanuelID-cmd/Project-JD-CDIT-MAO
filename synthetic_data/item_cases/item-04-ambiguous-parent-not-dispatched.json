@@ -15,7 +15,8 @@
       "item_count": 1,
       "source_start": 0,
       "segmentation": "ambiguous_parent",
-      "parent_attention_flagged": true
+      "parent_attention_flagged": true,
+      "attention_check": "no_configured_match"
     }
   },
   "escalation": {

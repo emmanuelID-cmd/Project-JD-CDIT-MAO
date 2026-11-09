@@ -160,7 +160,8 @@ class TriageItemScope(StrictModel):
     ``attention_check`` (S-1.1, scope 0.2 only) says what the attention literal
     check did for this item. ``no_configured_match`` is never a risk assessment,
     and ``check_not_run`` is information for Staff/Admin, not an extra hold (Q3).
-    It is optional until Manny's connector always supplies it (Q5).
+    It is required on every 0.2 scope (Q5, 2026-11-09, once Manny's connector
+    always supplied it in ``1c822c8``) and must stay ``None`` on a legacy 0.1 scope.
     """
 
     identity: LinkedItemRef
@@ -182,7 +183,8 @@ class TriageItemScope(StrictModel):
     )
     attention_check: AttentionCheck | None = Field(
         default=None,
-        description="S-1.1: what the attention literal check did for this item; None means Triage did not say",
+        description="S-1.1: what the attention literal check did for this item; required on scope 0.2 (Q5), "
+        "None only on a legacy 0.1 scope",
     )
 
     @model_validator(mode="after")
@@ -206,6 +208,8 @@ class TriageItemScope(StrictModel):
                 raise ValueError("category_evidence_outside_item_span")
         if self.attention_ref is not None and not self.parent_attention_flagged:
             raise ValueError("item_attention_requires_parent_summary")
+        if self.attention_check is None and not ident.is_legacy_scope:
+            raise ValueError("attention_check_required_for_scope_0_2")
         if self.attention_check is not None:
             if ident.is_legacy_scope:
                 raise ValueError("attention_check_requires_scope_0_2")

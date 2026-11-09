@@ -108,7 +108,8 @@ _ATTENTION_CHECK_TEXT = {
 def _attention_check_line(triage: TriageHandoff, triage_ref: SourceRef) -> NoteLine:
     """One Staff/Admin information line for an item without an attention flag (S-1.1).
 
-    It never clears or implies a flag and adds no hold (Manny, S-1.1 Q3).
+    It never clears or implies a flag and adds no hold (Manny, S-1.1 Q3). A 0.2 scope
+    always states the check (Q5); the unknown line remains for legacy 0.1 scopes.
     """
     check = triage.item_scope.attention_check if triage.item_scope is not None else None
     text = _ATTENTION_CHECK_TEXT.get(check) if check is not None else None
