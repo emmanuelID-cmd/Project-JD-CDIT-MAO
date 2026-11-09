@@ -1,6 +1,17 @@
 # Project Handoff — Project-JD-CDIT-MAO
 
-## Current outgoing state - 2026-11-09
+## Current outgoing state - 2026-11-09 (after live evaluation and developer sync)
+
+This pre-publication summary supersedes earlier current-status statements below where they conflict; dated entries remain historical.
+
+- Repository: `emmanuelID-cmd/Project-JD-CDIT-MAO`; active branch: `manny/coordinator-triage-escalation`; intended PR target: `developer`; `main` was not changed.
+- Fetched `origin/developer` at `1a8ae1d29afac9c2f8c382b8a4e877cb3f101865`. Remote Manny baseline before publication was `0c18f80aff27edc3b8e62c28f36fab72fe4c763a`. Local Manny now includes the fetched developer history through merge commit `764c229c6db1bb380a953e5f1f1e0804fbe389db` and the Manny evaluation work. No rebase or reset was used. The read-only merge-tree preflight found no conflicts.
+- Recorded SYN-EVAL-068 and SYN-EVAL-070 as confirmed category failures. Per D-22, their remediation is deferred until after Phase 2 and excluded from its exit gate; neither is a pass. The original live trace remains intact. Phase 2 remains open for the other unvalidated results, remaining label/source decisions, scoring, and exit review.
+- Added synthetic live-evaluation and scoring utilities, tests, diagnostic reports, and retained trace artifacts in commit `88fe405`; the decision and checklist updates are in that same task commit. Full test evidence from the preceding run is 717 passed; no tests were run in this update. `git diff --check` passed before the commit.
+- Current work is committed on the existing Manny lane. No push or PR merge has occurred. Open-PR status could not be verified: the GitHub connector returned 404/422 for this private repository, the local GitHub CLI reports an invalid login, and the available browser accessibility interface failed. Do not claim that no PR exists or merge until the open-PR list and PR order can be verified.
+- `main` remains at `1a5cf4ad6beda1a12b537f2ffc95ac930d921174`.
+
+## Prior outgoing snapshot - 2026-11-09 (before live evaluation)
 
 This pre-push summary supersedes older current-status statements below where they conflict; historical entries remain unchanged.
 

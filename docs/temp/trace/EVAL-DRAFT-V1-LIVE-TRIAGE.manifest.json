@@ -1,0 +1,49 @@
+{
+  "trace_run_id": "CDIT-LIVE-EVAL-4b7dfc48-532a-4c9a-b92d-63cdd590ba37",
+  "frozen_at_utc": "2026-11-09T19:34:02.111323+00:00",
+  "git_head": "e68fd08f94a544cb2383b66558d2b55df10c3aaf",
+  "authoritative_prd": "docs/requirements/PRD-v4.md",
+  "model": "claude-sonnet-5-5",
+  "system_prompt_sha256": "92dcee2769dbefed8b42e9b8579dd1e929789bd9c340d7d17bdc844225aa996c",
+  "contract_version": "0.1.0-proposed",
+  "dataset_id": "CDIT-SYNTHETIC-EVALUATION-DRAFT-100-v1",
+  "dataset_sha256": "a4d6d2b6e6bbb21584ae2a9b86da13c32b62e30c3a047a1bc4c53f08f72d7c82",
+  "dataset_label_approval": {
+    "label_author": "Manny",
+    "reviewer": "Manny",
+    "approver": "Manny",
+    "approved": false,
+    "scoring_authorized": false
+  },
+  "diagnostic_only": true,
+  "unique_cases": 100,
+  "items": 114,
+  "provider_calls": 45,
+  "retry_count": 0,
+  "no_ticket_writes": true,
+  "no_external_dispatches": true,
+  "raw_inputs_stored": false,
+  "evidence_files_sha256": {
+    "docs/requirements/PRD-v4.md": "6a0b75b06c537fa4fb97901c85af62107c0d76c9e7435e2e167aaf192fcabf34",
+    "docs/lanes/manny/TRIAGE-PROMPT-v0.md": "c07ded2f00e6d11520c8f4b61ab84c51c38148065fd7d746eaa3ef100776f498",
+    "synthetic_data/evaluation_draft/v1/cases.json": "a4d6d2b6e6bbb21584ae2a9b86da13c32b62e30c3a047a1bc4c53f08f72d7c82",
+    "src/cdit_support_mao/evaluation_live.py": "692b450a322a854b26e5de92414d6a29fc196b976b704f05d3507f8ae0a44047",
+    "src/cdit_support_mao/agents/triage/runtime_harness.py": "bd38f410a9994af4bbc87dcd1f8afb7fe7a07e4c321110b5b6fe4c74164147d7",
+    "src/cdit_support_mao/agents/triage/semantic_contract.py": "296d5b3c46d7e8ecfd265a01bc7a38f4955d9f967d8b8464cfc790ab50c1eb23",
+    "tests/test_evaluation_live.py": "e100b48173484f2a27dd077737a388f5e90b248116de843bd58a67e60b5f2381",
+    "docs/temp/trace/EVAL-DRAFT-V1-LIVE-TRIAGE.results.json": "ad9c150f0263527b2d2a358760401f528638b65795ba9630273c1f6fe0909518"
+  },
+  "expected_checks": [
+    "Triage category and label against draft case expectations (diagnostic only; labels not globally approved)",
+    "segmentation source spans against draft case expectations",
+    "urgency and destination remain Unknown until human review",
+    "human review remains required; downstream_allowed is false; dispatched is false",
+    "A0/A1 intake gating and no provider call for stopped cases"
+  ],
+  "known_scope_limits": [
+    "Triage A0-A2 only; not six-agent MAO",
+    "no Auditor, Knowledge, Troubleshooting, or Documentation live execution",
+    "45 provider calls across 100 unique cases; harness gates prevented calls for remaining cases",
+    "an earlier separate smoke run also called case SYN-EVAL-067 once; full sweep includes 067 once"
+  ]
+}

@@ -1,4 +1,15 @@
 # Handoffs prepared for push
+## 2026-11-09 - Manny live evaluation evidence and 068/070 deferral
+
+Summary file: PROJECT-HANDOFF.md
+
+- Active branch: `manny/coordinator-triage-escalation`; PR target: `developer`; no new branch was created. `main` remains unchanged.
+- Fetched developer history through `1a8ae1d29afac9c2f8c382b8a4e877cb3f101865`; local Manny includes it through merge commit `764c229c6db1bb380a953e5f1f1e0804fbe389db`. The merge preflight was clean. Manny's own evaluation commit is `88fe405`.
+- Added the synthetic live-evaluation/scoring helpers, tests, diagnostic evidence and retained trace artifacts. Recorded D-22: SYN-EVAL-068 and SYN-EVAL-070 remain confirmed failures; their remediation is deferred until after Phase 2 and excluded from this phase's exit gate. Other labels remain unapproved.
+- Phase 2 remains open: other model-result gaps, item-splitting failures, label/source approval, scoring and final exit review are outstanding. No phase was marked complete.
+- Prior full-suite evidence: 717 passed; no tests were run in this update. `git diff --check` passed before the commit.
+- Publication is pending. Open PR status could not be verified because the GitHub connector cannot access this private repository and the local GitHub CLI login is invalid. No push or PR merge has occurred.
+
 ## 2026-11-09T09:48:46-05:00 - Manny synthetic evaluation draft preparation
 
 Summary file: PROJECT-HANDOFF.md

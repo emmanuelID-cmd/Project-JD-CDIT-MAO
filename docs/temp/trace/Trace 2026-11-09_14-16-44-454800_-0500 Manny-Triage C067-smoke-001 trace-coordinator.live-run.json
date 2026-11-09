@@ -1,0 +1,117 @@
+{
+  "run_id": "CDIT-LIVE-EVAL-d6e42f86-d288-44bb-899a-4820bc0e0ed6",
+  "generated_at": "2026-11-09T19:18:00.406589+00:00",
+  "dataset_id": "CDIT-SYNTHETIC-EVALUATION-DRAFT-100-v1",
+  "dataset_sha256": "a4d6d2b6e6bbb21584ae2a9b86da13c32b62e30c3a047a1bc4c53f08f72d7c82",
+  "dataset_status": "DRAFT_NOT_APPROVED",
+  "label_approval": {
+    "label_author": "Manny",
+    "reviewer": "Manny",
+    "approver": "Manny",
+    "approved": false,
+    "scoring_authorized": false
+  },
+  "diagnostic_only": true,
+  "model": "claude-sonnet-5-5",
+  "contract_version": "0.1.0-proposed",
+  "system_prompt_sha256": "92dcee2769dbefed8b42e9b8579dd1e929789bd9c340d7d17bdc844225aa996c",
+  "cases_selected": 1,
+  "items_expected": 1,
+  "model_calls": 1,
+  "model_calls_authorized": true,
+  "model_calls_sequential": true,
+  "retry_count": 0,
+  "ticket_writes": 0,
+  "external_dispatches": 0,
+  "input_tokens_total": 1288,
+  "output_tokens_total": 752,
+  "triage_category": {
+    "scored_items": 1,
+    "matches": 0,
+    "accuracy": 0.0,
+    "unscored_items": 0
+  },
+  "segmentation": {
+    "checked_items": 1,
+    "matching_spans": 1,
+    "span_match_rate": 1.0
+  },
+  "cases": [
+    {
+      "case_id": "SYN-EVAL-067",
+      "trace_id": "TRACE-43379b34-cae0-46ca-b362-74c309572a0f",
+      "run_id": "RUN-e157109a-c373-4f45-8de6-9b4e899b9947",
+      "started_at": "2026-11-09T19:17:54.090475+00:00",
+      "ended_at": "2026-11-09T19:18:00.406519+00:00",
+      "input_sha256": "5c74471b9c2a804633c5c1cbae224c95231eec541d3a89b8d0a60e0b8a04c234",
+      "intake_status": "ready_for_triage",
+      "intake_checkpoint": "A1",
+      "intake_reason_code": null,
+      "handoff_events": [
+        {
+          "event": "handoff_prepared",
+          "status": "awaiting_ack",
+          "owner": "coordinator",
+          "sequence": 1,
+          "state_version": 1,
+          "timestamp": "2026-11-09T19:17:54.090475+00:00"
+        },
+        {
+          "event": "handoff_accepted",
+          "status": "accepted",
+          "owner": "triage",
+          "sequence": 2,
+          "state_version": 2,
+          "timestamp": "2026-11-09T19:17:54.090475+00:00"
+        }
+      ],
+      "triage_status": "proposal_for_human_review",
+      "triage_reason": null,
+      "urgency": "unknown",
+      "destination": "unknown",
+      "human_review_required": true,
+      "downstream_allowed": false,
+      "dispatched": false,
+      "model_call_count": 1,
+      "model": "claude-sonnet-5-5",
+      "prompt_id": "manny-triage-system-v1",
+      "prompt_sha256": "92dcee2769dbefed8b42e9b8579dd1e929789bd9c340d7d17bdc844225aa996c",
+      "request_payload_sha256": "f06666e122a1b4dc32119afdab6f5355f8992afb44ec4332d517840c38e42d07",
+      "input_tokens": 1288,
+      "output_tokens": 752,
+      "model_elapsed_ms": 6306,
+      "item_count_expected": 1,
+      "item_count_actual": 1,
+      "items": [
+        {
+          "item_index": 1,
+          "expected_category": "Product how-to / documentation request",
+          "expected_category_label": "inference",
+          "actual_category": null,
+          "actual_category_label": "unknown",
+          "category_match": false,
+          "expected_span": {
+            "start": 0,
+            "end": 63
+          },
+          "actual_span": {
+            "start": 0,
+            "end": 63
+          },
+          "span_match": true,
+          "evidence_quote_sha256": null
+        }
+      ],
+      "urgency_contract_pass": true,
+      "human_review_contract_pass": true
+    }
+  ],
+  "other_gates": {
+    "knowledge": "see separate non-billable Knowledge diagnostic",
+    "auditor_band_and_route": "not_scored_by_triage_runtime",
+    "troubleshooting": "not_run",
+    "documentation": "not_run",
+    "full_mao": "not_run",
+    "actual_model_cost": "not_calculated"
+  }
+}
