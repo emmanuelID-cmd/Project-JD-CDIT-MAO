@@ -31,9 +31,11 @@ from cdit_support_mao.lane_eval_sources import (
     validate_source_map,
 )
 
-from conftest import KNOWLEDGE_DIR, POLICY_PATH, REPO_ROOT
+from conftest import KNOWLEDGE_DIR, REPO_ROOT
 
 FIXTURES = REPO_ROOT / "synthetic_data" / "evaluation_knowledge" / "eval-draft-v1"
+# The evaluation draft cites SYN-TS-POLICY 0.1.1; the source map is checked against that version.
+POLICY_PATH = REPO_ROOT / "synthetic_data" / "policy" / "troubleshooting-policy_v0.1.1.json"
 CASES = REPO_ROOT / "synthetic_data" / "evaluation_draft" / "v1" / "cases.json"
 AS_OF = date(2026, 11, 10)
 NOW = datetime(2026, 11, 10, 12, 0, tzinfo=UTC)

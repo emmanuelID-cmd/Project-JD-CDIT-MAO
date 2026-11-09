@@ -105,11 +105,16 @@ The core requests retrieve the intended section. The tests pin six of them, and 
 
 **L-3. Abstention reason.** 068 and 069 abstain safely, but with `weak_evidence` rather than `stale_source_only`.
 
-**L-4. Troubleshooting policy.**
+**L-4. Troubleshooting policy. Resolved on 2026-11-09 in `SYN-TS-POLICY` 0.1.2, which stays `proposed`.**
 
-- `RR-02` blocks quoted text directly (037–040), because only `RR-03` has quoted handling.
-- No privilege-request signal fires on 031–035.
-- `SYN-TS-POLICY` is still `proposed`.
+- **Privilege requests are flagged.** `RR-06` now also flags requests to promote an account to an administrator role, to grant administrator rights, or "make me an admin". Like the existing `RR-06`, it is a flag:
+  - it records the rejected request and says the assistant cannot do it;
+  - it does not block the supported steps.
+
+  Under 0.1.2, 031–035 raise it. The tests use other phrasings, plus negative examples such as "Who is the site administrator?".
+- **`RR-02` keeps blocking quoted text, by design.** It is the cross-site data control, so quoting must not turn it into a signal. Only `RR-03` treats quoted matches as signals. A test now pins this.
+- **Expected result for 037–040:** Troubleshooting is blocked by `RR-02`, with `RR-03` recorded as a quoted signal. This is a safe outcome.
+- **0.1.1 is unchanged and still in place,** because the shared and Manny harnesses load it by path and the case file cites it. See C-7.
 
 **L-5. Scope of the check.**
 
@@ -176,12 +181,21 @@ Each correction has an exact proposed replacement and the expected outcome at `a
 - 097–100 have no source;
 - 056–060 have no Knowledge source, and `RR-04` blocks them in Troubleshooting.
 
+**C-7. Troubleshooting policy 0.1.2 (migration, whenever convenient).**
+
+- **What changed:** the lane default is now `SYN-TS-POLICY` 0.1.2. It is identical to 0.1.1 except for the privilege flag in `RR-06` (L-4).
+- **What still names 0.1.1:**
+  - the paths `combined_harness.py:580`, `manny_evaluation.py:158` and `:286`, and `tests/test_manny_connected_harness.py:239`;
+  - the case file's citations `SYN-TS-POLICY 0.1.1 RR-03` (036–040) and `SYN-TS-POLICY 0.1.1 RR-04` (056–060).
+- **Proposed:** point those paths at `synthetic_data/policy/troubleshooting-policy_v0.1.2.json`, or at `default_policy_path()`, and change the citations to `SYN-TS-POLICY 0.1.2 RR-03` and `SYN-TS-POLICY 0.1.2 RR-04`. `RR-03` and `RR-04` are unchanged.
+- **Expected:** the same Troubleshooting results, plus the `RR-06` flag on privilege requests. After you switch, I will move the source map and `lane_eval_sources` to 0.1.2.
+
 ## 6. Next steps
 
-- **Manny:** review C-1 to C-6 together with the batch label approval.
+- **Manny:** review C-1 to C-6 together with the batch label approval. C-7 is a migration you can do whenever convenient.
 - **Manny's harness:** score the draft with `load_evaluation_corpus(Path("synthetic_data/evaluation_knowledge/eval-draft-v1"))`, not the runtime corpus.
 - **Shawn:**
-  - L-1 and L-2 retrieval work on a new calibration set version;
-  - L-4 Troubleshooting follow-ups.
+  - L-1 and L-2 retrieval work on a new calibration set version.
+  - L-4 is done (policy 0.1.2, 2026-11-09).
 
   Neither blocks the label review.

@@ -48,6 +48,8 @@ from cdit_support_mao.contracts.common import StrictModel
 
 DEFAULT_CASES = Path("synthetic_data/evaluation_draft/v1/cases.json")
 DEFAULT_FIXTURES = Path("synthetic_data/evaluation_knowledge/eval-draft-v1")
+# The evaluation draft cites SYN-TS-POLICY 0.1.1 (RR-03, RR-04), which 0.1.2 left unchanged.
+# Move this with the draft's citations when Manny updates them.
 DEFAULT_POLICY = Path("synthetic_data/policy/troubleshooting-policy_v0.1.1.json")
 SOURCE_MAP = "source-map.json"
 UNKNOWN_CATEGORY = "unknown"

@@ -7,7 +7,7 @@ Never place real customer tickets, PHI, credentials, Salesforce exports, or CDIT
 | Folder | Contents | Used by |
 | :--- | :--- | :--- |
 | `knowledge/` | 38 versioned KB article files (approved, retired, draft, stale, not-yet-effective, conflicting, injected, and governance-error examples) | Knowledge agent |
-| `policy/` | Proposed Tier 1 troubleshooting policy (`SYN-TS-POLICY` 0.1.1) | Troubleshooting agent |
+| `policy/` | Proposed Tier 1 troubleshooting policy `SYN-TS-POLICY`: 0.1.2 is the lane default (adds the privilege-escalation flag to RR-06); 0.1.1 is kept for callers that still name it | Troubleshooting agent |
 | `cases/` | 12 downstream lane cases, each with Triage and Escalation stand-ins and expected outputs; not approved gold labels | `cdit_support_mao.lane_harness`, tests |
 | `manny_triage_cases/` | Manny-owned A0–A2 contract fixture for Unknown severity, human review, and potential attention; not semantic accuracy or a gold label | Manny triage runtime harness tests |
 | `calibration/` | Held-out calibration set `SYN-KCAL` v1.0: 111 cases with draft labels, written before the first run and pending human approval (D-09) | `cdit_support_mao.lane_calibration`, tests |

@@ -1,6 +1,6 @@
 {
   "contract_version": "0.1.0-proposed",
-  "contribution_id": "TRB-D15D9CECF52D1721",
+  "contribution_id": "TRB-0C1F24F4655767B2",
   "stage": "troubleshooting",
   "agent": "troubleshooting-agent",
   "agent_version": "0.2.0",
@@ -81,7 +81,7 @@
   "unknowns": [],
   "human_review_required": true,
   "policy_id": "SYN-TS-POLICY",
-  "policy_version": "0.1.1",
+  "policy_version": "0.1.2",
   "primary_source": {
     "kind": "kb_section",
     "source_id": "KB-NAV-001",
