@@ -19,7 +19,9 @@ from pydantic import Field, ValidationError, field_validator, model_validator
 from cdit_support_mao.contracts.common import StrictModel
 
 POLICY_PATH_ENV = "CDIT_TROUBLESHOOTING_POLICY"
-DEFAULT_POLICY_PATH = Path("synthetic_data/policy/troubleshooting-policy_v0.1.1.json")
+# 0.1.2 adds the privilege-escalation pattern to RR-06. 0.1.1 stays in place for callers that
+# still name it (the shared and Manny harnesses, and the evaluation draft's citations).
+DEFAULT_POLICY_PATH = Path("synthetic_data/policy/troubleshooting-policy_v0.1.2.json")
 
 # Quoted spans in untrusted case text. Straight and curly single quotes allow an
 # apostrophe inside a word (can't, site's) and must not start or end inside a word.

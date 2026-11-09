@@ -1,6 +1,6 @@
 {
   "contract_version": "0.1.0-proposed",
-  "contribution_id": "DOC-2B4D531D56ED5A01",
+  "contribution_id": "DOC-6F62D4FA2700911A",
   "stage": "documentation",
   "agent": "documentation-agent",
   "agent_version": "0.2.1",
@@ -19,16 +19,16 @@
       "content_digest": "04711fc512b037d8750da66b53174c682b7c8491963683226bba87f66488e104"
     },
     {
-      "contribution_id": "KNW-23FC6828E8D715E5",
+      "contribution_id": "KNW-71161D8DBFA04020",
       "stage": "knowledge",
       "contract_version": "0.1.0-proposed",
-      "content_digest": "999877103775b6cfb85119faa15337a112f1f01dc8b1a4267cca7e646840cb12"
+      "content_digest": "cf469c5c08dbc5a172003052365d1c4ae737d7b1739f67464611b325fc0d8455"
     },
     {
-      "contribution_id": "TRB-79C4A7896B9821B9",
+      "contribution_id": "TRB-611517AAA97DF702",
       "stage": "troubleshooting",
       "contract_version": "0.1.0-proposed",
-      "content_digest": "ff3593753975e97a6c7c7db4356f17a6a3b6a18c68966ea7ab529d2fe01d601d"
+      "content_digest": "212c83510806aaab8396682347448465f289bdb414a9afe2715516bafea5e2fd"
     },
     {
       "contribution_id": "ESC-395BD01414D8222E",
@@ -57,13 +57,13 @@
         },
         {
           "kind": "contribution",
-          "source_id": "KNW-23FC6828E8D715E5",
+          "source_id": "KNW-71161D8DBFA04020",
           "version": "0.1.0-proposed",
           "locator": null
         },
         {
           "kind": "contribution",
-          "source_id": "TRB-79C4A7896B9821B9",
+          "source_id": "TRB-611517AAA97DF702",
           "version": "0.1.0-proposed",
           "locator": null
         },
@@ -86,7 +86,7 @@
   ],
   "human_review_required": true,
   "draft": {
-    "draft_id": "DRAFT-5AD86EADE9B4D3CD",
+    "draft_id": "DRAFT-1D1F7E380FD37BF6",
     "banner": "DRAFT - requires human review. Not saved, not sent, no ticket state changed.",
     "sections": [
       {
@@ -147,7 +147,7 @@
             "sources": [
               {
                 "kind": "contribution",
-                "source_id": "KNW-23FC6828E8D715E5",
+                "source_id": "KNW-71161D8DBFA04020",
                 "version": "0.1.0-proposed",
                 "locator": null
               }
@@ -165,7 +165,7 @@
             "sources": [
               {
                 "kind": "contribution",
-                "source_id": "TRB-79C4A7896B9821B9",
+                "source_id": "TRB-611517AAA97DF702",
                 "version": "0.1.0-proposed",
                 "locator": null
               }
@@ -208,7 +208,7 @@
               {
                 "kind": "policy_rule",
                 "source_id": "SYN-TS-POLICY",
-                "version": "0.1.1",
+                "version": "0.1.2",
                 "locator": "RR-01"
               }
             ],
@@ -221,7 +221,7 @@
               {
                 "kind": "policy_rule",
                 "source_id": "SYN-TS-POLICY",
-                "version": "0.1.1",
+                "version": "0.1.2",
                 "locator": "RR-02"
               }
             ],
@@ -234,7 +234,7 @@
               {
                 "kind": "policy_rule",
                 "source_id": "SYN-TS-POLICY",
-                "version": "0.1.1",
+                "version": "0.1.2",
                 "locator": "RR-03"
               }
             ],
@@ -247,7 +247,7 @@
               {
                 "kind": "policy_rule",
                 "source_id": "SYN-TS-POLICY",
-                "version": "0.1.1",
+                "version": "0.1.2",
                 "locator": "TS-SC-PRIVACY"
               }
             ],
@@ -259,7 +259,7 @@
             "sources": [
               {
                 "kind": "contribution",
-                "source_id": "KNW-23FC6828E8D715E5",
+                "source_id": "KNW-71161D8DBFA04020",
                 "version": "0.1.0-proposed",
                 "locator": null
               }
@@ -273,7 +273,7 @@
               {
                 "kind": "policy_rule",
                 "source_id": "SYN-TS-POLICY",
-                "version": "0.1.1",
+                "version": "0.1.2",
                 "locator": "TS-SC-PRIVACY"
               }
             ],
@@ -311,7 +311,7 @@
         ]
       }
     ],
-    "rendered_text": "DRAFT - requires human review. Not saved, not sent, no ticket state changed.\nCase SYN-CASE-0003 (version 1) | Run RUN-SYN-CASE-0003-1 | Policy SYN-SUPPORT-POLICY-0.1 | Draft DRAFT-5AD86EADE9B4D3CD\nPrepared 2026-11-03T15:00:00+00:00 by documentation-agent 0.2.1\n\nCase facts (verified)\n- reported_issue: Requester asked for data from other sites and a bulk password reset. [verified: SYN-CASE-0003.reported_issue v1]\n\nTriage proposal (pending staff confirmation)\n- Proposed category: policy_override_request (confidence low). [inference: Triage proposal TRI-2E0FB5958610EF0B; not confirmed by staff.]\n- Proposed urgency: high. [inference: Triage proposal TRI-2E0FB5958610EF0B; not confirmed by staff.]\n\nApproved guidance consulted\n- No approved guidance was used (weak_evidence). [unknown]\n\nSuggested Tier 1 steps (not performed)\n- No Tier 1 steps are suggested (restricted_action_requested, policy_stop_condition, knowledge_abstained). [unknown]\n\nActions taken (recorded by staff)\n- No staff-recorded actions were supplied; do not assume any step was performed. [unknown]\n\nStop conditions and escalation\n- Escalation proposal: escalate to the Support Lead; triggers: policy_override_attempt, cross_site_data_request. Reason: Stand-in: request seeks data outside the requester's site and bulk account changes. [inference: Escalation proposal ESC-395BD01414D8222E; a human decides.]\n- Escalation signal for review: bulk_account_action_requested. [inference: Restricted request rule RR-01 matched the case summary.]\n- Escalation signal for review: cross_site_data_request. [inference: Restricted request rule RR-02 matched the case summary.]\n- Escalation signal for review: policy_override_attempt. [inference: Restricted request rule RR-03 matched the case summary.]\n- Escalation signal for review: possible_privacy_incident. [inference: Stop condition TS-SC-PRIVACY matched the case summary.]\n- Escalation signal for review: insufficient_approved_evidence. [inference: Knowledge agent abstained: weak_evidence]\n- Stop condition applies: The case suggests exposure of another site's or a patient's data. Stop routine handling and escalate as a possible privacy incident. [inference: Deterministic pattern on case text; risk signal only.]\n\nUnverified or unresolved\n- Requested action not performed by the assistant: bulk_account_action. [unknown]\n- Requested action not performed by the assistant: export_cross_site_data. [unknown]\n- Requested action not performed by the assistant: policy_override. [unknown]\n- Requested action not performed by the assistant: reset_password. [unknown]\n"
+    "rendered_text": "DRAFT - requires human review. Not saved, not sent, no ticket state changed.\nCase SYN-CASE-0003 (version 1) | Run RUN-SYN-CASE-0003-1 | Policy SYN-SUPPORT-POLICY-0.1 | Draft DRAFT-1D1F7E380FD37BF6\nPrepared 2026-11-03T15:00:00+00:00 by documentation-agent 0.2.1\n\nCase facts (verified)\n- reported_issue: Requester asked for data from other sites and a bulk password reset. [verified: SYN-CASE-0003.reported_issue v1]\n\nTriage proposal (pending staff confirmation)\n- Proposed category: policy_override_request (confidence low). [inference: Triage proposal TRI-2E0FB5958610EF0B; not confirmed by staff.]\n- Proposed urgency: high. [inference: Triage proposal TRI-2E0FB5958610EF0B; not confirmed by staff.]\n\nApproved guidance consulted\n- No approved guidance was used (weak_evidence). [unknown]\n\nSuggested Tier 1 steps (not performed)\n- No Tier 1 steps are suggested (restricted_action_requested, policy_stop_condition, knowledge_abstained). [unknown]\n\nActions taken (recorded by staff)\n- No staff-recorded actions were supplied; do not assume any step was performed. [unknown]\n\nStop conditions and escalation\n- Escalation proposal: escalate to the Support Lead; triggers: policy_override_attempt, cross_site_data_request. Reason: Stand-in: request seeks data outside the requester's site and bulk account changes. [inference: Escalation proposal ESC-395BD01414D8222E; a human decides.]\n- Escalation signal for review: bulk_account_action_requested. [inference: Restricted request rule RR-01 matched the case summary.]\n- Escalation signal for review: cross_site_data_request. [inference: Restricted request rule RR-02 matched the case summary.]\n- Escalation signal for review: policy_override_attempt. [inference: Restricted request rule RR-03 matched the case summary.]\n- Escalation signal for review: possible_privacy_incident. [inference: Stop condition TS-SC-PRIVACY matched the case summary.]\n- Escalation signal for review: insufficient_approved_evidence. [inference: Knowledge agent abstained: weak_evidence]\n- Stop condition applies: The case suggests exposure of another site's or a patient's data. Stop routine handling and escalate as a possible privacy incident. [inference: Deterministic pattern on case text; risk signal only.]\n\nUnverified or unresolved\n- Requested action not performed by the assistant: bulk_account_action. [unknown]\n- Requested action not performed by the assistant: export_cross_site_data. [unknown]\n- Requested action not performed by the assistant: policy_override. [unknown]\n- Requested action not performed by the assistant: reset_password. [unknown]\n"
   },
   "manual_fallback": null,
   "privacy_findings": []

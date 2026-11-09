@@ -3,7 +3,7 @@
   "cases_sha256": "5e9f580562c77b61b26256625eae34529163dd91bb420969d11ef816246cf891",
   "evaluation_as_of": "2026-11-10",
   "source_set_version": "SRC-16191440094D",
-  "knowledge_agent_version": "0.2.0",
+  "knowledge_agent_version": "0.3.0",
   "source_map_problems": [],
   "verdicts": {
     "abstained_as_expected": 8,

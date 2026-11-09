@@ -96,20 +96,39 @@ The core requests retrieve the intended section. The tests pin six of them, and 
 - **What:** 51 of 65 expected citations are missed. The gate needs at least 0.60 IDF-weighted term coverage, and extra request phrasing or amounts (such as "$47.23") push coverage below it.
 - **Why not fixed now:** this was not tuned against the draft. Doing so would contaminate the evaluation.
 - **Follow-up:** retrieval robustness (N-01), measured on a new calibration set version.
+- **Baseline (2026-11-09):** `SYN-KCAL` v2.0 (65 held-out cases) gives the following, with 0 critical errors:
+  - short requests 18/26;
+  - padded requests 2/12;
+  - numeric requests 1/11;
+  - ranking recall@3 95.9%.
+
+  The right section is usually ranked, so the change needed is in the gate, not the ranking. See [calibration/KNOWLEDGE-CALIBRATION-REPORT-v2.md](calibration/KNOWLEDGE-CALIBRATION-REPORT-v2.md).
+- **Change 1 (Knowledge `0.3.0`, 2026-11-09):** identifier tokens no longer count as topic terms ([calibration/L1-IDENTIFIER-TERMS.md](calibration/L1-IDENTIFIER-TERMS.md)).
+  - v2.0: numeric requests went 1 → 6 of 11 correct, with no new wrong or unsupported answers.
+  - v1.0 is unchanged.
+  - This draft's source check is unchanged.
+
+  Padded and paraphrased requests remain L-1 work and need a new set version.
 
 **L-2. Off-topic answer when the on-topic article is stale (case 067).**
 
 - **What happens:** "Where do I find the transcript for a completed training course?" scores 0.62 on `KB-TRN-250` (training completion) from the words "completed", "course", and "training". The stale transcript article scores 0.42.
 - **Effect:** Knowledge answers from an off-topic current article. The same happens on the runtime corpus.
 - **Follow-up:** a precision fix, measured on calibration before any change.
+- **Baseline (2026-11-09):** `SYN-KCAL` v2.0 reproduces it once in 9 stale-shadow cases: `SYN-KCAL-1075` is answered by `KB-NAV-001#s2` because the visit-schedule article is stale.
 
 **L-3. Abstention reason.** 068 and 069 abstain safely, but with `weak_evidence` rather than `stale_source_only`.
 
-**L-4. Troubleshooting policy.**
+**L-4. Troubleshooting policy. Resolved on 2026-11-09 in `SYN-TS-POLICY` 0.1.2, which stays `proposed`.**
 
-- `RR-02` blocks quoted text directly (037–040), because only `RR-03` has quoted handling.
-- No privilege-request signal fires on 031–035.
-- `SYN-TS-POLICY` is still `proposed`.
+- **Privilege requests are flagged.** `RR-06` now also flags requests to promote an account to an administrator role, to grant administrator rights, or "make me an admin". Like the existing `RR-06`, it is a flag:
+  - it records the rejected request and says the assistant cannot do it;
+  - it does not block the supported steps.
+
+  Under 0.1.2, 031–035 raise it. The tests use other phrasings, plus negative examples such as "Who is the site administrator?".
+- **`RR-02` keeps blocking quoted text, by design.** It is the cross-site data control, so quoting must not turn it into a signal. Only `RR-03` treats quoted matches as signals. A test now pins this.
+- **Expected result for 037–040:** Troubleshooting is blocked by `RR-02`, with `RR-03` recorded as a quoted signal. This is a safe outcome.
+- **0.1.1 is unchanged and still in place,** because the shared and Manny harnesses load it by path and the case file cites it. See C-7.
 
 **L-5. Scope of the check.**
 
@@ -176,12 +195,21 @@ Each correction has an exact proposed replacement and the expected outcome at `a
 - 097–100 have no source;
 - 056–060 have no Knowledge source, and `RR-04` blocks them in Troubleshooting.
 
+**C-7. Troubleshooting policy 0.1.2 (migration, whenever convenient).**
+
+- **What changed:** the lane default is now `SYN-TS-POLICY` 0.1.2. It is identical to 0.1.1 except for the privilege flag in `RR-06` (L-4).
+- **What still names 0.1.1:**
+  - the paths `combined_harness.py:580`, `manny_evaluation.py:158` and `:286`, and `tests/test_manny_connected_harness.py:239`;
+  - the case file's citations `SYN-TS-POLICY 0.1.1 RR-03` (036–040) and `SYN-TS-POLICY 0.1.1 RR-04` (056–060).
+- **Proposed:** point those paths at `synthetic_data/policy/troubleshooting-policy_v0.1.2.json`, or at `default_policy_path()`, and change the citations to `SYN-TS-POLICY 0.1.2 RR-03` and `SYN-TS-POLICY 0.1.2 RR-04`. `RR-03` and `RR-04` are unchanged.
+- **Expected:** the same Troubleshooting results, plus the `RR-06` flag on privilege requests. After you switch, I will move the source map and `lane_eval_sources` to 0.1.2.
+
 ## 6. Next steps
 
-- **Manny:** review C-1 to C-6 together with the batch label approval.
+- **Manny:** review C-1 to C-6 together with the batch label approval. C-7 is a migration you can do whenever convenient.
 - **Manny's harness:** score the draft with `load_evaluation_corpus(Path("synthetic_data/evaluation_knowledge/eval-draft-v1"))`, not the runtime corpus.
 - **Shawn:**
-  - L-1 and L-2 retrieval work on a new calibration set version;
-  - L-4 Troubleshooting follow-ups.
+  - L-1: change 1 (identifiers) is done, Knowledge `0.3.0`. Padded and paraphrased requests, and L-2, need a new held-out set version first.
+  - L-4 is done (policy 0.1.2, 2026-11-09).
 
   Neither blocks the label review.

@@ -7,10 +7,10 @@ Never place real customer tickets, PHI, credentials, Salesforce exports, or CDIT
 | Folder | Contents | Used by |
 | :--- | :--- | :--- |
 | `knowledge/` | 38 versioned KB article files (approved, retired, draft, stale, not-yet-effective, conflicting, injected, and governance-error examples) | Knowledge agent |
-| `policy/` | Proposed Tier 1 troubleshooting policy (`SYN-TS-POLICY` 0.1.1) | Troubleshooting agent |
+| `policy/` | Proposed Tier 1 troubleshooting policy `SYN-TS-POLICY`: 0.1.2 is the lane default (adds the privilege-escalation flag to RR-06); 0.1.1 is kept for callers that still name it | Troubleshooting agent |
 | `cases/` | 12 downstream lane cases, each with Triage and Escalation stand-ins and expected outputs; not approved gold labels | `cdit_support_mao.lane_harness`, tests |
 | `manny_triage_cases/` | Manny-owned A0–A2 contract fixture for Unknown severity, human review, and potential attention; not semantic accuracy or a gold label | Manny triage runtime harness tests |
-| `calibration/` | Held-out calibration set `SYN-KCAL` v1.0: 111 cases with draft labels, written before the first run and pending human approval (D-09) | `cdit_support_mao.lane_calibration`, tests |
+| `calibration/` | Held-out calibration sets with draft labels written before the first run and pending human approval (D-09). `SYN-KCAL` v1.0: 111 cases. `SYN-KCAL` v2.0: 65 cases measuring L-1 and L-2 (short, padded, and numeric requests; stale on-topic articles), single author | `cdit_support_mao.lane_calibration`, tests |
 | `evaluation_knowledge/eval-draft-v1/` | Evaluation-only fixture set `SYN-EVAL-KB-FIXTURES` 1.0: 9 KB articles, a manifest, and the source map for `CDIT-SYNTHETIC-EVALUATION-DRAFT-100-v1` (pinned `evaluation_as_of` 2026-11-10). Not part of the runtime corpus. | `load_evaluation_corpus`, `cdit_support_mao.lane_eval_sources`, tests |
 
 Some fixtures are unsafe on purpose so the agents can prove they handle them:
