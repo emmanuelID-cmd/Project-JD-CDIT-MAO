@@ -52,7 +52,9 @@ from cdit_support_mao.contracts.handoffs import (
 )
 
 AGENT_NAME = "knowledge-agent"
-AGENT_VERSION = "0.2.0"
+# 0.3.0 (2026-11-09, L-1): query tokens that contain a digit are case identifiers and no
+# longer count as topic terms in the relevance gate. Cut-offs are unchanged (D-08).
+AGENT_VERSION = "0.3.0"
 MAX_PASSAGES = 3
 MIN_MATCHED_TERMS = 2
 

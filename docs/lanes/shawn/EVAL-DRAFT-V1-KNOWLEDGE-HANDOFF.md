@@ -103,6 +103,12 @@ The core requests retrieve the intended section. The tests pin six of them, and 
   - ranking recall@3 95.9%.
 
   The right section is usually ranked, so the change needed is in the gate, not the ranking. See [calibration/KNOWLEDGE-CALIBRATION-REPORT-v2.md](calibration/KNOWLEDGE-CALIBRATION-REPORT-v2.md).
+- **Change 1 (Knowledge `0.3.0`, 2026-11-09):** identifier tokens no longer count as topic terms ([calibration/L1-IDENTIFIER-TERMS.md](calibration/L1-IDENTIFIER-TERMS.md)).
+  - v2.0: numeric requests went 1 → 6 of 11 correct, with no new wrong or unsupported answers.
+  - v1.0 is unchanged.
+  - This draft's source check is unchanged.
+
+  Padded and paraphrased requests remain L-1 work and need a new set version.
 
 **L-2. Off-topic answer when the on-topic article is stale (case 067).**
 
@@ -203,7 +209,7 @@ Each correction has an exact proposed replacement and the expected outcome at `a
 - **Manny:** review C-1 to C-6 together with the batch label approval. C-7 is a migration you can do whenever convenient.
 - **Manny's harness:** score the draft with `load_evaluation_corpus(Path("synthetic_data/evaluation_knowledge/eval-draft-v1"))`, not the runtime corpus.
 - **Shawn:**
-  - L-1 and L-2: the baseline is recorded in `SYN-KCAL` v2.0. Next is one retrieval change, measured against it.
+  - L-1: change 1 (identifiers) is done, Knowledge `0.3.0`. Padded and paraphrased requests, and L-2, need a new held-out set version first.
   - L-4 is done (policy 0.1.2, 2026-11-09).
 
   Neither blocks the label review.

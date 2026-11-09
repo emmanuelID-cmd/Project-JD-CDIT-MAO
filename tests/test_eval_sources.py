@@ -265,7 +265,7 @@ def _mini_cases(tmp_path: Path) -> Path:
         case("SYN-EVAL-903", "stale", [item("SYN-EVAL-903", 1,
              "How can I download my training transcript?", "How-to")], ["KB-TRN-360#s1 v1.0"]),
         case("SYN-EVAL-904", "no-dispatch", [item("SYN-EVAL-904", 1,
-             "My last pay appears short by $47.23 compared with the hours I entered.", "Pay")],
+             "My last payslip seems lower than my timesheet suggests.", "Pay")],
              ["KB-PAY-410#s1 v1.0"], dispatch=False),
         case("SYN-EVAL-905", "policy", [item("SYN-EVAL-905", 1,
              "Should I change a medication dose?", "Wellbeing")], ["SYN-TS-POLICY 0.1.1 RR-04"]),

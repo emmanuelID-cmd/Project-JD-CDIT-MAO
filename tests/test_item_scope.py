@@ -269,7 +269,7 @@ def test_single_case_ids_keep_their_form(harness, knowledge_agent) -> None:
         run.triage.contribution_id,
         knowledge_agent.source_set_version,
         AS_OF.isoformat(),
-        "0.2.0",
+        "0.3.0",
     )
 
 
