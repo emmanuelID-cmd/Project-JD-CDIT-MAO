@@ -96,12 +96,20 @@ The core requests retrieve the intended section. The tests pin six of them, and 
 - **What:** 51 of 65 expected citations are missed. The gate needs at least 0.60 IDF-weighted term coverage, and extra request phrasing or amounts (such as "$47.23") push coverage below it.
 - **Why not fixed now:** this was not tuned against the draft. Doing so would contaminate the evaluation.
 - **Follow-up:** retrieval robustness (N-01), measured on a new calibration set version.
+- **Baseline (2026-11-09):** `SYN-KCAL` v2.0 (65 held-out cases) gives the following, with 0 critical errors:
+  - short requests 18/26;
+  - padded requests 2/12;
+  - numeric requests 1/11;
+  - ranking recall@3 95.9%.
+
+  The right section is usually ranked, so the change needed is in the gate, not the ranking. See [calibration/KNOWLEDGE-CALIBRATION-REPORT-v2.md](calibration/KNOWLEDGE-CALIBRATION-REPORT-v2.md).
 
 **L-2. Off-topic answer when the on-topic article is stale (case 067).**
 
 - **What happens:** "Where do I find the transcript for a completed training course?" scores 0.62 on `KB-TRN-250` (training completion) from the words "completed", "course", and "training". The stale transcript article scores 0.42.
 - **Effect:** Knowledge answers from an off-topic current article. The same happens on the runtime corpus.
 - **Follow-up:** a precision fix, measured on calibration before any change.
+- **Baseline (2026-11-09):** `SYN-KCAL` v2.0 reproduces it once in 9 stale-shadow cases: `SYN-KCAL-1075` is answered by `KB-NAV-001#s2` because the visit-schedule article is stale.
 
 **L-3. Abstention reason.** 068 and 069 abstain safely, but with `weak_evidence` rather than `stale_source_only`.
 
@@ -195,7 +203,7 @@ Each correction has an exact proposed replacement and the expected outcome at `a
 - **Manny:** review C-1 to C-6 together with the batch label approval. C-7 is a migration you can do whenever convenient.
 - **Manny's harness:** score the draft with `load_evaluation_corpus(Path("synthetic_data/evaluation_knowledge/eval-draft-v1"))`, not the runtime corpus.
 - **Shawn:**
-  - L-1 and L-2 retrieval work on a new calibration set version.
+  - L-1 and L-2: the baseline is recorded in `SYN-KCAL` v2.0. Next is one retrieval change, measured against it.
   - L-4 is done (policy 0.1.2, 2026-11-09).
 
   Neither blocks the label review.
