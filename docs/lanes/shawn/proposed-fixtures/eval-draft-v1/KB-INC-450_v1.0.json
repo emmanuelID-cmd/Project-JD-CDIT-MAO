@@ -1,0 +1,58 @@
+{
+  "doc_id": "KB-INC-450",
+  "version": "1.0",
+  "title": "Many users at one site cannot work",
+  "topic": "multi_user_outage",
+  "product_area": "incident",
+  "status": "approved",
+  "data_classification": "synthetic",
+  "owner": "Synthetic Knowledge Owner",
+  "effective_date": "2026-11-09",
+  "review_due": "2027-11-09",
+  "keywords": [
+    "outage",
+    "site",
+    "many users",
+    "work queue",
+    "blocked",
+    "cannot open"
+  ],
+  "sections": [
+    {
+      "section_id": "s1",
+      "heading": "Several users at one site cannot open the same feature",
+      "text": "When many users at one site cannot open the same feature, treat the report as a possible service outage. Tier 1 staff collect the details below and send the report to the human incident path. Tier 1 staff do not run single-user troubleshooting steps or promise a fix time. The Auditor decides the urgency.",
+      "steps": [
+        {
+          "step_id": "st1",
+          "action_type": "collect_information",
+          "text": "Record the site, the feature that will not open, how many users are affected, when it started, and the exact error message, without patient or subject details."
+        }
+      ],
+      "information_needed": [
+        {
+          "field": "site_id",
+          "prompt": "Synthetic site identifier where users are affected."
+        },
+        {
+          "field": "affected_feature",
+          "prompt": "The feature or screen that will not open."
+        },
+        {
+          "field": "affected_user_count",
+          "prompt": "How many users are affected, as reported."
+        },
+        {
+          "field": "start_time",
+          "prompt": "When the problem started, as reported."
+        }
+      ],
+      "stop_conditions": [
+        {
+          "condition_id": "KB-INC-450-SC1",
+          "text": "Send the report to the human incident path. Do not handle it as a routine single-user request."
+        }
+      ]
+    }
+  ]
+}
