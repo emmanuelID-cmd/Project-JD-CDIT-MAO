@@ -1,6 +1,6 @@
 # Phase 3 — Escalation (Manny)
 
-**Status (2026-11-08):** A5 implementation and connected synthetic integration checks are complete. The combined harness exercises Auditor-resolved item handoff through Knowledge, Troubleshooting, Escalation, and Documentation; same-item provenance and High/P1 escalation are covered. Focused connected integration tests: 58 passed; full Python suite: 686 passed. Final checklist review remains separate from test success. The local Staff/Admin Auditor interface is implemented in the app/database workstream; manual browser/accessibility review and assigned-case permission coverage remain open.
+**Status (2026-11-08):** A5 implementation and connected synthetic integration checks are complete. The combined harness exercises Auditor-resolved item handoff through Knowledge, Troubleshooting, Escalation, and Documentation; same-item provenance and High/P1 escalation are covered. Focused connected integration tests: 58 passed; full Python suite: 689 passed after the case-assignment change. Final checklist review remains separate from test success. The local Staff/Admin Auditor interface and assigned-case permission coverage are implemented; manual browser/accessibility review remains open.
 
 ## Implementation evidence — 2026-11-05
 
@@ -28,7 +28,7 @@
 
 ## Handoff and exit evidence
 
-The connected harness now verifies the item-scoped A2-to-A5 handoff through the accepted A3/A4 path. Human disposition remains human-authored and propose-only; the harness's Auditor fixture is synthetic test data, while the local Staff/Admin app provides the decision form and append-only decision history. No customer communication, third-party dispatch, external write, second-reviewer agent, or case status change is enabled. Per-case assignment is not modeled, so that PRD condition is not claimed as tested.
+The connected harness now verifies the item-scoped A2-to-A5 handoff through the accepted A3/A4 path. Human disposition remains human-authored and propose-only; the harness's Auditor fixture is synthetic test data, while the local Staff/Admin app provides the decision form and append-only decision history. The local app restricts Staff actions to assigned cases and records Admin assignment/override actions. No customer communication, third-party dispatch, external write, second-reviewer agent, or agent-originated case status change is enabled.
 
 ## Boundaries
 

@@ -1,10 +1,10 @@
 # Phase 2 — Triage (Manny)
 
-**Status (2026-11-08):** The connected A0–A3 linked-item path and synthetic Auditor-resume path through A6 are implemented and pass focused integration tests (58 passed). PR #15 merged S-1.1; Manny's connector carries item-level attention-check results and taxonomy provenance. The local Staff/Admin Auditor interface and append-only decision history exist. Phase 2 exit remains open pending Manny's approval of the 100-case draft labels before scoring and resolution of the assigned-case permission gap. The 2026-11-06 live smoke call remains an unscored safe abstention; no new model call was made in this turn. Benchmarks are suggestions, not guarantees. Operational SLA/routing policy remains open under D-01.
+**Status (2026-11-08):** The connected A0–A3 linked-item path and synthetic Auditor-resume path through A6 are implemented and pass focused integration tests (58 passed). PR #15 merged S-1.1; Manny's connector carries item-level attention-check results and taxonomy provenance. The local Staff/Admin Auditor interface, append-only decision history, and assigned-case authorization are implemented. Phase 2 exit remains open pending Manny's approval of the 100-case draft labels and the subsequent scoring run. The 2026-11-06 live smoke call remains an unscored safe abstention; no new model call was made in this turn. Benchmarks are suggestions, not guarantees. Operational SLA/routing policy remains open under D-01.
 
 ## Ordered exit checklist
 
-See [`EXIT-CHECKLIST.md`](./EXIT-CHECKLIST.md) for the dependency-ordered remaining gates, owners, direct decisions, and cumulative readiness forecasts. Current qualitative estimate is 95% Phase 2 exit readiness; only scoring-related gates and the assigned-case permission condition remain open. Earlier 70–75% scaffold / 45–50% and 85% readiness estimates are historical.
+See [`EXIT-CHECKLIST.md`](./EXIT-CHECKLIST.md) for the dependency-ordered remaining gates, owners, direct decisions, and cumulative readiness forecasts. The prior 95% Phase 2 exit-readiness estimate remains a planning estimate; the assigned-case permission requirement is implemented, while label approval and scored evaluation remain open. Earlier 70–75% scaffold / 45–50% and 85% readiness estimates are historical.
 
 ## Connected Sonnet 5.5 smoke call — 2026-11-06
 

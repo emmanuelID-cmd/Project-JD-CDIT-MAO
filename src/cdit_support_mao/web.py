@@ -105,6 +105,11 @@ class CaseEditPayload(BaseModel):
     request_text: str | None = Field(default=None, min_length=1, max_length=12000)
 
 
+class CaseAssignmentPayload(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+    staff_account_id: str | None = Field(default=None, min_length=3, max_length=64)
+
+
 class StatusUpdatePayload(BaseModel):
     status: Literal[
         "submitted", "in_progress", "waiting_on_customer", "under_investigation",
@@ -129,6 +134,7 @@ class AuditorDecisionPayload(BaseModel):
     destination: str = Field(min_length=1, max_length=120)
     rationale: str = Field(min_length=1, max_length=2000)
     evidence: str = Field(min_length=1, max_length=2000)
+    admin_override_reason: str | None = Field(default=None, min_length=1, max_length=500)
     conditions: list[str] = Field(default_factory=list, max_length=20)
     exceptions: list[str] = Field(default_factory=list, max_length=20)
 
@@ -148,6 +154,8 @@ class AuditorDecisionPayload(BaseModel):
             setattr(self, field, value)
         self.conditions = [item.strip() for item in self.conditions]
         self.exceptions = [item.strip() for item in self.exceptions]
+        if self.admin_override_reason is not None:
+            self.admin_override_reason = self.admin_override_reason.strip() or None
         return self
 
 
@@ -361,6 +369,9 @@ def _case_change_event(
 
 def _case_for_role(row: sqlite3.Row, role: str) -> dict:
     result = dict(row)
+    if role == "user":
+        result.pop("assigned_staff_account_id", None)
+        result.pop("assigned_staff_username", None)
     result["display_status"] = (
         "in_review" if role == "user" and result["status"] == "in_progress" else result["status"]
     )
@@ -382,13 +393,21 @@ def _case_for_role(row: sqlite3.Row, role: str) -> dict:
 def list_cases(actor: Actor = Depends(require_roles("user", "staff", "admin"))):
     query = """SELECT c.case_id, c.owner_account_id, c.subject, c.request_text, c.status,
                       c.urgency_band, c.created_at, c.updated_at, c.record_kind, c.category,
-                      c.catalog_id, c.closure_reason, cat.rationale AS catalog_rationale
+                      c.catalog_id, c.closure_reason, c.assigned_staff_account_id,
+                      assigned.username AS assigned_staff_username,
+                      cat.rationale AS catalog_rationale
                FROM synthetic_cases c
-               LEFT JOIN synthetic_case_catalog cat ON cat.catalog_id = c.catalog_id"""
+               LEFT JOIN synthetic_case_catalog cat ON cat.catalog_id = c.catalog_id
+               LEFT JOIN synthetic_accounts assigned ON assigned.account_id = c.assigned_staff_account_id"""
     with connect() as db:
         if actor.role == "user":
             rows = db.execute(
                 query + " WHERE c.owner_account_id = ? AND c.record_kind = 'user_request' ORDER BY c.updated_at DESC",
+                (actor.account_id,),
+            ).fetchall()
+        elif actor.role == "staff":
+            rows = db.execute(
+                query + " WHERE c.assigned_staff_account_id = ? ORDER BY c.updated_at DESC",
                 (actor.account_id,),
             ).fetchall()
         else:
@@ -408,16 +427,20 @@ def auditor_taxonomy(actor: Actor = Depends(require_roles("staff", "admin"))):
 
 @router.get("/api/auditor/decisions")
 def list_auditor_decisions(actor: Actor = Depends(require_roles("staff", "admin"))):
-    """List append-only synthetic decision history for the existing Staff/Admin queue."""
+    """List decision history visible to the assigned Staff member or Admin."""
     with connect() as db:
         rows = db.execute(
-            """SELECT decision_id, case_id, item_id, decision_version, item_index, item_count,
-                      case_version, source_id, source_version, source_start, source_end,
-                      source_digest_sha256, policy_version, category, urgency_band, destination,
-                      rationale, evidence, conditions_json, exceptions_json, reviewer_account_id,
-                      recorded_at
-               FROM synthetic_auditor_decisions
-               ORDER BY recorded_at DESC, decision_id"""
+            """SELECT d.decision_id, d.case_id, d.item_id, d.decision_version,
+                      d.item_index, d.item_count, d.case_version, d.source_id,
+                      d.source_version, d.source_start, d.source_end, d.source_digest_sha256,
+                      d.policy_version, d.category, d.urgency_band, d.destination,
+                      d.rationale, d.evidence, d.conditions_json, d.exceptions_json,
+                      d.reviewer_account_id, d.recorded_at, d.admin_override_reason
+               FROM synthetic_auditor_decisions d
+               JOIN synthetic_cases c ON c.case_id = d.case_id
+               WHERE (? = 'admin' OR c.assigned_staff_account_id = ?)
+               ORDER BY d.recorded_at DESC, d.decision_id""",
+            (actor.role, actor.account_id),
         ).fetchall()
     result = []
     for row in rows:
@@ -436,11 +459,15 @@ def record_auditor_decision(
     """Record a human item-level routing decision without changing the ticket."""
     now = stamp(now_utc())
     decision_id = "AUD-" + uuid.uuid4().hex
+    if actor.role == "admin" and not payload.admin_override_reason:
+        raise HTTPException(status_code=422, detail="Admin decisions require an override reason")
+    if actor.role == "staff" and payload.admin_override_reason is not None:
+        raise HTTPException(status_code=422, detail="Only Admin may record an override reason")
     with connect() as db:
         db.execute("BEGIN IMMEDIATE")
         case = db.execute(
-            "SELECT request_text, updated_at, is_synthetic FROM synthetic_cases WHERE case_id = ?",
-            (case_id,),
+            "SELECT request_text, updated_at, is_synthetic FROM synthetic_cases WHERE case_id = ? AND (? = 'admin' OR assigned_staff_account_id = ?)",
+            (case_id, actor.role, actor.account_id),
         ).fetchone()
         if case is None or case["is_synthetic"] != 1:
             db.rollback()
@@ -475,9 +502,9 @@ def record_auditor_decision(
                (decision_id, case_id, item_id, decision_version, item_index, item_count,
                 case_version, source_id, source_version, source_start, source_end,
                 source_digest_sha256, policy_version, category, urgency_band, destination,
-                rationale, evidence, conditions_json, exceptions_json, reviewer_account_id,
-                recorded_at, is_synthetic)
-               VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 1)""",
+                 rationale, evidence, conditions_json, exceptions_json, reviewer_account_id,
+                 admin_override_reason, recorded_at, is_synthetic)
+               VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 1)""",
             (
                 decision_id, case_id, payload.item_id, previous + 1, payload.item_index,
                 payload.item_count, case["updated_at"], payload.source_id, payload.source_version,
@@ -485,13 +512,14 @@ def record_auditor_decision(
                 payload.category, payload.urgency_band, payload.destination, payload.rationale,
                 payload.evidence, json.dumps(payload.conditions, ensure_ascii=False, separators=(",", ":")),
                 json.dumps(payload.exceptions, ensure_ascii=False, separators=(",", ":")),
-                actor.account_id, now,
+                actor.account_id, payload.admin_override_reason, now,
             ),
         )
         db.commit()
     return {
         "decision_id": decision_id, "case_id": case_id, "item_id": payload.item_id,
         "decision_version": previous + 1, "reviewer_account_id": actor.account_id,
+        "admin_override_reason": payload.admin_override_reason,
         "recorded_at": now, "ticket_changed": False,
     }
 
@@ -531,12 +559,22 @@ def get_case(case_id: str, actor: Actor = Depends(require_roles("user", "staff",
                    WHERE c.case_id = ? AND c.owner_account_id = ? AND c.record_kind = 'user_request'""",
                 (case_id, actor.account_id),
             ).fetchone()
-        else:
+        elif actor.role == "admin":
             row = db.execute(
                 """SELECT c.*, cat.rationale AS catalog_rationale FROM synthetic_cases c
                    LEFT JOIN synthetic_case_catalog cat ON cat.catalog_id = c.catalog_id
                    WHERE c.case_id = ?""",
                 (case_id,),
+            ).fetchone()
+        else:
+            row = db.execute(
+                """SELECT c.*, cat.rationale AS catalog_rationale,
+                          assigned.username AS assigned_staff_username
+                   FROM synthetic_cases c
+                   LEFT JOIN synthetic_case_catalog cat ON cat.catalog_id = c.catalog_id
+                   LEFT JOIN synthetic_accounts assigned ON assigned.account_id = c.assigned_staff_account_id
+                   WHERE c.case_id = ? AND c.assigned_staff_account_id = ?""",
+                (case_id, actor.account_id),
             ).fetchone()
     if row is None:
         raise HTTPException(status_code=404, detail="Case not found")
@@ -558,10 +596,14 @@ def edit_case(case_id: str, payload: CaseEditPayload, actor: Actor = Depends(req
         db.execute("BEGIN IMMEDIATE")
         row = db.execute(
             """SELECT status, record_kind, subject, request_text FROM synthetic_cases
-               WHERE case_id = ? AND (? <> 'user' OR owner_account_id = ?)""",
-            (case_id, actor.role, actor.account_id),
+               WHERE case_id = ? AND (
+                 ? = 'admin'
+                 OR (? = 'staff' AND assigned_staff_account_id = ?)
+                 OR (? = 'user' AND owner_account_id = ? AND record_kind = 'user_request')
+               )""",
+            (case_id, actor.role, actor.role, actor.account_id, actor.role, actor.account_id),
         ).fetchone()
-        if row is None or (actor.role == "user" and row["record_kind"] != "user_request"):
+        if row is None:
             db.rollback()
             raise HTTPException(status_code=404, detail="Case not found")
         if actor.role == "user" and row["status"] != "submitted":
@@ -625,7 +667,11 @@ def update_case_status(
 ):
     with connect() as db:
         db.execute("BEGIN IMMEDIATE")
-        row = db.execute("SELECT status FROM synthetic_cases WHERE case_id = ?", (case_id,)).fetchone()
+        row = db.execute(
+            """SELECT status FROM synthetic_cases
+               WHERE case_id = ? AND (? = 'admin' OR assigned_staff_account_id = ?)""",
+            (case_id, actor.role, actor.account_id),
+        ).fetchone()
         if row is None:
             db.rollback()
             raise HTTPException(status_code=404, detail="Case not found")
@@ -653,6 +699,72 @@ def update_case_status(
         )
         db.commit()
     return {"case_id": case_id, "status": after, "changed": True}
+
+
+@router.patch("/api/admin/cases/{case_id}/assignment")
+def assign_case(
+    case_id: str, payload: CaseAssignmentPayload,
+    actor: Actor = Depends(require_roles("admin")),
+):
+    """Assign or unassign a synthetic case and append an Admin-attributed event."""
+    now = stamp(now_utc())
+    event_id = "CASE-ASG-" + uuid.uuid4().hex
+    with connect() as db:
+        db.execute("BEGIN IMMEDIATE")
+        case = db.execute(
+            "SELECT assigned_staff_account_id FROM synthetic_cases WHERE case_id = ? AND is_synthetic = 1",
+            (case_id,),
+        ).fetchone()
+        if case is None:
+            db.rollback()
+            raise HTTPException(status_code=404, detail="Synthetic case not found")
+        previous = case["assigned_staff_account_id"]
+        new_assignee = payload.staff_account_id
+        if new_assignee == previous:
+            db.rollback()
+            return {"case_id": case_id, "staff_account_id": previous, "changed": False}
+        if new_assignee is not None:
+            account = db.execute(
+                "SELECT role, status FROM synthetic_accounts WHERE account_id = ?",
+                (new_assignee,),
+            ).fetchone()
+            if account is None or account["role"] != "staff" or account["status"] != "active":
+                db.rollback()
+                raise HTTPException(status_code=422, detail="Choose an active Staff account")
+        action = "unassigned" if new_assignee is None else "reassigned" if previous else "assigned"
+        db.execute(
+            "UPDATE synthetic_cases SET assigned_staff_account_id = ? WHERE case_id = ?",
+            (new_assignee, case_id),
+        )
+        db.execute(
+            """INSERT INTO synthetic_case_assignment_events
+               (event_id, case_id, actor_account_id, previous_staff_account_id,
+                assigned_staff_account_id, action, occurred_at)
+               VALUES (?, ?, ?, ?, ?, ?, ?)""",
+            (event_id, case_id, actor.account_id,
+             previous, new_assignee, action, now),
+        )
+        db.commit()
+    return {"event_id": event_id, "case_id": case_id, "staff_account_id": new_assignee, "changed": True, "action": action}
+
+
+@router.get("/api/admin/case-assignment-events")
+def list_case_assignment_events(actor: Actor = Depends(require_roles("admin"))):
+    with connect() as db:
+        rows = db.execute(
+            """SELECT e.event_id, e.case_id, e.actor_account_id,
+                      actor.username AS actor_username, e.previous_staff_account_id,
+                      previous.username AS previous_staff_username,
+                      e.assigned_staff_account_id, assigned.username AS assigned_staff_username,
+                      e.action, e.occurred_at
+               FROM synthetic_case_assignment_events e
+               LEFT JOIN synthetic_accounts actor ON actor.account_id = e.actor_account_id
+               LEFT JOIN synthetic_accounts previous ON previous.account_id = e.previous_staff_account_id
+               LEFT JOIN synthetic_accounts assigned ON assigned.account_id = e.assigned_staff_account_id
+               ORDER BY e.occurred_at DESC, e.event_id"""
+        ).fetchall()
+    return [dict(row) for row in rows]
+
 
 @router.get("/api/admin/accounts")
 def list_accounts(actor: Actor = Depends(require_roles("admin"))):

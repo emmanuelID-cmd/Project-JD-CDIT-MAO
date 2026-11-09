@@ -4,27 +4,29 @@ Use this checklist as the live project status record. Check an item only when it
 
 **Current phase:** Manny Phase 2 connected Triage path implemented; exit remains open pending label approval and scored evaluation. Phase 3 integration and Shared workflow harness are implemented and validated on synthetic fixtures. PRD-v4 is the current requirements source.
 **Planning deadline:** November 11, 2026
-**Current implementation status (2026-11-08):** SQLite foundation, local synthetic User/Staff/Admin authentication, role routes/previews, and a Staff/Admin Auditor decision form with append-only synthetic decision history are implemented. Full Python suite: 686 passed; evaluation-draft checks: 5 passed; JavaScript syntax and `git diff --check` pass. Manual browser/accessibility review remains open. These checks do not approve the draft evaluation labels or close Phase 2/4 scoring gates.
-**Current case-lifecycle update:** All 80 catalog examples are in the local DB as Staff/Admin-only development records. User view remains scoped to their own requests; agent writes remain disabled. Browser/accessibility review remains open.
+**Current implementation status (2026-11-08):** SQLite foundation, local synthetic User/Staff/Admin authentication, role routes/previews, Staff/Admin Auditor review, and case-assignment authorization are implemented. Full Python suite: 689 passed; evaluation-draft validator: 5 passed; focused assignment/auth/auditor/lifecycle tests: 23 passed; JavaScript syntax and `git diff --check` pass. Manual browser/accessibility review remains open. Engineering checks do not approve the draft evaluation labels or close Phase 2/4 scoring gates.
+**Current case-lifecycle update:** Seeded demo cases are assigned to `SYN-STAFF-001`; new User requests remain unassigned until Admin assigns them. Staff case access is restricted server-side to assigned cases; Admin sees all and can assign/reassign. User view remains scoped to the requester's own requests; agent writes remain disabled. Browser/accessibility review remains open.
 **Antigravity provenance:** The project lead confirms Antigravity only merged PR #6; all other completion/work claims in its handoff are false. Existing repository artifacts are tracked separately and are not attributed to Antigravity.
 **Completion status:** In progress; do not claim project completion or begin release workflow.
 
 ## Current phase evidence — 2026-11-08
 
 - Manny's linked-item connector now carries S-1.1 attention-check states and the item's taxonomy source. Shawn's S-1.1 contract change is merged in PR #15. The combined synthetic harness resumes Auditor-reviewed items through Knowledge, Troubleshooting, Escalation (A5), and Documentation (A6); Unknown/ambiguous items and stale inputs fail closed.
-- Phase 2/3/shared integration checks: 58 focused tests passed across the combined workflow, escalation, connected Triage, and Knowledge receiver suites. The full Python suite passed 686 tests.
+- Phase 2/3/shared integration checks: 58 focused tests passed across the combined workflow, escalation, connected Triage, and Knowledge receiver suites. The latest full Python suite passed 689 tests.
 - Phase 4 has a 100-case synthetic evaluation draft. Cases remain `DRAFT_NOT_APPROVED` and unscored. Manny is the single label author/reviewer/approver for this synthetic assignment; Manny must review and approve the labels and source expectations before scoring. No independent peer review or evaluator agent is claimed.
-- The local Auditor interface reuses Staff/Admin access. The app has no per-case assignment model, while PRD-v4 describes Auditor access as subject to assigned-case permissions. This permission detail remains unverified; the current implementation does not add assignment functionality or claim assigned-case enforcement.
+- The Auditor interface reuses Staff/Admin access with case-level authorization: Staff may access only assigned cases, while Admin can see and assign all cases. Assignment/reassignment actor, prior/new assignee, and timestamp are recorded; Admin Auditor decisions require a reason. Focused tests cover role denial and reassignment visibility. Manual browser/accessibility review remains open.
 - No new decision is needed to retain the current synthetic/propose-only behavior. The remaining direct user decision is approval of the 100-case draft labels before scoring; manual browser/accessibility review is also pending.
 
 ## Shared project baseline
 
 - [x] PRD-v4 defines the authenticated local User/Staff/Admin app, SQLite foundation, minimal Product Health metadata, and separate unauthenticated role showcase.
-- [x] Local SQL planning branch `manny/sql-foundation` created from Manny lane commit `a363724`; SQL and connected Manny branches currently share the same commit, with no unique branch commits created.
+- [x] Local SQL planning branch `manny/sql-foundation` created from Manny lane commit `a363724`; SQL and connected Manny branches are locally aligned at `4486a02` before this assignment feature, with no unique branch commits created.
 - [x] Implement initial SQLite v1 migration for synthetic accounts, sessions, cases, app-only Product Health events/summaries, Admin access audit events, and session extension alerts; include constraints, indexes, checksum migration tracking, seed/reset, and retention purge. Cross-agent workflow/evaluation persistence remains separate pending boundary review.
 - [x] Implement local synthetic authentication and server-side User/Staff/Admin authorization under Manny; verify direct page/API denial and Admin audit events. Approved session and retention rules are specified in PRD-v4.
 - [x] Build the separate three-view no-login showcase using fabricated static data and inert privileged controls.
 - [x] Seed and show all 80 CASE-SCENARIOS entries as Staff/Admin-only development examples, kept separate from User requests and gold evaluation labels; API role visibility checks pass.
+- [x] Verify Staff edits/status/Auditor decisions are limited to assigned cases; Admin can see all and assign/reassign/unassign only to active Staff; assignment events record actor, old/new assignee, and timestamp; requester ownership remains separate. Assignment API tests pass.
+- [x] Verify Admin override reason is required and stored for Admin Auditor decisions; Staff cannot submit an override reason.
 - [x] Verify Staff/Admin human edits and allowed status changes are audited with bounded metadata; verify User own-request edit only while Submitted, In Progress display as In Review, post-transition edit denial, and unresolved cancellation; lifecycle API tests pass.
 - [x] Confirm agent authority remains read-only while Staff/Admin human case management is enabled; [ ] manual browser/accessibility review remains open.
 - [x] Verify auth/API boundaries, user case scoping, Admin audit and session controls, SQL parameter handling, and static preview isolation in focused synthetic tests. Product Health schema remains bounded and existing database tests cover retention and prohibited fields.
@@ -102,7 +104,7 @@ Use this checklist as the live project status record. Check an item only when it
 
 - [x] EscalationAgent implementation and focused tests exist. Unknown urgency routes to human Auditor review without assigning a band; attention evidence is preserved only after live A1 registry validation, with pattern ID/span provenance; a verified current Under Investigation fact remains human-managed, with no autonomous status change or third-party contact and P1 precedence preserved. Focused suite: 29 passed; full Python 3.13.15 suite: 615 passed. Integrated Phase 3 acceptance remains open.
 - [x] Bind A5 recorded-action evidence to the current synthetic case/version before it can be labeled verified; preserve source references on unresolved questions. This does not establish production authentication or replace Shared review.
-- [x] Phase 3 integration check: the combined harness passes an Auditor-resolved item through A3/A4/A5/A6 and verifies same-item provenance, P1 escalation, and safe stop behavior. Focused combined integration set: 58 passed; full Python suite: 686 passed. Final phase acceptance review remains recorded separately from this test result.
+- [x] Phase 3 integration check: the combined harness passes an Auditor-resolved item through A3/A4/A5/A6 and verifies same-item provenance, P1 escalation, and safe stop behavior. Focused combined integration set: 58 passed; latest full Python suite: 689 passed. Final phase acceptance review remains recorded separately from this test result.
 
 ### Manny Phase 4 — Evaluation status
 
@@ -115,7 +117,7 @@ Use this checklist as the live project status record. Check an item only when it
 ### Auditor interface scope
 
 - [x] The local Staff/Admin Auditor form and append-only synthetic decision history are implemented and tested. It does not change ticket status, send external messages, or dispatch a third party.
-- [ ] Manual browser/accessibility review remains open. Per-case assignment permissions are not implemented because the application has no assignment model; do not claim that this requirement is satisfied.
+- [ ] Manual browser/accessibility review remains open. Assigned-case authorization is implemented and API-tested; this does not replace the manual UI review.
 
 ## Shawn lane — Knowledge, Troubleshooting, Documentation
 
@@ -136,7 +138,7 @@ Use this checklist as the live project status record. Check an item only when it
 - [x] Agree blackboard fields, identifiers, versioning, provenance, confidence, uncertainty, and state lifecycle.
 - [x] Connect Coordinator → semantic Triage → item-scoped Knowledge and exercise the Auditor-resume path through Troubleshooting, Escalation, and Documentation. The synthetic harness uses fake model output and a human Auditor fixture; it does not claim live model accuracy.
 - [x] Exercise Knowledge → Troubleshooting → Escalation/Documentation in the current downstream fixture harness.
-- [x] Provide the local Staff/Admin Auditor decision form and append-only synthetic decision history. Manual browser/accessibility review and assigned-case permission coverage remain open.
+- [x] Provide the local Staff/Admin Auditor decision form and append-only synthetic decision history; enforce assigned-case scope for Staff and Admin override reason. Manual browser/accessibility review remains open.
 - [x] Verify the current single-case fixture connectors preserve case/run/policy/source versions, evidence labels, timestamps, status, and uncertainty without mutation. This does not test linked-item scope.
 - [x] Verify linked-item connectors preserve parent/item IDs, source spans, and per-item evidence/status without mutation; 58 focused connected tests pass.
 - [x] Test direct pipeline, permitted joins, stale results, linked-item identity, and safe stop/manual fallback in the connected synthetic harness; 58 focused connected tests pass. Coverage remains fixture-based, not real-world performance evidence.
@@ -155,7 +157,7 @@ Use this checklist as the live project status record. Check an item only when it
 
 ## Release / project completion gate
 
-- [ ] All P0 requirements and safety constraints are implemented and evidenced, or explicitly deferred by the project lead. The evaluation-label approval/scoring gate and assigned-case permission condition remain open.
+- [ ] All P0 requirements and safety constraints are implemented and evidenced, or explicitly deferred by the project lead. The evaluation-label approval/scoring gate and manual browser/accessibility review remain open.
 - [ ] Agent-level confidence, hallucination, prompt-injection, permission, failure-state, and recovery evaluations pass their approved gates. Synthetic integration tests pass; the 100-case labels remain unapproved and unscored.
 - [x] End-to-end synthetic handoffs, linked-item provenance, stale-state stops, and human Auditor resume are exercised by the combined harness. This does not prove production persistence or real-world accuracy.
 - [ ] Documentation, known limitations, open decisions, and lane ownership are current and reconciled before project closeout.

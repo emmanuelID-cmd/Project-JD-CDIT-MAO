@@ -19,13 +19,15 @@ def instant(value):
 
 def test_migration_is_idempotent_and_enables_required_tables(tmp_path):
     path = tmp_path / "local.sqlite3"
-    assert initialize_database(path) == 3
-    assert initialize_database(path) == 3
+    assert initialize_database(path) == 4
+    assert initialize_database(path) == 4
     with connect(path) as db:
         assert db.execute("PRAGMA foreign_keys").fetchone()[0] == 1
         tables = {r[0] for r in db.execute("SELECT name FROM sqlite_master WHERE type='table'")}
-        assert {"schema_migrations", "synthetic_accounts", "sessions", "synthetic_cases", "product_health_events", "product_health_summaries", "account_access_events", "session_extension_alerts", "synthetic_case_catalog", "synthetic_case_change_events", "synthetic_auditor_decisions"} <= tables
-        assert db.execute("SELECT COUNT(*) FROM schema_migrations").fetchone()[0] == 3
+        assert {"schema_migrations", "synthetic_accounts", "sessions", "synthetic_cases", "product_health_events", "product_health_summaries", "account_access_events", "session_extension_alerts", "synthetic_case_catalog", "synthetic_case_change_events", "synthetic_auditor_decisions", "synthetic_case_assignment_events"} <= tables
+        assert "assigned_staff_account_id" in {r[1] for r in db.execute("PRAGMA table_info(synthetic_cases)")}
+        assert "admin_override_reason" in {r[1] for r in db.execute("PRAGMA table_info(synthetic_auditor_decisions)")}
+        assert db.execute("SELECT COUNT(*) FROM schema_migrations").fetchone()[0] == 4
 
 
 def test_seed_is_synthetic_idempotent_and_product_health_has_no_content_fields(tmp_path):
@@ -39,6 +41,31 @@ def test_seed_is_synthetic_idempotent_and_product_health_has_no_content_fields(t
         ]
         case = db.execute("SELECT request_text, is_synthetic FROM synthetic_cases WHERE case_id='SYN-CASE-001'").fetchone()
         assert case["is_synthetic"] == 1 and case["request_text"].startswith("SYNTHETIC FIXTURE:")
+        assignments = db.execute(
+            "SELECT COUNT(*) FROM synthetic_case_assignment_events WHERE action='seed_assigned'"
+        ).fetchone()[0]
+        assert assignments == 81
+        assert db.execute(
+            "SELECT COUNT(*) FROM synthetic_cases WHERE assigned_staff_account_id='SYN-STAFF-001'"
+        ).fetchone()[0] == 81
+        with pytest.raises(sqlite3.IntegrityError, match="append-only"):
+            db.execute(
+                "UPDATE synthetic_case_assignment_events SET action='assigned' WHERE event_id LIKE 'CASE-ASG-SEED-%'"
+            )
+        db.execute(
+            "UPDATE synthetic_cases SET assigned_staff_account_id = NULL WHERE case_id='SYN-CASE-EX-001'"
+        )
+        db.execute(
+            """INSERT INTO synthetic_case_assignment_events
+             (event_id, case_id, actor_account_id, previous_staff_account_id, assigned_staff_account_id, action, occurred_at)
+             VALUES ('CASE-ASG-TEST-UNASSIGN', 'SYN-CASE-EX-001', 'SYN-ADMIN-001', 'SYN-STAFF-001', NULL, 'unassigned', '2026-11-08T12:00:00.000000Z')"""
+        )
+        db.commit()
+    seed_synthetic_data(path, now=instant("2026-11-08T12:02:00Z"))
+    with connect(path) as db:
+        assert db.execute(
+            "SELECT assigned_staff_account_id FROM synthetic_cases WHERE case_id='SYN-CASE-EX-001'"
+        ).fetchone()[0] is None
         event = db.execute("SELECT * FROM product_health_events").fetchone()
         columns = {r["name"] for r in db.execute("PRAGMA table_info(product_health_events)")}
         assert {"event_id", "occurred_at", "event_type", "component", "component_version", "status_code", "error_code", "duration_ms"} == columns
@@ -94,7 +121,7 @@ def test_retention_uses_accelerated_clock_and_correct_buckets(tmp_path):
     with connect(path) as db:
         assert db.execute("SELECT event_id FROM product_health_events WHERE event_id='PH-KEEP'").fetchone()
         assert db.execute("SELECT event_id FROM account_access_events WHERE event_id='AUD-KEEP'").fetchone()
-        assert db.execute("SELECT COUNT(*) FROM schema_migrations").fetchone()[0] == 3
+        assert db.execute("SELECT COUNT(*) FROM schema_migrations").fetchone()[0] == 4
 
 
 def test_reset_deletes_only_allowlisted_synthetic_rows_and_preserves_schema(tmp_path):
@@ -104,10 +131,12 @@ def test_reset_deletes_only_allowlisted_synthetic_rows_and_preserves_schema(tmp_
     assert counts["synthetic_accounts"] == 3
     assert counts["synthetic_cases"] == 81
     assert counts["synthetic_case_catalog"] == 80
+    assert counts["synthetic_case_assignment_events"] == 81
     with connect(path) as db:
-        assert db.execute("SELECT COUNT(*) FROM schema_migrations").fetchone()[0] == 3
+        assert db.execute("SELECT COUNT(*) FROM schema_migrations").fetchone()[0] == 4
         assert db.execute("SELECT COUNT(*) FROM synthetic_cases").fetchone()[0] == 0
         assert db.execute("SELECT COUNT(*) FROM synthetic_case_catalog").fetchone()[0] == 0
+        assert db.execute("SELECT COUNT(*) FROM synthetic_case_assignment_events").fetchone()[0] == 0
 
 
 def test_known_legacy_case_catalog_checksum_requires_complete_schema_signature(tmp_path):
@@ -119,7 +148,7 @@ def test_known_legacy_case_catalog_checksum_requires_complete_schema_signature(t
             ("b200a572c5f07a3cf4fbd2108a608582426b8a804fa422c12d2f383da81523d8",),
         )
         db.commit()
-    assert initialize_database(path) == 3
+    assert initialize_database(path) == 4
     with connect(path) as db:
         db.execute("DROP INDEX synthetic_cases_kind_status_idx")
         db.commit()

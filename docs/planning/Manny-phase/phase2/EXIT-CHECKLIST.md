@@ -1,6 +1,6 @@
 # Manny Phase 2 — Ordered Exit Checklist
 
-**Current state (2026-11-08):** Manny's connected A0–A3 path, S-1.1 item connector, and synthetic Auditor-resume path through A6 are implemented. Phase 2 **exit readiness is estimated at 95%**. This is a planning estimate, not a test metric; the 100-case labels still need Manny's approval before scoring, and the assigned-case access requirement needs an explicit implementation/deferral decision.
+**Current state (2026-11-08):** Manny's connected A0–A3 path, S-1.1 item connector, synthetic Auditor-resume path through A6, and local assigned-case authorization are implemented. Phase 2 **exit readiness remains estimated at 95%** as a planning estimate, not a test metric; Manny's approval of the 100-case labels and the subsequent scored evaluation remain open.
 
 **Forecast rule:** Percentages below are cumulative expected Phase 2 exit readiness after each whole step passes, assuming no rework. They are not additive, and a passing unit test alone does not satisfy a gate.
 
@@ -16,14 +16,14 @@ Owner: **Manny**. Shawn is not a prerequisite for this implementation step.
 - [x] Record the category vocabulary by the active synthetic policy snapshot and exact taxonomy digest. The 80-row catalog remains development examples, not labels or operational policy. The category vocabulary is not CDIT policy and does not establish operational SLAs.
 - [x] Prepare 100 synthetic evaluation cases with draft expected labels and source expectations at `synthetic_data/evaluation_draft/v1/cases.json`. They are explicitly draft, unapproved, and unscored; no accuracy claim is made.
 
-**After Step 1:** expected Phase 2 exit readiness is about **85%**. N1–N3 are complete; this does not close the shared receiver or label gates. The authenticated app/Auditor interface remains deferred until database/auth work.
+**After Step 1:** expected Phase 2 exit readiness is about **85%**. N1–N3 are complete; this does not close the shared receiver or label gates. The authenticated app/Auditor interface is now implemented in the local database/auth workstream, including assigned-case access.
 
 ## Step 2 — Receiver and shared-connection acceptance — expected readiness: 95%
 
 Owners: **Manny for the connector; Shawn for her Knowledge receiver; Shared Lane for connection checks.** Start this review after Step 1 has a concrete connected path to inspect.
 
 - [x] Shawn reviewed the connected receiver in PR #12 and accepted with findings: Knowledge receives the correct item text and preserves identity, parent, span, source/version, digest, and Auditor status without using category/urgency to bias retrieval. Manny's F-1/F-2 fixes are included in merged PR #12 at `a363724`.
-- [x] Shared combined-harness checks cover item joins, stale-state rejection, safe failure routing, and Auditor-resume behavior across A3–A6. The focused connected integration set passed 58 tests; the full Python suite passed 686 tests.
+- [x] Shared combined-harness checks cover item joins, stale-state rejection, safe failure routing, and Auditor-resume behavior across A3–A6. The focused connected integration set passed 58 tests; the full Python suite passed 689 tests after the local assignment work.
 - [x] Manny fixed F-1 and F-2: normalize CRLF before checking the trusted synthetic taxonomy pin, and find the first configured attention literal separately within each item span. Focused regressions: 49 passed; full suite: 618 passed.
 - [x] Normalize CRLF in the raw CASE-SCENARIOS fixtures used by the Manny Triage flow and development-example tests. Focused Triage modules: 40 passed; full suite: 618 passed (2026-11-08). Shawn's Windows checkout rerun remains to confirm the reported failures are resolved there.
 - [x] Review and merge S-1.1 for F-3 attention-check state and F-4 taxonomy citation in PR #15; Manny's connector supplies item-specific values and exact taxonomy provenance.
@@ -61,6 +61,6 @@ Owners: **Manny/project lead for label approval and phase review; Manny for eval
 
 ### Deferred and not Phase 2 blockers
 
-- The Staff/Admin Auditor form and synthetic decision history now exist in the local database-backed app. The application has no per-case assignment model; the PRD's assigned-case permission condition is not yet demonstrated. Manual browser/accessibility review remains open.
+- The Staff/Admin Auditor form and synthetic decision history use the assigned-case model: Staff can access only assigned cases; Admin can access/assign all; assignment history records Admin actions; Admin decisions require an override reason. API tests pass. Manual browser/accessibility review remains open.
 - Production authentication, real company policy/data, live Salesforce, ticket writes, email, customer notifications, and third-party dispatch remain out of scope.
 - Phase 3 and Phase 4 have their own acceptance gates; Phase 2 completion does not mark those phases complete.

@@ -199,6 +199,27 @@ def seed_synthetic_data(path: str | Path | None = None, *, now: datetime | None 
                        VALUES (?, ?, 'SYN-STAFF-001', 'example_seeded', NULL, 'submitted', 'synthetic_catalog_seed', ?)""",
                     (f"EV-CASE-EX-{example['row_number']:03d}-INIT", case_id, created),
                 )
+        initial_assignments = connection.execute(
+            """SELECT case_id FROM synthetic_cases c
+               WHERE c.assigned_staff_account_id IS NULL
+                 AND (c.case_id = 'SYN-CASE-001' OR c.record_kind = 'development_example')
+                 AND NOT EXISTS (
+                     SELECT 1 FROM synthetic_case_assignment_events e WHERE e.case_id = c.case_id
+                 )
+               ORDER BY c.case_id"""
+        ).fetchall()
+        for row in initial_assignments:
+            connection.execute(
+                "UPDATE synthetic_cases SET assigned_staff_account_id = 'SYN-STAFF-001' WHERE case_id = ?",
+                (row["case_id"],),
+            )
+            connection.execute(
+                """INSERT INTO synthetic_case_assignment_events
+                   (event_id, case_id, actor_account_id, previous_staff_account_id,
+                    assigned_staff_account_id, action, occurred_at)
+                   VALUES (?, ?, NULL, NULL, 'SYN-STAFF-001', 'seed_assigned', ?)""",
+                ("CASE-ASG-SEED-" + row["case_id"], row["case_id"], created),
+            )
         connection.execute(
             """INSERT OR IGNORE INTO product_health_events
                (event_id, occurred_at, event_type, component, component_version,
@@ -251,7 +272,8 @@ def reset_synthetic_data(path: str | Path | None = None) -> dict[str, int]:
     initialize_database(path)
     tables = (
         "session_extension_alerts", "account_access_events", "sessions",
-        "synthetic_auditor_decisions", "synthetic_case_change_events", "synthetic_cases", "synthetic_case_catalog",
+        "synthetic_case_assignment_events", "synthetic_auditor_decisions",
+        "synthetic_case_change_events", "synthetic_cases", "synthetic_case_catalog",
         "product_health_summaries", "product_health_events",
         "synthetic_accounts",
     )

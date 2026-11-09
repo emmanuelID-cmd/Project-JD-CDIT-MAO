@@ -48,8 +48,25 @@ def test_user_case_scope_and_staff_admin_route_boundaries(tmp_path, monkeypatch)
     assert client.get("/api/cases/SYN-CASE-OTHER").status_code == 404
     client.post("/auth/logout")
     login(client, "staff.demo")
-    assert len(client.get("/api/cases").json()) == 83
+    staff_cases = client.get("/api/cases").json()
+    assert len(staff_cases) == 81
+    assert "SYN-CASE-OTHER" not in {case["case_id"] for case in staff_cases}
+    assert client.get("/api/cases/SYN-CASE-OTHER").status_code == 404
+    assert client.patch("/api/cases/SYN-CASE-OTHER/status", json={"status": "in_progress"}).status_code == 404
     assert client.get("/api/admin/accounts").status_code == 403
+    client.post("/auth/logout")
+    login(client, "admin.demo")
+    assert len(client.get("/api/cases").json()) == 83
+    assigned = client.patch(
+        "/api/admin/cases/SYN-CASE-OTHER/assignment",
+        json={"staff_account_id": "SYN-STAFF-001"},
+    )
+    assert assigned.status_code == 200 and assigned.json()["action"] == "assigned"
+    client.post("/auth/logout")
+    login(client, "staff.demo")
+    staff_cases = client.get("/api/cases").json()
+    assert len(staff_cases) == 82
+    assert "SYN-CASE-OTHER" in {case["case_id"] for case in staff_cases}
 
 
 def test_admin_account_change_is_audited_and_revokes_target_session(tmp_path, monkeypatch):

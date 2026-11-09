@@ -1,6 +1,6 @@
 # Shared Phase 2 — Combined Workflow Harness
 
-**Status (2026-11-08):** The combined harness exercises the connected Manny A0–A3 path and resumes a synthetic Auditor-reviewed linked item through Knowledge, Troubleshooting, Escalation (A5), and Documentation (A6). It verifies item identity/provenance, high-urgency escalation, stale-state rejection, and safe stops. The focused connected set passed 58 tests; full Python suite passed 686. This is synthetic harness evidence, not production orchestration, independent review, or real-world accuracy. Manual UI/accessibility review and assigned-case permission coverage remain open.
+**Status (2026-11-08):** The combined harness exercises the connected Manny A0–A3 path and resumes a synthetic Auditor-reviewed linked item through Knowledge, Troubleshooting, Escalation (A5), and Documentation (A6). It verifies item identity/provenance, high-urgency escalation, stale-state rejection, and safe stops. The focused connected set passed 58 tests; full Python suite passed 689 after the local assigned-case authorization change. This is synthetic harness evidence, not production orchestration, independent review, or real-world accuracy. Manual UI/accessibility review remains open.
 
 ## Purpose
 

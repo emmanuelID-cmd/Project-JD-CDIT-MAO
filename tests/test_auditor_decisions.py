@@ -23,7 +23,7 @@ def client_for(tmp_path, monkeypatch, role):
     return path, client
 
 
-def payload_for(case, category):
+def payload_for(case, category, admin_override_reason=None):
     return {
         "item_id": "ITM-SYN-001",
         "item_index": 1,
@@ -40,6 +40,7 @@ def payload_for(case, category):
         "destination": "Tier 1 support",
         "rationale": "Synthetic case evidence supports this category and band.",
         "evidence": "Source SYN-CASE-001 request text, characters 0 through end.",
+        "admin_override_reason": admin_override_reason,
         "conditions": ["No active safety concern stated"],
         "exceptions": ["Re-review if new impact evidence appears"],
     }
@@ -92,8 +93,8 @@ def test_auditor_form_is_rendered_only_in_existing_staff_admin_case_controls():
     client = TestClient(app)
     script = client.get("/assets/app.js")
     assert script.status_code == 200
-    assert "function auditorPanel(item, decisions, categories)" in script.text
-    assert "auditorPanel(item, decisions, categories)" in script.text
+    assert "function auditorPanel(item, decisions, categories, role)" in script.text
+    assert "auditorPanel(item, decisions, categories, role)" in script.text
     assert 'if(role!=="user") [decisions,categories]' in script.text
     assert 'controls = \'<form class="case-edit-form"' in script.text
 
@@ -104,19 +105,39 @@ def test_admin_can_record_but_stale_case_span_and_non_taxonomy_fail_closed(tmp_p
     categories = admin.get("/api/auditor/taxonomy").json()["categories"]
     url = "/api/cases/SYN-CASE-001/items/auditor-decisions"
 
-    stale = payload_for(case, categories[0])
+    stale = payload_for(case, categories[0], "Synthetic Admin review override")
     stale["expected_case_version"] = "1900-01-01T00:00:00.000000Z"
     assert admin.post(url, json=stale).status_code == 409
 
-    outside_span = payload_for(case, categories[0])
+    outside_span = payload_for(case, categories[0], "Synthetic Admin review override")
     outside_span["source_end"] = len(case["request_text"]) + 1
     assert admin.post(url, json=outside_span).status_code == 422
 
-    invented_category = payload_for(case, "Unapproved Synthetic Category")
+    invented_category = payload_for(case, "Unapproved Synthetic Category", "Synthetic Admin review override")
     assert admin.post(url, json=invented_category).status_code == 422
     assert admin.get("/api/auditor/decisions").json() == []
 
-    assert admin.post(url, json=payload_for(case, categories[0])).status_code == 201
+    recorded = admin.post(url, json=payload_for(case, categories[0], "Synthetic Admin review override"))
+    assert recorded.status_code == 201
+    assert recorded.json()["admin_override_reason"] == "Synthetic Admin review override"
+    assert admin.get("/api/auditor/decisions").json()[0]["admin_override_reason"] == "Synthetic Admin review override"
+
+
+def test_admin_must_supply_override_reason_but_staff_must_not(tmp_path, monkeypatch):
+    path, admin = client_for(tmp_path, monkeypatch, "admin")
+    case = admin.get("/api/cases/SYN-CASE-001").json()
+    category = admin.get("/api/auditor/taxonomy").json()["categories"][0]
+    url = "/api/cases/SYN-CASE-001/items/auditor-decisions"
+    assert admin.post(url, json=payload_for(case, category)).status_code == 422
+    payload = payload_for(case, category, "  Synthetic override reason  ")
+    response = admin.post(url, json=payload)
+    assert response.status_code == 201
+    assert response.json()["admin_override_reason"] == "Synthetic override reason"
+
+    _path, staff = client_for(tmp_path / "staff", monkeypatch, "staff")
+    staff_case = staff.get("/api/cases/SYN-CASE-001").json()
+    payload = payload_for(staff_case, staff.get("/api/auditor/taxonomy").json()["categories"][0], "not allowed")
+    assert staff.post(url, json=payload).status_code == 422
 
 
 def test_new_decision_requires_current_previous_version_and_forbids_identity_spoofing(tmp_path, monkeypatch):

@@ -1,6 +1,6 @@
 # Shared Phase 0 - Requirements and Evaluation Baseline (PRD-v4)
 
-**Status (2026-11-08):** PRD-v4 is the current requirements source. Shared contract changes S-1/S-2 and S-1.1 are merged. The evaluation protocol and a 100-case draft with per-gate positive/negative counts exist; the labels remain unapproved and unscored. Connected synthetic integration tests pass, while the assigned-case permission condition and final evaluation acceptance remain open. Earlier phase notes are historical snapshots.
+**Status (2026-11-08):** PRD-v4 is the current requirements source. Shared contract changes S-1/S-2 and S-1.1 are merged. The evaluation protocol and a 100-case draft with per-gate positive/negative counts exist; the labels remain unapproved and unscored. Connected synthetic integration tests and local assigned-case authorization pass; final evaluation acceptance remains open. Earlier phase notes are historical snapshots.
 
 ## Work
 
