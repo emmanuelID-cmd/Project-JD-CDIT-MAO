@@ -1,0 +1,51 @@
+{
+  "doc_id": "KB-SAF-460",
+  "version": "1.0",
+  "title": "Injury or immediate safety report",
+  "topic": "safety_report",
+  "product_area": "safety",
+  "status": "approved",
+  "data_classification": "synthetic",
+  "owner": "Synthetic Knowledge Owner",
+  "effective_date": "2026-11-09",
+  "review_due": "2027-11-09",
+  "keywords": [
+    "injury",
+    "injured",
+    "safety",
+    "emergency",
+    "immediate help",
+    "hurt"
+  ],
+  "sections": [
+    {
+      "section_id": "s1",
+      "heading": "Someone is injured or in immediate danger",
+      "text": "The support desk cannot arrange emergency help or give medical advice. Anyone in immediate danger should contact local emergency services or the site's emergency contact now. Tier 1 staff record minimal details and route the report to the human safety contact. The Auditor decides the urgency.",
+      "steps": [
+        {
+          "step_id": "st1",
+          "action_type": "share_approved_article",
+          "text": "Tell the reporter that the support desk cannot arrange emergency help, and that anyone in immediate danger should contact local emergency services or the site's emergency contact now."
+        },
+        {
+          "step_id": "st2",
+          "action_type": "collect_information",
+          "text": "Record the site and the time of the report. Do not record medical details."
+        }
+      ],
+      "information_needed": [
+        {
+          "field": "site_id",
+          "prompt": "Synthetic site identifier named in the report."
+        }
+      ],
+      "stop_conditions": [
+        {
+          "condition_id": "KB-SAF-460-SC1",
+          "text": "Do not give medical advice or arrange help at Tier 1. Route the report to the human safety contact."
+        }
+      ]
+    }
+  ]
+}
