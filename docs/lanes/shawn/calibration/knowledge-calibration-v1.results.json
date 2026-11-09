@@ -5,7 +5,7 @@
   "label_status": "draft, not yet human-approved (D-09)",
   "source_set_version": "SRC-61C4A35E96CF",
   "policy": "SYN-TS-POLICY 0.1.2",
-  "knowledge_agent_version": "0.2.0",
+  "knowledge_agent_version": "0.3.0",
   "as_of": "2026-11-03",
   "summary": {
     "answered": 54,

@@ -2,7 +2,7 @@
 
 **Branch:** `shawn/knowledge-troubleshooting-docs`
 **Owner:** Shawn (finalized six-agent split, `docs/planning/TASK-SPLIT.md`)
-**Version:** Knowledge and Troubleshooting `0.2.0`, Documentation `0.2.1`; contracts `0.1.0-proposed` with S-1, S-2, and S-1.1 (item scope `0.2-proposed`)
+**Version:** Knowledge `0.3.0`, Troubleshooting `0.2.0`, Documentation `0.2.1`; contracts `0.1.0-proposed` with S-1, S-2, and S-1.1 (item scope `0.2-proposed`)
 **Status:** Implemented on synthetic data and merged into `developer` through PRs #2, #4, #5, #7, and #8 (2026-11-04 and 2026-11-05). Manny's combined six-agent harness runs these agents with his Coordinator, Triage, and Escalation agents. Linked-item support (shared drafts S-1 and S-2; Shawn changes K-1 to K-7) is on the lane branch, pending review (2026-11-06; [A2-ITEM-HANDOFF-RECEIVER-REVIEW.md](A2-ITEM-HANDOFF-RECEIVER-REVIEW.md) §8).
 
 ## 1. Authorization and scope
@@ -116,7 +116,7 @@ python -m cdit_support_mao.lane_calibration synthetic_data/calibration/knowledge
 111 cases | answered 54 | accuracy 96.3% | coverage 74.3% | abstention recall 95.1% | critical errors 0 | label problems 0
 
 python -m cdit_support_mao.lane_calibration synthetic_data/calibration/knowledge-calibration-v2.json --knowledge-dir synthetic_data/knowledge
-65 cases | answered 23 | accuracy 91.3% | coverage 42.9% | abstention recall 93.8% | critical errors 0 | label problems 0
+65 cases | answered 28 | accuracy 92.9% | coverage 53.1% | abstention recall 93.8% | critical errors 0 | label problems 0
 
 uvicorn cdit_support_mao.main:app --app-dir src  ->  GET /health  200 {"status":"ok","database":"ok"}
 ```
@@ -193,6 +193,10 @@ uvicorn cdit_support_mao.main:app --app-dir src  ->  GET /health  200 {"status":
 
     - **Main finding:** ranking recall@3 is 95.9%. The right section is usually ranked, but the coverage gate rejects it. L-1 is a gate design problem, not a ranking problem.
     - **How the set is used:** measure one retrieval change against v2.0; any further change needs a new set version.
+    - **The change measured on it:** Knowledge `0.3.0` ([L1-IDENTIFIER-TERMS.md](calibration/L1-IDENTIFIER-TERMS.md)) drops identifier tokens from the query. The design and acceptance criteria were fixed before the run.
+      - v2.0 correct answers went 21 → 26 (numeric requests 1 → 6), with the same 2 wrong or unsupported answers.
+      - v1.0 is unchanged.
+      - v2.0 is no longer held out.
     - Report: [KNOWLEDGE-CALIBRATION-REPORT-v2.md](calibration/KNOWLEDGE-CALIBRATION-REPORT-v2.md).
 - **D-10 Timestamps and audit.**
   - UTC ISO-8601 with microseconds from the host clock in the prototype.
@@ -201,7 +205,7 @@ uvicorn cdit_support_mao.main:app --app-dir src  ->  GET /health  200 {"status":
 ## 10. Handoff record
 
 - **Artifacts and versions:**
-  - Knowledge, Troubleshooting, and Documentation agents `0.2.0` (linked-item support, 2026-11-06). Documentation `0.2.1` adds the S-1.1 attention check line (2026-11-08).
+  - Knowledge, Troubleshooting, and Documentation agents `0.2.0` (linked-item support, 2026-11-06). Documentation `0.2.1` adds the S-1.1 attention check line (2026-11-08). Knowledge `0.3.0` stops counting identifier tokens as topic terms (L-1, 2026-11-09).
   - Contracts `0.1.0-proposed`, with S-1 (`TriageItemScope`), S-2 (`InputRef.content_digest`), and S-1.1 (`attention_check` and the taxonomy citation; item scope `0.2-proposed`).
   - Source set `SRC-61C4A35E96CF`.
   - Calibration sets `SYN-KCAL` 1.0 and 2.0. 2.0 records the L-1/L-2 baseline (2026-11-09).

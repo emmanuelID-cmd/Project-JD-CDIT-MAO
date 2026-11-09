@@ -174,3 +174,40 @@ def test_input_gate_blocks_unusable_triage(knowledge_agent, context, make_triage
 def test_contribution_id_is_idempotent(knowledge_agent, context, make_triage) -> None:
     triage = make_triage(GOLDEN)
     assert run(knowledge_agent, context, triage).contribution_id == run(knowledge_agent, context, triage).contribution_id
+
+
+# --- L-1 (Knowledge 0.3.0): identifiers in a request are case data, not topic terms ----------
+
+
+def test_scoring_terms_drop_tokens_with_digits() -> None:
+    from cdit_support_mao.agents.knowledge.retrieval import scoring_terms, tokenize
+
+    query = "Subject 1043 on site 207 at 09:40, visit V2"
+    assert {"1043", "207", "09", "40", "v2"} <= set(tokenize(query))
+    assert scoring_terms(query) == ["site", "subject", "visit"]
+
+
+@pytest.mark.parametrize(
+    ("query", "source"),
+    [
+        ("Electronic signature rejected again on form 12", "KB-DOC-190#s1"),
+        ("Search cannot find screening number 300-112", "KB-SRCH-240#s1"),
+    ],
+)
+def test_identifiers_do_not_dilute_relevance(knowledge_agent, context, make_triage, query, source) -> None:
+    result = run(knowledge_agent, context, make_triage(query))
+    assert result.status is AgentStatus.COMPLETED
+    top = result.passages[0]
+    assert f"{top.doc_id}#{top.section_id}" == source
+    assert not any(any(ch.isdigit() for ch in term) for term in result.matched_query_terms)
+
+
+def test_identifier_only_request_has_no_query_terms(knowledge_agent, context, make_triage) -> None:
+    result = run(knowledge_agent, context, make_triage("12345 67890"))
+    assert result.status is AgentStatus.ABSTAINED
+    assert result.checkpoint.reason_codes == (ReasonCode.NO_RELEVANT_SOURCE,)
+
+
+def test_identifiers_do_not_make_an_off_topic_request_answerable(knowledge_agent, context, make_triage) -> None:
+    result = run(knowledge_agent, context, make_triage("Expense claim for 120 dollars rejected"))
+    assert result.status is AgentStatus.ABSTAINED

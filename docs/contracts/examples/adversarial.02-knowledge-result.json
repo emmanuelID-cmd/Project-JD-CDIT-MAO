@@ -1,9 +1,9 @@
 {
   "contract_version": "0.1.0-proposed",
-  "contribution_id": "KNW-23FC6828E8D715E5",
+  "contribution_id": "KNW-71161D8DBFA04020",
   "stage": "knowledge",
   "agent": "knowledge-agent",
-  "agent_version": "0.2.0",
+  "agent_version": "0.3.0",
   "context": {
     "run_id": "RUN-SYN-CASE-0003-1",
     "case_id": "SYN-CASE-0003",

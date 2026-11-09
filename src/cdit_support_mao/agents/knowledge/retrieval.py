@@ -51,6 +51,19 @@ def tokenize(text: str) -> list[str]:
     return [_stem(t) for t in _TOKEN.findall(text.lower()) if len(t) > 1 and t not in STOPWORDS]
 
 
+_IDENTIFIER = re.compile(r"[0-9]")
+
+
+def scoring_terms(query: str) -> list[str]:
+    """Distinct query terms used for scoring a request.
+
+    A token that contains a digit (subject, visit, query, or site numbers; amounts;
+    times; dates) is a case identifier or detail, not a topic word, so it is left
+    out (L-1, 2026-11-09). Article text is indexed unchanged.
+    """
+    return sorted({term for term in tokenize(query) if not _IDENTIFIER.search(term)})
+
+
 def section_index_text(article: KbArticle, section: KbSection) -> str:
     """Text that is searchable. Stop conditions are excluded to avoid matching risk wording."""
     parts = [article.title, section.heading, section.text, " ".join(article.keywords)]
@@ -108,7 +121,7 @@ class LexicalIndex:
 
     def search(self, query: str) -> list[ScoredSection]:
         """Return sections with at least one matching term, best coverage first."""
-        query_terms = sorted(set(tokenize(query)))
+        query_terms = scoring_terms(query)
         if not query_terms:
             return []
         total_weight = sum(self.idf(term) for term in query_terms)
@@ -131,4 +144,4 @@ class LexicalIndex:
 
     @staticmethod
     def query_term_count(query: str) -> int:
-        return len(set(tokenize(query)))
+        return len(scoring_terms(query))

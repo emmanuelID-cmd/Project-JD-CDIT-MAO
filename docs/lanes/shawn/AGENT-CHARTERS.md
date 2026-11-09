@@ -2,7 +2,7 @@
 
 **Owner:** Shawn's Lane (Knowledge, Troubleshooting, Documentation)
 **Date:** 2026-11-05; updated 2026-11-06 for linked-item handoffs
-**Agents:** Knowledge `0.2.0`, Troubleshooting `0.2.0`, Documentation `0.2.1`; contracts `0.1.0-proposed` with S-1, S-2, and S-1.1 (item scope `0.2-proposed`)
+**Agents:** Knowledge `0.3.0`, Troubleshooting `0.2.0`, Documentation `0.2.1`; contracts `0.1.0-proposed` with S-1, S-2, and S-1.1 (item scope `0.2-proposed`)
 **Status:** Accepted for deterministic agents. This answers PRD-v3 alignment finding N-03. Manny answered Q-04 on 2026-11-05: for deterministic agents, the charter plus the structured output schema is the documented lane-owned behaviour specification ([PRD-V3-ALIGNMENT-REVIEW.md](PRD-V3-ALIGNMENT-REVIEW.md) §7).
 
 ## 1. What a charter is
