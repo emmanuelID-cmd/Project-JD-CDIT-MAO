@@ -6,13 +6,13 @@
 
 | Item | Value |
 | :--- | :--- |
-| Agents | Knowledge `0.3.0`; Troubleshooting `0.2.0` with policy `SYN-TS-POLICY 0.1.2` (proposed); Documentation `0.2.1` |
+| Agents | Knowledge `0.4.0` (updated 2026-11-09, after this packet was first written; see [L1-L2-BATCH-2.md](calibration/L1-L2-BATCH-2.md)); Troubleshooting `0.2.0` with policy `SYN-TS-POLICY 0.1.2` (proposed); Documentation `0.2.1` |
 | Contracts | `0.1.0-proposed` with S-1 (linked items), S-2 (input digests), and S-1.1 (item scope `0.2-proposed`). S-1.1 was approved by Manny on 2026-11-08. |
 | Design | Deterministic agents with no model calls. Per Q-04 (2026-11-05), each agent's charter plus its structured output schema satisfies PRD §3b ([AGENT-CHARTERS.md](AGENT-CHARTERS.md)). |
-| Tests | Full suite 731 passed. Knowledge 24, Troubleshooting 36, Documentation 8, linked items 78, contracts 19. |
+| Tests | Full suite 744 passed with Knowledge `0.4.0` (731 at `fa6b14f`). Knowledge 24, Troubleshooting 36, Documentation 8, linked items 78, contracts 19. |
 | Lane cases | 12/12 synthetic lane cases pass: golden, edge, adversarial, conflict, stale, injection, privacy, governance, and upstream stop. |
 | Integration | Manny's connected-path tests (11) and combined-workflow tests (9) pass with these agents. |
-| Calibration | `SYN-KCAL` v1.0 (111 cases) and v2.0 (65 cases), both with 0 critical safety errors. The labels are drafts (D-09). |
+| Calibration | `SYN-KCAL` v1.0 (111 cases), v2.0 (65), and v3.0 (59), each with 0 critical safety errors. The labels are drafts (D-09). |
 
 **Proposed decision:** accept A3, A4, and A6 for the **synthetic prototype**, with the limitations in §5 recorded. This is not an evaluation result: the 100-case evaluation, with approved labels and scoring, is a separate gate owned by Manny.
 
@@ -57,8 +57,8 @@
 
 | ID | Limitation | Effect | Owner and next step |
 | :--- | :--- | :--- | :--- |
-| L-1 | **Retrieval recall.** The lexical gate misses many reworded or padded requests. v2.0 answerable coverage is 53.1%, and the evaluation draft cites the expected source for 14 of 65 items. | Usefulness, not safety: a missed answer becomes an abstention and goes to human review. | Shawn. Knowledge `0.3.0` fixed numeric requests ([L1-IDENTIFIER-TERMS.md](calibration/L1-IDENTIFIER-TERMS.md)). Rewording needs another design and a new held-out set. |
-| L-2 | **Off-topic answer when the on-topic article is ineligible.** Examples: v2 `SYN-KCAL-1075`, evaluation case 067, and v1's 2 medium-band unsupported answers (relevance 0.61 and 0.63). | A real but wrong-topic citation, labelled tentative and routed to human review. | Shawn. A precision change, measured on a new set version. |
+| L-1 | **Retrieval recall.** The lexical gate misses many reworded or padded requests. v2.0 answerable coverage is 53.1%, and the evaluation draft cites the expected source for 14 of 65 items. | Usefulness, not safety: a missed answer becomes an abstention and goes to human review. | Shawn. Knowledge `0.3.0` fixed numeric requests and `0.4.0` padded requests ([L1-IDENTIFIER-TERMS.md](calibration/L1-IDENTIFIER-TERMS.md), [L1-L2-BATCH-2.md](calibration/L1-L2-BATCH-2.md)). Reworded requests need a synonym vocabulary or another retrieval method. |
+| L-2 | **Off-topic answer when the on-topic article is ineligible.** Examples: v2 `SYN-KCAL-1075`, evaluation case 067, and v1's 2 medium-band unsupported answers (relevance 0.61 and 0.63). | A real but wrong-topic citation, labelled tentative and routed to human review. | Shawn. Mostly fixed in Knowledge `0.4.0` by the ineligible-anchor guard: v1 `SYN-KCAL-0099`, v2 `1075`, and evaluation case 067 now abstain. One v1 medium-band unsupported answer (`SYN-KCAL-0078`) and some wrong-section answers remain. |
 | D-08, D-09 | Confidence thresholds are provisional, and the calibration labels are drafts. | The bands are qualitative. | Manny (evaluation owner). |
 | D-02, D-03 | `SYN-TS-POLICY` is `proposed`; its patterns are risk signals. | Tier 1 boundary values await CDIT policy. | Shared Lane / CDIT. |
 | Evaluation | The 100-case draft is unapproved and unscored. C-1 to C-7 are in [EVAL-DRAFT-V1-KNOWLEDGE-HANDOFF.md](EVAL-DRAFT-V1-KNOWLEDGE-HANDOFF.md). | §4f "approved must-pass set" evidence does not exist yet. | Manny. |
@@ -88,7 +88,7 @@
 ## 8. Reproduce
 
 ```text
-python -m pytest -q                                   # 731 passed at fa6b14f
+python -m pytest -q                                   # 744 passed with Knowledge 0.4.0
 python -m cdit_support_mao.lane_harness synthetic_data/cases
 python -m cdit_support_mao.lane_calibration synthetic_data/calibration/knowledge-calibration-v1.json --knowledge-dir synthetic_data/knowledge
 python -m cdit_support_mao.lane_calibration synthetic_data/calibration/knowledge-calibration-v2.json --knowledge-dir synthetic_data/knowledge

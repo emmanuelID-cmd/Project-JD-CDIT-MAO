@@ -53,15 +53,31 @@ def tokenize(text: str) -> list[str]:
 
 _IDENTIFIER = re.compile(r"[0-9]")
 
+# Greeting, thanks, apology, sign-off, urgency, request-timing, and addressing words describe
+# the request, not its topic (L-1 batch 2, 2026-11-09). Topic-capable words such as
+# "possible", "question", "advice", "team", "note", and "support" are deliberately absent.
+_COURTESY_WORDS = """
+thank thanks thx appreciate appreciated appreciation grateful kindly kind regards cheers
+wishes sincerely dear sorry apologies apologise apologize bother trouble hope hoping urgent
+urgently asap quick quickly soon today tonight tomorrow morning afternoon week weekend
+earliest chase chasing following follow again someone anyone somebody anybody whoever advise
+assist assistance guidance pointers
+""".split()
+COURTESY_TERMS = frozenset(_stem(word) for word in _COURTESY_WORDS)
+
 
 def scoring_terms(query: str) -> list[str]:
     """Distinct query terms used for scoring a request.
 
-    A token that contains a digit (subject, visit, query, or site numbers; amounts;
-    times; dates) is a case identifier or detail, not a topic word, so it is left
-    out (L-1, 2026-11-09). Article text is indexed unchanged.
+    Left out, because they are not topic words (article text is indexed unchanged):
+
+    - a token that contains a digit (subject, visit, query, or site numbers; amounts;
+      times; dates) is a case identifier or detail (L-1, Knowledge 0.3.0);
+    - a courtesy, urgency, or addressing word from ``COURTESY_TERMS`` (L-1, 0.4.0).
     """
-    return sorted({term for term in tokenize(query) if not _IDENTIFIER.search(term)})
+    return sorted(
+        {term for term in tokenize(query) if not _IDENTIFIER.search(term) and term not in COURTESY_TERMS}
+    )
 
 
 def section_index_text(article: KbArticle, section: KbSection) -> str:
@@ -145,3 +161,8 @@ class LexicalIndex:
     @staticmethod
     def query_term_count(query: str) -> int:
         return len(scoring_terms(query))
+
+    def anchor_term(self, query: str) -> str | None:
+        """The request's most specific word: its highest-IDF scoring term that the corpus uses."""
+        known = [term for term in scoring_terms(query) if term in self._idf]
+        return max(known, key=lambda term: (self._idf[term], term)) if known else None

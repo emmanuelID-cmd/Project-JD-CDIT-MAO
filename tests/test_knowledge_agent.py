@@ -211,3 +211,51 @@ def test_identifier_only_request_has_no_query_terms(knowledge_agent, context, ma
 def test_identifiers_do_not_make_an_off_topic_request_answerable(knowledge_agent, context, make_triage) -> None:
     result = run(knowledge_agent, context, make_triage("Expense claim for 120 dollars rejected"))
     assert result.status is AgentStatus.ABSTAINED
+
+
+# --- L-1/L-2 batch 2 (Knowledge 0.4.0): courtesy terms and the ineligible-anchor guard -------
+
+
+def test_courtesy_words_are_not_scoring_terms() -> None:
+    from cdit_support_mao.agents.knowledge.retrieval import scoring_terms
+
+    assert scoring_terms("Kindly advise asap, thanks: the form page will not save. Regards") == ["form", "page", "save"]
+    # Words that can name a support topic stay.
+    assert scoring_terms("A possible question about advice for my team") == ["advice", "possible", "question", "team"]
+
+
+@pytest.mark.parametrize(
+    ("query", "source"),
+    [
+        ("Kindly advise asap, thanks: the document preview window does not open. Regards", "KB-BRW-170#s1"),
+        ("Sorry to bother you, my account is locked after failed sign-in attempts. Cheers", "KB-AUD-080#s1"),
+    ],
+)
+def test_courtesy_text_does_not_dilute_relevance(knowledge_agent, context, make_triage, query, source) -> None:
+    result = run(knowledge_agent, context, make_triage(query))
+    assert result.status is AgentStatus.COMPLETED
+    top = result.passages[0]
+    assert f"{top.doc_id}#{top.section_id}" == source
+
+
+def test_courtesy_only_request_has_no_query_terms(knowledge_agent, context, make_triage) -> None:
+    result = run(knowledge_agent, context, make_triage("Cheers, thanks, regards"))
+    assert result.status is AgentStatus.ABSTAINED
+    assert result.checkpoint.reason_codes == (ReasonCode.NO_RELEVANT_SOURCE,)
+
+
+@pytest.mark.parametrize("query", ["Training course completed; where is its transcript?", "Transcript for my completed training course"])
+def test_ineligible_anchor_withholds_an_off_topic_answer(knowledge_agent, context, make_triage, query) -> None:
+    """The most specific word ('transcript') is only in the stale KB-TRN-360, so the current
+    training-completion article must not answer (L-2)."""
+    result = run(knowledge_agent, context, make_triage(query))
+    assert result.status is AgentStatus.ABSTAINED and result.passages == ()
+    assert result.checkpoint.reason_codes == (ReasonCode.STALE_SOURCE_ONLY,)
+    assert ("KB-TRN-360", ReasonCode.SOURCE_STALE) in {(e.doc_id, e.reason) for e in result.excluded_sources}
+    assert any("most specific term matches only an ineligible source" in u for u in result.unknowns)
+
+
+def test_anchor_guard_does_not_fire_when_the_eligible_answer_has_the_anchor(knowledge_agent, context, make_triage) -> None:
+    result = run(knowledge_agent, context, make_triage("Completed course still shows as incomplete on my profile"))
+    assert result.status is AgentStatus.COMPLETED
+    assert (result.passages[0].doc_id, result.passages[0].section_id) == ("KB-TRN-250", "s1")

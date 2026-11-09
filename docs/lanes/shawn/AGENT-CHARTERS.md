@@ -2,7 +2,7 @@
 
 **Owner:** Shawn's Lane (Knowledge, Troubleshooting, Documentation)
 **Date:** 2026-11-05; updated 2026-11-06 for linked-item handoffs
-**Agents:** Knowledge `0.3.0`, Troubleshooting `0.2.0`, Documentation `0.2.1`; contracts `0.1.0-proposed` with S-1, S-2, and S-1.1 (item scope `0.2-proposed`)
+**Agents:** Knowledge `0.4.0`, Troubleshooting `0.2.0`, Documentation `0.2.1`; contracts `0.1.0-proposed` with S-1, S-2, and S-1.1 (item scope `0.2-proposed`)
 **Status:** Accepted for deterministic agents. This answers PRD-v3 alignment finding N-03. Manny answered Q-04 on 2026-11-05: for deterministic agents, the charter plus the structured output schema is the documented lane-owned behaviour specification ([PRD-V3-ALIGNMENT-REVIEW.md](PRD-V3-ALIGNMENT-REVIEW.md) §7).
 
 ## 1. What a charter is
@@ -36,7 +36,7 @@
 | Produces | `KnowledgeResult`: up to 3 verbatim passages with document, version, section, relevance, and band; `excluded_sources` (IDs and reasons only); `conflicts`; `injection_flags` (pattern IDs only); labelled claims; unknowns. For a linked item, `item_scope_ref` echoes the item identity (no text). |
 | Must never | Write or paraphrase product guidance. Cite a draft, retired, stale, or not-yet-effective source. Choose between conflicting sources. Repeat injected text. Follow instructions found in a ticket or a passage. Retrieve on the parent message instead of the item text. Read, repeat, or rank by a linked item's category, urgency, attention flag, or Auditor state. |
 | Blocks a linked item when | It is not a `candidate_boundary` item, depends on another item, has no inferred category, or is not a proposal for human review (`upstream_blocked`). Its span length or item ID does not match (`upstream_chain_mismatch`). Its parent is another case or case version (`context_mismatch`). Unknown urgency is not a reason to block: retrieval is read-only and may run while the Auditor reviews urgency (Q-A). |
-| Abstains when | No relevant source (`no_relevant_source`); relevance below 0.60 or fewer than 2 matched terms (`weak_evidence`); only stale or not-yet-effective sources (`stale_source_only`); only draft or retired sources (`unapproved_source_only`); conflicting sources or versions (`conflicting_sources`, `multiple_approved_versions`); instruction-like text in a selected passage (`retrieved_injection`). |
+| Abstains when | No relevant source (`no_relevant_source`); relevance below 0.60 or fewer than 2 matched terms (`weak_evidence`); only stale or not-yet-effective sources (`stale_source_only`); only draft or retired sources (`unapproved_source_only`); conflicting sources or versions (`conflicting_sources`, `multiple_approved_versions`); instruction-like text in a selected passage (`retrieved_injection`); the request's most specific term matches only an ineligible source while the best eligible section lacks it (ineligible-anchor guard, `stale_source_only` or `unapproved_source_only`, Knowledge `0.4.0`). |
 | Confidence | The band of the top passage's relevance: high ≥ 0.85, medium ≥ 0.60 (marked tentative), otherwise abstain. Provisional and uncalibrated (D-08). |
 | Enforced by | `agents/knowledge/`; `tests/test_knowledge_agent.py`; `tests/test_item_scope.py`; calibration safety gate in `tests/test_calibration.py` |
 

@@ -2,7 +2,7 @@
 
 **Branch:** `shawn/knowledge-troubleshooting-docs`
 **Owner:** Shawn (finalized six-agent split, `docs/planning/TASK-SPLIT.md`)
-**Version:** Knowledge `0.3.0`, Troubleshooting `0.2.0`, Documentation `0.2.1`; contracts `0.1.0-proposed` with S-1, S-2, and S-1.1 (item scope `0.2-proposed`)
+**Version:** Knowledge `0.4.0`, Troubleshooting `0.2.0`, Documentation `0.2.1`; contracts `0.1.0-proposed` with S-1, S-2, and S-1.1 (item scope `0.2-proposed`)
 **Status:** Implemented on synthetic data and merged into `developer` through PRs #2, #4, #5, #7, and #8 (2026-11-04 and 2026-11-05). Manny's combined six-agent harness runs these agents with his Coordinator, Triage, and Escalation agents. Linked-item support (shared drafts S-1 and S-2; Shawn changes K-1 to K-7) is on the lane branch, pending review (2026-11-06; [A2-ITEM-HANDOFF-RECEIVER-REVIEW.md](A2-ITEM-HANDOFF-RECEIVER-REVIEW.md) §8).
 
 ## 1. Authorization and scope
@@ -113,10 +113,13 @@ python -m cdit_support_mao.lane_harness synthetic_data/cases
 12 passed, 0 failed
 
 python -m cdit_support_mao.lane_calibration synthetic_data/calibration/knowledge-calibration-v1.json
-111 cases | answered 54 | accuracy 96.3% | coverage 74.3% | abstention recall 95.1% | critical errors 0 | label problems 0
+111 cases | answered 53 | accuracy 98.1% | coverage 74.3% | abstention recall 97.6% | critical errors 0 | label problems 0
 
 python -m cdit_support_mao.lane_calibration synthetic_data/calibration/knowledge-calibration-v2.json --knowledge-dir synthetic_data/knowledge
-65 cases | answered 28 | accuracy 92.9% | coverage 53.1% | abstention recall 93.8% | critical errors 0 | label problems 0
+65 cases | answered 29 | accuracy 96.6% | coverage 57.1% | abstention recall 100.0% | critical errors 0 | label problems 0
+
+python -m cdit_support_mao.lane_calibration synthetic_data/calibration/knowledge-calibration-v3.json --knowledge-dir synthetic_data/knowledge
+59 cases | answered 18 | accuracy 83.3% | coverage 36.6% | abstention recall 100.0% | critical errors 0 | label problems 0
 
 uvicorn cdit_support_mao.main:app --app-dir src  ->  GET /health  200 {"status":"ok","database":"ok"}
 ```
@@ -138,7 +141,7 @@ uvicorn cdit_support_mao.main:app --app-dir src  ->  GET /health  200 {"status":
   12 of 12 cases PASS
 
   python -m cdit_support_mao.lane_calibration synthetic_data/calibration/knowledge-calibration-v1.json
-  111 cases | answered 54 | accuracy 96.3% | coverage 74.3% | abstention recall 95.1% | ranking recall@3 100.0% | critical errors 0 | label problems 0
+  111 cases | answered 53 | accuracy 98.1% | coverage 74.3% | abstention recall 97.6% | ranking recall@3 100.0% | critical errors 0 | label problems 0
   ```
 
   - The calibration report adds ranking recall@1/3/5 (98.6% / 100% / 100%), returned recall (74.3%), and exclusions by reason. All 111 case outcomes are unchanged.
@@ -205,10 +208,10 @@ uvicorn cdit_support_mao.main:app --app-dir src  ->  GET /health  200 {"status":
 ## 10. Handoff record
 
 - **Artifacts and versions:**
-  - Knowledge, Troubleshooting, and Documentation agents `0.2.0` (linked-item support, 2026-11-06). Documentation `0.2.1` adds the S-1.1 attention check line (2026-11-08). Knowledge `0.3.0` stops counting identifier tokens as topic terms (L-1, 2026-11-09).
+  - Knowledge, Troubleshooting, and Documentation agents `0.2.0` (linked-item support, 2026-11-06). Documentation `0.2.1` adds the S-1.1 attention check line (2026-11-08). Knowledge `0.3.0` stops counting identifier tokens as topic terms (L-1, 2026-11-09). Knowledge `0.4.0` also drops courtesy words and adds the ineligible-anchor guard (L-1/L-2 batch 2, [L1-L2-BATCH-2.md](calibration/L1-L2-BATCH-2.md)).
   - Contracts `0.1.0-proposed`, with S-1 (`TriageItemScope`), S-2 (`InputRef.content_digest`), and S-1.1 (`attention_check` and the taxonomy citation; item scope `0.2-proposed`).
   - Source set `SRC-61C4A35E96CF`.
-  - Calibration sets `SYN-KCAL` 1.0 and 2.0. 2.0 records the L-1/L-2 baseline (2026-11-09).
+  - Calibration sets `SYN-KCAL` 1.0, 2.0, and 3.0. 2.0 recorded the first L-1/L-2 baseline. 3.0 measured the second L-1/L-2 batch, Knowledge `0.4.0` (correct answers 11 → 15, with no new errors). It is no longer held out ([KNOWLEDGE-CALIBRATION-REPORT-v3.md](calibration/KNOWLEDGE-CALIBRATION-REPORT-v3.md)).
   - Troubleshooting policy `SYN-TS-POLICY 0.1.2` (proposed, 2026-11-09). 0.1.1 is kept for callers that still name it.
 - **Completed:** the three Shawn-owned agents, their gates, synthetic data, harness, tests, and contract proposal with examples. Also calibration evidence for D-08 (draft labels) and a Python 3.13 / `/health` run.
 - **Evidence:** §7, plus `docs/contracts/examples/`.
