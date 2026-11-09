@@ -9,8 +9,9 @@ Covers the shared change approved by Manny on 2026-11-08
   and only as a self-consistent, content-addressed reference.
 - Q3: ``check_not_run`` is information for Staff/Admin and adds no hold.
 - Q4: new scopes are 0.2; legacy 0.1 scopes keep the S-1 rules.
+- Q5 (2026-11-09): ``attention_check`` is required on every 0.2 scope, now that
+  Manny's connector always supplies it (``1c822c8``); legacy 0.1 scopes still omit it.
 
-Q5 (required ``attention_check``) waits for Manny's connector and is not tested here.
 All data is synthetic.
 """
 
@@ -97,6 +98,13 @@ def test_new_item_scopes_are_version_0_2_and_the_echo_carries_it(harness) -> Non
     assert run.knowledge.item_scope_ref == ident
 
 
+# A legacy 0.1 scope never states the attention check (Q4, Q5).
+LEGACY_SCOPE = {
+    "item_scope.identity.scope_contract_version": LEGACY_TRIAGE_ITEM_SCOPE_VERSION,
+    "item_scope.attention_check": None,
+}
+
+
 def test_unknown_scope_version_is_rejected(harness) -> None:
     triage = harness.run(item_case(), now=NOW).triage
     with pytest.raises(ValidationError, match="scope_contract_version"):
@@ -105,7 +113,7 @@ def test_unknown_scope_version_is_rejected(harness) -> None:
 
 def test_legacy_0_1_scope_still_flows_under_the_s1_rules(harness, knowledge_agent, troubleshooting_agent) -> None:
     run = harness.run(determined(), now=NOW)
-    legacy = revalidate(run.triage, **{"item_scope.identity.scope_contract_version": LEGACY_TRIAGE_ITEM_SCOPE_VERSION})
+    legacy = revalidate(run.triage, **LEGACY_SCOPE)
     assert legacy.item_scope.identity.is_legacy_scope and legacy.item_scope.attention_check is None
     knowledge, troubleshooting, documentation = rechain(run, legacy, knowledge_agent, troubleshooting_agent)
     assert knowledge.item_scope_ref.scope_contract_version == LEGACY_TRIAGE_ITEM_SCOPE_VERSION
@@ -130,7 +138,7 @@ def test_legacy_0_1_scope_rejects_the_s1_1_additions(harness, changes, error) ->
         changes = {"item_scope.category_sources": with_category_sources(triage, TAXONOMY_REF)}
     with pytest.raises(ValidationError, match=error):
         revalidate(
-            triage, **{"item_scope.identity.scope_contract_version": LEGACY_TRIAGE_ITEM_SCOPE_VERSION, **changes}
+            triage, **{**LEGACY_SCOPE, **changes}
         )
 
 
@@ -173,18 +181,35 @@ def test_schema_rejects_inconsistent_attention_check(harness, changes, error) ->
         {"item_scope.attention_check": "no_configured_match", "item_scope.parent_attention_flagged": True},
         {"item_scope.attention_check": "no_configured_match"},
         {"item_scope.attention_check": "check_not_run"},
-        {"item_scope.attention_check": None},
     ],
-    ids=["flagged", "match_elsewhere", "no_match", "not_run", "not_stated"],
+    ids=["flagged", "match_elsewhere", "no_match", "not_run"],
 )
 def test_schema_accepts_consistent_attention_check(harness, changes) -> None:
     triage = harness.run(item_case(), now=NOW).triage
     assert revalidate(triage, **changes).item_scope.attention_check == changes["item_scope.attention_check"]
 
 
-def test_harness_derives_potential_attention_for_a_flagged_item(harness) -> None:
-    scope = harness.run(item_case(attention_on_item=True), now=NOW).triage.item_scope
-    assert scope.attention_check == "potential_attention" and scope.attention_ref is not None
+def test_q5_attention_check_is_required_on_a_0_2_scope(harness) -> None:
+    triage = harness.run(item_case(), now=NOW).triage
+    assert not triage.item_scope.identity.is_legacy_scope
+    with pytest.raises(ValidationError, match="attention_check_required_for_scope_0_2"):
+        revalidate(triage, **{"item_scope.attention_check": None})
+
+
+@pytest.mark.parametrize(
+    ("stand_in", "expected"),
+    [
+        ({"attention_on_item": True}, "potential_attention"),
+        ({"parent_attention_flagged": True}, "no_configured_match"),
+        ({}, "check_not_run"),
+        ({"attention_check": "no_configured_match"}, "no_configured_match"),
+    ],
+    ids=["flagged", "flag_elsewhere", "silent", "stated"],
+)
+def test_harness_derives_the_check_like_the_connector(harness, stand_in, expected) -> None:
+    scope = harness.run(item_case(**stand_in), now=NOW).triage.item_scope
+    assert scope.attention_check == expected
+    assert (scope.attention_ref is not None) == (expected == "potential_attention")
 
 
 # ---------------------------------------------------------------------------
@@ -252,9 +277,8 @@ def test_documentation_cites_the_taxonomy_on_the_category_line(harness, knowledg
     [
         ("no_configured_match", ClaimLabel.INFERENCE, "This is not a risk assessment."),
         ("check_not_run", ClaimLabel.INFERENCE, "Information only; the Auditor's urgency review still applies."),
-        (None, ClaimLabel.UNKNOWN, "Triage did not say whether it ran for this item."),
     ],
-    ids=["no_match", "not_run", "not_stated"],
+    ids=["no_match", "not_run"],
 )
 def test_documentation_states_the_attention_check(harness, check, label, phrase) -> None:
     run = harness.run(determined(attention_check=check), now=NOW)
