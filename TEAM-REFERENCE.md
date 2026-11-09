@@ -1,4 +1,19 @@
 # Handoffs prepared for push
+## 2026-11-09T09:48:46-05:00 - Manny synthetic evaluation draft preparation
+
+Summary file: PROJECT-HANDOFF.md
+
+- Git author for the outgoing task commit: Emmanuel De Jesus <emmanuel.dejesus@pursuit.org>.
+- Repository/branch: `emmanuelID-cmd/Project-JD-CDIT-MAO`, `manny/coordinator-triage-escalation`; PR target: `developer`. Verified remote baseline is `5ce9a0602b0d233dbb69a4777c5623db3f378162`; the fetched Manny lane and developer tips match, with no incoming work and no open PR.
+- Done:
+  - [x] Correct synthetic evaluation query text, source mappings, source spans, and date metadata without changing the agreed category/Unknown/Auditor policy.
+  - [x] Update the checklist to record completed draft preparation and the open Phase 2 acceptance gates.
+  - [x] Validate 100 cases/105 spans, 5 draft-validator tests, three targeted deterministic retrieval outcomes, and whitespace.
+- Not completed:
+  - [ ] Manny batch label/source-expectation approval and integrated 100-case scoring.
+  - [ ] Shawn's proposed knowledge fixtures/policy accepted and active for grounding/retrieval scoring.
+- This entry was prepared before the task commit; it records the verified pre-push baseline and work scope, not a push time or commit SHA.
+
 
 **Current requirements source (2026-11-08):** [`docs/requirements/PRD-v4.md`](docs/requirements/PRD-v4.md). Dated PRD-v3 statements below describe the baseline at their recorded handoff time.
 
