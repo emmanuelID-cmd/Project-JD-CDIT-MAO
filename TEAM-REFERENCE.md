@@ -2,7 +2,15 @@
 
 **Current requirements source (2026-11-08):** [`docs/requirements/PRD-v4.md`](docs/requirements/PRD-v4.md). Dated PRD-v3 statements below describe the baseline at their recorded handoff time.
 
-**Current integration state (verified 2026-11-08):** Shawn's PR #15 merged into `developer` as `1a9239910c5862cde6f995dfebcb9208ea515117`; S-1.1 is implemented and no longer undecided. All four non-main branches are aligned at that commit, and `main` is unchanged. See the current-state section at the top of [PROJECT-HANDOFF.md](PROJECT-HANDOFF.md). Older dated entries below describe their historical snapshot state.
+**Published integration baseline (verified 2026-11-08):** Shawn's PR #15 is merged into `developer` at `1a9239910c5862cde6f995dfebcb9208ea515117`; S-1.1 is implemented. The current outgoing Manny SQL work is nine commits ahead on `manny/sql-foundation` at `df02e26f0d8289f96eb39890e278759c5bf20a86`; it has not yet been pushed. Local `manny/coordinator-triage-escalation` is at ancestor `4486a02`, Shawn's lane is at the published baseline, and `main` remains unchanged. See the pre-push status at the top of [PROJECT-HANDOFF.md](PROJECT-HANDOFF.md). Older entries below describe their recorded snapshot states.
+
+## 2026-11-08 — Manny SQL assignment and evaluation status
+
+Summary file: PROJECT-HANDOFF.md
+
+- The nine outgoing Manny commits include the Phase 2 connected-Triage and Auditor-resume work, Phase 3/4 fixtures and evaluation draft, and the assignment/access-control commit `df02e26`.
+- Full project suite: 689 passed. The 100-case draft validator passes 5/5 structural checks, but case labels remain unapproved and unscored; all 17 proposed evidence IDs are missing from the synthetic corpus. Do not report the evaluation as complete.
+- Before push, the outgoing branch is nine commits ahead of the verified `developer` baseline. No open PR was found. The reviewed pull request must target `developer`; `main` is not part of this publication.
 
 ## 2026-11-08T14:17:06-05:00 - Manny SQL foundation: synthetic case catalog and human lifecycle
 

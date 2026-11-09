@@ -1,4 +1,16 @@
 # Project Handoff — Project-JD-CDIT-MAO
+## Current outgoing state — 2026-11-08
+
+This is the pre-push handoff for the authorized Manny SQL-branch publication. It supersedes older current-status statements below where they conflict; older entries remain historical snapshots.
+
+- Repository: `emmanuelID-cmd/Project-JD-CDIT-MAO`; branch: `manny/sql-foundation`; target: `developer`.
+- Verified destination baseline: `1a9239910c5862cde6f995dfebcb9208ea515117` (`origin/developer` and `origin/manny/sql-foundation`). Outgoing task commit: `df02e26f0d8289f96eb39890e278759c5bf20a86`; the branch contains nine commits beyond that baseline. `developer` is an ancestor; fetch found no incoming commits and no open PR existed before publication. No push or PR has occurred yet. `main` remains unchanged.
+- Added assigned-case authorization for the synthetic app: Staff can access only cases assigned to their active account; Admin can view and assign/reassign/unassign cases and inspect assignment history; Admin Auditor decisions require an override reason. Requester ownership remains separate. Seeded cases go to `SYN-STAFF-001`; newly submitted requests remain unassigned for Admin assignment.
+- Assignment changes record actor, prior and new assignee, and timestamp. Normal history is append-only. The only reset is the explicit local terminal command `reset --confirm-synthetic-only`; no reset UI control was added.
+- Phase 2 remains open. The 100-case draft is still `DRAFT_NOT_APPROVED` and unscored. Its structural validator passes 5/5 checks, but all 17 proposed evidence source IDs are absent from the local synthetic knowledge corpus. Read-only label reviews found segmentation/category/runtime shape generally plausible, but no case labels are approved. Review findings needing Manny's label decision: cases 002–005 add vague follow-up pressure to routine payroll requests; 061 and 063–065 need an explicit manual-fallback route; 081–085 may understate an Admin-only audit-screen request as routine; 091–095 lack the due date needed to substantiate High/P1; 096–100 may under-route quoted injection/privilege concerns. Exact band thresholds and routes remain unapproved. No provider calls or accuracy score were made.
+- Validation: `.venv\\Scripts\\python.exe -m pytest -q` — 689 passed; `node --test tests/test_evaluation_draft.mjs` — 5 passed; `node --check src/cdit_support_mao/static/app.js` and `git diff --check` passed.
+- Still open: Manny's approval of the 100 case-level label proposals; mapping or creating the 17 synthetic evidence sources with Shawn's Knowledge lane; integrated 100-case scoring; manual browser/accessibility review; and remaining Shared/project phase acceptance. No real/CDIT data, production authentication, model write tools, outbound notifications, or customer communications were used.
+
 ## Current verified integration state - 2026-11-08
 
 This section supersedes older status snapshots below where they conflict. The dated entries remain historical records of their preparation-time state.
