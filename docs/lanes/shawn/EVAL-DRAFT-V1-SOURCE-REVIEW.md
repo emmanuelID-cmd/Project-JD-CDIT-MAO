@@ -2,6 +2,8 @@
 
 **Status:** Shawn's Lane review for Manny, 2026-11-08. Review and proposal only. No knowledge article, policy, case file, label, category or urgency rule, or agent behavior was changed.
 
+**Update 2026-11-09:** The fixtures landed as an evaluation-only set. They are revised to use the User, Staff, and Admin roles, and their IDs and sections are unchanged. The current state is in [EVAL-DRAFT-V1-KNOWLEDGE-HANDOFF.md](EVAL-DRAFT-V1-KNOWLEDGE-HANDOFF.md). This review is kept as the record of the original mapping.
+
 **Reviewed:**
 
 - `synthetic_data/evaluation_draft/v1/cases.json`: `CDIT-SYNTHETIC-EVALUATION-DRAFT-100-v1`, status `DRAFT_NOT_APPROVED`, 100 cases, 105 items, at `developer` `1e58fdc`.
@@ -89,7 +91,7 @@ Pin an evaluation `as_of` in the dataset, for example 2026-11-10.
 
 ## 4. Proposed fixtures (for review; not in the corpus)
 
-**Draft files.** They are in [proposed-fixtures/eval-draft-v1/](proposed-fixtures/eval-draft-v1/). They sit outside `synthetic_data/knowledge/`, so they do not load and change nothing until accepted.
+**Draft files.** These were first proposed under `proposed-fixtures/eval-draft-v1/`, which is now moved. They now live in [synthetic_data/evaluation_knowledge/eval-draft-v1/](../../../synthetic_data/evaluation_knowledge/eval-draft-v1/), outside `synthetic_data/knowledge/`, so the runtime corpus never loads them.
 
 **Common fields:**
 

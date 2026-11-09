@@ -6,7 +6,7 @@
   "product_area": "scheduling",
   "status": "approved",
   "data_classification": "synthetic",
-  "owner": "Synthetic Knowledge Owner",
+  "owner": "Synthetic evaluation fixture (test-only; not CDIT policy)",
   "effective_date": "2026-11-09",
   "review_due": "2027-11-09",
   "keywords": [
@@ -21,12 +21,12 @@
     {
       "section_id": "s1",
       "heading": "Two shifts overlap on the schedule",
-      "text": "When two shifts overlap on a user's schedule, Tier 1 staff record both shifts and route the conflict to the scheduling coordinator. Tier 1 staff do not move, cancel, or swap shifts.",
+      "text": "When two shifts overlap on a User's schedule, Staff record both shifts and hand the conflict to an Admin for human review. Staff do not move, cancel, or swap shifts.",
       "steps": [
         {
           "step_id": "st1",
           "action_type": "navigate_ui",
-          "text": "Ask the user to open My Schedule and read the date, start time, and end time of both shifts."
+          "text": "Ask the User to open My Schedule and read the date, start time, and end time of both shifts."
         },
         {
           "step_id": "st2",
@@ -43,11 +43,11 @@
       "stop_conditions": [
         {
           "condition_id": "KB-SHF-440-SC1",
-          "text": "If the times look shifted by several hours, the overlap may be a time zone display difference; share KB-SCH-150 before routing a conflict."
+          "text": "If the times look shifted by several hours, the overlap may be a time zone display difference; share KB-SCH-150 before handing on a conflict."
         },
         {
           "condition_id": "KB-SHF-440-SC2",
-          "text": "Do not change the schedule at Tier 1. Route the conflict to the scheduling coordinator."
+          "text": "Staff do not change the schedule. Hand the conflict to an Admin for human review."
         }
       ]
     }
