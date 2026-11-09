@@ -1,6 +1,6 @@
 # Phase 4 — Manny Lane Validation and Handoff
 
-**Status (2026-11-08):** The existing runner and connected synthetic harness are available, and a 100-case evaluation draft now exists. Phase 4 is not accepted or complete: the cases are `DRAFT_NOT_APPROVED`, no labels have been scored, and the PRD accuracy gates remain unmeasured. The full Python suite passed 686 tests; the evaluation-draft validator passed 4 tests. Neither result is model-accuracy evidence.
+**Status (2026-11-08):** The existing runner and connected synthetic harness are available, and a 100-case evaluation draft now exists. Phase 4 is not accepted or complete: the cases are `DRAFT_NOT_APPROVED`, no labels have been scored, and the PRD accuracy gates remain unmeasured. The full Python suite passed 686 tests; the evaluation-draft validator passed 5 tests. Neither result is model-accuracy evidence.
 
 ## Current progress — 2026-11-06
 

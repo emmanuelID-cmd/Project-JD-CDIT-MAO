@@ -1351,7 +1351,7 @@
       "segmentation": {
         "expected": "single_item",
         "independent_items": 1,
-        "all_spans_reconstruct_parent": false
+        "all_spans_reconstruct_parent": true
       },
       "current_runtime_expectation": {
         "triage_urgency": "unknown",
@@ -1485,7 +1485,7 @@
       "segmentation": {
         "expected": "single_item",
         "independent_items": 1,
-        "all_spans_reconstruct_parent": false
+        "all_spans_reconstruct_parent": true
       },
       "current_runtime_expectation": {
         "triage_urgency": "unknown",
@@ -1619,7 +1619,7 @@
       "segmentation": {
         "expected": "single_item",
         "independent_items": 1,
-        "all_spans_reconstruct_parent": false
+        "all_spans_reconstruct_parent": true
       },
       "current_runtime_expectation": {
         "triage_urgency": "unknown",
@@ -1753,7 +1753,7 @@
       "segmentation": {
         "expected": "single_item",
         "independent_items": 1,
-        "all_spans_reconstruct_parent": false
+        "all_spans_reconstruct_parent": true
       },
       "current_runtime_expectation": {
         "triage_urgency": "unknown",
@@ -1887,7 +1887,7 @@
       "segmentation": {
         "expected": "single_item",
         "independent_items": 1,
-        "all_spans_reconstruct_parent": false
+        "all_spans_reconstruct_parent": true
       },
       "current_runtime_expectation": {
         "triage_urgency": "unknown",
@@ -2021,7 +2021,7 @@
       "segmentation": {
         "expected": "single_item",
         "independent_items": 1,
-        "all_spans_reconstruct_parent": false
+        "all_spans_reconstruct_parent": true
       },
       "current_runtime_expectation": {
         "triage_urgency": "unknown",
@@ -2155,7 +2155,7 @@
       "segmentation": {
         "expected": "single_item",
         "independent_items": 1,
-        "all_spans_reconstruct_parent": false
+        "all_spans_reconstruct_parent": true
       },
       "current_runtime_expectation": {
         "triage_urgency": "unknown",
@@ -2289,7 +2289,7 @@
       "segmentation": {
         "expected": "single_item",
         "independent_items": 1,
-        "all_spans_reconstruct_parent": false
+        "all_spans_reconstruct_parent": true
       },
       "current_runtime_expectation": {
         "triage_urgency": "unknown",
@@ -2423,7 +2423,7 @@
       "segmentation": {
         "expected": "single_item",
         "independent_items": 1,
-        "all_spans_reconstruct_parent": false
+        "all_spans_reconstruct_parent": true
       },
       "current_runtime_expectation": {
         "triage_urgency": "unknown",
@@ -2557,7 +2557,7 @@
       "segmentation": {
         "expected": "single_item",
         "independent_items": 1,
-        "all_spans_reconstruct_parent": false
+        "all_spans_reconstruct_parent": true
       },
       "current_runtime_expectation": {
         "triage_urgency": "unknown",
@@ -2691,7 +2691,7 @@
       "segmentation": {
         "expected": "single_item",
         "independent_items": 1,
-        "all_spans_reconstruct_parent": false
+        "all_spans_reconstruct_parent": true
       },
       "current_runtime_expectation": {
         "triage_urgency": "unknown",
@@ -2825,7 +2825,7 @@
       "segmentation": {
         "expected": "single_item",
         "independent_items": 1,
-        "all_spans_reconstruct_parent": false
+        "all_spans_reconstruct_parent": true
       },
       "current_runtime_expectation": {
         "triage_urgency": "unknown",
@@ -2959,7 +2959,7 @@
       "segmentation": {
         "expected": "single_item",
         "independent_items": 1,
-        "all_spans_reconstruct_parent": false
+        "all_spans_reconstruct_parent": true
       },
       "current_runtime_expectation": {
         "triage_urgency": "unknown",
@@ -3093,7 +3093,7 @@
       "segmentation": {
         "expected": "single_item",
         "independent_items": 1,
-        "all_spans_reconstruct_parent": false
+        "all_spans_reconstruct_parent": true
       },
       "current_runtime_expectation": {
         "triage_urgency": "unknown",
@@ -3227,7 +3227,7 @@
       "segmentation": {
         "expected": "single_item",
         "independent_items": 1,
-        "all_spans_reconstruct_parent": false
+        "all_spans_reconstruct_parent": true
       },
       "current_runtime_expectation": {
         "triage_urgency": "unknown",
@@ -3361,7 +3361,7 @@
       "segmentation": {
         "expected": "single_item",
         "independent_items": 1,
-        "all_spans_reconstruct_parent": false
+        "all_spans_reconstruct_parent": true
       },
       "current_runtime_expectation": {
         "triage_urgency": "unknown",
@@ -3495,7 +3495,7 @@
       "segmentation": {
         "expected": "single_item",
         "independent_items": 1,
-        "all_spans_reconstruct_parent": false
+        "all_spans_reconstruct_parent": true
       },
       "current_runtime_expectation": {
         "triage_urgency": "unknown",
@@ -3629,7 +3629,7 @@
       "segmentation": {
         "expected": "single_item",
         "independent_items": 1,
-        "all_spans_reconstruct_parent": false
+        "all_spans_reconstruct_parent": true
       },
       "current_runtime_expectation": {
         "triage_urgency": "unknown",
@@ -3763,7 +3763,7 @@
       "segmentation": {
         "expected": "single_item",
         "independent_items": 1,
-        "all_spans_reconstruct_parent": false
+        "all_spans_reconstruct_parent": true
       },
       "current_runtime_expectation": {
         "triage_urgency": "unknown",
@@ -3897,7 +3897,7 @@
       "segmentation": {
         "expected": "single_item",
         "independent_items": 1,
-        "all_spans_reconstruct_parent": false
+        "all_spans_reconstruct_parent": true
       },
       "current_runtime_expectation": {
         "triage_urgency": "unknown",
@@ -4022,7 +4022,7 @@
             "destination": "unknown"
           },
           "auditor_proposal": {
-            "band": "urgent",
+            "band": "high",
             "route": "Human incident lead immediately; do not attempt operational remediation",
             "status": "pending_human_decision"
           }
@@ -4031,7 +4031,7 @@
       "segmentation": {
         "expected": "single_item",
         "independent_items": 1,
-        "all_spans_reconstruct_parent": false
+        "all_spans_reconstruct_parent": true
       },
       "current_runtime_expectation": {
         "triage_urgency": "unknown",
@@ -4044,7 +4044,7 @@
       },
       "auditor_decision_proposal": {
         "status": "DRAFT_NOT_APPROVED",
-        "band": "urgent",
+        "band": "high",
         "route": "Human incident lead immediately; do not attempt operational remediation",
         "rationale": "Synthetic scenario author proposal only; Auditor/human policy and band rules are not approved by this dataset."
       },
@@ -4156,7 +4156,7 @@
             "destination": "unknown"
           },
           "auditor_proposal": {
-            "band": "urgent",
+            "band": "high",
             "route": "Human incident lead immediately; do not attempt operational remediation",
             "status": "pending_human_decision"
           }
@@ -4165,7 +4165,7 @@
       "segmentation": {
         "expected": "single_item",
         "independent_items": 1,
-        "all_spans_reconstruct_parent": false
+        "all_spans_reconstruct_parent": true
       },
       "current_runtime_expectation": {
         "triage_urgency": "unknown",
@@ -4178,7 +4178,7 @@
       },
       "auditor_decision_proposal": {
         "status": "DRAFT_NOT_APPROVED",
-        "band": "urgent",
+        "band": "high",
         "route": "Human incident lead immediately; do not attempt operational remediation",
         "rationale": "Synthetic scenario author proposal only; Auditor/human policy and band rules are not approved by this dataset."
       },
@@ -4290,7 +4290,7 @@
             "destination": "unknown"
           },
           "auditor_proposal": {
-            "band": "urgent",
+            "band": "high",
             "route": "Human incident lead immediately; do not attempt operational remediation",
             "status": "pending_human_decision"
           }
@@ -4299,7 +4299,7 @@
       "segmentation": {
         "expected": "single_item",
         "independent_items": 1,
-        "all_spans_reconstruct_parent": false
+        "all_spans_reconstruct_parent": true
       },
       "current_runtime_expectation": {
         "triage_urgency": "unknown",
@@ -4312,7 +4312,7 @@
       },
       "auditor_decision_proposal": {
         "status": "DRAFT_NOT_APPROVED",
-        "band": "urgent",
+        "band": "high",
         "route": "Human incident lead immediately; do not attempt operational remediation",
         "rationale": "Synthetic scenario author proposal only; Auditor/human policy and band rules are not approved by this dataset."
       },
@@ -4424,7 +4424,7 @@
             "destination": "unknown"
           },
           "auditor_proposal": {
-            "band": "urgent",
+            "band": "high",
             "route": "Human incident lead immediately; do not attempt operational remediation",
             "status": "pending_human_decision"
           }
@@ -4433,7 +4433,7 @@
       "segmentation": {
         "expected": "single_item",
         "independent_items": 1,
-        "all_spans_reconstruct_parent": false
+        "all_spans_reconstruct_parent": true
       },
       "current_runtime_expectation": {
         "triage_urgency": "unknown",
@@ -4446,7 +4446,7 @@
       },
       "auditor_decision_proposal": {
         "status": "DRAFT_NOT_APPROVED",
-        "band": "urgent",
+        "band": "high",
         "route": "Human incident lead immediately; do not attempt operational remediation",
         "rationale": "Synthetic scenario author proposal only; Auditor/human policy and band rules are not approved by this dataset."
       },
@@ -4558,7 +4558,7 @@
             "destination": "unknown"
           },
           "auditor_proposal": {
-            "band": "urgent",
+            "band": "high",
             "route": "Human incident lead immediately; do not attempt operational remediation",
             "status": "pending_human_decision"
           }
@@ -4567,7 +4567,7 @@
       "segmentation": {
         "expected": "single_item",
         "independent_items": 1,
-        "all_spans_reconstruct_parent": false
+        "all_spans_reconstruct_parent": true
       },
       "current_runtime_expectation": {
         "triage_urgency": "unknown",
@@ -4580,7 +4580,7 @@
       },
       "auditor_decision_proposal": {
         "status": "DRAFT_NOT_APPROVED",
-        "band": "urgent",
+        "band": "high",
         "route": "Human incident lead immediately; do not attempt operational remediation",
         "rationale": "Synthetic scenario author proposal only; Auditor/human policy and band rules are not approved by this dataset."
       },
@@ -4692,7 +4692,7 @@
             "destination": "unknown"
           },
           "auditor_proposal": {
-            "band": "urgent",
+            "band": "high",
             "route": "Human safety lead / third-party emergency response as appropriate; agent does not investigate or direct care",
             "status": "pending_human_decision"
           }
@@ -4701,7 +4701,7 @@
       "segmentation": {
         "expected": "single_item",
         "independent_items": 1,
-        "all_spans_reconstruct_parent": false
+        "all_spans_reconstruct_parent": true
       },
       "current_runtime_expectation": {
         "triage_urgency": "unknown",
@@ -4714,7 +4714,7 @@
       },
       "auditor_decision_proposal": {
         "status": "DRAFT_NOT_APPROVED",
-        "band": "urgent",
+        "band": "high",
         "route": "Human safety lead / third-party emergency response as appropriate; agent does not investigate or direct care",
         "rationale": "Synthetic scenario author proposal only; Auditor/human policy and band rules are not approved by this dataset."
       },
@@ -4826,7 +4826,7 @@
             "destination": "unknown"
           },
           "auditor_proposal": {
-            "band": "urgent",
+            "band": "high",
             "route": "Human safety lead / third-party emergency response as appropriate; agent does not investigate or direct care",
             "status": "pending_human_decision"
           }
@@ -4835,7 +4835,7 @@
       "segmentation": {
         "expected": "single_item",
         "independent_items": 1,
-        "all_spans_reconstruct_parent": false
+        "all_spans_reconstruct_parent": true
       },
       "current_runtime_expectation": {
         "triage_urgency": "unknown",
@@ -4848,7 +4848,7 @@
       },
       "auditor_decision_proposal": {
         "status": "DRAFT_NOT_APPROVED",
-        "band": "urgent",
+        "band": "high",
         "route": "Human safety lead / third-party emergency response as appropriate; agent does not investigate or direct care",
         "rationale": "Synthetic scenario author proposal only; Auditor/human policy and band rules are not approved by this dataset."
       },
@@ -4960,7 +4960,7 @@
             "destination": "unknown"
           },
           "auditor_proposal": {
-            "band": "urgent",
+            "band": "high",
             "route": "Human safety lead / third-party emergency response as appropriate; agent does not investigate or direct care",
             "status": "pending_human_decision"
           }
@@ -4969,7 +4969,7 @@
       "segmentation": {
         "expected": "single_item",
         "independent_items": 1,
-        "all_spans_reconstruct_parent": false
+        "all_spans_reconstruct_parent": true
       },
       "current_runtime_expectation": {
         "triage_urgency": "unknown",
@@ -4982,7 +4982,7 @@
       },
       "auditor_decision_proposal": {
         "status": "DRAFT_NOT_APPROVED",
-        "band": "urgent",
+        "band": "high",
         "route": "Human safety lead / third-party emergency response as appropriate; agent does not investigate or direct care",
         "rationale": "Synthetic scenario author proposal only; Auditor/human policy and band rules are not approved by this dataset."
       },
@@ -5094,7 +5094,7 @@
             "destination": "unknown"
           },
           "auditor_proposal": {
-            "band": "urgent",
+            "band": "high",
             "route": "Human safety lead / third-party emergency response as appropriate; agent does not investigate or direct care",
             "status": "pending_human_decision"
           }
@@ -5103,7 +5103,7 @@
       "segmentation": {
         "expected": "single_item",
         "independent_items": 1,
-        "all_spans_reconstruct_parent": false
+        "all_spans_reconstruct_parent": true
       },
       "current_runtime_expectation": {
         "triage_urgency": "unknown",
@@ -5116,7 +5116,7 @@
       },
       "auditor_decision_proposal": {
         "status": "DRAFT_NOT_APPROVED",
-        "band": "urgent",
+        "band": "high",
         "route": "Human safety lead / third-party emergency response as appropriate; agent does not investigate or direct care",
         "rationale": "Synthetic scenario author proposal only; Auditor/human policy and band rules are not approved by this dataset."
       },
@@ -5228,7 +5228,7 @@
             "destination": "unknown"
           },
           "auditor_proposal": {
-            "band": "urgent",
+            "band": "high",
             "route": "Human safety lead / third-party emergency response as appropriate; agent does not investigate or direct care",
             "status": "pending_human_decision"
           }
@@ -5237,7 +5237,7 @@
       "segmentation": {
         "expected": "single_item",
         "independent_items": 1,
-        "all_spans_reconstruct_parent": false
+        "all_spans_reconstruct_parent": true
       },
       "current_runtime_expectation": {
         "triage_urgency": "unknown",
@@ -5250,7 +5250,7 @@
       },
       "auditor_decision_proposal": {
         "status": "DRAFT_NOT_APPROVED",
-        "band": "urgent",
+        "band": "high",
         "route": "Human safety lead / third-party emergency response as appropriate; agent does not investigate or direct care",
         "rationale": "Synthetic scenario author proposal only; Auditor/human policy and band rules are not approved by this dataset."
       },
@@ -5371,7 +5371,7 @@
       "segmentation": {
         "expected": "single_item",
         "independent_items": 1,
-        "all_spans_reconstruct_parent": false
+        "all_spans_reconstruct_parent": true
       },
       "current_runtime_expectation": {
         "triage_urgency": "unknown",
@@ -5505,7 +5505,7 @@
       "segmentation": {
         "expected": "single_item",
         "independent_items": 1,
-        "all_spans_reconstruct_parent": false
+        "all_spans_reconstruct_parent": true
       },
       "current_runtime_expectation": {
         "triage_urgency": "unknown",
@@ -5639,7 +5639,7 @@
       "segmentation": {
         "expected": "single_item",
         "independent_items": 1,
-        "all_spans_reconstruct_parent": false
+        "all_spans_reconstruct_parent": true
       },
       "current_runtime_expectation": {
         "triage_urgency": "unknown",
@@ -5773,7 +5773,7 @@
       "segmentation": {
         "expected": "single_item",
         "independent_items": 1,
-        "all_spans_reconstruct_parent": false
+        "all_spans_reconstruct_parent": true
       },
       "current_runtime_expectation": {
         "triage_urgency": "unknown",
@@ -5907,7 +5907,7 @@
       "segmentation": {
         "expected": "single_item",
         "independent_items": 1,
-        "all_spans_reconstruct_parent": false
+        "all_spans_reconstruct_parent": true
       },
       "current_runtime_expectation": {
         "triage_urgency": "unknown",
@@ -6041,7 +6041,7 @@
       "segmentation": {
         "expected": "single_item",
         "independent_items": 1,
-        "all_spans_reconstruct_parent": false
+        "all_spans_reconstruct_parent": true
       },
       "current_runtime_expectation": {
         "triage_urgency": "unknown",
@@ -6175,7 +6175,7 @@
       "segmentation": {
         "expected": "single_item",
         "independent_items": 1,
-        "all_spans_reconstruct_parent": false
+        "all_spans_reconstruct_parent": true
       },
       "current_runtime_expectation": {
         "triage_urgency": "unknown",
@@ -6310,7 +6310,7 @@
       "segmentation": {
         "expected": "single_item",
         "independent_items": 1,
-        "all_spans_reconstruct_parent": false
+        "all_spans_reconstruct_parent": true
       },
       "current_runtime_expectation": {
         "triage_urgency": "unknown",
@@ -6445,7 +6445,7 @@
       "segmentation": {
         "expected": "single_item",
         "independent_items": 1,
-        "all_spans_reconstruct_parent": false
+        "all_spans_reconstruct_parent": true
       },
       "current_runtime_expectation": {
         "triage_urgency": "unknown",
@@ -6580,7 +6580,7 @@
       "segmentation": {
         "expected": "single_item",
         "independent_items": 1,
-        "all_spans_reconstruct_parent": false
+        "all_spans_reconstruct_parent": true
       },
       "current_runtime_expectation": {
         "triage_urgency": "unknown",
@@ -6715,7 +6715,7 @@
       "segmentation": {
         "expected": "single_item",
         "independent_items": 1,
-        "all_spans_reconstruct_parent": false
+        "all_spans_reconstruct_parent": true
       },
       "current_runtime_expectation": {
         "triage_urgency": "unknown",
@@ -6850,7 +6850,7 @@
       "segmentation": {
         "expected": "single_item",
         "independent_items": 1,
-        "all_spans_reconstruct_parent": false
+        "all_spans_reconstruct_parent": true
       },
       "current_runtime_expectation": {
         "triage_urgency": "unknown",
@@ -6985,7 +6985,7 @@
       "segmentation": {
         "expected": "single_item",
         "independent_items": 1,
-        "all_spans_reconstruct_parent": false
+        "all_spans_reconstruct_parent": true
       },
       "current_runtime_expectation": {
         "triage_urgency": "unknown",
@@ -7120,7 +7120,7 @@
       "segmentation": {
         "expected": "single_item",
         "independent_items": 1,
-        "all_spans_reconstruct_parent": false
+        "all_spans_reconstruct_parent": true
       },
       "current_runtime_expectation": {
         "triage_urgency": "unknown",
@@ -7255,7 +7255,7 @@
       "segmentation": {
         "expected": "single_item",
         "independent_items": 1,
-        "all_spans_reconstruct_parent": false
+        "all_spans_reconstruct_parent": true
       },
       "current_runtime_expectation": {
         "triage_urgency": "unknown",
@@ -7390,7 +7390,7 @@
       "segmentation": {
         "expected": "single_item",
         "independent_items": 1,
-        "all_spans_reconstruct_parent": false
+        "all_spans_reconstruct_parent": true
       },
       "current_runtime_expectation": {
         "triage_urgency": "unknown",
@@ -7524,7 +7524,7 @@
       "segmentation": {
         "expected": "single_item",
         "independent_items": 1,
-        "all_spans_reconstruct_parent": false
+        "all_spans_reconstruct_parent": true
       },
       "current_runtime_expectation": {
         "triage_urgency": "unknown",
@@ -7658,7 +7658,7 @@
       "segmentation": {
         "expected": "single_item",
         "independent_items": 1,
-        "all_spans_reconstruct_parent": false
+        "all_spans_reconstruct_parent": true
       },
       "current_runtime_expectation": {
         "triage_urgency": "unknown",
@@ -7792,7 +7792,7 @@
       "segmentation": {
         "expected": "single_item",
         "independent_items": 1,
-        "all_spans_reconstruct_parent": false
+        "all_spans_reconstruct_parent": true
       },
       "current_runtime_expectation": {
         "triage_urgency": "unknown",
@@ -7926,7 +7926,7 @@
       "segmentation": {
         "expected": "single_item",
         "independent_items": 1,
-        "all_spans_reconstruct_parent": false
+        "all_spans_reconstruct_parent": true
       },
       "current_runtime_expectation": {
         "triage_urgency": "unknown",
@@ -8060,7 +8060,7 @@
       "segmentation": {
         "expected": "single_item",
         "independent_items": 1,
-        "all_spans_reconstruct_parent": false
+        "all_spans_reconstruct_parent": true
       },
       "current_runtime_expectation": {
         "triage_urgency": "unknown",
@@ -8192,7 +8192,7 @@
       "segmentation": {
         "expected": "single_item",
         "independent_items": 1,
-        "all_spans_reconstruct_parent": false
+        "all_spans_reconstruct_parent": true
       },
       "current_runtime_expectation": {
         "triage_urgency": "unknown",
@@ -8324,7 +8324,7 @@
       "segmentation": {
         "expected": "single_item",
         "independent_items": 1,
-        "all_spans_reconstruct_parent": false
+        "all_spans_reconstruct_parent": true
       },
       "current_runtime_expectation": {
         "triage_urgency": "unknown",
@@ -8456,7 +8456,7 @@
       "segmentation": {
         "expected": "single_item",
         "independent_items": 1,
-        "all_spans_reconstruct_parent": false
+        "all_spans_reconstruct_parent": true
       },
       "current_runtime_expectation": {
         "triage_urgency": "unknown",
@@ -8588,7 +8588,7 @@
       "segmentation": {
         "expected": "single_item",
         "independent_items": 1,
-        "all_spans_reconstruct_parent": false
+        "all_spans_reconstruct_parent": true
       },
       "current_runtime_expectation": {
         "triage_urgency": "unknown",
@@ -8720,7 +8720,7 @@
       "segmentation": {
         "expected": "single_item",
         "independent_items": 1,
-        "all_spans_reconstruct_parent": false
+        "all_spans_reconstruct_parent": true
       },
       "current_runtime_expectation": {
         "triage_urgency": "unknown",
@@ -8855,7 +8855,7 @@
       "segmentation": {
         "expected": "single_item",
         "independent_items": 1,
-        "all_spans_reconstruct_parent": false
+        "all_spans_reconstruct_parent": true
       },
       "current_runtime_expectation": {
         "triage_urgency": "unknown",
@@ -8990,7 +8990,7 @@
       "segmentation": {
         "expected": "single_item",
         "independent_items": 1,
-        "all_spans_reconstruct_parent": false
+        "all_spans_reconstruct_parent": true
       },
       "current_runtime_expectation": {
         "triage_urgency": "unknown",
@@ -9125,7 +9125,7 @@
       "segmentation": {
         "expected": "single_item",
         "independent_items": 1,
-        "all_spans_reconstruct_parent": false
+        "all_spans_reconstruct_parent": true
       },
       "current_runtime_expectation": {
         "triage_urgency": "unknown",
@@ -9260,7 +9260,7 @@
       "segmentation": {
         "expected": "single_item",
         "independent_items": 1,
-        "all_spans_reconstruct_parent": false
+        "all_spans_reconstruct_parent": true
       },
       "current_runtime_expectation": {
         "triage_urgency": "unknown",
@@ -9395,7 +9395,7 @@
       "segmentation": {
         "expected": "single_item",
         "independent_items": 1,
-        "all_spans_reconstruct_parent": false
+        "all_spans_reconstruct_parent": true
       },
       "current_runtime_expectation": {
         "triage_urgency": "unknown",
@@ -9529,7 +9529,7 @@
       "segmentation": {
         "expected": "single_item",
         "independent_items": 1,
-        "all_spans_reconstruct_parent": false
+        "all_spans_reconstruct_parent": true
       },
       "current_runtime_expectation": {
         "triage_urgency": "unknown",
@@ -9661,7 +9661,7 @@
       "segmentation": {
         "expected": "single_item",
         "independent_items": 1,
-        "all_spans_reconstruct_parent": false
+        "all_spans_reconstruct_parent": true
       },
       "current_runtime_expectation": {
         "triage_urgency": "unknown",
@@ -9795,7 +9795,7 @@
       "segmentation": {
         "expected": "single_item",
         "independent_items": 1,
-        "all_spans_reconstruct_parent": false
+        "all_spans_reconstruct_parent": true
       },
       "current_runtime_expectation": {
         "triage_urgency": "unknown",
@@ -9929,7 +9929,7 @@
       "segmentation": {
         "expected": "single_item",
         "independent_items": 1,
-        "all_spans_reconstruct_parent": false
+        "all_spans_reconstruct_parent": true
       },
       "current_runtime_expectation": {
         "triage_urgency": "unknown",
@@ -10063,7 +10063,7 @@
       "segmentation": {
         "expected": "single_item",
         "independent_items": 1,
-        "all_spans_reconstruct_parent": false
+        "all_spans_reconstruct_parent": true
       },
       "current_runtime_expectation": {
         "triage_urgency": "unknown",
@@ -10197,7 +10197,7 @@
       "segmentation": {
         "expected": "single_item",
         "independent_items": 1,
-        "all_spans_reconstruct_parent": false
+        "all_spans_reconstruct_parent": true
       },
       "current_runtime_expectation": {
         "triage_urgency": "unknown",
@@ -10331,7 +10331,7 @@
       "segmentation": {
         "expected": "single_item",
         "independent_items": 1,
-        "all_spans_reconstruct_parent": false
+        "all_spans_reconstruct_parent": true
       },
       "current_runtime_expectation": {
         "triage_urgency": "unknown",
@@ -10465,7 +10465,7 @@
       "segmentation": {
         "expected": "single_item",
         "independent_items": 1,
-        "all_spans_reconstruct_parent": false
+        "all_spans_reconstruct_parent": true
       },
       "current_runtime_expectation": {
         "triage_urgency": "unknown",
@@ -10599,7 +10599,7 @@
       "segmentation": {
         "expected": "single_item",
         "independent_items": 1,
-        "all_spans_reconstruct_parent": false
+        "all_spans_reconstruct_parent": true
       },
       "current_runtime_expectation": {
         "triage_urgency": "unknown",
@@ -10733,7 +10733,7 @@
       "segmentation": {
         "expected": "single_item",
         "independent_items": 1,
-        "all_spans_reconstruct_parent": false
+        "all_spans_reconstruct_parent": true
       },
       "current_runtime_expectation": {
         "triage_urgency": "unknown",
@@ -10869,7 +10869,7 @@
       "segmentation": {
         "expected": "single_item",
         "independent_items": 1,
-        "all_spans_reconstruct_parent": false
+        "all_spans_reconstruct_parent": true
       },
       "current_runtime_expectation": {
         "triage_urgency": "unknown",
@@ -11005,7 +11005,7 @@
       "segmentation": {
         "expected": "single_item",
         "independent_items": 1,
-        "all_spans_reconstruct_parent": false
+        "all_spans_reconstruct_parent": true
       },
       "current_runtime_expectation": {
         "triage_urgency": "unknown",
@@ -11141,7 +11141,7 @@
       "segmentation": {
         "expected": "single_item",
         "independent_items": 1,
-        "all_spans_reconstruct_parent": false
+        "all_spans_reconstruct_parent": true
       },
       "current_runtime_expectation": {
         "triage_urgency": "unknown",
@@ -11277,7 +11277,7 @@
       "segmentation": {
         "expected": "single_item",
         "independent_items": 1,
-        "all_spans_reconstruct_parent": false
+        "all_spans_reconstruct_parent": true
       },
       "current_runtime_expectation": {
         "triage_urgency": "unknown",
@@ -11413,7 +11413,7 @@
       "segmentation": {
         "expected": "single_item",
         "independent_items": 1,
-        "all_spans_reconstruct_parent": false
+        "all_spans_reconstruct_parent": true
       },
       "current_runtime_expectation": {
         "triage_urgency": "unknown",
@@ -11548,7 +11548,7 @@
       "segmentation": {
         "expected": "single_item",
         "independent_items": 1,
-        "all_spans_reconstruct_parent": false
+        "all_spans_reconstruct_parent": true
       },
       "current_runtime_expectation": {
         "triage_urgency": "unknown",
@@ -11683,7 +11683,7 @@
       "segmentation": {
         "expected": "single_item",
         "independent_items": 1,
-        "all_spans_reconstruct_parent": false
+        "all_spans_reconstruct_parent": true
       },
       "current_runtime_expectation": {
         "triage_urgency": "unknown",
@@ -11818,7 +11818,7 @@
       "segmentation": {
         "expected": "single_item",
         "independent_items": 1,
-        "all_spans_reconstruct_parent": false
+        "all_spans_reconstruct_parent": true
       },
       "current_runtime_expectation": {
         "triage_urgency": "unknown",
@@ -11953,7 +11953,7 @@
       "segmentation": {
         "expected": "single_item",
         "independent_items": 1,
-        "all_spans_reconstruct_parent": false
+        "all_spans_reconstruct_parent": true
       },
       "current_runtime_expectation": {
         "triage_urgency": "unknown",
@@ -12088,7 +12088,7 @@
       "segmentation": {
         "expected": "single_item",
         "independent_items": 1,
-        "all_spans_reconstruct_parent": false
+        "all_spans_reconstruct_parent": true
       },
       "current_runtime_expectation": {
         "triage_urgency": "unknown",
@@ -12222,7 +12222,7 @@
       "segmentation": {
         "expected": "single_item",
         "independent_items": 1,
-        "all_spans_reconstruct_parent": false
+        "all_spans_reconstruct_parent": true
       },
       "current_runtime_expectation": {
         "triage_urgency": "unknown",
@@ -12356,7 +12356,7 @@
       "segmentation": {
         "expected": "single_item",
         "independent_items": 1,
-        "all_spans_reconstruct_parent": false
+        "all_spans_reconstruct_parent": true
       },
       "current_runtime_expectation": {
         "triage_urgency": "unknown",
@@ -12490,7 +12490,7 @@
       "segmentation": {
         "expected": "single_item",
         "independent_items": 1,
-        "all_spans_reconstruct_parent": false
+        "all_spans_reconstruct_parent": true
       },
       "current_runtime_expectation": {
         "triage_urgency": "unknown",
@@ -12624,7 +12624,7 @@
       "segmentation": {
         "expected": "single_item",
         "independent_items": 1,
-        "all_spans_reconstruct_parent": false
+        "all_spans_reconstruct_parent": true
       },
       "current_runtime_expectation": {
         "triage_urgency": "unknown",
@@ -12781,7 +12781,7 @@
       "segmentation": {
         "expected": "candidate_boundary",
         "independent_items": 2,
-        "all_spans_reconstruct_parent": true
+        "all_spans_reconstruct_parent": false
       },
       "current_runtime_expectation": {
         "triage_urgency": "unknown",
@@ -12939,7 +12939,7 @@
       "segmentation": {
         "expected": "candidate_boundary",
         "independent_items": 2,
-        "all_spans_reconstruct_parent": true
+        "all_spans_reconstruct_parent": false
       },
       "current_runtime_expectation": {
         "triage_urgency": "unknown",
@@ -13097,7 +13097,7 @@
       "segmentation": {
         "expected": "candidate_boundary",
         "independent_items": 2,
-        "all_spans_reconstruct_parent": true
+        "all_spans_reconstruct_parent": false
       },
       "current_runtime_expectation": {
         "triage_urgency": "unknown",
@@ -13255,7 +13255,7 @@
       "segmentation": {
         "expected": "candidate_boundary",
         "independent_items": 2,
-        "all_spans_reconstruct_parent": true
+        "all_spans_reconstruct_parent": false
       },
       "current_runtime_expectation": {
         "triage_urgency": "unknown",
@@ -13413,7 +13413,7 @@
       "segmentation": {
         "expected": "candidate_boundary",
         "independent_items": 2,
-        "all_spans_reconstruct_parent": true
+        "all_spans_reconstruct_parent": false
       },
       "current_runtime_expectation": {
         "triage_urgency": "unknown",
@@ -13548,7 +13548,7 @@
       "segmentation": {
         "expected": "single_item",
         "independent_items": 1,
-        "all_spans_reconstruct_parent": false
+        "all_spans_reconstruct_parent": true
       },
       "current_runtime_expectation": {
         "triage_urgency": "unknown",
@@ -13682,7 +13682,7 @@
       "segmentation": {
         "expected": "single_item",
         "independent_items": 1,
-        "all_spans_reconstruct_parent": false
+        "all_spans_reconstruct_parent": true
       },
       "current_runtime_expectation": {
         "triage_urgency": "unknown",
@@ -13816,7 +13816,7 @@
       "segmentation": {
         "expected": "single_item",
         "independent_items": 1,
-        "all_spans_reconstruct_parent": false
+        "all_spans_reconstruct_parent": true
       },
       "current_runtime_expectation": {
         "triage_urgency": "unknown",
@@ -13950,7 +13950,7 @@
       "segmentation": {
         "expected": "single_item",
         "independent_items": 1,
-        "all_spans_reconstruct_parent": false
+        "all_spans_reconstruct_parent": true
       },
       "current_runtime_expectation": {
         "triage_urgency": "unknown",
@@ -14084,7 +14084,7 @@
       "segmentation": {
         "expected": "single_item",
         "independent_items": 1,
-        "all_spans_reconstruct_parent": false
+        "all_spans_reconstruct_parent": true
       },
       "current_runtime_expectation": {
         "triage_urgency": "unknown",
@@ -14218,7 +14218,7 @@
       "segmentation": {
         "expected": "single_item",
         "independent_items": 1,
-        "all_spans_reconstruct_parent": false
+        "all_spans_reconstruct_parent": true
       },
       "current_runtime_expectation": {
         "triage_urgency": "unknown",
@@ -14352,7 +14352,7 @@
       "segmentation": {
         "expected": "single_item",
         "independent_items": 1,
-        "all_spans_reconstruct_parent": false
+        "all_spans_reconstruct_parent": true
       },
       "current_runtime_expectation": {
         "triage_urgency": "unknown",
@@ -14487,7 +14487,7 @@
       "segmentation": {
         "expected": "single_item",
         "independent_items": 1,
-        "all_spans_reconstruct_parent": false
+        "all_spans_reconstruct_parent": true
       },
       "current_runtime_expectation": {
         "triage_urgency": "unknown",
@@ -14622,7 +14622,7 @@
       "segmentation": {
         "expected": "single_item",
         "independent_items": 1,
-        "all_spans_reconstruct_parent": false
+        "all_spans_reconstruct_parent": true
       },
       "current_runtime_expectation": {
         "triage_urgency": "unknown",
@@ -14757,7 +14757,7 @@
       "segmentation": {
         "expected": "single_item",
         "independent_items": 1,
-        "all_spans_reconstruct_parent": false
+        "all_spans_reconstruct_parent": true
       },
       "current_runtime_expectation": {
         "triage_urgency": "unknown",

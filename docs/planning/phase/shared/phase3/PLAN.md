@@ -1,6 +1,6 @@
 # Shared Phase 3 — Integrated Evaluation and Independent Review
 
-**Status (2026-11-08):** The 100-case draft and integrated synthetic harness are available. Evaluation remains unscored because Manny must approve the draft expected labels/source expectations first. The 686 passing Python tests and 4 passing draft-validator checks establish engineering checks only; they do not establish PRD accuracy gates or real-world performance. Current acceptance requirements are in PRD-v4.
+**Status (2026-11-08):** The 100-case draft and integrated synthetic harness are available. Evaluation remains unscored because Manny must approve the draft expected labels/source expectations first. The 686 passing Python tests and 5 passing draft-validator checks establish engineering checks only; they do not establish PRD accuracy gates or real-world performance. Current acceptance requirements are in PRD-v4.
 
 ## Work
 

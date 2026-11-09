@@ -65,6 +65,33 @@ test('required edge-case families and controls are present', () => {
   }
 });
 
+test('case proposals use approved bands and truthful parent-span reconstruction flags', () => {
+  const allowedBands = new Set(['low', 'medium', 'high', 'unknown']);
+  for (const c of data.cases) {
+    assert.ok(allowedBands.has(c.auditor_decision_proposal.band),
+      `${c.case_id}: urgent is a High/P1 attention flag, not a fourth band`);
+    for (const item of c.items) {
+      if (item.auditor_proposal?.band) {
+        assert.ok(allowedBands.has(item.auditor_proposal.band),
+          `${c.case_id}/${item.item_id}: invalid proposed band`);
+      }
+    }
+    const items = [...c.items].sort((a, b) => a.source_span.start - b.source_span.start);
+    let cursor = 0;
+    let reconstructsParent = true;
+    for (const item of items) {
+      const { start, end } = item.source_span;
+      if (start !== cursor || c.source_message.text.slice(start, end) !== item.text) {
+        reconstructsParent = false;
+      }
+      cursor = end;
+    }
+    if (cursor !== c.source_message.text.length) reconstructsParent = false;
+    assert.equal(c.segmentation.all_spans_reconstruct_parent, reconstructsParent,
+      `${c.case_id}: reconstruction flag must reflect exact ordered spans`);
+  }
+});
+
 test('proposed category vocabulary exists in the 80-row development catalog without importing its rows as labels', () => {
   const catalog = fs.readFileSync(catalogPath, 'utf8');
   const categories = new Set(data.cases.flatMap((c) => c.items.map((i) => i.triage_proposal.category)).filter((v) => v && v !== 'unknown'));
