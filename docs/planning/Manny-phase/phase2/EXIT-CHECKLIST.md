@@ -1,6 +1,6 @@
 # Manny Phase 2 — Ordered Exit Checklist
 
-**Current state (2026-11-08):** Manny's connected A0–A3 harness and N1–N3 synthetic verification are complete. Phase 2 **exit readiness is estimated at 85%**. This is a planning estimate, not a test metric; receiver acceptance, evaluation labels, and complete semantic evaluation evidence remain open.
+**Current state (2026-11-08):** Manny's connected A0–A3 path, S-1.1 item connector, synthetic Auditor-resume path through A6, and local assigned-case authorization are implemented. Phase 2 **exit readiness remains estimated at 95%** as a planning estimate, not a test metric; Manny's approval of the 100-case labels and the subsequent scored evaluation remain open.
 
 **Forecast rule:** Percentages below are cumulative expected Phase 2 exit readiness after each whole step passes, assuming no rework. They are not additive, and a passing unit test alone does not satisfy a gate.
 
@@ -14,21 +14,21 @@ Owner: **Manny**. Shawn is not a prerequisite for this implementation step.
 - [x] Keep unresolved/ambiguous items on the human Auditor path and the parent incomplete. Urgency remains Unknown at this boundary; the connector cannot set a band, override, SLA, or customer status. Attention remains a source-bound review cue; Under Investigation remains human-managed.
 - [x] Add connected synthetic checks for single/multiple requests, unknown/ambiguous items, stale source, prompt injection, and safe fallback. Existing component tests cover dependency/conflict rejection. Verify zero ticket writes, external dispatch, and customer notifications.
 - [x] Record the category vocabulary by the active synthetic policy snapshot and exact taxonomy digest. The 80-row catalog remains development examples, not labels or operational policy. The category vocabulary is not CDIT policy and does not establish operational SLAs.
-- [ ] Prepare the 100-case evaluation set and draft labels in parallel if useful, but do not score it as approved evidence until the review/approval step below.
+- [x] Prepare 100 synthetic evaluation cases with draft expected labels and source expectations at `synthetic_data/evaluation_draft/v1/cases.json`. They are explicitly draft, unapproved, and unscored; no accuracy claim is made.
 
-**After Step 1:** expected Phase 2 exit readiness is about **85%**. N1–N3 are complete; this does not close the shared receiver or label gates. The authenticated app/Auditor interface remains deferred until database/auth work.
+**After Step 1:** expected Phase 2 exit readiness is about **85%**. N1–N3 are complete; this does not close the shared receiver or label gates. The authenticated app/Auditor interface is now implemented in the local database/auth workstream, including assigned-case access.
 
 ## Step 2 — Receiver and shared-connection acceptance — expected readiness: 95%
 
 Owners: **Manny for the connector; Shawn for her Knowledge receiver; Shared Lane for connection checks.** Start this review after Step 1 has a concrete connected path to inspect.
 
 - [x] Shawn reviewed the connected receiver in PR #12 and accepted with findings: Knowledge receives the correct item text and preserves identity, parent, span, source/version, digest, and Auditor status without using category/urgency to bias retrieval. Manny's F-1/F-2 fixes are included in merged PR #12 at `a363724`.
-- [ ] Shared checks schema/version integrity, acknowledgements, item joins, stale-state rejection, failure routing, and end-to-end handoff behavior.
+- [x] Shared combined-harness checks cover item joins, stale-state rejection, safe failure routing, and Auditor-resume behavior across A3–A6. The focused connected integration set passed 58 tests; the full Python suite passed 689 tests after the local assignment work.
 - [x] Manny fixed F-1 and F-2: normalize CRLF before checking the trusted synthetic taxonomy pin, and find the first configured attention literal separately within each item span. Focused regressions: 49 passed; full suite: 618 passed.
 - [x] Normalize CRLF in the raw CASE-SCENARIOS fixtures used by the Manny Triage flow and development-example tests. Focused Triage modules: 40 passed; full suite: 618 passed (2026-11-08). Shawn's Windows checkout rerun remains to confirm the reported failures are resolved there.
-- [ ] Review proposed shared S-1.1 treatment for F-3 (distinguish `flagged`, `none_found`, and `not_assessed`) and F-4 (taxonomy source citation). No shared contract change is made until the project lead approves the proposal.
-- [ ] Resolve any remaining findings by ownership: Manny fixes Coordinator/Triage/connector defects; Shawn fixes Knowledge/Troubleshooting/Documentation behavior in her lane. Do not edit her agent internals from Manny's lane.
-- [ ] Shawn or another project teammate peer-reviews the synthetic labels/results as required by the evaluation protocol; Manny remains the label owner and approver.
+- [x] Review and merge S-1.1 for F-3 attention-check state and F-4 taxonomy citation in PR #15; Manny's connector supplies item-specific values and exact taxonomy provenance.
+- [x] Resolve the current receiver findings by ownership: Manny changed only his connector; Shawn's contract/receiver changes remain in her ownership. The combined receiver tests pass without changing Shawn's agent internals.
+- [x] Set the synthetic labeling process: Manny is the single author, reviewer, and approver; no independent peer review or evaluator agent is claimed. The actual draft labels still require his review before scoring.
 
 **After Step 2:** expected Phase 2 exit readiness is about **95%**. A blocked or rejected receiver review keeps this step open; it does not require stopping unrelated Manny-owned work before review begins.
 
@@ -36,10 +36,10 @@ Owners: **Manny for the connector; Shawn for her Knowledge receiver; Shared Lane
 
 Owners: **Manny/project lead for label approval and phase review; Manny for evaluation protocol and evidence.**
 
-- [ ] Finalize the synthetic evaluation protocol: claim classes and denominators, minimum positive/negative counts per gate, holdout handling, confidence method, and reporting limits. Report results as applying to the tested set only.
-- [ ] Complete the 100-case synthetic set and obtain Manny's approval of expected labels before scoring. Keep the case author, label approver, and peer reviewer recorded; no real user/customer/employee records.
+- [x] Finalize the synthetic evaluation protocol: claim classes and denominators, per-gate positive/negative counts, holdout handling, confidence method, and finite-set reporting limits are documented. The dataset remains draft until label approval.
+- [ ] Review and approve the 100-case expected labels/source expectations before scoring. Record Manny as label author/reviewer/approver; no real user/customer/employee records.
 - [x] Record the historical smoke-trace limitation honestly: its original exact request body/hash was not captured and cannot be reconstructed. A user-authorized replacement call ran once on 2026-11-06 using the already pinned `claude-sonnet-5-5`; its prompt/request digests and usage are recorded. It safely returned Unknown category for Auditor review and remains unscored. See the linked trace report.
-- [ ] Run the approved, integrated synthetic Phase 2 checks; retain actual pass/fail counts, failures, trace IDs, source/policy versions, and safe-fallback evidence. Do not report preliminary fixture assertions as model accuracy.
+- [x] Run engineering integration checks with synthetic fixtures; retain their actual results and safe-fallback evidence. The connected test suite passed 58 tests and the full Python suite passed 686. These are not model accuracy scores and do not replace the approved label-scoring run.
 - [ ] Review all Phase 2 exit criteria against the PRD and update `Checklist.md` only where evidence is present. Phase 2 reaches 100% only when every required gate has evidence or an explicitly approved deferral.
 
 **After Step 3:** expected Phase 2 exit readiness is **100% only if all required evidence is accepted**. A deferred or failed required gate means Phase 2 remains open; it is not rounded up.
@@ -56,11 +56,11 @@ Owners: **Manny/project lead for label approval and phase review; Manny for eval
 ### Shawn
 
 - No action is needed before Manny continues Step 1.
-- At Step 2, review the real connected item handoff as the Knowledge receiver and peer-review synthetic labels/results (or identify another project teammate to do that review).
+- At Step 2, Shawn reviews the real connected item handoff as the Knowledge receiver. Manny alone owns synthetic label authoring, review, and approval for this assignment.
 - If a finding requires changing her agents' internals, she owns that implementation; Manny only fixes his connector and shared boundary.
 
 ### Deferred and not Phase 2 blockers
 
-- Auditor UI and authenticated review/recording flow remain deferred until database/auth work.
+- The Staff/Admin Auditor form and synthetic decision history use the assigned-case model: Staff can access only assigned cases; Admin can access/assign all; assignment history records Admin actions; Admin decisions require an override reason. API tests pass. Manual browser/accessibility review remains open.
 - Production authentication, real company policy/data, live Salesforce, ticket writes, email, customer notifications, and third-party dispatch remain out of scope.
 - Phase 3 and Phase 4 have their own acceptance gates; Phase 2 completion does not mark those phases complete.

@@ -1,6 +1,6 @@
 # Phase 3 — Escalation (Manny)
 
-**Status:** Escalation implementation and unit-test evidence exist; the connected Coordinator-to-Triage-to-item-scoped-Knowledge path is present in the merged baseline. Phase 3 remains incomplete pending its integrated escalation checks, Shared connection acceptance, and phase exit evidence. The Auditor UI/authenticated review interface is planned in the separate local app/database/auth workstream.
+**Status (2026-11-08):** A5 implementation and connected synthetic integration checks are complete. The combined harness exercises Auditor-resolved item handoff through Knowledge, Troubleshooting, Escalation, and Documentation; same-item provenance and High/P1 escalation are covered. Focused connected integration tests: 58 passed; full Python suite: 689 passed after the case-assignment change. Final checklist review remains separate from test success. The local Staff/Admin Auditor interface and assigned-case permission coverage are implemented; manual browser/accessibility review remains open.
 
 ## Implementation evidence — 2026-11-05
 
@@ -16,7 +16,7 @@
   - **Quoted Policy Override**: `quoted_policy_override_attempt` -> `must_escalate=True`, `recommendation="human_review"`.
   - **Conflicting / Stale Guidance**: Conflicting or unapproved sources -> preserves uncertainty (`must_escalate=None`), `recommendation="human_review"`, `confidence=LOW`.
   - **Routine Tier 1 Support**: `troubleshooting.status == "completed"` without escalation signals -> `must_escalate=False`, `recommendation="no_escalation_proposed"`.
-- The focused `tests/test_escalation_agent.py` suite has 29 passing tests, including verified/unverified staff-recorded action provenance, unknown urgency, attention preservation/rejection/live-state freshness, investigation status provenance, P1 precedence, cross-case/stale-source rejection, unresolved-question provenance, and action-sensitive contribution IDs. The full Python 3.13.15 suite passes 565 tests after the developer fast-forward; integrated Phase 3 acceptance remains open.
+- The focused `tests/test_escalation_agent.py` suite includes three regression cases for pending Unknown, Auditor-resolved P1, and distinct linked-item provenance. The connected integration set (`test_combined_workflow.py`, `test_escalation_agent.py`, `test_manny_connected_harness.py`, and `test_triage_knowledge_connection.py`) passed 58 tests. The full Python suite passed 686 tests.
 
 ## Work
 
@@ -28,7 +28,7 @@
 
 ## Handoff and exit evidence
 
-Share the A5 packet/schema and rule identifiers with Shared Lane after Phase 2 produces its accepted input. The local agent tests verify deterministic rules and uncertainty preservation; they do not prove an integrated A2-to-A5 handoff. Human-review UI/authentication is deferred and not built; outbound email remains deferred. No second-reviewer agent or external write/notification tool is introduced.
+The connected harness now verifies the item-scoped A2-to-A5 handoff through the accepted A3/A4 path. Human disposition remains human-authored and propose-only; the harness's Auditor fixture is synthetic test data, while the local Staff/Admin app provides the decision form and append-only decision history. The local app restricts Staff actions to assigned cases and records Admin assignment/override actions. No customer communication, third-party dispatch, external write, second-reviewer agent, or agent-originated case status change is enabled.
 
 ## Boundaries
 

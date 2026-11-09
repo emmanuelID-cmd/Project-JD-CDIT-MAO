@@ -116,8 +116,19 @@ def test_connected_harness_sends_inferred_unknown_urgency_item_to_knowledge(know
     assert handoff.item_scope is not None
     assert handoff.item_scope.auditor_review == "pending"
     assert handoff.item_scope.category_label == "inference"
+    assert handoff.item_scope.identity.scope_contract_version == "triage-item-scope-0.2-proposed"
+    assert handoff.item_scope.attention_check == "check_not_run"
     assert handoff.item_scope.identity.source_start == 0
     assert handoff.item_scope.identity.source_end == len(handoff.case_summary)
+    taxonomy_refs = [
+        source for source in handoff.item_scope.category_sources
+        if source.source_id == "SYN-TICKET-CATEGORY-TAXONOMY"
+    ]
+    assert len(taxonomy_refs) == 1
+    assert taxonomy_refs[0].locator.startswith("category_sha256:")
+    taxonomy_digest = taxonomy_refs[0].locator.removeprefix("category_sha256:")
+    assert taxonomy_refs[0].version == f"sha256-{taxonomy_digest[:16]}"
+    assert all(source.source_id != "SYN-POLICY-1" for source in handoff.item_scope.category_sources)
     assert item.knowledge is not None
     assert item.knowledge.item_scope_ref == handoff.item_scope.identity
     assert item.knowledge.input_refs[0].content_digest == handoff.content_digest()
@@ -269,4 +280,48 @@ def test_connected_harness_attaches_repeated_attention_literal_to_each_item(know
         scope = item.dispatch.handoff.item_scope
         assert scope.parent_attention_flagged is True
         assert scope.attention_ref is not None
+        assert scope.attention_check == "potential_attention"
         assert scope.attention_ref.locator == f"attention-flag:{start}-{start + len('outage')}"
+
+
+def test_connected_harness_marks_attention_per_item_and_keeps_parent_summary(knowledge_agent):
+    owner = object()
+    patterns = FixtureAttentionPatterns(provisioning_capability=owner)
+    patterns.add("SYN-ATTENTION-02", "MFA", capability=owner)
+    patterns.seal(capability=owner)
+    message = "I cannot find report export; I cannot access MFA"
+    harness, request, token = make_harness(
+        message, knowledge_agent=knowledge_agent, fixture_patterns=patterns
+    )
+
+    result = harness.run(
+        request, session_token=token, client=FakeClient(),
+        billable_call_authorized=True, now=NOW,
+    )
+
+    assert len(result.items) == 2
+    first, second = (item.dispatch.handoff.item_scope for item in result.items)
+    assert first.attention_check == "no_configured_match"
+    assert first.attention_ref is None and first.parent_attention_flagged is True
+    assert second.attention_check == "potential_attention"
+    assert second.attention_ref is not None and second.parent_attention_flagged is True
+
+
+def test_connected_harness_marks_configured_but_nonmatching_attention_check(knowledge_agent):
+    owner = object()
+    patterns = FixtureAttentionPatterns(provisioning_capability=owner)
+    patterns.add("SYN-ATTENTION-03", "server down", capability=owner)
+    patterns.seal(capability=owner)
+    harness, request, token = make_harness(
+        "I cannot find the report export control", knowledge_agent=knowledge_agent,
+        fixture_patterns=patterns,
+    )
+
+    result = harness.run(
+        request, session_token=token, client=FakeClient(),
+        billable_call_authorized=True, now=NOW,
+    )
+
+    scope = result.items[0].dispatch.handoff.item_scope
+    assert scope.attention_check == "no_configured_match"
+    assert scope.attention_ref is None and scope.parent_attention_flagged is False

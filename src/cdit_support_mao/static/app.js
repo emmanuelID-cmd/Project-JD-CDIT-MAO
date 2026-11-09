@@ -16,9 +16,46 @@ function statusPill(status) { return '<span class="status-pill ' + (status === "
 function statusOptions(current, allowed) {
   return (allowed || []).map(value => '<option value="' + esc(value) + '"' + (value === current ? ' selected' : '') + '>' + esc(pretty(value)) + '</option>').join("");
 }
-function cardForCase(item, role) {
+function auditorPanel(item, decisions, categories, role) {
+  const history = decisions.filter(d => d.case_id === item.case_id);
+  const knownVersions = Object.fromEntries(history.reduce((latest, decision) => {
+    latest.set(decision.item_id, Math.max(latest.get(decision.item_id) || 0, decision.decision_version)); return latest;
+  }, new Map()));
+  let historyHtml = history.length
+    ? '<div class="auditor-history"><b>Recorded decisions</b>' + history.map(d => '<details class="decision-record"><summary>Item ' + esc(d.item_index) + ' of ' + esc(d.item_count) + ' · ' + esc(d.category) + ' / ' + esc(pretty(d.urgency_band)) + ' · v' + esc(d.decision_version) + '</summary><div class="decision-record-meta">' + esc(d.item_id) + ' · Destination: ' + esc(d.destination) + ' · Reviewer: ' + esc(d.reviewer_account_id) + ' · ' + esc(new Date(d.recorded_at).toLocaleString()) + '</div><p><b>Reason</b> ' + esc(d.rationale) + '</p><p><b>Evidence</b> ' + esc(d.evidence) + '</p><p><b>Conditions</b> ' + esc((d.conditions||[]).join("; ") || "None recorded") + '</p><p><b>Exceptions</b> ' + esc((d.exceptions||[]).join("; ") || "None recorded") + '</p><small>Case version ' + esc(d.case_version) + ' · Source ' + esc(d.source_id) + ' / ' + esc(d.source_version) + ' · Span ' + esc(d.source_start) + '–' + esc(d.source_end) + ' · Policy ' + esc(d.policy_version) + '</small></details>').join('') + '</div>'
+    : '<p class="helper">No human item decisions have been recorded for this case.</p>';
+  historyHtml += history.filter(d => d.admin_override_reason).map(d => '<p class="helper"><b>Admin override reason (' + esc(d.reviewer_account_id) + '):</b> ' + esc(d.admin_override_reason) + '</p>').join('');
+  const categoryOptions = categories.map(value => '<option value="' + esc(value) + '">' + esc(value) + '</option>').join('');
+  return '<details class="auditor-panel"><summary>Human Auditor decision <span>Staff/Admin · append-only record</span></summary>' + historyHtml +
+    '<form class="auditor-decision-form stack-form" data-auditor-decision="' + esc(item.case_id) + '" data-known-versions="' + esc(JSON.stringify(knownVersions)) + '">' +
+    '<p class="helper">Synthetic prototype only. Record the human decision for one linked item. This does not change ticket status, contact anyone, or execute a routing action. The case text span and case version are checked when saved.</p>' +
+    '<input type="hidden" name="expected_case_version" value="' + esc(item.updated_at) + '"><input type="hidden" name="expected_previous_decision_version" value="0">' +
+    '<div class="row-actions"><label>Item ID<input name="item_id" maxlength="128" required placeholder="ID from the reviewed item packet"></label><label>Item number<input name="item_index" type="number" min="1" max="8" value="1" required></label><label>Items in parent<input name="item_count" type="number" min="1" max="8" value="1" required></label></div>' +
+    '<div class="row-actions"><label>Source span start<input name="source_start" type="number" min="0" value="0" required></label><label>Source span end<input name="source_end" type="number" min="1" max="12000" required></label><label>Category<select name="category" required><option value="">Choose category</option>' + categoryOptions + '</select></label></div>' +
+    '<div class="row-actions"><label>Urgency band<select name="urgency_band" required><option value="">Choose band</option><option value="low">Low [P3]</option><option value="medium">Medium [P2]</option><option value="high">High [P1]</option></select></label><label>Proposed destination<input name="destination" maxlength="120" required placeholder="Human-selected synthetic destination"></label></div>' +
+    '<div class="row-actions"><label>Source ID<input name="source_id" maxlength="128" required placeholder="Source referenced in the review packet"></label><label>Source version<input name="source_version" maxlength="64" required></label><label>Policy version<input name="policy_version" maxlength="64" required></label></div>' +
+    (role === "admin" ? '<label>Admin override reason<textarea name="admin_override_reason" maxlength="500" rows="2" required placeholder="Why is Admin reviewing outside the assigned Staff workflow?"></textarea></label>' : '') +
+    '<label>Reason / rationale<textarea name="rationale" maxlength="2000" rows="3" required></textarea></label><label>Evidence<textarea name="evidence" maxlength="2000" rows="3" required placeholder="Use synthetic evidence references or a brief source-linked explanation"></textarea></label>' +
+    '<label>Conditions<textarea name="conditions" maxlength="1000" rows="2" placeholder="One condition per line (optional)"></textarea></label><label>Exceptions<textarea name="exceptions" maxlength="1000" rows="2" placeholder="One exception per line (optional)"></textarea></label>' +
+    '<div class="form-bottom"><span class="helper">Reviewer identity and timestamp come from the authenticated session.</span><button class="button primary" type="submit">Record human decision</button></div><div class="form-message" role="status" aria-live="polite"></div></form></details>';
+}
+function assignmentPanel(item, role, staffAccounts=[], assignmentEvents=[]) {
+  const current = item.assigned_staff_account_id || "";
+  const label = item.assigned_staff_username || item.assigned_staff_account_id || "Unassigned";
+  if (role !== "admin") return '<p class="helper">Assigned to you: ' + esc(label) + '</p>';
+  const options = staffAccounts.filter(a => a.role === "staff" && a.status === "active").map(a =>
+    '<option value="' + esc(a.account_id) + '"' + (a.account_id === current ? ' selected' : '') + '>' + esc(a.username) + ' (' + esc(a.account_id) + ')</option>'
+  ).join("");
+  const history = assignmentEvents.filter(e => e.case_id === item.case_id);
+  const historyHtml = history.length ? '<details class="decision-record"><summary>Assignment history (' + history.length + ')</summary>' + history.map(e =>
+    '<p>' + esc(pretty(e.action)) + ': ' + esc(e.previous_staff_username || "Unassigned") + ' → ' + esc(e.assigned_staff_username || "Unassigned") + ' · by ' + esc(e.actor_username || "synthetic seed") + ' · ' + esc(new Date(e.occurred_at).toLocaleString()) + '</p>'
+  ).join("") + '</details>' : '';
+  return '<form class="case-assignment-form" data-case-assignment="' + esc(item.case_id) + '"><label>Assigned Staff<select name="staff_account_id"><option value="">Unassigned</option>' + options + '</select></label><button class="button secondary" type="submit">Save assignment</button><span class="form-message" role="status" aria-live="polite"></span></form>' + historyHtml;
+}
+function cardForCase(item, role, decisions=[], categories=[], staffAccounts=[], assignmentEvents=[]) {
   const displayStatus = item.display_status || item.status;
   const kind = item.record_kind === "development_example" ? '<span class="role-pill">Development example</span>' : '<span class="role-pill">Client request</span>';
+  const ownerLabel = item.record_kind === "development_example" ? "Fixture owner" : "Requester";
   const rationale = item.catalog_rationale ? '<p class="helper">Example context: ' + esc(item.catalog_rationale) + '</p>' : '';
   let controls = '';
   if (role === "user" && item.can_edit) {
@@ -26,11 +63,11 @@ function cardForCase(item, role) {
   } else if (role === "user" && item.can_cancel) {
     controls = '<span class="helper">Editing is locked while support reviews this request.</span><button class="button secondary danger" type="button" data-case-cancel="' + esc(item.case_id) + '">Cancel as unresolved</button>';
   } else if (role !== "user") {
-    controls = '<form class="case-edit-form" data-case-edit="' + esc(item.case_id) + '"><label>Request title<input name="subject" maxlength="160" value="' + esc(item.subject) + '" required></label><label>Request details<textarea name="request_text" maxlength="12000" rows="3" required>' + esc(item.request_text) + '</textarea></label><div class="row-actions"><button class="button secondary" type="submit">Save case details</button>' + (item.allowed_next_statuses.length ? '<label class="status-control">Change status<select name="next_status" required><option value="">Choose status</option>' + statusOptions("", item.allowed_next_statuses) + '</select></label><button class="button primary" type="button" data-case-status="' + esc(item.case_id) + '">Update status</button>' : '<span class="helper">Closed is terminal.</span>') + '</div><span class="form-message" role="status"></span></form>';
+    controls = assignmentPanel(item, role, staffAccounts, assignmentEvents) + '<form class="case-edit-form" data-case-edit="' + esc(item.case_id) + '"><label>Request title<input name="subject" maxlength="160" value="' + esc(item.subject) + '" required></label><label>Request details<textarea name="request_text" maxlength="12000" rows="3" required>' + esc(item.request_text) + '</textarea></label><div class="row-actions"><button class="button secondary" type="submit">Save case details</button>' + (item.allowed_next_statuses.length ? '<label class="status-control">Change status<select name="next_status" required><option value="">Choose status</option>' + statusOptions("", item.allowed_next_statuses) + '</select></label><button class="button primary" type="button" data-case-status="' + esc(item.case_id) + '">Update status</button>' : '<span class="helper">Closed is terminal.</span>') + '</div><span class="form-message" role="status"></span></form>' + auditorPanel(item, decisions, categories, role);
   } else {
     controls = '<span class="helper">' + (item.closure_reason === "requester_cancelled_unresolved" ? "Cancelled by you as unresolved." : "This request is no longer editable.") + '</span>';
   }
-  return '<article class="case-card"><div><div class="case-meta">' + kind + (role !== "user" ? '<span class="case-id">Owner ' + esc(item.owner_account_id) + '</span>' : '') + '</div><h3>' + esc(item.subject) + '</h3><p>' + esc(item.request_text) + '</p>' + rationale + '<div class="case-meta"><span class="case-id">' + esc(item.case_id) + '</span>' + statusPill(displayStatus) + statusPill(item.urgency_band) + '<span>Created ' + esc(new Date(item.created_at).toLocaleString()) + '</span></div></div><div class="case-actions">' + controls + '</div></article>';
+  return '<article class="case-card"><div><div class="case-meta">' + kind + (role !== "user" ? '<span class="case-id">' + ownerLabel + ' ' + esc(item.owner_account_id) + '</span>' : '') + '</div><h3>' + esc(item.subject) + '</h3><p>' + esc(item.request_text) + '</p>' + rationale + '<div class="case-meta"><span class="case-id">' + esc(item.case_id) + '</span>' + statusPill(displayStatus) + statusPill(item.urgency_band) + '<span>Created ' + esc(new Date(item.created_at).toLocaleString()) + '</span></div></div><div class="case-actions">' + controls + '</div></article>';
 }
 function empty(message) { return '<div class="empty-state"><b>' + esc(message) + '</b><span>There are no synthetic records to show.</span></div>'; }
 function setNav(role) {
@@ -59,9 +96,9 @@ function renderMetrics(role, cases, accounts=[], alerts=[]) {
     : [["SYNTHETIC ACCOUNTS",accounts.length,"User, Staff, Admin"],["ACTIVE CASES",cases.length,"Human-reviewed support queue"],["OPEN SESSION REQUESTS",alerts.filter(a=>a.review_status==="new").length,"Review only; no time extension"]];
   $("#metrics").innerHTML=values.map((x,i)=>'<article class="metric-card ' + (i===2 ? "accent" : "") + '"><span>' + esc(x[0]) + '</span><b>' + esc(x[1]) + '</b><small>' + esc(x[2]) + '</small></article>').join("");
 }
-function renderCases(cases, role) {
+function renderCases(cases, role, decisions=[], categories=[], staffAccounts=[], assignmentEvents=[]) {
   const root=$("#case-list");
-  root.innerHTML=cases.length ? cases.map(c=>cardForCase(c,role)).join("") : empty(role==="user" ? "No requests yet" : "Queue is clear");
+  root.innerHTML=cases.length ? cases.map(c=>cardForCase(c,role,decisions,categories,staffAccounts,assignmentEvents)).join("") : empty(role==="user" ? "No requests yet" : "Queue is clear");
 }
 function requestForm() {
   return '<section class="panel" id="new-request"><div class="panel-heading"><div><div class="eyebrow">CREATE A CASE</div><h2>Tell us what you need</h2><p class="muted">Synthetic prototype only. Do not enter real personal, health, or customer information.</p></div><span class="panel-icon">＋</span></div><form id="request-form" class="stack-form"><label for="subject">Request title</label><input id="subject" name="subject" maxlength="160" placeholder="e.g. Report export access" required><label for="request-text">What happened or what do you need?</label><textarea id="request-text" name="request_text" maxlength="12000" rows="5" placeholder="Describe your synthetic support request." required></textarea><div class="form-bottom"><span class="helper">Synthetic examples only · 12,000 character maximum</span><button class="button primary" type="submit">Submit request <span aria-hidden="true">→</span></button></div><div id="request-message" class="form-message" role="status" aria-live="polite"></div></form></section>';
@@ -89,9 +126,12 @@ function renderAlerts(alerts) {
 }
 async function loadData(role) {
   const cases=await api("/api/cases");
-  renderCases(cases,role);
-  let accounts=[],alerts=[];
-  if(role==="admin"){ [accounts,alerts]=await Promise.all([api("/api/admin/accounts"),api("/api/admin/session-extension-alerts")]); renderAccounts(accounts); renderAlerts(alerts); }
+  let decisions=[],categories=[];
+  if(role!=="user") [decisions,categories]=await Promise.all([api("/api/auditor/decisions"),api("/api/auditor/taxonomy")]).then(([d,t])=>[d,t.categories||[]]);
+  let accounts=[],alerts=[],assignmentEvents=[];
+  if(role==="admin") [accounts,alerts,assignmentEvents]=await Promise.all([api("/api/admin/accounts"),api("/api/admin/session-extension-alerts"),api("/api/admin/case-assignment-events")]);
+  renderCases(cases,role,decisions,categories,accounts,assignmentEvents);
+  if(role==="admin"){ renderAccounts(accounts); renderAlerts(alerts); }
   if(role!=="user") renderHealth(await api("/api/product-health"));
   renderMetrics(role,cases,accounts,alerts);
 }
@@ -126,6 +166,15 @@ async function start() {
       const statusSave=e.target.closest("[data-status-save]"); if(statusSave){const id=statusSave.dataset.statusSave;const select=document.querySelector('[data-status-select="' + id + '"]');if(select.value)await adminChange(id,{status:select.value},role);else showMessage($("#admin-message"),"Choose an access status first.");}
       const review=e.target.closest("[data-alert-review]"); if(review)try{await api("/api/admin/session-extension-alerts/"+encodeURIComponent(review.dataset.alertReview)+"/review",{method:"PATCH"});await loadData(role);}catch(err){showMessage($("#admin-message"),err.message,"error");}
     });
+    document.addEventListener("input", e=>{
+      const itemId=e.target.closest('input[name="item_id"]');
+      if(!itemId)return;
+      const form=itemId.closest("form[data-auditor-decision]");
+      try {
+        const versions=JSON.parse(form.dataset.knownVersions || "{}");
+        form.elements.expected_previous_decision_version.value=String(versions[itemId.value.trim()] || 0);
+      } catch { form.elements.expected_previous_decision_version.value="0"; }
+    });
     document.addEventListener("click", async e=>{
       const cancel=e.target.closest("[data-case-cancel]");
       if(cancel){
@@ -140,6 +189,24 @@ async function start() {
       }
     });
     document.addEventListener("submit", async e=>{
+      const assignmentForm=e.target.closest("form[data-case-assignment]");
+      if(assignmentForm){
+        e.preventDefault();const message=assignmentForm.querySelector(".form-message");
+        const staffAccountId=assignmentForm.elements.staff_account_id.value || null;
+        try{const result=await api("/api/admin/cases/"+encodeURIComponent(assignmentForm.dataset.caseAssignment)+"/assignment",{method:"PATCH",body:JSON.stringify({staff_account_id:staffAccountId})});await loadData(role);showMessage($("#admin-message")||message,result.changed?"Case assignment saved and logged.":"No assignment change was needed.","success");}
+        catch(error){showMessage(message,error.message,"error");}
+        return;
+      }
+      const auditorForm=e.target.closest("form[data-auditor-decision]");
+      if(auditorForm){
+        e.preventDefault();const form=auditorForm;const message=form.querySelector(".form-message");const values=Object.fromEntries(new FormData(form).entries());
+        const lines=name=>String(values[name]||"").split(/\r?\n/).map(x=>x.trim()).filter(Boolean);
+        const payload={...values,item_index:Number(values.item_index),item_count:Number(values.item_count),expected_previous_decision_version:Number(values.expected_previous_decision_version),source_start:Number(values.source_start),source_end:Number(values.source_end),conditions:lines("conditions"),exceptions:lines("exceptions")};
+        delete payload.conditions_text;delete payload.exceptions_text;payload.conditions=lines("conditions");payload.exceptions=lines("exceptions");
+        try{const result=await api("/api/cases/"+encodeURIComponent(form.dataset.auditorDecision)+"/items/auditor-decisions",{method:"POST",body:JSON.stringify(payload)});showMessage(message,"Decision " + result.decision_id + " recorded as version " + result.decision_version + ". Ticket status was not changed.","success");await loadData(role);}
+        catch(error){showMessage(message,error.message,"error");}
+        return;
+      }
       const form=e.target.closest("form[data-case-edit]");if(!form)return;
       e.preventDefault();const caseId=form.dataset.caseEdit;const message=form.querySelector(".form-message");
       try{await api("/api/cases/"+encodeURIComponent(caseId),{method:"PATCH",body:JSON.stringify({subject:form.elements.subject.value,request_text:form.elements.request_text.value})});await loadData(role);}

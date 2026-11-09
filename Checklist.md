@@ -2,21 +2,31 @@
 
 Use this checklist as the live project status record. Check an item only when its evidence is present and reviewed. Planning completion is not implementation completion; an unchecked item blocks a completion claim unless the project lead explicitly marks it out of scope or deferred.
 
-**Current phase:** Manny Phase 2 - Triage integration in progress; exit gates remain open. PRD-v4 is the current requirements source.
+**Current phase:** Manny Phase 2 connected Triage path implemented; exit remains open pending label approval and scored evaluation. Phase 3 integration and Shared workflow harness are implemented and validated on synthetic fixtures. PRD-v4 is the current requirements source.
 **Planning deadline:** November 11, 2026
-**Current implementation status:** SQLite foundation, local synthetic User/Staff/Admin authentication, authorized role routes, and isolated role previews are implemented. Current suite: 638 tests passed; seed, API lifecycle checks, JavaScript syntax, and whitespace checks are green. Manual browser/accessibility review remains open. This app/database work does not close agent Phase 2, Phase 3, Phase 4, or Shared integration gates.
-**Current case-lifecycle update:** All 80 catalog examples are in the local DB as Staff/Admin-only development records. User view remains scoped to their own requests; agent writes remain disabled. Browser/accessibility review remains open.
+**Current implementation status (2026-11-08):** SQLite foundation, local synthetic User/Staff/Admin authentication, role routes/previews, Staff/Admin Auditor review, and case-assignment authorization are implemented. Full Python suite: 689 passed; evaluation-draft validator: 5 passed; focused assignment/auth/auditor/lifecycle tests: 23 passed; JavaScript syntax and `git diff --check` pass. Manual browser/accessibility review remains open. Engineering checks do not approve the draft evaluation labels or close Phase 2/4 scoring gates.
+**Current case-lifecycle update:** Seeded demo cases are assigned to `SYN-STAFF-001`; new User requests remain unassigned until Admin assigns them. Staff case access is restricted server-side to assigned cases; Admin sees all and can assign/reassign. User view remains scoped to the requester's own requests; agent writes remain disabled. Browser/accessibility review remains open.
 **Antigravity provenance:** The project lead confirms Antigravity only merged PR #6; all other completion/work claims in its handoff are false. Existing repository artifacts are tracked separately and are not attributed to Antigravity.
 **Completion status:** In progress; do not claim project completion or begin release workflow.
+
+## Current phase evidence — 2026-11-08
+
+- Manny's linked-item connector now carries S-1.1 attention-check states and the item's taxonomy source. Shawn's S-1.1 contract change is merged in PR #15. The combined synthetic harness resumes Auditor-reviewed items through Knowledge, Troubleshooting, Escalation (A5), and Documentation (A6); Unknown/ambiguous items and stale inputs fail closed.
+- Phase 2/3/shared integration checks: 58 focused tests passed across the combined workflow, escalation, connected Triage, and Knowledge receiver suites. The latest full Python suite passed 689 tests.
+- Phase 4 has a 100-case synthetic evaluation draft. Cases remain `DRAFT_NOT_APPROVED` and unscored. Manny is the single label author/reviewer/approver for this synthetic assignment; Manny must review and approve the labels and source expectations before scoring. No independent peer review or evaluator agent is claimed.
+- The Auditor interface reuses Staff/Admin access with case-level authorization: Staff may access only assigned cases, while Admin can see and assign all cases. Assignment/reassignment actor, prior/new assignee, and timestamp are recorded; Admin Auditor decisions require a reason. Focused tests cover role denial and reassignment visibility. Manual browser/accessibility review remains open.
+- No new decision is needed to retain the current synthetic/propose-only behavior. The remaining direct user decision is approval of the 100-case draft labels before scoring; manual browser/accessibility review is also pending.
 
 ## Shared project baseline
 
 - [x] PRD-v4 defines the authenticated local User/Staff/Admin app, SQLite foundation, minimal Product Health metadata, and separate unauthenticated role showcase.
-- [x] Local SQL planning branch `manny/sql-foundation` created from Manny lane commit `a363724`; SQL and connected Manny branches currently share the same commit, with no unique branch commits created.
+- [x] Local SQL planning branch `manny/sql-foundation` created from Manny lane commit `a363724`; SQL and connected Manny branches are locally aligned at `4486a02` before this assignment feature, with no unique branch commits created.
 - [x] Implement initial SQLite v1 migration for synthetic accounts, sessions, cases, app-only Product Health events/summaries, Admin access audit events, and session extension alerts; include constraints, indexes, checksum migration tracking, seed/reset, and retention purge. Cross-agent workflow/evaluation persistence remains separate pending boundary review.
 - [x] Implement local synthetic authentication and server-side User/Staff/Admin authorization under Manny; verify direct page/API denial and Admin audit events. Approved session and retention rules are specified in PRD-v4.
 - [x] Build the separate three-view no-login showcase using fabricated static data and inert privileged controls.
 - [x] Seed and show all 80 CASE-SCENARIOS entries as Staff/Admin-only development examples, kept separate from User requests and gold evaluation labels; API role visibility checks pass.
+- [x] Verify Staff edits/status/Auditor decisions are limited to assigned cases; Admin can see all and assign/reassign/unassign only to active Staff; assignment events record actor, old/new assignee, and timestamp; requester ownership remains separate. Assignment API tests pass.
+- [x] Verify Admin override reason is required and stored for Admin Auditor decisions; Staff cannot submit an override reason.
 - [x] Verify Staff/Admin human edits and allowed status changes are audited with bounded metadata; verify User own-request edit only while Submitted, In Progress display as In Review, post-transition edit denial, and unresolved cancellation; lifecycle API tests pass.
 - [x] Confirm agent authority remains read-only while Staff/Admin human case management is enabled; [ ] manual browser/accessibility review remains open.
 - [x] Verify auth/API boundaries, user case scoping, Admin audit and session controls, SQL parameter handling, and static preview isolation in focused synthetic tests. Product Health schema remains bounded and existing database tests cover retention and prohibited fields.
@@ -53,14 +63,14 @@ Use this checklist as the live project status record. Check an item only when it
 
 - [x] Confirm owner availability and accept the Coordinator, Triage, and Escalation assignment (Manny’s approved lane sequence).
 - [x] Manny Phase 1: implement and review the process-local synthetic A0/A1 fixture boundary and versioned handoff; Shared receiver review remains an integration gate.
-- [x] Phase 2 local Triage input boundary, conservative linked-item segmentation, unknown/Auditor proposals, and source-span checks are implemented; these components do not constitute Phase 2 exit. Human dispatch and UI remain deferred to database/auth setup.
+- [x] Phase 2 local Triage input boundary, conservative linked-item segmentation, unknown/Auditor proposals, source-span checks, and linked-item Knowledge connector are implemented; these components do not alone constitute Phase 2 exit.
 - [x] Add exact 80-row development-example references to linked items as unverified IDs; the match does not classify category or urgency, and ambiguous segmentation receives no reference. Focused checks: 30 passed; full synthetic-only suite after current Phase 2 changes: 463 passed.
 - [x] Select and document Anthropic Claude Sonnet 5.5 (`claude-sonnet-5-5`) for synthetic Triage. The local ignored `.env` was configured by the user. Two one-attempt authorized synthetic smoke calls are recorded; the 2026-11-06 call uses the connected harness and its output remains unscored. No key value is stored in this checklist.
 - [x] Add a provider-free semantic output validator for category inference, exact source quotes, and forced Unknown urgency/destination; no model call or shared-contract change. Full synthetic-only suite: 463 passed.
 - [x] Add a synthetic-only Anthropic client adapter boundary with per-run billable authorization, immediate handoff preflight, retry disabled, provisional 60-second timeout, injection-as-data handling, and strict output validation; prepare minimized item requests and block ambiguous segmentation before provider use. Pin/install Anthropic SDK 2.5.0 and python-dotenv 1.2.4; the ignored `.env` is local-only. One synthetic API smoke call is recorded; see its trace report for limits.
 - [x] Decide the model alias/snapshot and regression policy with Shared Lane before model-backed evaluation (D-20); SDK 2.5.0 and dotenv 1.2.4 are pinned.
 - [x] Define and implement Coordinator behavior, tools, schemas, internal validation, stop conditions, retries, and recovery from the current PRD.
-- [ ] Complete implementation of the already-approved Triage behavior: classify separable requests independently, preserve exact source spans, keep categories as inference, route Unknown/ambiguous items to the Auditor, and attach a reasoned attention flag when plausible urgency warrants it. The runtime loads the category-only vocabulary from an exact SHA-256-pinned synthetic source, validates it at the call boundary, and joins each proposal to its exact item quote. The item-scoped Connector/Knowledge path is now implemented and tested; the fixture-only attention signal remains a review cue, not a live risk detector or operational urgency policy. F-1 and F-2 are fixed in Manny commit `122d44b` with regression tests; updated PR review is pending. Remaining Phase 2 gates: Shared connection acceptance, Manny-approved evaluation labels, and full evaluation evidence. Operational urgency/destination remain Unknown pending Auditor review.
+- [x] Implement the approved Triage behavior: independently classify separable requests, preserve exact source spans, keep categories as inference, send Unknown/ambiguous items to the Auditor, and attach item attention-check results. The item-scoped connector uses the merged S-1.1 contract and taxonomy provenance. Attention remains a review cue, not a live risk detector or operational urgency policy. Operational urgency/destination remain Unknown until the human Auditor decides.
 - [x] Add `run_triage_runtime` as a callable boundary over acknowledged Coordinator input; fake-client tests verify source-bound candidates, Unknown urgency/destination, mandatory human review, and no downstream/dispatch. The function does not construct a client or load credentials.
 - [x] Build `MannyA0A2Harness` to run synthetic Coordinator intake through acknowledged Triage. It accepts only an injected client, leaves billable-call authorization false by default, stops before Knowledge/Shared, and records metadata-only handoff events. Focused tests verify no-call fallback and a fake-client A2 proposal.
 - [x] Add `SYN-MANNY-TRIAGE-0001`, a user-approved Unknown-severity/possible-major-impact contract case. The A0–A2 fake-client run preserves Unknown, human review, source-bound attention, and no dispatch. It is not a gold label or model-accuracy score.
@@ -83,7 +93,7 @@ Use this checklist as the live project status record. Check an item only when it
 
 - [ ] Obtain Manny's approved semantic label for the smoke fixture; until then, its classification correctness remains unverified.
 - [x] Draft the Manny-owned connection proposal for Shared Lane review in [TRIAGE-LINKED-ITEM-HANDOFF-PROPOSAL.md](docs/lanes/manny/TRIAGE-LINKED-ITEM-HANDOFF-PROPOSAL.md); this does not change or accept the shared contract.
-- [ ] Receiver/shared gate: Shawn reviewed PR #12 and accepted with findings; Manny's F-1/F-2 fixes are included in merged PR #12 at `a363724`. Shared Lane still needs to check schema/version integrity, acknowledgements, item joins, stale-state rejection, failure routing, and the end-to-end handoff. Do not change Shawn-owned agent behavior. Follow the [ordered Phase 2 exit checklist](docs/planning/Manny-phase/phase2/EXIT-CHECKLIST.md).
+- [x] Receiver/shared gate: PR #12 receiver findings were fixed; PR #15 merged the S-1.1 contract. The connected harness checks item identity, spans, taxonomy evidence, digest joins, stale-state rejection, Auditor resume, and downstream A4/A5/A6 behavior. Focused combined integration set: 58 passed; no Shawn-owned agent internals were changed.
 - [ ] Run and retain the app-wired Coordinator-to-Triage plus downstream integration/security cases after the shared handoff shape is accepted; the one-call Triage smoke did not exercise this workflow.
 - [ ] At project completion, run 100 sequential synthetic-only traces; retain pass and failure evidence and stay within the available $40 budget.
 - [x] PR #6 was merged into `developer` (merge commit `8499f85`). The merge itself is the only Antigravity action confirmed by the project lead; do not treat the merge as evidence that Antigravity performed or validated the implementation work described in its handoff.
@@ -94,19 +104,20 @@ Use this checklist as the live project status record. Check an item only when it
 
 - [x] EscalationAgent implementation and focused tests exist. Unknown urgency routes to human Auditor review without assigning a band; attention evidence is preserved only after live A1 registry validation, with pattern ID/span provenance; a verified current Under Investigation fact remains human-managed, with no autonomous status change or third-party contact and P1 precedence preserved. Focused suite: 29 passed; full Python 3.13.15 suite: 615 passed. Integrated Phase 3 acceptance remains open.
 - [x] Bind A5 recorded-action evidence to the current synthetic case/version before it can be labeled verified; preserve source references on unresolved questions. This does not establish production authentication or replace Shared review.
-- [ ] Phase 3 acceptance: connect and validate the actual A2-to-A5 path against the accepted Phase 2/shared handoff, including uncertainty and failure behavior. Phase 3 is not marked complete while this dependency remains open.
+- [x] Phase 3 integration check: the combined harness passes an Auditor-resolved item through A3/A4/A5/A6 and verifies same-item provenance, P1 escalation, and safe stop behavior. Focused combined integration set: 58 passed; latest full Python suite: 689 passed. Final phase acceptance review remains recorded separately from this test result.
 
 ### Manny Phase 4 — Evaluation status
 
 - [x] Synthetic evaluation runner and generated report/JSON artifacts exist.
 - [x] Preliminary runner evidence exists for 9 Coordinator checks, 3 benchmark fixtures, 4 Escalation rules, and 12 downstream fixture cases. The runner now compares every downstream result with its case file expected output; 12/12 fixture assertions match. These are engineering-fixture checks, not approved gold labels. The CLI regression asserts exit code 2 and `not_scored`/not-ready status when only preliminary fixtures pass. Focused evaluation and case-harness tests: 22 passed; the full Python suite: 615 passed. No evaluation labels have been scored.
-- [ ] Phase 4 acceptance: the 12-case run is not the PRD target of at least 100 labeled synthetic cases; Manny label approval is pending; and the CombinedWorkflowHarness uses a stand-in TriageHandoff rather than Coordinator-to-semantic-Triage. Do not describe the six-agent workflow or evaluation gate as complete.
+- [ ] Phase 4 acceptance: a 100-case synthetic draft now exists at `synthetic_data/evaluation_draft/v1/cases.json`; it is not approved or scored. Manny must approve the expected labels/source expectations before the evaluator scores it. The combined harness has synthetic fixture coverage but does not prove real-world performance.
 
 **Snapshot comparison:** commit `3138388` (2026-11-05 15:15) recorded Phase 2 active and Phase 3/4 outstanding. Commit `9a2d3f4` later added Escalation code and the fixture harness; commit `37c01c8` added the evaluation runner/report. Those artifacts are retained; their presence does not by itself satisfy phase acceptance.
 
-### Deferred interface scope
+### Auditor interface scope
 
-- [x] The Auditor UI, authenticated reviewer workflow, and live human-dispatch interface do not exist and remain deferred until database/authentication work. They are not part of the current phase-status correction.
+- [x] The local Staff/Admin Auditor form and append-only synthetic decision history are implemented and tested. It does not change ticket status, send external messages, or dispatch a third party.
+- [ ] Manual browser/accessibility review remains open. Assigned-case authorization is implemented and API-tested; this does not replace the manual UI review.
 
 ## Shawn lane — Knowledge, Troubleshooting, Documentation
 
@@ -125,12 +136,12 @@ Use this checklist as the live project status record. Check an item only when it
 ## Shared connection and integration work
 
 - [x] Agree blackboard fields, identifiers, versioning, provenance, confidence, uncertainty, and state lifecycle.
-- [ ] Connect Coordinator → semantic Triage → Knowledge and the approved parallel Escalation check after runtime wiring and linked-item contract acceptance. The current CombinedWorkflowHarness begins with a stand-in Triage handoff.
+- [x] Connect Coordinator → semantic Triage → item-scoped Knowledge and exercise the Auditor-resume path through Troubleshooting, Escalation, and Documentation. The synthetic harness uses fake model output and a human Auditor fixture; it does not claim live model accuracy.
 - [x] Exercise Knowledge → Troubleshooting → Escalation/Documentation in the current downstream fixture harness.
-- [ ] Connect Documentation → Coordinator/human review; the harness produces a draft but has no Coordinator receiver or reviewer interface.
+- [x] Provide the local Staff/Admin Auditor decision form and append-only synthetic decision history; enforce assigned-case scope for Staff and Admin override reason. Manual browser/accessibility review remains open.
 - [x] Verify the current single-case fixture connectors preserve case/run/policy/source versions, evidence labels, timestamps, status, and uncertainty without mutation. This does not test linked-item scope.
-- [ ] Verify linked-item connectors preserve parent/item IDs, source spans, and per-item evidence/status without mutation after Shared accepts the proposal.
-- [x] Test direct pipeline, permitted parallel joins, retries with new input versions, missing handoffs, stale results, conflicts, and safe stop/manual fallback within the downstream stand-in harness; this does not validate Coordinator-to-semantic-Triage or linked-item integration.
+- [x] Verify linked-item connectors preserve parent/item IDs, source spans, and per-item evidence/status without mutation; 58 focused connected tests pass.
+- [x] Test direct pipeline, permitted joins, stale results, linked-item identity, and safe stop/manual fallback in the connected synthetic harness; 58 focused connected tests pass. Coverage remains fixture-based, not real-world performance evidence.
 - [x] Verify cross-lane connectors only; agent prompts, tools, decision logic, and behavior remain with their owners.
 - [x] Represent mandatory human review and proposed escalation in the handoff contracts. This is contract/output evidence only; no reviewer UI or notification delivery exists.
 - [x] Record integration defects and return agent-internal fixes to the owning lane; no cross-lane functionality edits.
@@ -146,9 +157,9 @@ Use this checklist as the live project status record. Check an item only when it
 
 ## Release / project completion gate
 
-- [ ] All P0 requirements and safety constraints are implemented and evidenced, or explicitly deferred by the project lead. Phase 2 integration and evaluation gates remain open.
-- [ ] Agent-level confidence, hallucination, prompt-injection, permission, failure-state, and recovery evaluations pass their approved gates. Current unit tests pass; the approved semantic label and integrated workflow evidence are still missing.
-- [ ] End-to-end handoffs, blackboard consistency, parallel joins, timestamping, and human escalation are verified. Coordinator-to-semantic-Triage and linked-item downstream integration have not been exercised.
+- [ ] All P0 requirements and safety constraints are implemented and evidenced, or explicitly deferred by the project lead. The evaluation-label approval/scoring gate and manual browser/accessibility review remain open.
+- [ ] Agent-level confidence, hallucination, prompt-injection, permission, failure-state, and recovery evaluations pass their approved gates. Synthetic integration tests pass; the 100-case labels remain unapproved and unscored.
+- [x] End-to-end synthetic handoffs, linked-item provenance, stale-state stops, and human Auditor resume are exercised by the combined harness. This does not prove production persistence or real-world accuracy.
 - [ ] Documentation, known limitations, open decisions, and lane ownership are current and reconciled before project closeout.
 - [ ] Project lead explicitly confirms the project is complete or directs a merge to `main`.
 - [ ] Only after that direction, complete the authorized merge/release workflow. Never infer permission from checklist progress alone.
