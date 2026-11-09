@@ -1,0 +1,57 @@
+﻿{
+    "trace_id":  "C067-smoke-001",
+    "status":  "FROZEN_EXPECTATIONS_BEFORE_RUN",
+    "planned_at":  "2026-11-09T14:16:44-05:00",
+    "traced_agent":  "Manny Triage A2",
+    "mode":  "single-case synthetic live smoke",
+    "expected_model":  "claude-sonnet-5-5",
+    "prd":  {
+                "path":  "docs/requirements/PRD-v4.md",
+                "sha256":  "6a0b75b06c537fa4fb97901c85af62107c0d76c9e7435e2e167aaf192fcabf34"
+            },
+    "dataset":  {
+                    "path":  "synthetic_data/evaluation_draft/v1/cases.json",
+                    "sha256":  "a4d6d2b6e6bbb21584ae2a9b86da13c32b62e30c3a047a1bc4c53f08f72d7c82",
+                    "case_id":  "SYN-EVAL-067",
+                    "case_label_status":  "draft overall; category proposal reviewed by Manny"
+                },
+    "code_baseline":  "e68fd08 plus uncommitted scorer implementation; runtime files unchanged by this task",
+    "expected_checks":  [
+                            {
+                                "id":  "A0-A1-INTAKE",
+                                "expected":  "Synthetic request is accepted or safely held; acknowledged handoff is recorded; no external side effects.",
+                                "oracle":  "PRD-v4 A0/A1 and current Coordinator runtime contract",
+                                "oracle_verified":  true
+                            },
+                            {
+                                "id":  "A2-CATEGORY-067",
+                                "expected_category":  "Product how-to / documentation request",
+                                "expected_label":  "inference",
+                                "oracle":  "Case 067 reviewed category proposal and user-approved category review",
+                                "oracle_verified":  true
+                            },
+                            {
+                                "id":  "A2-ITEM-SPAN",
+                                "expected":  "One item whose span reconstructs the whole case message; any evidence quote must be an exact substring of that item.",
+                                "oracle":  "PRD-v4 A2 and semantic output contract",
+                                "oracle_verified":  true
+                            },
+                            {
+                                "id":  "A2-UNKNOWN-URGENCY-DESTINATION",
+                                "expected":  "urgency=unknown and destination=unknown",
+                                "oracle":  "PRD-v4 §4a and semantic output schema",
+                                "oracle_verified":  true
+                            },
+                            {
+                                "id":  "A2-REVIEW-ONLY",
+                                "expected":  "human_review_required=true, downstream_allowed=false, dispatched=false; no ticket writes or external dispatch",
+                                "oracle":  "PRD-v4 propose-only boundary and semantic output schema",
+                                "oracle_verified":  true
+                            }
+                        ],
+    "untested_by_scope":  [
+                              "Knowledge retrieval and the Case 067 wrong-source result; evaluated separately by the Knowledge diagnostic.",
+                              "Troubleshooting, Escalation, Documentation, UI, and end-to-end MAO."
+                          ],
+    "billing":  "One explicitly authorized synthetic Anthropic request if the fixture reaches semantic Triage; no retry; token usage recorded."
+}

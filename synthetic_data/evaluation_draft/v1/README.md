@@ -1,10 +1,14 @@
 # Synthetic evaluation draft v1
 
-**Status: DRAFT / NOT APPROVED / NOT SCORED.** This is a 100-case synthetic label-review draft for Manny. It is not gold data, an operational routing policy, or evidence of agent accuracy.
+**Status: DRAFT / NOT APPROVED for final evaluation.** This is a 100-case synthetic label-review draft for Manny. It is not gold data or an operational routing policy. A non-billable Knowledge-only diagnostic may be run against its current expectations; that diagnostic is not an end-to-end MAO accuracy score and does not approve the labels.
 
 ## Approval and use
 
-Manny is the single label author, reviewer, and approver for this assignment. The category vocabulary, three-band scheme (Low/Medium/High), Urgent-as-High/P1 attention flag, Unknown-to-Auditor handling, and propose-only boundary were already agreed; this draft does not ask Manny to decide those policies again. Before scoring, Manny reviews this draft's application of those rules to each case, including segmentation, category, Auditor band/route, evidence expectations, and gate outcomes. Do not score this draft. The deferred evaluator agent is not part of the product workflow.
+Manny is the single label author, reviewer, and approver for this assignment. The category vocabulary, three-band scheme (Low/Medium/High), Urgent-as-High/P1 attention flag, Unknown-to-Auditor handling, and propose-only boundary were already agreed; this draft does not ask Manny to decide those policies again. Final scoring requires the complete case/source expectations to be recorded as approved. The diagnostic command below can run before final approval, but must remain explicitly diagnostic. The deferred evaluator agent is not part of the product workflow.
+
+### Current diagnostic
+
+Run python -m cdit_support_mao.evaluation_score to execute the Knowledge agent over every item routed to Knowledge using load_evaluation_corpus(...). It writes a Markdown report and JSON results under docs/lanes/manny/evaluation/. This run is synthetic-only and non-billable. It does not call Triage's Anthropic adapter, the full MAO workflow, or change approved / scoring_authorized.
 
 The cases are synthetic and contain no real names, tickets, PHI, credentials, or company records. Marker strings such as `SYNTHETIC-SSN-0000` are test tokens, not real identifiers.
 
@@ -20,6 +24,6 @@ The 80-row `CASE-SCENARIOS.md` catalog is a development resource, not evaluation
 
 ## Coverage and limitations
 
-The draft includes prompt-injection attempts in retrieved knowledge and attachment contexts, plus a separate benign-quoted-instruction control, benign quoted instructions, synthetic sensitive-data markers, stale and conflicting sources as separate cases, ambiguous severity, a major outage, clinical-advice request, tool/model outage, role-denial, missing-detail pressure, linked multi-item requests, source/claim grounding, and no-write authority. The file includes a computed per-gate challenge/control count; these are coverage counts only, not pass rates. All 17 proposed source IDs are currently absent from the local synthetic knowledge/policy corpus; map them to approved synthetic passages or build those passages before scoring grounding/retrieval gates.
+The draft includes prompt-injection attempts in retrieved knowledge and attachment contexts, plus a separate benign-quoted-instruction control, synthetic sensitive-data markers, stale and conflicting sources as separate cases, ambiguous severity, a major outage, clinical-advice request, tool/model outage, role-denial, missing-detail pressure, linked multi-item requests, source/claim grounding, and no-write authority. The file includes a computed per-gate challenge/control count; these are coverage counts only, not pass rates. Evaluation-only synthetic source fixtures are loaded separately from runtime knowledge. The Knowledge diagnostic reports retrieval outcomes against them; it does not measure semantic Triage, other agents, or complete PRD gates.
 
 No model was called and no result was scored. The manifest records only draft expectations. Existing evaluator and harness artifacts were not changed.

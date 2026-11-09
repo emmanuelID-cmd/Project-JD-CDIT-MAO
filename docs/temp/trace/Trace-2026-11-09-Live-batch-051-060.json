@@ -1,0 +1,744 @@
+{
+  "run_id": "CDIT-LIVE-EVAL-4563e439-ba89-4b6e-944d-ec64726dc2f4",
+  "generated_at": "2026-11-09T19:26:41.392418+00:00",
+  "dataset_id": "CDIT-SYNTHETIC-EVALUATION-DRAFT-100-v1",
+  "dataset_sha256": "a4d6d2b6e6bbb21584ae2a9b86da13c32b62e30c3a047a1bc4c53f08f72d7c82",
+  "dataset_status": "DRAFT_NOT_APPROVED",
+  "label_approval": {
+    "label_author": "Manny",
+    "reviewer": "Manny",
+    "approver": "Manny",
+    "approved": false,
+    "scoring_authorized": false
+  },
+  "diagnostic_only": true,
+  "model": "claude-sonnet-5-5",
+  "contract_version": "0.1.0-proposed",
+  "system_prompt_sha256": "92dcee2769dbefed8b42e9b8579dd1e929789bd9c340d7d17bdc844225aa996c",
+  "cases_selected": 10,
+  "items_expected": 10,
+  "model_calls": 4,
+  "model_calls_authorized": true,
+  "model_calls_sequential": true,
+  "retry_count": 0,
+  "ticket_writes": 0,
+  "external_dispatches": 0,
+  "input_tokens_total": 5276,
+  "output_tokens_total": 2977,
+  "triage_category": {
+    "scored_items": 5,
+    "matches": 1,
+    "accuracy": 0.2,
+    "unscored_items": 6
+  },
+  "segmentation": {
+    "checked_items": 4,
+    "matching_spans": 3,
+    "span_match_rate": 0.75
+  },
+  "cases": [
+    {
+      "case_id": "SYN-EVAL-051",
+      "trace_id": "TRACE-828d917f-8ddb-4f75-ab2d-9c23460ea37e",
+      "run_id": "RUN-0d95fece-1dca-417a-9279-c3956207b61d",
+      "started_at": "2026-11-09T19:26:16.040842+00:00",
+      "ended_at": "2026-11-09T19:26:16.074033+00:00",
+      "input_sha256": "ca5bfb70427bc6ae5cb3698f5c12fb9c8b42fa3c971bc1770732d88af483b016",
+      "intake_status": "ready_for_triage",
+      "intake_checkpoint": "A1",
+      "intake_reason_code": null,
+      "handoff_events": [
+        {
+          "event": "handoff_prepared",
+          "status": "awaiting_ack",
+          "owner": "coordinator",
+          "sequence": 1,
+          "state_version": 1,
+          "timestamp": "2026-11-09T19:26:16.040842+00:00"
+        },
+        {
+          "event": "handoff_accepted",
+          "status": "accepted",
+          "owner": "triage",
+          "sequence": 2,
+          "state_version": 2,
+          "timestamp": "2026-11-09T19:26:16.040842+00:00"
+        }
+      ],
+      "triage_status": "needs_human_review",
+      "triage_reason": "semantic_result_unavailable",
+      "urgency": "unknown",
+      "destination": "unknown",
+      "human_review_required": true,
+      "downstream_allowed": false,
+      "dispatched": false,
+      "model_call_count": 0,
+      "model": null,
+      "prompt_id": null,
+      "prompt_sha256": "92dcee2769dbefed8b42e9b8579dd1e929789bd9c340d7d17bdc844225aa996c",
+      "request_payload_sha256": null,
+      "input_tokens": null,
+      "output_tokens": null,
+      "model_elapsed_ms": null,
+      "item_count_expected": 1,
+      "item_count_actual": 1,
+      "items": [
+        {
+          "item_index": 1,
+          "expected_category": "unknown",
+          "expected_category_label": "unknown",
+          "actual_category": null,
+          "actual_category_label": "unknown",
+          "category_match": null,
+          "expected_span": {
+            "start": 0,
+            "end": 184
+          },
+          "actual_span": {
+            "start": 0,
+            "end": 184
+          },
+          "span_match": true,
+          "evidence_quote_sha256": null
+        }
+      ],
+      "urgency_contract_pass": null,
+      "human_review_contract_pass": true
+    },
+    {
+      "case_id": "SYN-EVAL-052",
+      "trace_id": "TRACE-9245bdbf-7a39-46c4-8f5c-6b5dcb0397fa",
+      "run_id": "RUN-778bc41e-94ce-4410-a715-86184ddc6997",
+      "started_at": "2026-11-09T19:26:16.074296+00:00",
+      "ended_at": "2026-11-09T19:26:16.101043+00:00",
+      "input_sha256": "ab99d45e0c69c4db997686e63451e54972d5749d1ec122c35afd4d6daeb5c159",
+      "intake_status": "ready_for_triage",
+      "intake_checkpoint": "A1",
+      "intake_reason_code": null,
+      "handoff_events": [
+        {
+          "event": "handoff_prepared",
+          "status": "awaiting_ack",
+          "owner": "coordinator",
+          "sequence": 1,
+          "state_version": 1,
+          "timestamp": "2026-11-09T19:26:16.074296+00:00"
+        },
+        {
+          "event": "handoff_accepted",
+          "status": "accepted",
+          "owner": "triage",
+          "sequence": 2,
+          "state_version": 2,
+          "timestamp": "2026-11-09T19:26:16.074296+00:00"
+        }
+      ],
+      "triage_status": "needs_human_review",
+      "triage_reason": "semantic_result_unavailable",
+      "urgency": "unknown",
+      "destination": "unknown",
+      "human_review_required": true,
+      "downstream_allowed": false,
+      "dispatched": false,
+      "model_call_count": 0,
+      "model": null,
+      "prompt_id": null,
+      "prompt_sha256": "92dcee2769dbefed8b42e9b8579dd1e929789bd9c340d7d17bdc844225aa996c",
+      "request_payload_sha256": null,
+      "input_tokens": null,
+      "output_tokens": null,
+      "model_elapsed_ms": null,
+      "item_count_expected": 1,
+      "item_count_actual": 1,
+      "items": [
+        {
+          "item_index": 1,
+          "expected_category": "unknown",
+          "expected_category_label": "unknown",
+          "actual_category": null,
+          "actual_category_label": "unknown",
+          "category_match": null,
+          "expected_span": {
+            "start": 0,
+            "end": 186
+          },
+          "actual_span": {
+            "start": 0,
+            "end": 186
+          },
+          "span_match": true,
+          "evidence_quote_sha256": null
+        }
+      ],
+      "urgency_contract_pass": null,
+      "human_review_contract_pass": true
+    },
+    {
+      "case_id": "SYN-EVAL-053",
+      "trace_id": "TRACE-51cd740d-a03f-463f-b878-622ae1ca52ba",
+      "run_id": "RUN-b3de9dab-de02-458a-91d9-cb08f5158960",
+      "started_at": "2026-11-09T19:26:16.101289+00:00",
+      "ended_at": "2026-11-09T19:26:16.113570+00:00",
+      "input_sha256": "eb9b3ea469c6680a7edf3b4e79eebd62868410497e882cf09f5cfd4aa742e5ab",
+      "intake_status": "ready_for_triage",
+      "intake_checkpoint": "A1",
+      "intake_reason_code": null,
+      "handoff_events": [
+        {
+          "event": "handoff_prepared",
+          "status": "awaiting_ack",
+          "owner": "coordinator",
+          "sequence": 1,
+          "state_version": 1,
+          "timestamp": "2026-11-09T19:26:16.101289+00:00"
+        },
+        {
+          "event": "handoff_accepted",
+          "status": "accepted",
+          "owner": "triage",
+          "sequence": 2,
+          "state_version": 2,
+          "timestamp": "2026-11-09T19:26:16.101289+00:00"
+        }
+      ],
+      "triage_status": "needs_human_review",
+      "triage_reason": "semantic_result_unavailable",
+      "urgency": "unknown",
+      "destination": "unknown",
+      "human_review_required": true,
+      "downstream_allowed": false,
+      "dispatched": false,
+      "model_call_count": 0,
+      "model": null,
+      "prompt_id": null,
+      "prompt_sha256": "92dcee2769dbefed8b42e9b8579dd1e929789bd9c340d7d17bdc844225aa996c",
+      "request_payload_sha256": null,
+      "input_tokens": null,
+      "output_tokens": null,
+      "model_elapsed_ms": null,
+      "item_count_expected": 1,
+      "item_count_actual": 1,
+      "items": [
+        {
+          "item_index": 1,
+          "expected_category": "unknown",
+          "expected_category_label": "unknown",
+          "actual_category": null,
+          "actual_category_label": "unknown",
+          "category_match": null,
+          "expected_span": {
+            "start": 0,
+            "end": 193
+          },
+          "actual_span": {
+            "start": 0,
+            "end": 193
+          },
+          "span_match": true,
+          "evidence_quote_sha256": null
+        }
+      ],
+      "urgency_contract_pass": null,
+      "human_review_contract_pass": true
+    },
+    {
+      "case_id": "SYN-EVAL-054",
+      "trace_id": "TRACE-97643e92-0d83-4696-97b8-a817ff92f4ca",
+      "run_id": "RUN-2327800c-c006-4ac5-bba3-a87b09bba561",
+      "started_at": "2026-11-09T19:26:16.113779+00:00",
+      "ended_at": "2026-11-09T19:26:16.123796+00:00",
+      "input_sha256": "476957cda0fd13c227b660af78c2ed4610293e566c0b8ef76b920200c63b1690",
+      "intake_status": "ready_for_triage",
+      "intake_checkpoint": "A1",
+      "intake_reason_code": null,
+      "handoff_events": [
+        {
+          "event": "handoff_prepared",
+          "status": "awaiting_ack",
+          "owner": "coordinator",
+          "sequence": 1,
+          "state_version": 1,
+          "timestamp": "2026-11-09T19:26:16.113779+00:00"
+        },
+        {
+          "event": "handoff_accepted",
+          "status": "accepted",
+          "owner": "triage",
+          "sequence": 2,
+          "state_version": 2,
+          "timestamp": "2026-11-09T19:26:16.113779+00:00"
+        }
+      ],
+      "triage_status": "needs_human_review",
+      "triage_reason": "semantic_result_unavailable",
+      "urgency": "unknown",
+      "destination": "unknown",
+      "human_review_required": true,
+      "downstream_allowed": false,
+      "dispatched": false,
+      "model_call_count": 0,
+      "model": null,
+      "prompt_id": null,
+      "prompt_sha256": "92dcee2769dbefed8b42e9b8579dd1e929789bd9c340d7d17bdc844225aa996c",
+      "request_payload_sha256": null,
+      "input_tokens": null,
+      "output_tokens": null,
+      "model_elapsed_ms": null,
+      "item_count_expected": 1,
+      "item_count_actual": 1,
+      "items": [
+        {
+          "item_index": 1,
+          "expected_category": "unknown",
+          "expected_category_label": "unknown",
+          "actual_category": null,
+          "actual_category_label": "unknown",
+          "category_match": null,
+          "expected_span": {
+            "start": 0,
+            "end": 190
+          },
+          "actual_span": {
+            "start": 0,
+            "end": 190
+          },
+          "span_match": true,
+          "evidence_quote_sha256": null
+        }
+      ],
+      "urgency_contract_pass": null,
+      "human_review_contract_pass": true
+    },
+    {
+      "case_id": "SYN-EVAL-055",
+      "trace_id": "TRACE-17150a2b-74b0-4412-88a4-7a6a953942d5",
+      "run_id": "RUN-268c1c07-7840-4e65-a279-788ec146fcfe",
+      "started_at": "2026-11-09T19:26:16.124046+00:00",
+      "ended_at": "2026-11-09T19:26:16.137695+00:00",
+      "input_sha256": "67f0910246702fca796327dca5f4970adfa956b83786d3934be3e9bcf85832db",
+      "intake_status": "ready_for_triage",
+      "intake_checkpoint": "A1",
+      "intake_reason_code": null,
+      "handoff_events": [
+        {
+          "event": "handoff_prepared",
+          "status": "awaiting_ack",
+          "owner": "coordinator",
+          "sequence": 1,
+          "state_version": 1,
+          "timestamp": "2026-11-09T19:26:16.124046+00:00"
+        },
+        {
+          "event": "handoff_accepted",
+          "status": "accepted",
+          "owner": "triage",
+          "sequence": 2,
+          "state_version": 2,
+          "timestamp": "2026-11-09T19:26:16.124046+00:00"
+        }
+      ],
+      "triage_status": "needs_human_review",
+      "triage_reason": "semantic_result_unavailable",
+      "urgency": "unknown",
+      "destination": "unknown",
+      "human_review_required": true,
+      "downstream_allowed": false,
+      "dispatched": false,
+      "model_call_count": 0,
+      "model": null,
+      "prompt_id": null,
+      "prompt_sha256": "92dcee2769dbefed8b42e9b8579dd1e929789bd9c340d7d17bdc844225aa996c",
+      "request_payload_sha256": null,
+      "input_tokens": null,
+      "output_tokens": null,
+      "model_elapsed_ms": null,
+      "item_count_expected": 1,
+      "item_count_actual": 1,
+      "items": [
+        {
+          "item_index": 1,
+          "expected_category": "unknown",
+          "expected_category_label": "unknown",
+          "actual_category": null,
+          "actual_category_label": "unknown",
+          "category_match": null,
+          "expected_span": {
+            "start": 0,
+            "end": 192
+          },
+          "actual_span": {
+            "start": 0,
+            "end": 192
+          },
+          "span_match": true,
+          "evidence_quote_sha256": null
+        }
+      ],
+      "urgency_contract_pass": null,
+      "human_review_contract_pass": true
+    },
+    {
+      "case_id": "SYN-EVAL-056",
+      "trace_id": "TRACE-7060f338-7226-4a16-b1db-98a561cce875",
+      "run_id": "RUN-6916a322-fd0a-43b6-b19d-1fbc01d5ba46",
+      "started_at": "2026-11-09T19:26:16.137925+00:00",
+      "ended_at": "2026-11-09T19:26:16.154075+00:00",
+      "input_sha256": "980c6b5a745a9f5d854cfce15dc797820d8721ee7c618913a5bfd6e50b75dc9b",
+      "intake_status": "ready_for_triage",
+      "intake_checkpoint": "A1",
+      "intake_reason_code": null,
+      "handoff_events": [
+        {
+          "event": "handoff_prepared",
+          "status": "awaiting_ack",
+          "owner": "coordinator",
+          "sequence": 1,
+          "state_version": 1,
+          "timestamp": "2026-11-09T19:26:16.137925+00:00"
+        },
+        {
+          "event": "handoff_accepted",
+          "status": "accepted",
+          "owner": "triage",
+          "sequence": 2,
+          "state_version": 2,
+          "timestamp": "2026-11-09T19:26:16.137925+00:00"
+        }
+      ],
+      "triage_status": "needs_human_review",
+      "triage_reason": "semantic_result_unavailable",
+      "urgency": "unknown",
+      "destination": "unknown",
+      "human_review_required": true,
+      "downstream_allowed": false,
+      "dispatched": false,
+      "model_call_count": 0,
+      "model": null,
+      "prompt_id": null,
+      "prompt_sha256": "92dcee2769dbefed8b42e9b8579dd1e929789bd9c340d7d17bdc844225aa996c",
+      "request_payload_sha256": null,
+      "input_tokens": null,
+      "output_tokens": null,
+      "model_elapsed_ms": null,
+      "item_count_expected": 1,
+      "item_count_actual": 1,
+      "items": [
+        {
+          "item_index": 1,
+          "expected_category": "Employee wellbeing",
+          "expected_category_label": "inference",
+          "actual_category": null,
+          "actual_category_label": "unknown",
+          "category_match": null,
+          "expected_span": {
+            "start": 0,
+            "end": 151
+          },
+          "actual_span": {
+            "start": 0,
+            "end": 151
+          },
+          "span_match": true,
+          "evidence_quote_sha256": null
+        }
+      ],
+      "urgency_contract_pass": null,
+      "human_review_contract_pass": true
+    },
+    {
+      "case_id": "SYN-EVAL-057",
+      "trace_id": "TRACE-766197f4-be0c-45b6-930b-c8ca5934a760",
+      "run_id": "RUN-c8dc9cb9-edc5-4285-917c-51e032b828d5",
+      "started_at": "2026-11-09T19:26:16.154425+00:00",
+      "ended_at": "2026-11-09T19:26:22.766154+00:00",
+      "input_sha256": "c1bb7c49f64d552686dc1f599ebf8f875a29a4ae9f2c1bd1dd710f9207642f11",
+      "intake_status": "ready_for_triage",
+      "intake_checkpoint": "A1",
+      "intake_reason_code": null,
+      "handoff_events": [
+        {
+          "event": "handoff_prepared",
+          "status": "awaiting_ack",
+          "owner": "coordinator",
+          "sequence": 1,
+          "state_version": 1,
+          "timestamp": "2026-11-09T19:26:16.154425+00:00"
+        },
+        {
+          "event": "handoff_accepted",
+          "status": "accepted",
+          "owner": "triage",
+          "sequence": 2,
+          "state_version": 2,
+          "timestamp": "2026-11-09T19:26:16.154425+00:00"
+        }
+      ],
+      "triage_status": "proposal_for_human_review",
+      "triage_reason": null,
+      "urgency": "unknown",
+      "destination": "unknown",
+      "human_review_required": true,
+      "downstream_allowed": false,
+      "dispatched": false,
+      "model_call_count": 1,
+      "model": "claude-sonnet-5-5",
+      "prompt_id": "manny-triage-system-v1",
+      "prompt_sha256": "92dcee2769dbefed8b42e9b8579dd1e929789bd9c340d7d17bdc844225aa996c",
+      "request_payload_sha256": "456f35ace2f961a38bd6a5c1a2b14440d3d6940aaf3d95ea08bd1cb51b9454e4",
+      "input_tokens": 1314,
+      "output_tokens": 739,
+      "model_elapsed_ms": 6595,
+      "item_count_expected": 1,
+      "item_count_actual": 1,
+      "items": [
+        {
+          "item_index": 1,
+          "expected_category": "Employee wellbeing",
+          "expected_category_label": "inference",
+          "actual_category": null,
+          "actual_category_label": "unknown",
+          "category_match": false,
+          "expected_span": {
+            "start": 0,
+            "end": 153
+          },
+          "actual_span": {
+            "start": 0,
+            "end": 153
+          },
+          "span_match": true,
+          "evidence_quote_sha256": null
+        }
+      ],
+      "urgency_contract_pass": true,
+      "human_review_contract_pass": true
+    },
+    {
+      "case_id": "SYN-EVAL-058",
+      "trace_id": "TRACE-9b13bc14-2da0-45b4-8deb-31669eb90e67",
+      "run_id": "RUN-7e0fa468-f706-4101-9f23-285d95aea14b",
+      "started_at": "2026-11-09T19:26:22.766602+00:00",
+      "ended_at": "2026-11-09T19:26:31.093837+00:00",
+      "input_sha256": "620ef66655e8da96157c28df796ad78c9fd1014de97db1aa103c109a8778beb7",
+      "intake_status": "ready_for_triage",
+      "intake_checkpoint": "A1",
+      "intake_reason_code": null,
+      "handoff_events": [
+        {
+          "event": "handoff_prepared",
+          "status": "awaiting_ack",
+          "owner": "coordinator",
+          "sequence": 1,
+          "state_version": 1,
+          "timestamp": "2026-11-09T19:26:22.766602+00:00"
+        },
+        {
+          "event": "handoff_accepted",
+          "status": "accepted",
+          "owner": "triage",
+          "sequence": 2,
+          "state_version": 2,
+          "timestamp": "2026-11-09T19:26:22.766602+00:00"
+        }
+      ],
+      "triage_status": "proposal_for_human_review",
+      "triage_reason": null,
+      "urgency": "unknown",
+      "destination": "unknown",
+      "human_review_required": true,
+      "downstream_allowed": false,
+      "dispatched": false,
+      "model_call_count": 1,
+      "model": "claude-sonnet-5-5",
+      "prompt_id": "manny-triage-system-v1",
+      "prompt_sha256": "92dcee2769dbefed8b42e9b8579dd1e929789bd9c340d7d17bdc844225aa996c",
+      "request_payload_sha256": "7987a07f10e6738b22d8ac1a1a93dc57d53bca6e7e018aa9113778a72f6da1d0",
+      "input_tokens": 1331,
+      "output_tokens": 1036,
+      "model_elapsed_ms": 8319,
+      "item_count_expected": 1,
+      "item_count_actual": 2,
+      "items": [
+        {
+          "item_index": 1,
+          "expected_category": "Employee wellbeing",
+          "expected_category_label": "inference",
+          "actual_category": "Employee wellbeing",
+          "actual_category_label": "inference",
+          "category_match": true,
+          "expected_span": {
+            "start": 0,
+            "end": 160
+          },
+          "actual_span": {
+            "start": 0,
+            "end": 122
+          },
+          "span_match": false,
+          "evidence_quote_sha256": "6976a39a300b79163388a03c1677dcfb48f66a59273e3a8101975f27f4beeed3"
+        },
+        {
+          "item_index": 2,
+          "expected_category": null,
+          "expected_category_label": null,
+          "actual_category": null,
+          "actual_category_label": "unknown",
+          "category_match": false,
+          "expected_span": null,
+          "actual_span": {
+            "start": 124,
+            "end": 160
+          },
+          "span_match": false,
+          "evidence_quote_sha256": null
+        }
+      ],
+      "urgency_contract_pass": true,
+      "human_review_contract_pass": true
+    },
+    {
+      "case_id": "SYN-EVAL-059",
+      "trace_id": "TRACE-bc673039-1a4f-4b56-8269-e6c26bb79733",
+      "run_id": "RUN-79d40dc2-0821-4734-ad23-ca9e48edf2d1",
+      "started_at": "2026-11-09T19:26:31.094087+00:00",
+      "ended_at": "2026-11-09T19:26:35.991948+00:00",
+      "input_sha256": "797ff696bc4468c6da73bbffd1854f2474350a52c219376717ccc5d87fa0a40d",
+      "intake_status": "ready_for_triage",
+      "intake_checkpoint": "A1",
+      "intake_reason_code": null,
+      "handoff_events": [
+        {
+          "event": "handoff_prepared",
+          "status": "awaiting_ack",
+          "owner": "coordinator",
+          "sequence": 1,
+          "state_version": 1,
+          "timestamp": "2026-11-09T19:26:31.094087+00:00"
+        },
+        {
+          "event": "handoff_accepted",
+          "status": "accepted",
+          "owner": "triage",
+          "sequence": 2,
+          "state_version": 2,
+          "timestamp": "2026-11-09T19:26:31.094087+00:00"
+        }
+      ],
+      "triage_status": "proposal_for_human_review",
+      "triage_reason": null,
+      "urgency": "unknown",
+      "destination": "unknown",
+      "human_review_required": true,
+      "downstream_allowed": false,
+      "dispatched": false,
+      "model_call_count": 1,
+      "model": "claude-sonnet-5-5",
+      "prompt_id": "manny-triage-system-v1",
+      "prompt_sha256": "92dcee2769dbefed8b42e9b8579dd1e929789bd9c340d7d17bdc844225aa996c",
+      "request_payload_sha256": "85e0a83b9a57df82b97a8339d57121c0087803bb631502bed33ef71780cc1259",
+      "input_tokens": 1317,
+      "output_tokens": 625,
+      "model_elapsed_ms": 4883,
+      "item_count_expected": 1,
+      "item_count_actual": 1,
+      "items": [
+        {
+          "item_index": 1,
+          "expected_category": "Employee wellbeing",
+          "expected_category_label": "inference",
+          "actual_category": null,
+          "actual_category_label": "unknown",
+          "category_match": false,
+          "expected_span": {
+            "start": 0,
+            "end": 157
+          },
+          "actual_span": {
+            "start": 0,
+            "end": 157
+          },
+          "span_match": true,
+          "evidence_quote_sha256": null
+        }
+      ],
+      "urgency_contract_pass": true,
+      "human_review_contract_pass": true
+    },
+    {
+      "case_id": "SYN-EVAL-060",
+      "trace_id": "TRACE-1a27ece6-100e-46df-b789-1c394236ef4b",
+      "run_id": "RUN-d52ec63a-0b32-43bb-9684-94b3c84b6570",
+      "started_at": "2026-11-09T19:26:35.992204+00:00",
+      "ended_at": "2026-11-09T19:26:41.392240+00:00",
+      "input_sha256": "d70cb6ee429438b660dcad4c850c2d4ba9ee774e92d73ffa6e2ca268bbe7cf95",
+      "intake_status": "ready_for_triage",
+      "intake_checkpoint": "A1",
+      "intake_reason_code": null,
+      "handoff_events": [
+        {
+          "event": "handoff_prepared",
+          "status": "awaiting_ack",
+          "owner": "coordinator",
+          "sequence": 1,
+          "state_version": 1,
+          "timestamp": "2026-11-09T19:26:35.992204+00:00"
+        },
+        {
+          "event": "handoff_accepted",
+          "status": "accepted",
+          "owner": "triage",
+          "sequence": 2,
+          "state_version": 2,
+          "timestamp": "2026-11-09T19:26:35.992204+00:00"
+        }
+      ],
+      "triage_status": "proposal_for_human_review",
+      "triage_reason": null,
+      "urgency": "unknown",
+      "destination": "unknown",
+      "human_review_required": true,
+      "downstream_allowed": false,
+      "dispatched": false,
+      "model_call_count": 1,
+      "model": "claude-sonnet-5-5",
+      "prompt_id": "manny-triage-system-v1",
+      "prompt_sha256": "92dcee2769dbefed8b42e9b8579dd1e929789bd9c340d7d17bdc844225aa996c",
+      "request_payload_sha256": "f92396bfb11a7049ca9833800cefebb4a8c252513ab10ec7ddc84847064dd3b8",
+      "input_tokens": 1314,
+      "output_tokens": 577,
+      "model_elapsed_ms": 5252,
+      "item_count_expected": 1,
+      "item_count_actual": 1,
+      "items": [
+        {
+          "item_index": 1,
+          "expected_category": "Employee wellbeing",
+          "expected_category_label": "inference",
+          "actual_category": null,
+          "actual_category_label": "unknown",
+          "category_match": false,
+          "expected_span": {
+            "start": 0,
+            "end": 159
+          },
+          "actual_span": {
+            "start": 0,
+            "end": 159
+          },
+          "span_match": true,
+          "evidence_quote_sha256": null
+        }
+      ],
+      "urgency_contract_pass": true,
+      "human_review_contract_pass": true
+    }
+  ],
+  "other_gates": {
+    "knowledge": "see separate non-billable Knowledge diagnostic",
+    "auditor_band_and_route": "not_scored_by_triage_runtime",
+    "troubleshooting": "not_run",
+    "documentation": "not_run",
+    "full_mao": "not_run",
+    "actual_model_cost": "not_calculated"
+  }
+}

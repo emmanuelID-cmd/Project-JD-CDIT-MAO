@@ -37,12 +37,16 @@ Owners: **Manny for the connector; Shawn for her Knowledge receiver; Shared Lane
 Owners: **Manny/project lead for label approval and phase review; Manny for evaluation protocol and evidence.**
 
 - [x] Finalize the synthetic evaluation protocol: claim classes and denominators, per-gate positive/negative counts, holdout handling, confidence method, and finite-set reporting limits are documented. The dataset remains draft until label approval.
+- [x] Run the authorized 100-case synthetic live A0–A2 diagnostic on 2026-11-09 and retain the reconciled trace. It produced 45 validated model responses, 8 A1 stops, and 47 `semantic_result_unavailable` fallbacks; exact failed SDK-attempt count is not instrumented. This is a live diagnostic, not full-MAO execution or an approved score.
+- [x] Record Manny's case-level adjudication: SYN-EVAL-068 and SYN-EVAL-070 are confirmed category failures against “Product how-to / documentation request”; both returned “Employment record copy.” This decision applies only to these two cases; global dataset approval remains false.
+- [x] Record the remediation disposition for SYN-EVAL-068 and SYN-EVAL-070: deferred until after Phase 2 and excluded from this phase's exit gate by Manny's 2026-11-09 direction. Both remain confirmed failures, not passes; the original trace is unchanged. Reopen as post-Phase-2 follow-up with a new trace/version and regression evidence.
+- [ ] Investigate/remediate the unexpected split/missing-item results and `semantic_result_unavailable` causes. Add regression evidence and report any retest under a new trace/version; do not overwrite the original 2026-11-09 results.
 - [ ] Review and approve the 100-case expected labels/source expectations before scoring. Record Manny as label author/reviewer/approver; no real user/customer/employee records.
 - [x] Record the historical smoke-trace limitation honestly: its original exact request body/hash was not captured and cannot be reconstructed. A user-authorized replacement call ran once on 2026-11-06 using the already pinned `claude-sonnet-5-5`; its prompt/request digests and usage are recorded. It safely returned Unknown category for Auditor review and remains unscored. See the linked trace report.
-- [x] Run engineering integration checks with synthetic fixtures; retain their actual results and safe-fallback evidence. The connected test suite passed 58 tests and the full Python suite passed 686. These are not model accuracy scores and do not replace the approved label-scoring run.
+- [x] Run engineering integration checks with synthetic fixtures; retain their actual results and safe-fallback evidence. The connected test suite passed 58 tests. The full Python suite passed 717 tests after the evaluation metric correction on 2026-11-09. These are not model accuracy scores and do not replace the approved label-scoring run.
 - [ ] Review all Phase 2 exit criteria against the PRD and update `Checklist.md` only where evidence is present. Phase 2 reaches 100% only when every required gate has evidence or an explicitly approved deferral.
 
-**After Step 3:** expected Phase 2 exit readiness is **100% only if all required evidence is accepted**. A deferred or failed required gate means Phase 2 remains open; it is not rounded up.
+**After Step 3:** expected Phase 2 exit readiness is **100% only if every non-deferred required gate has accepted evidence**. D-22 excludes only remediation of cases 068 and 070; the failures stay visible and do not count as passes. Any other open required gate keeps Phase 2 open; readiness is not rounded up.
 
 ## Direct decisions and handoffs
 

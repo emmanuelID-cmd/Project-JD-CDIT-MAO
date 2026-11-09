@@ -1,0 +1,744 @@
+{
+  "run_id": "CDIT-LIVE-EVAL-78977963-567a-427d-9cba-5a3a8745b6d6",
+  "generated_at": "2026-11-09T19:27:57.374125+00:00",
+  "dataset_id": "CDIT-SYNTHETIC-EVALUATION-DRAFT-100-v1",
+  "dataset_sha256": "a4d6d2b6e6bbb21584ae2a9b86da13c32b62e30c3a047a1bc4c53f08f72d7c82",
+  "dataset_status": "DRAFT_NOT_APPROVED",
+  "label_approval": {
+    "label_author": "Manny",
+    "reviewer": "Manny",
+    "approver": "Manny",
+    "approved": false,
+    "scoring_authorized": false
+  },
+  "diagnostic_only": true,
+  "model": "claude-sonnet-5-5",
+  "contract_version": "0.1.0-proposed",
+  "system_prompt_sha256": "92dcee2769dbefed8b42e9b8579dd1e929789bd9c340d7d17bdc844225aa996c",
+  "cases_selected": 10,
+  "items_expected": 10,
+  "model_calls": 9,
+  "model_calls_authorized": true,
+  "model_calls_sequential": true,
+  "retry_count": 0,
+  "ticket_writes": 0,
+  "external_dispatches": 0,
+  "input_tokens_total": 11689,
+  "output_tokens_total": 5262,
+  "triage_category": {
+    "scored_items": 10,
+    "matches": 0,
+    "accuracy": 0.0,
+    "unscored_items": 1
+  },
+  "segmentation": {
+    "checked_items": 9,
+    "matching_spans": 8,
+    "span_match_rate": 0.8888888888888888
+  },
+  "cases": [
+    {
+      "case_id": "SYN-EVAL-061",
+      "trace_id": "TRACE-8e66203c-da20-4c11-9639-2db06bc663d0",
+      "run_id": "RUN-324799c8-2df6-40ff-a875-66312391f5e9",
+      "started_at": "2026-11-09T19:27:16.132109+00:00",
+      "ended_at": "2026-11-09T19:27:16.153210+00:00",
+      "input_sha256": "492ca3cb12f75ac976ba3d856223bf91da558fa21df0b65aad357e3bf32bfc7f",
+      "intake_status": "ready_for_triage",
+      "intake_checkpoint": "A1",
+      "intake_reason_code": null,
+      "handoff_events": [
+        {
+          "event": "handoff_prepared",
+          "status": "awaiting_ack",
+          "owner": "coordinator",
+          "sequence": 1,
+          "state_version": 1,
+          "timestamp": "2026-11-09T19:27:16.132109+00:00"
+        },
+        {
+          "event": "handoff_accepted",
+          "status": "accepted",
+          "owner": "triage",
+          "sequence": 2,
+          "state_version": 2,
+          "timestamp": "2026-11-09T19:27:16.132109+00:00"
+        }
+      ],
+      "triage_status": "needs_human_review",
+      "triage_reason": "semantic_result_unavailable",
+      "urgency": "unknown",
+      "destination": "unknown",
+      "human_review_required": true,
+      "downstream_allowed": false,
+      "dispatched": false,
+      "model_call_count": 0,
+      "model": null,
+      "prompt_id": null,
+      "prompt_sha256": "92dcee2769dbefed8b42e9b8579dd1e929789bd9c340d7d17bdc844225aa996c",
+      "request_payload_sha256": null,
+      "input_tokens": null,
+      "output_tokens": null,
+      "model_elapsed_ms": null,
+      "item_count_expected": 1,
+      "item_count_actual": 1,
+      "items": [
+        {
+          "item_index": 1,
+          "expected_category": "Customer service outage",
+          "expected_category_label": "inference",
+          "actual_category": null,
+          "actual_category_label": "unknown",
+          "category_match": null,
+          "expected_span": {
+            "start": 0,
+            "end": 138
+          },
+          "actual_span": {
+            "start": 0,
+            "end": 138
+          },
+          "span_match": true,
+          "evidence_quote_sha256": null
+        }
+      ],
+      "urgency_contract_pass": null,
+      "human_review_contract_pass": true
+    },
+    {
+      "case_id": "SYN-EVAL-062",
+      "trace_id": "TRACE-734d0565-e3c3-4d9c-a225-f19bb9c77c20",
+      "run_id": "RUN-00fd3051-ebf9-44b8-a8e6-3ee1ef3afded",
+      "started_at": "2026-11-09T19:27:16.153558+00:00",
+      "ended_at": "2026-11-09T19:27:18.312031+00:00",
+      "input_sha256": "0417819cd7d299947a6efbd466436def0371f54726ac59e21274054e9321a8b7",
+      "intake_status": "ready_for_triage",
+      "intake_checkpoint": "A1",
+      "intake_reason_code": null,
+      "handoff_events": [
+        {
+          "event": "handoff_prepared",
+          "status": "awaiting_ack",
+          "owner": "coordinator",
+          "sequence": 1,
+          "state_version": 1,
+          "timestamp": "2026-11-09T19:27:16.153558+00:00"
+        },
+        {
+          "event": "handoff_accepted",
+          "status": "accepted",
+          "owner": "triage",
+          "sequence": 2,
+          "state_version": 2,
+          "timestamp": "2026-11-09T19:27:16.153558+00:00"
+        }
+      ],
+      "triage_status": "proposal_for_human_review",
+      "triage_reason": null,
+      "urgency": "unknown",
+      "destination": "unknown",
+      "human_review_required": true,
+      "downstream_allowed": false,
+      "dispatched": false,
+      "model_call_count": 1,
+      "model": "claude-sonnet-5-5",
+      "prompt_id": "manny-triage-system-v1",
+      "prompt_sha256": "92dcee2769dbefed8b42e9b8579dd1e929789bd9c340d7d17bdc844225aa996c",
+      "request_payload_sha256": "cbb5d6c75cabb8eda7c766419f058412a2224b1f13ec0e3e1b4f3b37c32040ee",
+      "input_tokens": 1311,
+      "output_tokens": 190,
+      "model_elapsed_ms": 2142,
+      "item_count_expected": 1,
+      "item_count_actual": 1,
+      "items": [
+        {
+          "item_index": 1,
+          "expected_category": "unknown",
+          "expected_category_label": "unknown",
+          "actual_category": null,
+          "actual_category_label": "unknown",
+          "category_match": false,
+          "expected_span": {
+            "start": 0,
+            "end": 157
+          },
+          "actual_span": {
+            "start": 0,
+            "end": 157
+          },
+          "span_match": true,
+          "evidence_quote_sha256": null
+        }
+      ],
+      "urgency_contract_pass": true,
+      "human_review_contract_pass": true
+    },
+    {
+      "case_id": "SYN-EVAL-063",
+      "trace_id": "TRACE-93e65c56-4e98-4a2b-848e-cfd7ce8caa97",
+      "run_id": "RUN-315790fb-e5cc-4430-a43b-9d474a8cb11b",
+      "started_at": "2026-11-09T19:27:18.312325+00:00",
+      "ended_at": "2026-11-09T19:27:24.341576+00:00",
+      "input_sha256": "19ef302a3ebe345f2ea07f16b928bc74d4e3aa3fb81826971fd8f010238491a5",
+      "intake_status": "ready_for_triage",
+      "intake_checkpoint": "A1",
+      "intake_reason_code": null,
+      "handoff_events": [
+        {
+          "event": "handoff_prepared",
+          "status": "awaiting_ack",
+          "owner": "coordinator",
+          "sequence": 1,
+          "state_version": 1,
+          "timestamp": "2026-11-09T19:27:18.312325+00:00"
+        },
+        {
+          "event": "handoff_accepted",
+          "status": "accepted",
+          "owner": "triage",
+          "sequence": 2,
+          "state_version": 2,
+          "timestamp": "2026-11-09T19:27:18.312325+00:00"
+        }
+      ],
+      "triage_status": "proposal_for_human_review",
+      "triage_reason": null,
+      "urgency": "unknown",
+      "destination": "unknown",
+      "human_review_required": true,
+      "downstream_allowed": false,
+      "dispatched": false,
+      "model_call_count": 1,
+      "model": "claude-sonnet-5-5",
+      "prompt_id": "manny-triage-system-v1",
+      "prompt_sha256": "92dcee2769dbefed8b42e9b8579dd1e929789bd9c340d7d17bdc844225aa996c",
+      "request_payload_sha256": "eac359f9350ed8a72571e60f206bf5b9dd34aea40b475b8e47f1070365750d80",
+      "input_tokens": 1323,
+      "output_tokens": 796,
+      "model_elapsed_ms": 6020,
+      "item_count_expected": 1,
+      "item_count_actual": 2,
+      "items": [
+        {
+          "item_index": 1,
+          "expected_category": "Customer service outage",
+          "expected_category_label": "inference",
+          "actual_category": null,
+          "actual_category_label": "unknown",
+          "category_match": false,
+          "expected_span": {
+            "start": 0,
+            "end": 147
+          },
+          "actual_span": {
+            "start": 0,
+            "end": 109
+          },
+          "span_match": false,
+          "evidence_quote_sha256": null
+        },
+        {
+          "item_index": 2,
+          "expected_category": null,
+          "expected_category_label": null,
+          "actual_category": null,
+          "actual_category_label": "unknown",
+          "category_match": false,
+          "expected_span": null,
+          "actual_span": {
+            "start": 111,
+            "end": 147
+          },
+          "span_match": false,
+          "evidence_quote_sha256": null
+        }
+      ],
+      "urgency_contract_pass": true,
+      "human_review_contract_pass": true
+    },
+    {
+      "case_id": "SYN-EVAL-064",
+      "trace_id": "TRACE-3b89ec4e-5be5-4d65-8775-dd5bb9421953",
+      "run_id": "RUN-9526b690-03a6-4595-82b5-c4569a90024b",
+      "started_at": "2026-11-09T19:27:24.341712+00:00",
+      "ended_at": "2026-11-09T19:27:29.349504+00:00",
+      "input_sha256": "36e3a23f2b32fd1e2401e42d0f190163099a59cffc68d8f0ec6f5d0efa0d4c4b",
+      "intake_status": "ready_for_triage",
+      "intake_checkpoint": "A1",
+      "intake_reason_code": null,
+      "handoff_events": [
+        {
+          "event": "handoff_prepared",
+          "status": "awaiting_ack",
+          "owner": "coordinator",
+          "sequence": 1,
+          "state_version": 1,
+          "timestamp": "2026-11-09T19:27:24.341712+00:00"
+        },
+        {
+          "event": "handoff_accepted",
+          "status": "accepted",
+          "owner": "triage",
+          "sequence": 2,
+          "state_version": 2,
+          "timestamp": "2026-11-09T19:27:24.341712+00:00"
+        }
+      ],
+      "triage_status": "proposal_for_human_review",
+      "triage_reason": null,
+      "urgency": "unknown",
+      "destination": "unknown",
+      "human_review_required": true,
+      "downstream_allowed": false,
+      "dispatched": false,
+      "model_call_count": 1,
+      "model": "claude-sonnet-5-5",
+      "prompt_id": "manny-triage-system-v1",
+      "prompt_sha256": "92dcee2769dbefed8b42e9b8579dd1e929789bd9c340d7d17bdc844225aa996c",
+      "request_payload_sha256": "b36ba271b2f79f5516e19c485cddcd01767fb6172d45295b7434f815daf5327e",
+      "input_tokens": 1309,
+      "output_tokens": 615,
+      "model_elapsed_ms": 5000,
+      "item_count_expected": 1,
+      "item_count_actual": 1,
+      "items": [
+        {
+          "item_index": 1,
+          "expected_category": "Customer service outage",
+          "expected_category_label": "inference",
+          "actual_category": null,
+          "actual_category_label": "unknown",
+          "category_match": false,
+          "expected_span": {
+            "start": 0,
+            "end": 144
+          },
+          "actual_span": {
+            "start": 0,
+            "end": 144
+          },
+          "span_match": true,
+          "evidence_quote_sha256": null
+        }
+      ],
+      "urgency_contract_pass": true,
+      "human_review_contract_pass": true
+    },
+    {
+      "case_id": "SYN-EVAL-065",
+      "trace_id": "TRACE-233c8958-9020-47df-b30e-233abb978608",
+      "run_id": "RUN-025eb704-a6d2-4d9b-86ea-b1905bda6ca1",
+      "started_at": "2026-11-09T19:27:29.349756+00:00",
+      "ended_at": "2026-11-09T19:27:33.760829+00:00",
+      "input_sha256": "5e7e0a68aafadf37ca9c0e892a33aeee4a1b1c68a81e75cddbb0614418c397a8",
+      "intake_status": "ready_for_triage",
+      "intake_checkpoint": "A1",
+      "intake_reason_code": null,
+      "handoff_events": [
+        {
+          "event": "handoff_prepared",
+          "status": "awaiting_ack",
+          "owner": "coordinator",
+          "sequence": 1,
+          "state_version": 1,
+          "timestamp": "2026-11-09T19:27:29.349756+00:00"
+        },
+        {
+          "event": "handoff_accepted",
+          "status": "accepted",
+          "owner": "triage",
+          "sequence": 2,
+          "state_version": 2,
+          "timestamp": "2026-11-09T19:27:29.349756+00:00"
+        }
+      ],
+      "triage_status": "proposal_for_human_review",
+      "triage_reason": null,
+      "urgency": "unknown",
+      "destination": "unknown",
+      "human_review_required": true,
+      "downstream_allowed": false,
+      "dispatched": false,
+      "model_call_count": 1,
+      "model": "claude-sonnet-5-5",
+      "prompt_id": "manny-triage-system-v1",
+      "prompt_sha256": "92dcee2769dbefed8b42e9b8579dd1e929789bd9c340d7d17bdc844225aa996c",
+      "request_payload_sha256": "a717054b1f61acaf4b72b6abcf7f8636cd967bbe56be4845a36314598c755cc5",
+      "input_tokens": 1306,
+      "output_tokens": 542,
+      "model_elapsed_ms": 4399,
+      "item_count_expected": 1,
+      "item_count_actual": 1,
+      "items": [
+        {
+          "item_index": 1,
+          "expected_category": "Customer service outage",
+          "expected_category_label": "inference",
+          "actual_category": null,
+          "actual_category_label": "unknown",
+          "category_match": false,
+          "expected_span": {
+            "start": 0,
+            "end": 146
+          },
+          "actual_span": {
+            "start": 0,
+            "end": 146
+          },
+          "span_match": true,
+          "evidence_quote_sha256": null
+        }
+      ],
+      "urgency_contract_pass": true,
+      "human_review_contract_pass": true
+    },
+    {
+      "case_id": "SYN-EVAL-066",
+      "trace_id": "TRACE-60502d4d-5e94-48c2-8772-7815c1f02fe0",
+      "run_id": "RUN-df451ce3-88f5-477a-9245-e25eb45a6fc0",
+      "started_at": "2026-11-09T19:27:33.760992+00:00",
+      "ended_at": "2026-11-09T19:27:38.439212+00:00",
+      "input_sha256": "410d5a09437f39efe7783136cc6ae0a69be1bac30bebf400d1a7ea4762c89e06",
+      "intake_status": "ready_for_triage",
+      "intake_checkpoint": "A1",
+      "intake_reason_code": null,
+      "handoff_events": [
+        {
+          "event": "handoff_prepared",
+          "status": "awaiting_ack",
+          "owner": "coordinator",
+          "sequence": 1,
+          "state_version": 1,
+          "timestamp": "2026-11-09T19:27:33.760992+00:00"
+        },
+        {
+          "event": "handoff_accepted",
+          "status": "accepted",
+          "owner": "triage",
+          "sequence": 2,
+          "state_version": 2,
+          "timestamp": "2026-11-09T19:27:33.760992+00:00"
+        }
+      ],
+      "triage_status": "proposal_for_human_review",
+      "triage_reason": null,
+      "urgency": "unknown",
+      "destination": "unknown",
+      "human_review_required": true,
+      "downstream_allowed": false,
+      "dispatched": false,
+      "model_call_count": 1,
+      "model": "claude-sonnet-5-5",
+      "prompt_id": "manny-triage-system-v1",
+      "prompt_sha256": "92dcee2769dbefed8b42e9b8579dd1e929789bd9c340d7d17bdc844225aa996c",
+      "request_payload_sha256": "8daf5ceca2ecdb347058b0c8436d7b640c9b668bb498cb19078eafa4b6eb1b9c",
+      "input_tokens": 1282,
+      "output_tokens": 579,
+      "model_elapsed_ms": 4675,
+      "item_count_expected": 1,
+      "item_count_actual": 1,
+      "items": [
+        {
+          "item_index": 1,
+          "expected_category": "Product how-to / documentation request",
+          "expected_category_label": "inference",
+          "actual_category": null,
+          "actual_category_label": "unknown",
+          "category_match": false,
+          "expected_span": {
+            "start": 0,
+            "end": 42
+          },
+          "actual_span": {
+            "start": 0,
+            "end": 42
+          },
+          "span_match": true,
+          "evidence_quote_sha256": null
+        }
+      ],
+      "urgency_contract_pass": true,
+      "human_review_contract_pass": true
+    },
+    {
+      "case_id": "SYN-EVAL-067",
+      "trace_id": "TRACE-c7662f24-e9f8-4681-bfc8-ca2ec1f1085f",
+      "run_id": "RUN-0bb8123b-fa07-4c7d-a1b7-ac8dad233f74",
+      "started_at": "2026-11-09T19:27:38.439426+00:00",
+      "ended_at": "2026-11-09T19:27:43.272529+00:00",
+      "input_sha256": "5c74471b9c2a804633c5c1cbae224c95231eec541d3a89b8d0a60e0b8a04c234",
+      "intake_status": "ready_for_triage",
+      "intake_checkpoint": "A1",
+      "intake_reason_code": null,
+      "handoff_events": [
+        {
+          "event": "handoff_prepared",
+          "status": "awaiting_ack",
+          "owner": "coordinator",
+          "sequence": 1,
+          "state_version": 1,
+          "timestamp": "2026-11-09T19:27:38.439426+00:00"
+        },
+        {
+          "event": "handoff_accepted",
+          "status": "accepted",
+          "owner": "triage",
+          "sequence": 2,
+          "state_version": 2,
+          "timestamp": "2026-11-09T19:27:38.439426+00:00"
+        }
+      ],
+      "triage_status": "proposal_for_human_review",
+      "triage_reason": null,
+      "urgency": "unknown",
+      "destination": "unknown",
+      "human_review_required": true,
+      "downstream_allowed": false,
+      "dispatched": false,
+      "model_call_count": 1,
+      "model": "claude-sonnet-5-5",
+      "prompt_id": "manny-triage-system-v1",
+      "prompt_sha256": "92dcee2769dbefed8b42e9b8579dd1e929789bd9c340d7d17bdc844225aa996c",
+      "request_payload_sha256": "f06666e122a1b4dc32119afdab6f5355f8992afb44ec4332d517840c38e42d07",
+      "input_tokens": 1288,
+      "output_tokens": 657,
+      "model_elapsed_ms": 4827,
+      "item_count_expected": 1,
+      "item_count_actual": 1,
+      "items": [
+        {
+          "item_index": 1,
+          "expected_category": "Product how-to / documentation request",
+          "expected_category_label": "inference",
+          "actual_category": null,
+          "actual_category_label": "unknown",
+          "category_match": false,
+          "expected_span": {
+            "start": 0,
+            "end": 63
+          },
+          "actual_span": {
+            "start": 0,
+            "end": 63
+          },
+          "span_match": true,
+          "evidence_quote_sha256": null
+        }
+      ],
+      "urgency_contract_pass": true,
+      "human_review_contract_pass": true
+    },
+    {
+      "case_id": "SYN-EVAL-068",
+      "trace_id": "TRACE-9aa5dff2-24da-4755-a9a4-2db7f0be5eb4",
+      "run_id": "RUN-9de0c10f-35dd-4b44-83aa-7202839a75f7",
+      "started_at": "2026-11-09T19:27:43.272984+00:00",
+      "ended_at": "2026-11-09T19:27:47.593862+00:00",
+      "input_sha256": "f0b7abe14bb737517ed7f122a2df5f960cdf2aaa5a587c595701b50e85887621",
+      "intake_status": "ready_for_triage",
+      "intake_checkpoint": "A1",
+      "intake_reason_code": null,
+      "handoff_events": [
+        {
+          "event": "handoff_prepared",
+          "status": "awaiting_ack",
+          "owner": "coordinator",
+          "sequence": 1,
+          "state_version": 1,
+          "timestamp": "2026-11-09T19:27:43.272984+00:00"
+        },
+        {
+          "event": "handoff_accepted",
+          "status": "accepted",
+          "owner": "triage",
+          "sequence": 2,
+          "state_version": 2,
+          "timestamp": "2026-11-09T19:27:43.272984+00:00"
+        }
+      ],
+      "triage_status": "proposal_for_human_review",
+      "triage_reason": null,
+      "urgency": "unknown",
+      "destination": "unknown",
+      "human_review_required": true,
+      "downstream_allowed": false,
+      "dispatched": false,
+      "model_call_count": 1,
+      "model": "claude-sonnet-5-5",
+      "prompt_id": "manny-triage-system-v1",
+      "prompt_sha256": "92dcee2769dbefed8b42e9b8579dd1e929789bd9c340d7d17bdc844225aa996c",
+      "request_payload_sha256": "f0786c46325bc001e5c93dba0cf5a62ffbe04dbc291e04257006f137d119c2de",
+      "input_tokens": 1293,
+      "output_tokens": 631,
+      "model_elapsed_ms": 4312,
+      "item_count_expected": 1,
+      "item_count_actual": 1,
+      "items": [
+        {
+          "item_index": 1,
+          "expected_category": "Product how-to / documentation request",
+          "expected_category_label": "inference",
+          "actual_category": "Employment record copy",
+          "actual_category_label": "inference",
+          "category_match": false,
+          "expected_span": {
+            "start": 0,
+            "end": 70
+          },
+          "actual_span": {
+            "start": 0,
+            "end": 70
+          },
+          "span_match": true,
+          "evidence_quote_sha256": "8cc0dc1d54648d9f9c3b3863042f94dda311064d997d902ef66cbff8b800efb5"
+        }
+      ],
+      "urgency_contract_pass": true,
+      "human_review_contract_pass": true
+    },
+    {
+      "case_id": "SYN-EVAL-069",
+      "trace_id": "TRACE-2ed72e34-35de-422c-9f50-3fd065ec62d4",
+      "run_id": "RUN-d66eea84-036c-4569-ad73-5b3628e4ccb2",
+      "started_at": "2026-11-09T19:27:47.594054+00:00",
+      "ended_at": "2026-11-09T19:27:51.778783+00:00",
+      "input_sha256": "57da9170336be6aa827207b5eb085fb5fd1090b60349a7b6312868d9a9645876",
+      "intake_status": "ready_for_triage",
+      "intake_checkpoint": "A1",
+      "intake_reason_code": null,
+      "handoff_events": [
+        {
+          "event": "handoff_prepared",
+          "status": "awaiting_ack",
+          "owner": "coordinator",
+          "sequence": 1,
+          "state_version": 1,
+          "timestamp": "2026-11-09T19:27:47.594054+00:00"
+        },
+        {
+          "event": "handoff_accepted",
+          "status": "accepted",
+          "owner": "triage",
+          "sequence": 2,
+          "state_version": 2,
+          "timestamp": "2026-11-09T19:27:47.594054+00:00"
+        }
+      ],
+      "triage_status": "proposal_for_human_review",
+      "triage_reason": null,
+      "urgency": "unknown",
+      "destination": "unknown",
+      "human_review_required": true,
+      "downstream_allowed": false,
+      "dispatched": false,
+      "model_call_count": 1,
+      "model": "claude-sonnet-5-5",
+      "prompt_id": "manny-triage-system-v1",
+      "prompt_sha256": "92dcee2769dbefed8b42e9b8579dd1e929789bd9c340d7d17bdc844225aa996c",
+      "request_payload_sha256": "0dd69762bec5316d035b6e833fb0f5834b6244239cc6aeecb96997b10f5a0ef9",
+      "input_tokens": 1289,
+      "output_tokens": 505,
+      "model_elapsed_ms": 4179,
+      "item_count_expected": 1,
+      "item_count_actual": 1,
+      "items": [
+        {
+          "item_index": 1,
+          "expected_category": "Product how-to / documentation request",
+          "expected_category_label": "inference",
+          "actual_category": null,
+          "actual_category_label": "unknown",
+          "category_match": false,
+          "expected_span": {
+            "start": 0,
+            "end": 63
+          },
+          "actual_span": {
+            "start": 0,
+            "end": 63
+          },
+          "span_match": true,
+          "evidence_quote_sha256": null
+        }
+      ],
+      "urgency_contract_pass": true,
+      "human_review_contract_pass": true
+    },
+    {
+      "case_id": "SYN-EVAL-070",
+      "trace_id": "TRACE-dae5c9c7-7603-42b3-a9fe-67e3c65c25c0",
+      "run_id": "RUN-3e1086cb-680f-4f17-8bbd-1432b3018ecb",
+      "started_at": "2026-11-09T19:27:51.778891+00:00",
+      "ended_at": "2026-11-09T19:27:57.374043+00:00",
+      "input_sha256": "83591a02add2e9fd90a367eeed46d8a73f2af5e95f8e91d1480e025475c3d2c6",
+      "intake_status": "ready_for_triage",
+      "intake_checkpoint": "A1",
+      "intake_reason_code": null,
+      "handoff_events": [
+        {
+          "event": "handoff_prepared",
+          "status": "awaiting_ack",
+          "owner": "coordinator",
+          "sequence": 1,
+          "state_version": 1,
+          "timestamp": "2026-11-09T19:27:51.778891+00:00"
+        },
+        {
+          "event": "handoff_accepted",
+          "status": "accepted",
+          "owner": "triage",
+          "sequence": 2,
+          "state_version": 2,
+          "timestamp": "2026-11-09T19:27:51.778891+00:00"
+        }
+      ],
+      "triage_status": "proposal_for_human_review",
+      "triage_reason": null,
+      "urgency": "unknown",
+      "destination": "unknown",
+      "human_review_required": true,
+      "downstream_allowed": false,
+      "dispatched": false,
+      "model_call_count": 1,
+      "model": "claude-sonnet-5-5",
+      "prompt_id": "manny-triage-system-v1",
+      "prompt_sha256": "92dcee2769dbefed8b42e9b8579dd1e929789bd9c340d7d17bdc844225aa996c",
+      "request_payload_sha256": "1a54ccb1c449dd813fdd0b30b5d5d8ae3035a7626ca6baaddd7b3b412baf8139",
+      "input_tokens": 1288,
+      "output_tokens": 747,
+      "model_elapsed_ms": 5592,
+      "item_count_expected": 1,
+      "item_count_actual": 1,
+      "items": [
+        {
+          "item_index": 1,
+          "expected_category": "Product how-to / documentation request",
+          "expected_category_label": "inference",
+          "actual_category": "Employment record copy",
+          "actual_category_label": "inference",
+          "category_match": false,
+          "expected_span": {
+            "start": 0,
+            "end": 61
+          },
+          "actual_span": {
+            "start": 0,
+            "end": 61
+          },
+          "span_match": true,
+          "evidence_quote_sha256": "83591a02add2e9fd90a367eeed46d8a73f2af5e95f8e91d1480e025475c3d2c6"
+        }
+      ],
+      "urgency_contract_pass": true,
+      "human_review_contract_pass": true
+    }
+  ],
+  "other_gates": {
+    "knowledge": "see separate non-billable Knowledge diagnostic",
+    "auditor_band_and_route": "not_scored_by_triage_runtime",
+    "troubleshooting": "not_run",
+    "documentation": "not_run",
+    "full_mao": "not_run",
+    "actual_model_cost": "not_calculated"
+  }
+}

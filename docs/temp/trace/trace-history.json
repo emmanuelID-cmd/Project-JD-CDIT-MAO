@@ -15,6 +15,22 @@
       "parent_trace_id": null,
       "unverified_checks": 2,
       "not_tested_checks": 1
+    },
+    {
+      "trace_id": "TRACE-ead5e547-773a-44a1-bafa-e34e2fdc9297",
+      "agent": "Manny Triage A0-A2",
+      "version": "a9e68e10aa61ebc690a3e51f7c1a0ac3dac48bbf838e8cf2eb7ea57b66017637",
+      "started_at": "2026-11-09T19:22:36.671595+00:00",
+      "completion": "INCOMPLETE",
+      "check_outcome": "UNVERIFIED",
+      "evidence": "docs/temp/trace/Trace 2026-11-09_14-22-36-671595_-0500 Manny-Triage Live100-001 coordinator.md",
+      "expected_checks": 5,
+      "passed_checks": 3,
+      "failed_checks": 1,
+      "unverified_checks": 1,
+      "not_tested_checks": 0,
+      "parent_trace_id": null,
+      "ended_at": "2026-11-09T19:32:12.591047+00:00"
     }
   ]
 }
