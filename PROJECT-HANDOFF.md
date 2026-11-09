@@ -1,4 +1,17 @@
 # Project Handoff — Project-JD-CDIT-MAO
+
+## Current outgoing state - 2026-11-09
+
+This pre-push summary supersedes older current-status statements below where they conflict; historical entries remain unchanged.
+
+- Repository: `emmanuelID-cmd/Project-JD-CDIT-MAO`; active branch: `manny/coordinator-triage-escalation`; PR target: `developer`.
+- Verified remote baseline: `5ce9a0602b0d233dbb69a4777c5623db3f378162` for `origin/manny/coordinator-triage-escalation` and `origin/developer`. Fetch found no incoming or outgoing commits before this work. No open PR existed. `main` remains at `1a5cf4ad6beda1a12b537f2ffc95ac930d921174`.
+- Git author configured for the outgoing task commit: Emmanuel De Jesus <emmanuel.dejesus@pursuit.org>. This entry is prepared before the task commit; the final commit identifier is recorded by Git, not asserted here.
+- Done: normalize synthetic evaluation text by removing scenario markers while preserving exact item spans; pin `evaluation_as_of` to 2026-11-10; replace placeholder expected-source IDs with the mappings from Shawn's source review; rewrite stale and conflicting-source cases as concrete user requests; allow inferred-category conflict items with Unknown urgency to reach Knowledge while Auditor review remains pending; make the retrieved-injection case a benign notification-preferences request; cite PRD-v4 recovery requirements for manual fallback cases; update Checklist.md with the actual remaining gates.
+- Validation: `node --test tests/test_evaluation_draft.mjs` - 5 passed; all 105 item spans match and no scenario markers remain; targeted deterministic local retrieval found the expected stale article, both conflicting upload articles, and the injection-bearing notification article; `git diff --check` passed. No model/API call was made and no accuracy score was claimed.
+- Not completed: Manny's batch approval of the 100 case-level label/source expectations; Shawn-lane proposed source fixtures and policy acceptance/activation; full integrated 100-case scoring; manual browser/accessibility review; remaining project phase acceptance. All labels remain `DRAFT_NOT_APPROVED` and scoring remains unauthorized.
+- No real/CDIT data, production authentication, agent writes, external dispatch, or customer notification was used.
+
 ## Current outgoing state — 2026-11-08
 
 This is the pre-push handoff for the authorized Manny SQL-branch publication. It supersedes older current-status statements below where they conflict; older entries remain historical snapshots.
