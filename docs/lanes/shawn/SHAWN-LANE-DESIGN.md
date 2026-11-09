@@ -26,7 +26,7 @@
 | `src/cdit_support_mao/lane_calibration.py` | Calibration runner and CLI that produces lane evidence for D-08: band accuracy, abstention, cut-off sweep, retrieval recall@k, source exclusions, and a critical safety gate over every case (§9). |
 | `docs/lanes/shawn/AGENT-CHARTERS.md` | Per-agent charters: role, inputs, outputs, forbidden actions, stop rules (N-03). Accepted with the schemas as the behaviour specification (Q-04); the prompt drafts are not runtime prompts. |
 | `synthetic_data/knowledge/` | 38 synthetic KB article versions (see §6 and `synthetic_data/README.md`). |
-| `synthetic_data/policy/troubleshooting-policy_v0.1.1.json` | Synthetic Tier 1 action allowlist, staff-only and forbidden action types, request rules, stop conditions. |
+| `synthetic_data/policy/troubleshooting-policy_v0.1.2.json` | Synthetic Tier 1 action allowlist, staff-only and forbidden action types, request rules, stop conditions. 0.1.2 adds the privilege-escalation flag to RR-06; `_v0.1.1.json` stays for callers that still name it. |
 | `synthetic_data/cases/` | 12 synthetic lane cases, each with its expected outcome written before the run. |
 | `synthetic_data/item_cases/` | 5 synthetic linked-item cases (two items of one parent, an item held for the Auditor, an ambiguous parent, instruction-like item text). Kept apart so Manny's evaluation set is unchanged. |
 | `synthetic_data/calibration/` | Held-out calibration set `SYN-KCAL` v1.0: 111 cases with draft labels, written before the first run and not yet human-approved. |
@@ -187,7 +187,7 @@ uvicorn cdit_support_mao.main:app --app-dir src  ->  GET /health  200 {"status":
   - Contracts `0.1.0-proposed`, with S-1 (`TriageItemScope`), S-2 (`InputRef.content_digest`), and S-1.1 (`attention_check` and the taxonomy citation; item scope `0.2-proposed`).
   - Source set `SRC-61C4A35E96CF`.
   - Calibration set `SYN-KCAL` 1.0.
-  - Troubleshooting policy `SYN-TS-POLICY 0.1.1` (proposed).
+  - Troubleshooting policy `SYN-TS-POLICY 0.1.2` (proposed, 2026-11-09). 0.1.1 is kept for callers that still name it.
 - **Completed:** the three Shawn-owned agents, their gates, synthetic data, harness, tests, and contract proposal with examples. Also calibration evidence for D-08 (draft labels) and a Python 3.13 / `/health` run.
 - **Evidence:** §7, plus `docs/contracts/examples/`.
 - **PRD-v3 alignment:** [PRD-V3-ALIGNMENT-REVIEW.md](PRD-V3-ALIGNMENT-REVIEW.md) (2026-11-04, updated 2026-11-05). It lists findings and open questions. B-01 is fixed (§4), N-02 is done (§7), and N-03 is accepted under Q-04 ([AGENT-CHARTERS.md](AGENT-CHARTERS.md)). The other findings are open.

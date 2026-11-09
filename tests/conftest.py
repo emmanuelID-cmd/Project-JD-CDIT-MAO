@@ -29,7 +29,7 @@ from cdit_support_mao.lane_harness import LaneHarness
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 KNOWLEDGE_DIR = REPO_ROOT / "synthetic_data" / "knowledge"
-POLICY_PATH = REPO_ROOT / "synthetic_data" / "policy" / "troubleshooting-policy_v0.1.1.json"
+POLICY_PATH = REPO_ROOT / "synthetic_data" / "policy" / "troubleshooting-policy_v0.1.2.json"
 CASES_DIR = REPO_ROOT / "synthetic_data" / "cases"
 
 AS_OF = date(2026, 11, 3)

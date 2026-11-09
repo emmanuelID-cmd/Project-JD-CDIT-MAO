@@ -61,7 +61,7 @@ knowledge passages that answer the triaged case, or abstain.
 | Item | Charter |
 | :--- | :--- |
 | Purpose | Propose Tier 1 troubleshooting steps quoted from the top approved passage, inside the Tier 1 boundary of the troubleshooting policy. |
-| Reads | The Triage handoff and the Knowledge result built from it. The synthetic troubleshooting policy (`SYN-TS-POLICY 0.1.1`). |
+| Reads | The Triage handoff and the Knowledge result built from it. The synthetic troubleshooting policy (`SYN-TS-POLICY 0.1.2`). |
 | Produces | `TroubleshootingResult`: suggested steps marked `suggested_not_performed`; `staff_only_procedures`; `stop_conditions`; `information_needed`; `rejected` items; `escalation_signals`; labelled claims. |
 | Must never | Suggest a step that is not quoted from the evidence, or whose action type is staff-only, forbidden, or unknown. Perform or claim to perform any step. Grant, change, or advise changing access. Decide escalation; it only emits signals. |
 | Rejects or abstains when | Knowledge abstained (`knowledge_abstained`). A blocking request rule matches the case text (`restricted_action_requested`): bulk account actions, cross-site data, policy override, clinical or eligibility questions. A privacy or security stop condition matches (`policy_stop_condition`). The approved guidance contains a forbidden or unknown action type (`unsupported_step_rejected`, `unknown_action_type`); the whole guidance is then rejected. |

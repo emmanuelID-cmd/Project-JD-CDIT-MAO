@@ -1,6 +1,6 @@
 {
   "contract_version": "0.1.0-proposed",
-  "contribution_id": "TRB-79C4A7896B9821B9",
+  "contribution_id": "TRB-AA6EE4C8ADEF9BA9",
   "stage": "troubleshooting",
   "agent": "troubleshooting-agent",
   "agent_version": "0.2.0",
@@ -51,7 +51,7 @@
         {
           "kind": "policy_rule",
           "source_id": "SYN-TS-POLICY",
-          "version": "0.1.1",
+          "version": "0.1.2",
           "locator": "RR-01"
         }
       ],
@@ -65,7 +65,7 @@
         {
           "kind": "policy_rule",
           "source_id": "SYN-TS-POLICY",
-          "version": "0.1.1",
+          "version": "0.1.2",
           "locator": "RR-02"
         }
       ],
@@ -79,7 +79,7 @@
         {
           "kind": "policy_rule",
           "source_id": "SYN-TS-POLICY",
-          "version": "0.1.1",
+          "version": "0.1.2",
           "locator": "RR-03"
         }
       ],
@@ -93,7 +93,7 @@
         {
           "kind": "policy_rule",
           "source_id": "SYN-TS-POLICY",
-          "version": "0.1.1",
+          "version": "0.1.2",
           "locator": "RR-05"
         }
       ],
@@ -107,7 +107,7 @@
         {
           "kind": "policy_rule",
           "source_id": "SYN-TS-POLICY",
-          "version": "0.1.1",
+          "version": "0.1.2",
           "locator": "TS-SC-PRIVACY"
         }
       ],
@@ -122,7 +122,7 @@
   ],
   "human_review_required": true,
   "policy_id": "SYN-TS-POLICY",
-  "policy_version": "0.1.1",
+  "policy_version": "0.1.2",
   "primary_source": null,
   "steps": [],
   "staff_only_procedures": [],
@@ -134,7 +134,7 @@
       "source": {
         "kind": "policy_rule",
         "source_id": "SYN-TS-POLICY",
-        "version": "0.1.1",
+        "version": "0.1.2",
         "locator": "TS-SC-PRIVACY"
       },
       "triggered": true
@@ -175,7 +175,7 @@
         {
           "kind": "policy_rule",
           "source_id": "SYN-TS-POLICY",
-          "version": "0.1.1",
+          "version": "0.1.2",
           "locator": "RR-01"
         }
       ]
@@ -187,7 +187,7 @@
         {
           "kind": "policy_rule",
           "source_id": "SYN-TS-POLICY",
-          "version": "0.1.1",
+          "version": "0.1.2",
           "locator": "RR-02"
         }
       ]
@@ -199,7 +199,7 @@
         {
           "kind": "policy_rule",
           "source_id": "SYN-TS-POLICY",
-          "version": "0.1.1",
+          "version": "0.1.2",
           "locator": "RR-03"
         }
       ]
@@ -211,7 +211,7 @@
         {
           "kind": "policy_rule",
           "source_id": "SYN-TS-POLICY",
-          "version": "0.1.1",
+          "version": "0.1.2",
           "locator": "TS-SC-PRIVACY"
         }
       ]

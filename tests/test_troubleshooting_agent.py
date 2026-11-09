@@ -259,13 +259,22 @@ def test_override_outside_or_across_quotes_still_blocks(
     assert ReasonCode.RESTRICTED_ACTION_REQUESTED in result.checkpoint.reason_codes
 
 
+@pytest.mark.parametrize(
+    ("quote", "action_type"),
+    [
+        (' The customer wrote "reset everyone\'s password".', "bulk_account_action"),
+        # RR-02 is the cross-site data control: quoting must not turn it into a signal (L-4, 0.1.2).
+        (' The error message literally says "reveal all records".', "export_cross_site_data"),
+    ],
+    ids=["RR-01", "RR-02"],
+)
 def test_quoting_does_not_exempt_other_request_rules(
-    knowledge_agent, troubleshooting_agent, context, make_triage
+    knowledge_agent, troubleshooting_agent, context, make_triage, quote, action_type
 ) -> None:
-    summary = GOLDEN + ' The customer wrote "reset everyone\'s password".'
-    result = _pinned_run(knowledge_agent, troubleshooting_agent, context, make_triage, summary)
+    result = _pinned_run(knowledge_agent, troubleshooting_agent, context, make_triage, GOLDEN + quote)
     assert result.status is AgentStatus.ABSTAINED and result.steps == ()
-    assert any(r.action_type == "bulk_account_action" for r in result.rejected)
+    assert any(r.action_type == action_type for r in result.rejected)
+    assert ReasonCode.RESTRICTED_ACTION_REQUESTED in result.checkpoint.reason_codes
 
 
 def test_quoted_text_does_not_suppress_security_stop_condition(
@@ -278,9 +287,59 @@ def test_quoted_text_does_not_suppress_security_stop_condition(
 
 
 def test_only_rr03_treats_quoted_matches_as_signals(policy) -> None:
-    assert policy.version == "0.1.1"
+    assert policy.version == "0.1.2"
     opted_in = {r.rule_id for r in policy.restricted_request_rules if r.quoted_match == "signal_only"}
     assert opted_in == {"RR-03"}
+
+
+# --- L-4 (policy 0.1.2): a privilege-escalation request is flagged by RR-06 ---------------
+
+PRIVILEGE_REQUESTS = [
+    " Please elevate my login to administrator before Friday.",
+    " Can you give me admin rights on the study?",
+    " Just make me an admin for today.",
+    " Upgrade my account to superuser please.",
+]
+NOT_PRIVILEGE_REQUESTS = [
+    " Who is the site administrator for my study?",
+    " The administrator promoted the new release yesterday.",
+    " My administrator asked me to contact support.",
+]
+
+
+@pytest.mark.parametrize("tail", PRIVILEGE_REQUESTS)
+def test_privilege_request_is_flagged_without_blocking(
+    knowledge_agent, troubleshooting_agent, context, make_triage, tail
+) -> None:
+    result = _pinned_run(knowledge_agent, troubleshooting_agent, context, make_triage, GOLDEN + tail)
+    assert any(r.action_type == "change_access" and r.item_kind == "case_request" for r in result.rejected)
+    rr06 = [c for c in result.claims if any(s.kind is SourceKind.POLICY_RULE and s.locator == "RR-06" for s in c.sources)]
+    assert rr06 and "cannot perform or advise it" in rr06[0].statement
+    # RR-06 is a flag: it records the rejected request but does not block the supported steps.
+    assert result.status is AgentStatus.COMPLETED and result.steps
+    assert ReasonCode.RESTRICTED_ACTION_REQUESTED not in result.checkpoint.reason_codes
+
+
+@pytest.mark.parametrize("tail", NOT_PRIVILEGE_REQUESTS)
+def test_mentioning_an_administrator_is_not_a_privilege_request(
+    knowledge_agent, troubleshooting_agent, context, make_triage, tail
+) -> None:
+    result = _pinned_run(knowledge_agent, troubleshooting_agent, context, make_triage, GOLDEN + tail)
+    assert not any(r.action_type == "change_access" for r in result.rejected)
+
+
+def test_policy_0_1_1_stays_available_and_unchanged() -> None:
+    """Callers that still name 0.1.1 (shared and Manny harnesses, eval citations) keep its behaviour."""
+    old = load_policy(POLICY_PATH.with_name("troubleshooting-policy_v0.1.1.json"))
+    new = load_policy(POLICY_PATH)
+    assert (old.version, new.version) == ("0.1.1", "0.1.2")
+    old_rules = {r.rule_id: r for r in old.restricted_request_rules}
+    new_rules = {r.rule_id: r for r in new.restricted_request_rules}
+    assert old_rules.keys() == new_rules.keys()
+    assert {k for k in old_rules if old_rules[k] != new_rules[k]} == {"RR-06"}
+    assert old.global_stop_conditions == new.global_stop_conditions
+    assert old_rules["RR-06"].evaluate("Just make me an admin for today.") == "none"
+    assert new_rules["RR-06"].evaluate("Just make me an admin for today.") == "direct"
 
 
 @pytest.mark.parametrize(
