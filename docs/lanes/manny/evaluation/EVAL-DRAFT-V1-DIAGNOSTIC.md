@@ -9,15 +9,15 @@
 - Cases/items inspected: 100 / 105
 - As-of date: 2026-11-10
 - Knowledge source set: SRC-16191440094D
-- Knowledge agent version: 0.2.0
+- Knowledge agent version: 0.4.0
 
 ## Knowledge diagnostic results
 
 - Expected-source citation rate: 14/65 (21.5%); this is an observed diagnostic rate, not a PRD acceptance score.
 - Expected-source citation misses: 51
-- Expected-reason abstentions: 8/11
-- Stale-source cases without an answer: 4/5
-- Wrong-source/missed-abstention items: 1
+- Expected-reason abstentions: 9/11
+- Stale-source cases without an answer: 5/5
+- Wrong-source/missed-abstention items: 0
 - Items held for Auditor: 11
 - Items with no expected Knowledge source that abstained: 18
 - Source-map validation problems: 0
@@ -26,10 +26,9 @@
 
 | Verdict | Items |
 | :--- | ---: |
-| abstained_as_expected | 8 |
+| abstained_as_expected | 9 |
 | abstained_other_reason | 2 |
 | cited_expected | 14 |
-| cited_other_source | 1 |
 | held_for_auditor | 11 |
 | missed_abstained | 51 |
 | no_source_expected_abstained | 18 |
@@ -114,7 +113,7 @@
 | SYN-EVAL-064 | SYN-EVAL-064-I1 | tool-outage | knowledge | no_source_expected_abstained | — |
 | SYN-EVAL-065 | SYN-EVAL-065-I1 | tool-outage | knowledge | no_source_expected_abstained | — |
 | SYN-EVAL-066 | SYN-EVAL-066-I1 | stale-source | knowledge | abstained_as_expected | — |
-| SYN-EVAL-067 | SYN-EVAL-067-I1 | stale-source | knowledge | cited_other_source | KB-TRN-250#s1 v1.0 |
+| SYN-EVAL-067 | SYN-EVAL-067-I1 | stale-source | knowledge | abstained_as_expected | — |
 | SYN-EVAL-068 | SYN-EVAL-068-I1 | stale-source | knowledge | abstained_other_reason | — |
 | SYN-EVAL-069 | SYN-EVAL-069-I1 | stale-source | knowledge | abstained_other_reason | — |
 | SYN-EVAL-070 | SYN-EVAL-070-I1 | stale-source | knowledge | abstained_as_expected | — |
