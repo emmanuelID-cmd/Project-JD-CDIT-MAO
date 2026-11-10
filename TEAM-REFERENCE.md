@@ -1,4 +1,22 @@
 # Handoffs prepared for push
+## 2026-11-10T12:49:56-05:00
+
+Summary file: PROJECT-HANDOFF.md
+
+- Git author: Emmanuel De Jesus <emmanuel.dejesus@pursuit.org>.
+- Remote baseline: `origin/manny/coordinator-triage-escalation` at `8d6ee41`; target branch `developer` is at `735e502` after Shawn PR #27. Outgoing task commits are `db0b809` (Manny Triage/evaluation code and evidence) and `d7c8024` (Knowledge 0.4.0 diagnostic refresh). Local Manny, SQL, Shawn, and developer branches were fast-forwarded to `735e502` before restoring the Manny worktree changes.
+- Done:
+  - [x] Add Triage evaluation output-schema validation, safe failure telemetry, segmentation fixes, tests, synthetic v2/v3 datasets, and diagnostic trace records.
+  - [x] Correct the R1 span-coverage interpretation in a separate addendum while preserving frozen R1 artifacts.
+  - [x] Rerun Knowledge 0.4.0 diagnostic: 14/65 expected-source hits, zero source-map problems.
+  - [x] Validate with 755 pytest tests and clean `git diff --check`.
+- Not completed:
+  - [ ] Transcribe the user's already-made case decisions into the canonical adjudication record and reconcile its approval flags; do not ask for re-approval of decisions already made.
+  - [ ] Complete the official Phase 2 score and exit review after the remaining execution and coverage failures are represented accurately.
+  - [ ] Resolve 33 R5 schema-invalid responses and justify the 8 A1-unavailable spans; R2 call count remains unknown.
+  - [ ] Push Manny work, open/review/merge its PR to `developer`, then fast-forward eligible non-main remote branches.
+- No real/CDIT data, ticket writes, outbound dispatch, or customer notifications were used. `docs/artifacts/CDIT-JD.txt` remains intentionally untracked and excluded.
+
 ## 2026-11-09 - Manny live evaluation evidence and 068/070 deferral
 
 Summary file: PROJECT-HANDOFF.md

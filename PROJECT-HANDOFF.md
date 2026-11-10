@@ -1,15 +1,16 @@
 # Project Handoff — Project-JD-CDIT-MAO
 
-## Current outgoing state - 2026-11-09 (after live evaluation and developer sync)
+## Current outgoing state - 2026-11-10 (after PR #27 sync and diagnostics)
 
 This pre-publication summary supersedes earlier current-status statements below where they conflict; dated entries remain historical.
 
-- Repository: `emmanuelID-cmd/Project-JD-CDIT-MAO`; active branch: `manny/coordinator-triage-escalation`; intended PR target: `developer`; `main` was not changed.
-- Fetched `origin/developer` at `1a8ae1d29afac9c2f8c382b8a4e877cb3f101865`. Remote Manny baseline before publication was `0c18f80aff27edc3b8e62c28f36fab72fe4c763a`. Local Manny now includes the fetched developer history through merge commit `764c229c6db1bb380a953e5f1f1e0804fbe389db` and the Manny evaluation work. No rebase or reset was used. The read-only merge-tree preflight found no conflicts.
-- Recorded SYN-EVAL-068 and SYN-EVAL-070 as confirmed category failures. Per D-22, their remediation is deferred until after Phase 2 and excluded from its exit gate; neither is a pass. The original live trace remains intact. Phase 2 remains open for the other unvalidated results, remaining label/source decisions, scoring, and exit review.
-- Added synthetic live-evaluation and scoring utilities, tests, diagnostic reports, and retained trace artifacts in commit `88fe405`; the decision and checklist updates are in that same task commit. Full test evidence from the preceding run is 717 passed; no tests were run in this update. `git diff --check` passed before the commit.
-- Current work is committed on the existing Manny lane. No push or PR merge has occurred. Open-PR status could not be verified: the GitHub connector returned 404/422 for this private repository, the local GitHub CLI reports an invalid login, and the available browser accessibility interface failed. Do not claim that no PR exists or merge until the open-PR list and PR order can be verified.
-- `main` remains at `1a5cf4ad6beda1a12b537f2ffc95ac930d921174`.
+- Repository: `emmanuelID-cmd/Project-JD-CDIT-MAO`; active branch: `manny/coordinator-triage-escalation`; intended PR target: `developer`; `main` remains unchanged at `1a5cf4ad6beda1a12b537f2ffc95ac930d921174`.
+- Fetched `origin/developer` and `origin/shawn/knowledge-troubleshooting-docs` at `735e502` (merged PR #27). Local `developer`, Manny, SQL, and Shawn branches were each fast-forwarded from `8d6ee41` to `735e502`; no unique commits or conflicts were found. At handoff preparation, remote Manny and SQL remain at `8d6ee41`; Shawn and developer are at `735e502`.
+- Added Manny Triage live-evaluation contract/schema handling, segmentation safeguards, failure telemetry, synthetic v2/v3 case preparation, tests, and diagnostic evidence in commit `db0b809`. R5 is diagnostic only: 59 validated responses, 33 schema-invalid responses, 56/59 category proposals matching draft expectations, 97/97 observed spans exact, and 8 expected spans unavailable at A1. The dataset still records `approved=False` and `scoring_authorized=False`; no official all-case score is claimed. The R1 span-count correction is recorded in `docs/temp/trace/EVAL-DRAFT-V3-LIVE-TRIAGE-R1-ADDENDUM.md` without altering its frozen source artifacts. One R2 aggregation attempt remains incomplete and has no reliable call count.
+- Per Shawn's request after PR #27, reran the non-billable Knowledge diagnostic on agent 0.4.0 in commit `d7c8024`: 100 cases / 105 items, 14/65 expected-source hits (21.5%), zero source-map problems. This is diagnostic evidence, not an approved Knowledge or full-MAO acceptance score.
+- D-22 remains in force: remediation for SYN-EVAL-068 and SYN-EVAL-070 is deferred and neither is counted as a pass. Phase 2 remains open; the remaining schema failures, A1 stop justification, transcription of already-made human case decisions into the canonical adjudication record, and full evaluation/exit review are not complete.
+- Validation on the updated developer base: `.venv\\Scripts\\python.exe -m cdit_support_mao.evaluation_score` completed with 0 source-map problems; `.venv\\Scripts\\python.exe -m pytest -q` — 755 passed; `git diff --check` — clean. `docs/artifacts/CDIT-JD.txt` is intentionally untracked and excluded.
+- GitHub CLI verified no open PR from the Manny lane before publication. The requested push and PR are pending; no work has been merged into developer from this outgoing change yet.
 
 ## Prior outgoing snapshot - 2026-11-09 (before live evaluation)
 
