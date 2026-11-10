@@ -10,6 +10,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 from datetime import datetime
+from typing import Callable
 
 from cdit_support_mao.agents.coordinator import Coordinator
 from cdit_support_mao.agents.coordinator.handoff import (
@@ -70,6 +71,8 @@ class MannyA0A2Harness:
         client: AnthropicClient | None = None,
         billable_call_authorized: bool = False,
         now: datetime | None = None,
+        semantic_failure_observer: Callable[[str], None] | None = None,
+        provider_attempt_observer: Callable[[], None] | None = None,
     ) -> MannyA0A2Run:
         """Run synthetic intake and stop at a review-only A2 result.
 
@@ -109,6 +112,8 @@ class MannyA0A2Harness:
             client=client,
             billable_call_authorized=billable_call_authorized,
             now=now,
+            semantic_failure_observer=semantic_failure_observer,
+            provider_attempt_observer=provider_attempt_observer,
         )
         events = tuple(
             event for event in self._registry.events()

@@ -2,7 +2,7 @@
 from __future__ import annotations
 
 from datetime import datetime
-from typing import Literal
+from typing import Callable, Literal
 
 from pydantic import ValidationError, model_validator
 
@@ -92,6 +92,8 @@ def run_triage_runtime(
     client: AnthropicClient | None = None,
     billable_call_authorized: bool = False,
     now: datetime | None = None,
+    semantic_failure_observer: Callable[[str], None] | None = None,
+    provider_attempt_observer: Callable[[], None] | None = None,
 ) -> TriageRuntimeResult:
     """Run semantic Triage on a current Coordinator-acknowledged synthetic input.
 
@@ -177,6 +179,8 @@ def run_triage_runtime(
         client=client,
         billable_call_authorized=billable_call_authorized,
         now=now,
+        on_failure=semantic_failure_observer,
+        on_provider_attempt=provider_attempt_observer,
     )
     if semantic_result is None:
         if not _handoff_is_active(registry, handoff_id, expected_version, receiver_capability, context, now):

@@ -7,7 +7,7 @@ Model calls require explicit per-run billable authorization and fail closed to N
 from __future__ import annotations
 
 from datetime import datetime
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Callable
 
 if TYPE_CHECKING:
     from cdit_support_mao.agents.coordinator.handoff import HandoffRegistry
@@ -69,6 +69,8 @@ def execute_semantic_triage(
     client: AnthropicClient | None = None,
     billable_call_authorized: bool = False,
     now: datetime | None = None,
+    on_failure: Callable[[str], None] | None = None,
+    on_provider_attempt: Callable[[], None] | None = None,
 ) -> TriageModelResult | None:
     """Execute model-backed semantic category proposal only when authorized.
 
@@ -77,6 +79,8 @@ def execute_semantic_triage(
     All fallback cases require human Auditor review.
     """
     if client is None or billable_call_authorized is not True:
+        if on_failure is not None:
+            on_failure("triage_call_not_authorized_or_client_missing")
         return None
 
     try:
@@ -88,6 +92,8 @@ def execute_semantic_triage(
             now=now,
         )
     except Exception:
+        if on_failure is not None:
+            on_failure("triage_handoff_preflight_failed")
         return None
 
     try:
@@ -95,7 +101,9 @@ def execute_semantic_triage(
             candidate,
             allowed_categories=allowed_categories,
         )
-    except TriageSemanticPreparationError:
+    except TriageSemanticPreparationError as exc:
+        if on_failure is not None:
+            on_failure(str(exc))
         return None
 
     def handoff_preflight() -> bool:
@@ -117,6 +125,9 @@ def execute_semantic_triage(
             client=client,
             billable_call_authorized=billable_call_authorized,
             handoff_preflight=handoff_preflight,
+            on_provider_attempt=on_provider_attempt,
         )
-    except AnthropicTriageError:
+    except AnthropicTriageError as exc:
+        if on_failure is not None:
+            on_failure(exc.code)
         return None

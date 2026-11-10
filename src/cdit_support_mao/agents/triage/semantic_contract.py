@@ -73,6 +73,31 @@ class TriageSemanticOutput(StrictModel):
 class TriageSemanticContractError(ValueError):
     """Content-free failure for invalid or unsupported model output."""
 
+    def __init__(self, code: str) -> None:
+        fields = (
+            "items", "item_index", "category", "category_label", "evidence_quote",
+            "rationale", "missing_questions", "urgency", "urgency_label", "destination",
+            "destination_label", "human_review_required", "downstream_allowed",
+            "parent_complete", "dispatched", "unknown_field",
+        )
+        error_types = (
+            "missing", "too_short", "too_long", "tuple_type", "list_type", "dict_type",
+            "model_type", "string_type", "int_type", "bool_type", "literal_error",
+            "extra_forbidden", "value_error", "other",
+        )
+        allowed = {
+            "invalid_triage_model_output",
+            "triage_model_output_invalid_json",
+            "triage_model_output_schema_invalid",
+            "triage_model_item_coverage_mismatch",
+            "triage_model_category_outside_development_taxonomy",
+            "triage_model_quote_not_in_source_item",
+            *{f"triage_model_output_schema_invalid_{field}_{error_type}"
+              for field in fields for error_type in error_types},
+        }
+        self.code = code if code in allowed else "invalid_triage_model_output"
+        super().__init__(self.code)
+
 
 def validate_semantic_output(raw: object, *, request: TriageSemanticRequest) -> TriageSemanticOutput:
     """Validate exact item coverage, taxonomy membership and source-quoted inference."""
@@ -80,9 +105,37 @@ def validate_semantic_output(raw: object, *, request: TriageSemanticRequest) -> 
         raise TriageSemanticContractError("invalid_triage_model_output")
     try:
         payload = json.loads(raw)
+    except (json.JSONDecodeError, TypeError):
+        raise TriageSemanticContractError("triage_model_output_invalid_json") from None
+    try:
         output = TriageSemanticOutput.model_validate(payload)
-    except (json.JSONDecodeError, ValidationError, TypeError, ValueError):
-        raise TriageSemanticContractError("invalid_triage_model_output") from None
+    except ValidationError as exc:
+        known_fields = {
+            "items", "item_index", "category", "category_label", "evidence_quote",
+            "rationale", "missing_questions", "urgency", "urgency_label", "destination",
+            "destination_label", "human_review_required", "downstream_allowed",
+            "parent_complete", "dispatched",
+        }
+        field = "unknown_field"
+        error_type = "other"
+        for error in exc.errors(include_url=False, include_context=False, include_input=False):
+            location = error.get("loc", ())
+            candidate = next((value for value in reversed(location) if isinstance(value, str)), None)
+            if candidate in known_fields:
+                field = candidate
+                allowed_error_types = {
+                    "missing", "too_short", "too_long", "tuple_type", "list_type", "dict_type",
+                    "model_type", "string_type", "int_type", "bool_type", "literal_error",
+                    "extra_forbidden", "value_error",
+                }
+                observed_type = error.get("type")
+                error_type = observed_type if observed_type in allowed_error_types else "other"
+                break
+        raise TriageSemanticContractError(
+            f"triage_model_output_schema_invalid_{field}_{error_type}"
+        ) from None
+    except (TypeError, ValueError):
+        raise TriageSemanticContractError("triage_model_output_schema_invalid") from None
 
     expected_indexes = tuple(item.item_index for item in request.items)
     if tuple(item.item_index for item in output.items) != expected_indexes:

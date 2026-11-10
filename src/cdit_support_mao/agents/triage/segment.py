@@ -36,7 +36,20 @@ class SegmentationResult(StrictModel):
 
 
 _CONJUNCTION = re.compile(r"\s+(?:and|also)\s+(?=(?:i|we|my|our)\b)", re.I)
-_UNCERTAIN_CONJUNCTION = re.compile(r"\s+(?:and|also)\b", re.I)
+_SEPARATE_CONJUNCTION = re.compile(r",?\s+and\s+separately\s+", re.I)
+_UNCERTAIN_CONJUNCTION = re.compile(
+    r"\s+(?:and|also)\s+(?=(?:need|want|request|submit|send|resend|change|update|correct|fix|reset|remove|grant)\b)",
+    re.I,
+)
+_INDEPENDENT_ISSUE_CLAUSE = re.compile(
+    r"\s+and\s+(?:(?:my|our|their|the|a|an)\s+)?[a-z][\w'-]*(?:\s+[a-z][\w'-]*){0,3}\s+"
+    r"(?:is|are|was|were|has|have|fails|failed|cannot|can't|doesn't|don't|won't|missing|wrong|blocked|overlaps|conflicts)\b",
+    re.I,
+)
+_FINITE_ISSUE_PREDICATE = re.compile(
+    r"\b(?:is|are|was|were|has|have|fails|failed|cannot|can't|doesn't|don't|won't|missing|wrong|blocked|overlaps|conflicts)\b",
+    re.I,
+)
 
 
 def _parts(text: str) -> tuple[list[tuple[int, int]], str]:
@@ -75,9 +88,17 @@ def _parts(text: str) -> tuple[list[tuple[int, int]], str]:
             continue
         if quote is None:
             match = _CONJUNCTION.match(text, index)
-            if not match and _UNCERTAIN_CONJUNCTION.match(text, index):
+            separate_match = _SEPARATE_CONJUNCTION.match(text, index)
+            independent_issue = _INDEPENDENT_ISSUE_CLAUSE.match(text, index)
+            clause_start = max(
+                text.rfind(".", 0, index), text.rfind(";", 0, index),
+                text.rfind("\n", 0, index),
+            ) + 1
+            if (not match and not separate_match
+                    and (_UNCERTAIN_CONJUNCTION.match(text, index)
+                         or (independent_issue and _FINITE_ISSUE_PREDICATE.search(text[clause_start:index])))):
                 uncertain = True
-            if char in ";\n" or match:
+            if char in ";\n" or match or separate_match:
                 end = index
                 while start < end and text[start].isspace():
                     start += 1
@@ -85,7 +106,12 @@ def _parts(text: str) -> tuple[list[tuple[int, int]], str]:
                     end -= 1
                 if end > start:
                     spans.append((start, end))
-                index = match.end() if match else index + 1
+                if match:
+                    index = match.end()
+                elif separate_match:
+                    index = separate_match.end()
+                else:
+                    index += 1
                 start = index
                 continue
         index += 1
