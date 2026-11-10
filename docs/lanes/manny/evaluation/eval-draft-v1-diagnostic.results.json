@@ -14,14 +14,13 @@
   "item_count": 105,
   "evaluation_as_of": "2026-11-10",
   "source_set_version": "SRC-16191440094D",
-  "knowledge_agent_version": "0.2.0",
+  "knowledge_agent_version": "0.4.0",
   "source_map_problem_count": 0,
   "source_map_problems": [],
   "item_verdicts": {
-    "abstained_as_expected": 8,
+    "abstained_as_expected": 9,
     "abstained_other_reason": 2,
     "cited_expected": 14,
-    "cited_other_source": 1,
     "held_for_auditor": 11,
     "missed_abstained": 51,
     "no_source_expected_abstained": 18
@@ -32,10 +31,10 @@
     "expected_citation_rate": 0.2153846153846154,
     "expected_citation_misses": 51,
     "expected_abstention_cases": 11,
-    "expected_reason_abstentions": 8,
+    "expected_reason_abstentions": 9,
     "stale_source_cases": 5,
-    "stale_source_cases_without_an_answer": 4,
-    "wrong_source_or_missing_expected_abstention": 1,
+    "stale_source_cases_without_an_answer": 5,
+    "wrong_source_or_missing_expected_abstention": 0,
     "auditor_held_items": 11,
     "no_source_expected_and_abstained": 18
   },
@@ -1013,12 +1012,12 @@
       "expected_sources": [
         "KB-TRN-360#s1 v1.0"
       ],
-      "knowledge_status": "completed",
-      "reason_codes": [],
-      "cited_sources": [
-        "KB-TRN-250#s1 v1.0"
+      "knowledge_status": "abstained",
+      "reason_codes": [
+        "stale_source_only"
       ],
-      "verdict": "cited_other_source"
+      "cited_sources": [],
+      "verdict": "abstained_as_expected"
     },
     {
       "case_id": "SYN-EVAL-068",
@@ -1578,5 +1577,5 @@
       "verdict": "no_source_expected_abstained"
     }
   ],
-  "generated_at": "2026-11-09T19:07:08.827056+00:00"
+  "generated_at": "2026-11-10T17:45:55.540950+00:00"
 }

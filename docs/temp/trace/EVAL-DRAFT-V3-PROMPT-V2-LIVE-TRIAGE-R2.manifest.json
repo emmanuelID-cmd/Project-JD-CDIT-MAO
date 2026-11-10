@@ -1,0 +1,48 @@
+{
+  "manifest_id": "CDIT-PHASE2-V3-PROMPT-V2-LIVE-TRIAGE-20261110-R2",
+  "created_at": "2026-11-10T14:49:38.591373+00:00",
+  "authoritative_prd": "docs/requirements/PRD-v4.md",
+  "model_id": "claude-sonnet-5-5",
+  "system_prompt_id": "manny-triage-system-v2",
+  "trace_scope": "100 synthetic cases through Coordinator A0/A1 and Manny Triage A2; not full MAO or Knowledge scoring",
+  "run_constraints": {
+    "max_cases": 100,
+    "sequential": true,
+    "retries": 0,
+    "ticket_writes": 0,
+    "external_dispatches": 0,
+    "raw_ticket_text_saved": false
+  },
+  "expectations_frozen_before_run": {
+    "triage": "compare every validated category proposal to case-level expected category/label; ambiguous/unknown cases may abstain to Auditor; abstentions are not category passes",
+    "segmentation": "exact source spans for every item A1 allows onward; list cases stopped before segmentation separately",
+    "urgency": "Triage urgency and destination stay Unknown; Auditor band/route not scored here",
+    "deferred_failures": [
+      "SYN-EVAL-068",
+      "SYN-EVAL-070: remediation deferred by D-22; retain visible failure, do not count as pass"
+    ],
+    "approval_flags": {
+      "label_author": "Manny",
+      "reviewer": "Manny",
+      "approver": "Manny",
+      "approved": false,
+      "scoring_authorized": false
+    },
+    "knowledge": "not run in this tool; separate source-grounding gates not scored"
+  },
+  "versions_and_sha256": {
+    "docs/requirements/PRD-v4.md": "6a0b75b06c537fa4fb97901c85af62107c0d76c9e7435e2e167aaf192fcabf34",
+    "synthetic_data/evaluation_draft/v3/cases.json": "f3655b62a194ab5045b9f1ab0c79db046948fc02bb9bb9a8096340d00d481c6f",
+    "src/cdit_support_mao/agents/triage/anthropic_adapter.py": "c1c95acca97614395b0e2a878c23fbdbe75e8091fc8b4c3a0cbd2f031c612c77",
+    "src/cdit_support_mao/agents/triage/semantic_pipeline.py": "bed569b46184afd3d1d39042b3171ab9ea2570523f58285a08654621b0d48383",
+    "src/cdit_support_mao/agents/triage/segment.py": "d821a371c39c4b32d349112a647d9f092e42a67fa96015ab6273ede64c5a897a",
+    "src/cdit_support_mao/agents/triage/runtime_harness.py": "fcf745d5cdce2b3f8d2bad2c9ea76ab45486b0187b4bc8cb6cdcee1c6fd4b499",
+    "src/cdit_support_mao/evaluation_live.py": "3625476d5e4424bc3f18a4557a14dab8df3f678ce60eeb664de5d3a3818d4fc3",
+    "tests/test_triage_segment.py": "3aacd9fe17829f4a4c2b451fc4c0ad191a779b287811e7134979c21172e0dccd",
+    "tests/test_evaluation_live.py": "5e0e8ec836e67a7d91f53691847a8699a7c7d8484657ed41312d4757505ea221",
+    "tests/test_triage_anthropic_adapter.py": "34f0812ed1b1e2783a700a7a933ba448136646e1f7849f606c29fa225e126beb"
+  },
+  "dataset_id": "CDIT-SYNTHETIC-EVALUATION-DRAFT-100-v3",
+  "cases": 100,
+  "expected_items": 105
+}

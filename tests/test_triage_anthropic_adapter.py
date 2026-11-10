@@ -117,8 +117,11 @@ def test_adapter_sends_minimized_synthetic_request_and_validates_output():
     assert user_payload["items"] == [{"item_index": 1, "text": "I cannot access the trial schedule."}]
     assert "case_id" not in user_payload
     assert result.request_payload_sha256 == hashlib.sha256(exact_user_body.encode("utf-8")).hexdigest()
-    assert result.prompt_id == SYSTEM_PROMPT_ID == "manny-triage-system-v1"
+    assert result.prompt_id == SYSTEM_PROMPT_ID == "manny-triage-system-v2"
     assert call["system"] == SYSTEM_PROMPT
+    assert call["output_config"]["format"]["type"] == "json_schema"
+    assert call["output_config"]["format"]["schema"]["additionalProperties"] is False
+    assert call["output_config"]["format"]["schema"]["properties"]["items"]["minItems"] == 1
     assert result.system_prompt_sha256 == hashlib.sha256(SYSTEM_PROMPT.encode("utf-8")).hexdigest()
     assert "system_prompt" not in result.model_dump()
     trace_metadata = json.dumps({
@@ -144,10 +147,27 @@ def test_adapter_rejects_incomplete_provider_response(stop_reason):
 def test_adapter_rejects_model_output_that_is_not_grounded_or_contract_valid():
     bad = _valid_json().replace("cannot access", "cannot log in")
     client = FakeClient(FakeMessages(_response(text=bad)))
-    with pytest.raises(AnthropicTriageError, match="output_rejected"):
+    with pytest.raises(AnthropicTriageError, match="quote_not_in_source"):
         classify_synthetic_items(
             _request(), client=client, billable_call_authorized=True, handoff_preflight=lambda: True,
         )
+
+
+@pytest.mark.parametrize(
+    ("text", "expected_code"),
+    [
+        ("{not-json", "triage_provider_output_invalid_json"),
+        ("{}", "triage_provider_output_schema_invalid"),
+    ],
+)
+def test_adapter_reports_fixed_safe_subcode_for_rejected_model_output(text, expected_code):
+    client = FakeClient(FakeMessages(_response(text=text)))
+    with pytest.raises(AnthropicTriageError, match=expected_code) as caught:
+        classify_synthetic_items(
+            _request(), client=client, billable_call_authorized=True, handoff_preflight=lambda: True,
+        )
+    assert "not-json" not in str(caught.value)
+    assert "Access Request" not in str(caught.value)
 
 
 def test_injection_text_remains_untrusted_user_data_under_fixed_system_prompt():

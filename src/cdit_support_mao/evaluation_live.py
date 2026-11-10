@@ -83,12 +83,16 @@ def _run_case(case: dict[str, Any], *, client: Any, authorized: bool) -> dict[st
     }
     run_id = f"LIVE-{uuid4()}"
     started_at = datetime.now(UTC)
+    failure_codes: list[str] = []
+    provider_attempts: list[str] = []
     result = harness.run(
         request,
         session_token=token,
         client=client,
         billable_call_authorized=authorized,
         now=started_at,
+        semantic_failure_observer=failure_codes.append,
+        provider_attempt_observer=lambda: provider_attempts.append("messages.create_invoked"),
     )
     ended_at = datetime.now(UTC)
     triage = result.triage
@@ -170,6 +174,17 @@ def _run_case(case: dict[str, Any], *, client: Any, authorized: bool) -> dict[st
         "downstream_allowed": triage.downstream_allowed if triage is not None else None,
         "dispatched": triage.dispatched if triage is not None else None,
         "model_call_count": model_call_count,
+        "provider_attempt_count": len(provider_attempts),
+        "semantic_failure_code": (
+            failure_codes[-1] if failure_codes else
+            (
+                f"triage_runtime_{triage.reason}"
+                if triage is not None and semantic is None and triage.reason is not None
+                else "triage_failure_code_not_observed"
+                if triage is not None and semantic is None
+                else None
+            )
+        ),
         "model": semantic.model if semantic is not None else None,
         "prompt_id": semantic.prompt_id if semantic is not None else None,
         "prompt_sha256": semantic.system_prompt_sha256 if semantic is not None else _sha256(SYSTEM_PROMPT.encode("utf-8")),
@@ -232,12 +247,28 @@ def run_batch(
     ]
     category_matches = sum(item["category_match"] is True for item in proposal_items)
     abstention_items = [item for item in scored_items if item["actual_category"] is None]
+    all_items = [item for case in case_results for item in case["items"]]
     span_checked = [
-        item for item in scored_items
+        item for item in all_items
         if item["expected_span"] is not None and item["actual_span"] is not None
     ]
+    span_unavailable = [
+        item for item in all_items
+        if item["expected_span"] is not None and item["actual_span"] is None
+    ]
+    span_unavailable_case_ids = sorted(
+        case["case_id"] for case in case_results
+        if any(item["expected_span"] is not None and item["actual_span"] is None
+               for item in case["items"])
+    )
     span_matches = sum(item["span_match"] for item in span_checked)
     calls = sum(case["model_call_count"] for case in case_results)
+    provider_attempts = sum(case["provider_attempt_count"] for case in case_results)
+    failure_codes: dict[str, int] = {}
+    for case in case_results:
+        code = case.get("semantic_failure_code")
+        if code:
+            failure_codes[code] = failure_codes.get(code, 0) + 1
     tokens_in = sum(case["input_tokens"] or 0 for case in case_results)
     tokens_out = sum(case["output_tokens"] or 0 for case in case_results)
     return {
@@ -254,8 +285,9 @@ def run_batch(
         "cases_selected": len(selected),
         "items_expected": sum(len(case["items"]) for case in selected),
         "model_calls": calls,
-        "model_call_attempts_verified": False,
-        "model_call_attempts_note": "model_calls counts validated semantic results; failed SDK attempts are not instrumented by this runner",
+        "provider_attempts": provider_attempts,
+        "provider_attempts_note": "count of invocations of the SDK messages.create method; not provider-side receipt or billing confirmation",
+        "semantic_failure_code_counts": failure_codes,
         "model_calls_authorized": billable_call_authorized,
         "model_calls_sequential": True,
         "retry_count": 0,
@@ -276,9 +308,17 @@ def run_batch(
             "unscored_items": sum(len(case["items"]) for case in case_results) - len(scored_items),
         },
         "segmentation": {
+            "expected_items": sum(len(case["items"]) for case in selected),
             "checked_items": len(span_checked),
             "matching_spans": span_matches,
+            "mismatching_spans": len(span_checked) - span_matches,
+            "unavailable_items": len(span_unavailable),
+            "unavailable_case_ids": span_unavailable_case_ids,
             "span_match_rate": span_matches / len(span_checked) if span_checked else None,
+            "observed_span_coverage": (
+                len(span_checked) / sum(len(case["items"]) for case in selected)
+                if selected else None
+            ),
         },
         "cases": case_results,
         "other_gates": {
@@ -310,7 +350,9 @@ def render_report(result: dict[str, Any]) -> str:
         f"- Dataset SHA-256: {result['dataset_sha256']}",
         f"- Label approval flags: approved={result['label_approval'].get('approved')}, scoring_authorized={result['label_approval'].get('scoring_authorized')}",
         f"- Cases/items selected: {result['cases_selected']} / {result['items_expected']}",
-        f"- Validated model responses: {result['model_calls']} (SDK attempt count is not instrumented; retries are configured off; authorized={result['model_calls_authorized']}, sequential={result['model_calls_sequential']})",
+        f"- Validated model responses: {result['model_calls']}",
+        f"- SDK create invocations: {result['provider_attempts']} (method-invocation count, not provider billing confirmation).",
+        f"- Safe failure-code counts: {result['semantic_failure_code_counts']}",
         f"- Model / contract: {result['model']} / {result['contract_version']}",
         f"- Input/output tokens: {result['input_tokens_total']} / {result['output_tokens_total']}",
         "",
@@ -318,7 +360,9 @@ def render_report(result: dict[str, Any]) -> str:
         "",
         f"- Category proposals paired with an expected item: {triage['matches']}/{triage['scored_items']} matched ({accuracy_text}); {triage.get('proposal_disagreements', 0)} differed from the draft expectation.",
         f"- Abstentions with expected outputs: {triage.get('abstentions_with_expected_outputs', 0)}; unpaired extra model items: {triage.get('unpaired_actual_items', 0)}; expected items without a validated result: {triage['unscored_items']}.",
-        f"- Item spans: {spans['matching_spans']}/{spans['checked_items']} matched ({span_text}).",
+        f"- Item spans: {spans['matching_spans']}/{spans['checked_items']} observed spans matched ({span_text}); "
+        f"{spans.get('unavailable_items', 0)}/{spans.get('expected_items', spans['checked_items'])} expected spans were unavailable "
+        f"(observed coverage {spans.get('observed_span_coverage', 0):.1%}).",
         "",
         "No urgency or destination accuracy is calculated: the A2 contract requires both to remain Unknown until human review. Auditor band/route decisions are also not scored by this run.",
         "",
@@ -383,7 +427,8 @@ def main(argv: Sequence[str] | None = None) -> int:
     args.report.write_text(render_report(result), encoding="utf-8", newline="\n")
     args.results.write_text(json.dumps(result, indent=2, ensure_ascii=False) + "\n", encoding="utf-8", newline="\n")
     print(
-        f"LIVE DIAGNOSTIC: {result['cases_selected']} cases, {result['model_calls']} model calls; "
+        f"LIVE DIAGNOSTIC: {result['cases_selected']} cases, {result['provider_attempts']} SDK create invocations, "
+        f"{result['model_calls']} validated semantic results; "
         f"Triage category {result['triage_category']['matches']}/{result['triage_category']['scored_items']}."
     )
     print(f"Report: {args.report}")
