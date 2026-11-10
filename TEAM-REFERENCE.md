@@ -3,8 +3,9 @@
 
 Summary file: PROJECT-HANDOFF.md
 
-- Git author: Emmanuel De Jesus <emmanuel.dejesus@pursuit.org>.
-- Remote baseline: `origin/manny/coordinator-triage-escalation` at `8d6ee41`; target branch `developer` is at `735e502` after Shawn PR #27. Outgoing task commits are `db0b809` (Manny Triage/evaluation code and evidence) and `d7c8024` (Knowledge 0.4.0 diagnostic refresh). Local Manny, SQL, Shawn, and developer branches were fast-forwarded to `735e502` before restoring the Manny worktree changes.
+- Git authors represented in this push: Emmanuel De Jesus <emmanuel.dejesus@pursuit.org> (Manny commits `db0b809` and `d7c8024`) and Shawn (`80f2e92`, `9598ba8`, and `68e0500`, already merged through PR #27 and carried by the fast-forward).
+- Remote baseline: `origin/manny/coordinator-triage-escalation` at `8d6ee41c16ffa83b423127bf4ab00571deabf186`; target `developer` and Shawn's remote lane are at `735e502c2f4d66e53846dbc2cd843040e2a29c95`. The three Shawn commits were already present on developer before this update. Local Manny, SQL, Shawn, and developer branches were fast-forwarded to `735e502` before restoring the Manny worktree changes.
+- Manny outgoing task commits are `db0b8092fe5449451b21baaaa761710985f23e8d` (Triage/evaluation implementation and evidence) and `d7c8024dfd672fa87e943c612aa34544addc7296` (Knowledge 0.4.0 diagnostic refresh).
 - Done:
   - [x] Add Triage evaluation output-schema validation, safe failure telemetry, segmentation fixes, tests, synthetic v2/v3 datasets, and diagnostic trace records.
   - [x] Correct the R1 span-coverage interpretation in a separate addendum while preserving frozen R1 artifacts.
