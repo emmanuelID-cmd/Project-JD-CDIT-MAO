@@ -513,3 +513,11 @@ UI lane clarification: Either lane may add/style presentation controls (includin
   - Answer Q-E.
   - Add the proposal document.
   - Implement S-3 to S-8 when ready.
+
+## 2026-11-11T17:36:00-05:00 — ActionRelay preservation branch and submission package
+
+- Branch: `manny/coordinator-triage-escalation`. The task commits are `d66f0b05b8f4b8657a966556c34c2d9f4aee340e` (ticket outcomes, Auditor classification, PRD, architecture, and migrations) and `5d1b5c832ec813899408d7822d427f5925cd2636` (presentation package, selected walkthrough, slides, JD PDF, and architecture assets).
+- The user directed this run to preserve the branch and target `main` directly; do not update or merge `developer`, and do not fast-forward any branch. Verified `origin/main` baseline: `1a5cf4ad6beda1a12b537f2ffc95ac930d921174`; it is an ancestor of this branch. The branch has 139 commits and 415 changed paths relative to `main`, representing the accumulated project state through Manny commit `4384eb3`; it does not include the four newer commits on `developer`.
+- The existing Manny remote branch baseline is `4384eb3b62a71b8dd8861aaf45cdaef342593a58`; local branch is two commits ahead. No open PR currently covers this branch targeting `main`.
+- Validation in this publication pass: staged whitespace checks passed for the two task commits. The application test suite was not rerun. The selected HTML and matching MP4 were packaged unchanged; latest requested beat-level revisions remain documented for later video work.
+- Current state: handoff prepared; branch push and PR to `main` are pending. Merge only by a non-fast-forward PR merge after the PR checks/review are available. No `developer` update or `developer`-to-`main` release is part of this run.

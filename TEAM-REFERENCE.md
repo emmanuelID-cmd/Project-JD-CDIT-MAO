@@ -1,5 +1,12 @@
 # Handoffs prepared for push
 
+## 2026-11-11 — ActionRelay preservation branch publication
+
+Summary file: PROJECT-HANDOFF.md
+
+- User-directed target: `main` from `manny/coordinator-triage-escalation`; `developer` remains untouched. Main baseline is recorded in the handoff. The branch is 139 commits / 415 paths ahead of main and excludes the four newer developer commits.
+- Two task commits are ready; handoff and presentation package details and validation limits are recorded in `PROJECT-HANDOFF.md`. Push and PR are pending.
+
 ## 2026-11-11 — User request-page recovery
 
 Summary file: PROJECT-HANDOFF.md
