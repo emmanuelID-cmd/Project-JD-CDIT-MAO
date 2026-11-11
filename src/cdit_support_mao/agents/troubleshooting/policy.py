@@ -22,6 +22,8 @@ POLICY_PATH_ENV = "CDIT_TROUBLESHOOTING_POLICY"
 # 0.1.2 adds the privilege-escalation pattern to RR-06. 0.1.1 stays in place for callers that
 # still name it (the shared and Manny harnesses, and the evaluation draft's citations).
 DEFAULT_POLICY_PATH = Path("synthetic_data/policy/troubleshooting-policy_v0.1.2.json")
+# src/cdit_support_mao/agents/<agent>/<module>.py -> repository root.
+_PROJECT_ROOT = Path(__file__).resolve().parents[4]
 
 # Quoted spans in untrusted case text. Straight and curly single quotes allow an
 # apostrophe inside a word (can't, site's) and must not start or end inside a word.
@@ -136,7 +138,12 @@ class TroubleshootingPolicy(StrictModel):
 
 
 def default_policy_path() -> Path:
-    return Path(os.environ.get(POLICY_PATH_ENV, str(DEFAULT_POLICY_PATH))).expanduser()
+    """Configured policy; a relative path missing from the working directory
+    resolves against the project root, so the app works from any start folder."""
+    path = Path(os.environ.get(POLICY_PATH_ENV, str(DEFAULT_POLICY_PATH))).expanduser()
+    if not path.is_absolute() and not path.exists() and (_PROJECT_ROOT / path).exists():
+        return _PROJECT_ROOT / path
+    return path
 
 
 def load_policy(path: Path | None = None) -> TroubleshootingPolicy:

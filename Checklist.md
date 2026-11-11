@@ -162,6 +162,7 @@ Use this checklist as the live project status record. Check an item only when it
 - [ ] All P0 requirements and safety constraints are implemented and evidenced, or explicitly deferred by the project lead. The evaluation-label approval/scoring gate and manual browser/accessibility review remain open.
 - [ ] Agent-level confidence, hallucination, prompt-injection, permission, failure-state, and recovery evaluations pass their approved gates. Synthetic integration tests pass; the 100-case labels remain unapproved and unscored.
 - [x] End-to-end synthetic handoffs, linked-item provenance, stale-state stops, and human Auditor resume are exercised by the combined harness. This does not prove production persistence or real-world accuracy.
+- [x] App-wired synthetic resume (2026-11-11): an Auditor decision saved in the authenticated app runs Knowledge, Troubleshooting, Escalation and Documentation and shows them on the case-version timeline, including after a Knowledge abstention. 773 tests passed. One live Claude Triage call through the app is still to be recorded; see `docs/planning/ACTIONRELAY-END-TO-END-WIRING-HANDOFF.md`.
 - [ ] Documentation, known limitations, open decisions, and lane ownership are current and reconciled before project closeout.
 - [ ] Project lead explicitly confirms the project is complete or directs a merge to `main`.
 - [ ] Only after that direction, complete the authorized merge/release workflow. Never infer permission from checklist progress alone.

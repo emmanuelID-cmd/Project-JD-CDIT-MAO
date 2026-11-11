@@ -22,6 +22,8 @@ from cdit_support_mao.contracts.common import ReasonCode, StrictModel
 
 KNOWLEDGE_DIR_ENV = "CDIT_KNOWLEDGE_DIR"
 DEFAULT_KNOWLEDGE_DIR = Path("synthetic_data/knowledge")
+# src/cdit_support_mao/agents/<agent>/<module>.py -> repository root.
+_PROJECT_ROOT = Path(__file__).resolve().parents[4]
 
 
 class CorpusError(ValueError):
@@ -113,7 +115,12 @@ class KnowledgeCorpus:
 
 
 def default_knowledge_dir() -> Path:
-    return Path(os.environ.get(KNOWLEDGE_DIR_ENV, str(DEFAULT_KNOWLEDGE_DIR))).expanduser()
+    """Configured directory; a relative path missing from the working directory
+    resolves against the project root, so the app works from any start folder."""
+    path = Path(os.environ.get(KNOWLEDGE_DIR_ENV, str(DEFAULT_KNOWLEDGE_DIR))).expanduser()
+    if not path.is_absolute() and not path.exists() and (_PROJECT_ROOT / path).exists():
+        return _PROJECT_ROOT / path
+    return path
 
 
 def load_corpus(directory: Path | None = None) -> KnowledgeCorpus:

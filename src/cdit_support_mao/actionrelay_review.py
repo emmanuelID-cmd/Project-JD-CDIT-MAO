@@ -86,32 +86,36 @@ def downstream(row, run_id: str, check) -> dict:
               "stages": stages, "next_action": "human_review"}
     ack = {triage.contribution_id}
 
-    def record(name, contribution) -> bool:
-        stages.append({"name": name, "status": contribution.status.value,
-                       "reasons": [code.value for code in contribution.checkpoint.reason_codes]})
+    def record(name, contribution, detail: str | None = None) -> None:
+        stage = {"name": name, "status": contribution.status.value,
+                 "reasons": [code.value for code in contribution.checkpoint.reason_codes]}
+        if detail:
+            stage["detail"] = detail
+        stages.append(stage)
         check()
         ack.add(contribution.contribution_id)
-        return contribution.status is AgentStatus.COMPLETED
 
+    # Run every stage in the combined-harness order. Each agent handles an
+    # abstained or blocked upstream contribution itself (its own gates), so an
+    # early Knowledge abstention still reaches the Escalation check and the
+    # Documentation handoff draft instead of silently ending the run.
     check()
     knowledge = KnowledgeAgent(load_corpus()).run(
         context, triage, acknowledged=ack, as_of=now.date(), now=now,
     )
-    if not record("Knowledge", knowledge):
-        return result
+    record("Knowledge", knowledge)
     troubleshooting = TroubleshootingAgent(policy).run(context, triage, knowledge, acknowledged=ack, now=now)
-    if not record("Troubleshooting", troubleshooting):
-        return result
+    record("Troubleshooting", troubleshooting)
     escalation = EscalationAgent().run(
         context, triage=triage, knowledge=knowledge, troubleshooting=troubleshooting, acknowledged=ack, now=now,
     )
-    if not record("Escalation", escalation):
-        return result
+    record("Escalation", escalation, escalation.recommendation)
     documentation = DocumentationAgent().run(
         context, triage=triage, knowledge=knowledge, troubleshooting=troubleshooting,
         escalation=escalation, recorded_actions=(), acknowledged=ack, now=now,
     )
-    record("Documentation", documentation)
+    record("Documentation", documentation,
+           "draft_note" if documentation.draft else "manual_fallback" if documentation.manual_fallback else None)
     return result
 
 

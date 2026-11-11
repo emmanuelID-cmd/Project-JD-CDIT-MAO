@@ -37,12 +37,24 @@ def test_billable_run_is_explicit_scoped_and_deduplicated(tmp_path, monkeypatch)
     case = submit(user, "I need the IDNYC application form.")
     route = case + "/agent-runs"
     allow = {"authorize_billable_call": True}
+    built = []
+
+    def no_provider():
+        # Never build a real client here, even on a machine whose .env holds a key.
+        built.append(True)
+        raise AssertionError("a rejected request must not reach client construction")
+
+    monkeypatch.setattr(actionrelay_live, "create_anthropic_client", no_provider)
     monkeypatch.delenv("ACTIONRELAY_ENABLE_LIVE_TRIAGE", raising=False)
     assert admin.post(route, json=allow).status_code == 503
     monkeypatch.setenv("ACTIONRELAY_ENABLE_LIVE_TRIAGE", "1")
     assert user.post(route, json=allow).status_code == 403
     assert admin.post(route, json={"authorize_billable_call": False}).status_code == 422
-    assert admin.post(submit(user, "Unapproved free text") + "/agent-runs", json=allow).status_code == 422
+    # Bounded synthetic free text is eligible; over-length and likely-sensitive text are not.
+    assert admin.post(submit(user, "x" * 2001) + "/agent-runs", json=allow).status_code == 422
+    assert admin.post(submit(user, "Please check my SSN 123-45-6789 on file.") + "/agent-runs",
+                      json=allow).status_code == 422
+    assert built == []
     attempts = []
     monkeypatch.setattr(actionrelay_live, "create_anthropic_client", lambda: nullcontext(object()))
 
@@ -55,7 +67,12 @@ def test_billable_run_is_explicit_scoped_and_deduplicated(tmp_path, monkeypatch)
     run = admin.post(route, json=allow)
     assert run.status_code == 201
     assert run.json()["provider_attempts"] == 1
-    assert admin.get(route).json()[0] == run.json()
+    # The activity view joins this run with any outcome for the same case version.
+    timeline = admin.get(route).json()[0]
+    assert (timeline["run_id"], timeline["case_version"], timeline["provider_attempts"]) == (
+        run.json()["run_id"], run.json()["case_version"], 1)
+    assert timeline["result"]["stages"][0] == {"name": "Claude Triage",
+                                               "status": "proposal_for_human_review"}
     assert admin.post(route, json=allow).status_code == 409
     assert len(attempts) == 1
     assert user.get(case).json()["status"] == "submitted"
