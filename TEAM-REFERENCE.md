@@ -1,4 +1,13 @@
 # Handoffs prepared for push
+
+## 2026-11-11 — ActionRelay app/resource work and deliverable handoffs
+
+Summary file: PROJECT-HANDOFF.md
+
+- Repository: `emmanuelID-cmd/Project-JD-CDIT-MAO`; branch `manny/coordinator-triage-escalation`; target `developer`; verified pre-push baseline `81195e9e768242b8e667bccf20c8e900eadd9f84`.
+- Grouped the application/resource implementation, system-wiring handoff, and video/slides production brief into separate commits. Existing lane ownership was preserved; Shawn-owned agent internals were not changed.
+- Validation: full project suite 771 passed; focused migration tests 6 passed; staged whitespace checks passed after a one-line style correction. No live Claude call was made in this pass.
+- Push/PR/merge are pending; no open PR covered this branch when checked. The current app-level full durable six-agent timeline is still documented as remaining work.
 ## 2026-11-10T12:49:56-05:00
 
 Summary file: PROJECT-HANDOFF.md

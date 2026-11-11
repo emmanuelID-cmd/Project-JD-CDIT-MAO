@@ -1,4 +1,17 @@
 # Project Handoff — Project-JD-CDIT-MAO
+## Current outgoing state — 2026-11-11 (before publication)
+
+This snapshot supersedes the 2026-11-10 outgoing-state note below where they conflict; older dated notes remain historical.
+
+- Repository: `emmanuelID-cmd/Project-JD-CDIT-MAO`. Active lane: `manny/coordinator-triage-escalation`; PR target: `developer`. Verified pre-push baseline: `origin/developer` and `origin/manny/coordinator-triage-escalation` at `81195e9e768242b8e667bccf20c8e900eadd9f84`. `origin/main` remains `1a5cf4ad6beda1a12b537f2ffc95ac930d921174`.
+- Outgoing work includes the pre-existing unpushed live-Triage/walkthrough commit `a5b9b8668538dc331832d6d5edbdbc333cb07397`, the grouped ActionRelay application/resource commit `a3aa6d035745a7b9eddfb490c8179c488da3e955`, the system-wiring handoff commit `3c25bd2`, its whitespace-only correction `e5e3c34`, and the final-video/slides handoff commit `573bdaf2d284107f9845079e45f53ae52fba357a`. All are on the Manny lane; no work was cherry-picked from another contributor.
+- Added authenticated synthetic ticket delivery for approved catalog resources and generated synthetic employee PDFs; added the checked public IDNYC PDF, resource directory, ticket reply/download behavior, and lifecycle receipts. The W-2/payroll-personal-record route remains human review. Updated PRD-v4 and architecture notes, live activity and review panels, four-account navigation, analytics, and the review walkthrough editions.
+- Added `docs/planning/ACTIONRELAY-END-TO-END-WIRING-HANDOFF.md` and `docs/presentations/ACTIONRELAY-FINAL-VIDEO-SLIDES-HANDOFF.md`. The first records what is already connected and the app-level durable six-agent timeline that remains to be completed. The second distinguishes the embedded Storyboard and current HTML review editions from the older MP4 and records the approved final video/slide requirements. No standalone slide deck or revised final MP4 is claimed as complete.
+- **Integration limit:** the authenticated app has a direct deterministic resource-delivery path, live Coordinator/Triage checkpoint, and an Auditor-triggered local Knowledge/Troubleshooting/Escalation/Documentation resume path. It does not yet store every stage in one durable end-to-end run timeline; the live Claude endpoint is still sample-scoped. See the wiring handoff; do not present the application as a fully integrated six-agent live service.
+- Validation from the project root: `.venv\Scripts\python.exe -m pytest -q --basetemp C:\Users\dejes\.codex\visualizations\2026\11\10\01a1c618-13bb-7c33-9758-3466d13b9eb9\pytest-handoff-final` — **771 passed**; focused `tests/test_database_schema.py` — **6 passed**; staged whitespace checks passed after correcting the handoff line break. No live Claude call was made for this publication task.
+- The ignored local `data/cdit_support.db` and `.env` were excluded; the verified public IDNYC PDF and synthetic resources are included. No production data, Salesforce integration, external messaging, or personal-document processing is claimed.
+- Push and PR are pending. No open PR currently covers the Manny branch. After push, create a PR to `developer`; merge only after required checks and reviewer/owner approval. Fast-forward only branches whose cleanliness and ancestry prove it is safe. `Shawn` acknowledgment in the wiring handoff remains pending. Do not update `main`.
+
 
 ## Current outgoing state - 2026-11-10 (after PR #27 sync and diagnostics)
 
