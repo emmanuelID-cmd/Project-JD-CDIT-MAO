@@ -8,6 +8,7 @@ from fastapi.exception_handlers import http_exception_handler
 from urllib.parse import quote
 from fastapi.staticfiles import StaticFiles
 
+from cdit_support_mao.actionrelay_live import router as actionrelay_router
 from cdit_support_mao.database import check_database
 from cdit_support_mao.web import Actor, require_roles, router as web_router
 
@@ -15,11 +16,12 @@ from cdit_support_mao.web import Actor, require_roles, router as web_router
 STATIC_DIR = Path(__file__).parent / "static"
 app = FastAPI(
     title="CDIT Support Desk MAO",
-    description="Synthetic-data-only prototype; agent workflows remain draft-only and human supervised.",
+    description="Local synthetic ActionRelay prototype with supervised live Triage.",
     version="0.1.0",
 )
 app.mount("/assets", StaticFiles(directory=STATIC_DIR), name="assets")
 app.include_router(web_router)
+app.include_router(actionrelay_router)
 
 
 @app.middleware("http")

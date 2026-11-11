@@ -8,6 +8,7 @@ import os
 import secrets
 import sqlite3
 import uuid
+from contextlib import closing
 from dataclasses import dataclass
 from datetime import datetime, timedelta, timezone
 from typing import Literal
@@ -67,7 +68,7 @@ def provision_synthetic_password(account_id: str, password: str) -> None:
     """Set the password for a seeded local synthetic account; never accepts real account data."""
     hashed = _hash_password(password)
     initialize_database()
-    with connect() as db:
+    with closing(connect()) as db, db:
         db.execute("BEGIN IMMEDIATE")
         row = db.execute(
             "SELECT status FROM synthetic_accounts WHERE account_id = ?", (account_id,)
@@ -87,6 +88,7 @@ class Actor:
     account_id: str
     username: str
     role: str
+    auditor: bool = False
 
 
 class LoginPayload(BaseModel):
@@ -180,11 +182,11 @@ def _session_context(request: Request, *, touch: bool) -> tuple[Actor, dict]:
     token_hash = hashlib.sha256(token.encode("ascii", errors="ignore")).hexdigest()
     initialize_database()
     current = now_utc()
-    with connect() as db:
+    with closing(connect()) as db, db:
         row = db.execute(
             """SELECT s.session_id, s.issued_at, s.last_activity_at, s.absolute_expires_at,
                       s.warned_15m, s.warned_5m, s.revoked_at,
-                      a.account_id, a.username, a.role, a.status
+                      a.account_id, a.username, a.role, a.status, a.auditor_access
                FROM sessions s JOIN synthetic_accounts a ON a.account_id = s.account_id
                WHERE s.token_hash = ?""",
             (token_hash,),
@@ -217,7 +219,8 @@ def _session_context(request: Request, *, touch: bool) -> tuple[Actor, dict]:
             _record_health(db, "session_warning_5m", "session", "warning")
             warned5 = True
         db.commit()
-        actor = Actor(row["account_id"], row["username"], row["role"])
+        actor = Actor(row["account_id"], row["username"], row["role"],
+                      row["role"] == "staff" and bool(row["auditor_access"]))
         state = {
             "authenticated": True,
             "idle_expires_at": stamp(idle_deadline),
@@ -255,7 +258,7 @@ def _set_session_cookie(response: Response, token: str) -> None:
 def login(payload: LoginPayload, response: Response):
     username = payload.username.strip()
     initialize_database()
-    with connect() as db:
+    with closing(connect()) as db, db:
         row = db.execute(
             "SELECT account_id, username, role, status, password_hash FROM synthetic_accounts WHERE username = ? COLLATE NOCASE",
             (username,),
@@ -283,7 +286,7 @@ def login(payload: LoginPayload, response: Response):
 def logout(request: Request, response: Response):
     token = request.cookies.get(COOKIE_NAME)
     if token:
-        with connect() as db:
+        with closing(connect()) as db, db:
             db.execute(
                 "UPDATE sessions SET revoked_at = ? WHERE token_hash = ? AND revoked_at IS NULL",
                 (stamp(now_utc()), hashlib.sha256(token.encode("ascii", errors="ignore")).hexdigest()),
@@ -306,7 +309,7 @@ def session_status(request: Request):
 
 @router.get("/auth/me")
 def me(actor: Actor = Depends(current_actor)):
-    return {"account_id": actor.account_id, "username": actor.username, "role": actor.role}
+    return {"account_id": actor.account_id, "username": actor.username, "role": actor.role, "auditor": actor.auditor}
 
 
 @router.post("/auth/continue")
@@ -319,7 +322,7 @@ def continue_session(request: Request, actor: Actor = Depends(current_actor)):
 @router.post("/auth/extension-request")
 def request_extension(request: Request, actor: Actor = Depends(current_actor)):
     _actor, state = _session_context(request, touch=False)
-    with connect() as db:
+    with closing(connect()) as db, db:
         existing = db.execute(
             "SELECT alert_id FROM session_extension_alerts WHERE session_id = (SELECT session_id FROM sessions WHERE token_hash = ?) AND review_status = 'new'",
             (hashlib.sha256(request.cookies[COOKIE_NAME].encode("ascii", errors="ignore")).hexdigest(),),
@@ -367,7 +370,7 @@ def _case_change_event(
     )
 
 
-def _case_for_role(row: sqlite3.Row, role: str) -> dict:
+def _case_for_role(row: sqlite3.Row, role: str, *, auditor: bool = False) -> dict:
     result = dict(row)
     if role == "user":
         result.pop("assigned_staff_account_id", None)
@@ -384,7 +387,7 @@ def _case_for_role(row: sqlite3.Row, role: str) -> dict:
     )
     result["allowed_next_statuses"] = (
         sorted(ALLOWED_STATUS_TRANSITIONS[result["status"]])
-        if role in {"staff", "admin"} else []
+        if role in {"staff", "admin"} and not auditor else []
     )
     return result
 
@@ -399,26 +402,26 @@ def list_cases(actor: Actor = Depends(require_roles("user", "staff", "admin"))):
                FROM synthetic_cases c
                LEFT JOIN synthetic_case_catalog cat ON cat.catalog_id = c.catalog_id
                LEFT JOIN synthetic_accounts assigned ON assigned.account_id = c.assigned_staff_account_id"""
-    with connect() as db:
+    with closing(connect()) as db, db:
         if actor.role == "user":
             rows = db.execute(
                 query + " WHERE c.owner_account_id = ? AND c.record_kind = 'user_request' ORDER BY c.updated_at DESC",
                 (actor.account_id,),
             ).fetchall()
-        elif actor.role == "staff":
+        elif actor.role == "staff" and not actor.auditor:
             rows = db.execute(
                 query + " WHERE c.assigned_staff_account_id = ? ORDER BY c.updated_at DESC",
                 (actor.account_id,),
             ).fetchall()
         else:
             rows = db.execute(query + " ORDER BY c.updated_at DESC").fetchall()
-    return [_case_for_role(row, actor.role) for row in rows]
+    return [_case_for_role(row, actor.role, auditor=actor.auditor) for row in rows]
 
 
 @router.get("/api/auditor/taxonomy")
 def auditor_taxonomy(actor: Actor = Depends(require_roles("staff", "admin"))):
     """Return the approved synthetic category vocabulary used by the local case catalog."""
-    with connect() as db:
+    with closing(connect()) as db, db:
         rows = db.execute(
             "SELECT DISTINCT category FROM synthetic_case_catalog ORDER BY category COLLATE NOCASE"
         ).fetchall()
@@ -428,7 +431,7 @@ def auditor_taxonomy(actor: Actor = Depends(require_roles("staff", "admin"))):
 @router.get("/api/auditor/decisions")
 def list_auditor_decisions(actor: Actor = Depends(require_roles("staff", "admin"))):
     """List decision history visible to the assigned Staff member or Admin."""
-    with connect() as db:
+    with closing(connect()) as db, db:
         rows = db.execute(
             """SELECT d.decision_id, d.case_id, d.item_id, d.decision_version,
                       d.item_index, d.item_count, d.case_version, d.source_id,
@@ -458,20 +461,24 @@ def record_auditor_decision(
 ):
     """Record a human item-level routing decision without changing the ticket."""
     now = stamp(now_utc())
+    if actor.role != "admin" and not actor.auditor:
+        raise HTTPException(403, "Auditor capability required.")
     decision_id = "AUD-" + uuid.uuid4().hex
     if actor.role == "admin" and not payload.admin_override_reason:
         raise HTTPException(status_code=422, detail="Admin decisions require an override reason")
     if actor.role == "staff" and payload.admin_override_reason is not None:
         raise HTTPException(status_code=422, detail="Only Admin may record an override reason")
-    with connect() as db:
+    with closing(connect()) as db, db:
         db.execute("BEGIN IMMEDIATE")
         case = db.execute(
-            "SELECT request_text, updated_at, is_synthetic FROM synthetic_cases WHERE case_id = ? AND (? = 'admin' OR assigned_staff_account_id = ?)",
+            "SELECT request_text, updated_at, is_synthetic, status FROM synthetic_cases WHERE case_id = ? AND (? = 'admin' OR assigned_staff_account_id = ?)",
             (case_id, actor.role, actor.account_id),
         ).fetchone()
         if case is None or case["is_synthetic"] != 1:
             db.rollback()
             raise HTTPException(status_code=404, detail="Synthetic case not found")
+        if case["status"] == "closed":
+            raise HTTPException(409, "Closed cases are read-only.")
         if case["updated_at"] != payload.expected_case_version:
             db.rollback()
             raise HTTPException(status_code=409, detail="Case changed since this review form was loaded; refresh and review again")
@@ -489,10 +496,17 @@ def record_auditor_decision(
         if category is None:
             db.rollback()
             raise HTTPException(status_code=422, detail="Choose a category from the synthetic taxonomy")
-        previous = db.execute(
-            "SELECT COALESCE(MAX(decision_version), 0) AS version FROM synthetic_auditor_decisions WHERE case_id = ? AND item_id = ?",
+        latest = db.execute(
+            "SELECT decision_version, reviewer_account_id, admin_override_reason "
+            "FROM synthetic_auditor_decisions WHERE case_id = ? AND item_id = ? "
+            "ORDER BY decision_version DESC LIMIT 1",
             (case_id, payload.item_id),
-        ).fetchone()["version"]
+        ).fetchone()
+        if actor.auditor and latest and (
+            latest["reviewer_account_id"] != actor.account_id or latest["admin_override_reason"]
+        ):
+            raise HTTPException(403, "You can revise only your own current decisions.")
+        previous = latest["decision_version"] if latest else 0
         if previous != payload.expected_previous_decision_version:
             db.rollback()
             raise HTTPException(status_code=409, detail="A newer decision exists; refresh the decision history")
@@ -532,7 +546,7 @@ def submit_case(payload: SupportRequest, actor: Actor = Depends(require_roles("u
     request_text = payload.request_text.strip()
     if not subject or not request_text:
         raise HTTPException(status_code=422, detail="Subject and request are required")
-    with connect() as db:
+    with closing(connect()) as db, db:
         db.execute("BEGIN IMMEDIATE")
         db.execute(
             """INSERT INTO synthetic_cases
@@ -551,7 +565,7 @@ def submit_case(payload: SupportRequest, actor: Actor = Depends(require_roles("u
 
 @router.get("/api/cases/{case_id}")
 def get_case(case_id: str, actor: Actor = Depends(require_roles("user", "staff", "admin"))):
-    with connect() as db:
+    with closing(connect()) as db, db:
         if actor.role == "user":
             row = db.execute(
                 """SELECT c.*, cat.rationale AS catalog_rationale FROM synthetic_cases c
@@ -559,7 +573,7 @@ def get_case(case_id: str, actor: Actor = Depends(require_roles("user", "staff",
                    WHERE c.case_id = ? AND c.owner_account_id = ? AND c.record_kind = 'user_request'""",
                 (case_id, actor.account_id),
             ).fetchone()
-        elif actor.role == "admin":
+        elif actor.role == "admin" or actor.auditor:
             row = db.execute(
                 """SELECT c.*, cat.rationale AS catalog_rationale FROM synthetic_cases c
                    LEFT JOIN synthetic_case_catalog cat ON cat.catalog_id = c.catalog_id
@@ -578,11 +592,13 @@ def get_case(case_id: str, actor: Actor = Depends(require_roles("user", "staff",
             ).fetchone()
     if row is None:
         raise HTTPException(status_code=404, detail="Case not found")
-    return _case_for_role(row, actor.role)
+    return _case_for_role(row, actor.role, auditor=actor.auditor)
 
 
 @router.patch("/api/cases/{case_id}")
 def edit_case(case_id: str, payload: CaseEditPayload, actor: Actor = Depends(require_roles("user", "staff", "admin"))):
+    if actor.auditor:
+        raise HTTPException(403, "Auditors cannot edit case content.")
     fields = payload.model_fields_set
     if not fields:
         raise HTTPException(status_code=422, detail="Provide a subject or request description")
@@ -592,7 +608,7 @@ def edit_case(case_id: str, payload: CaseEditPayload, actor: Actor = Depends(req
     request_text = payload.request_text.strip() if request_changed and payload.request_text is not None else None
     if subject_changed and not subject or request_changed and not request_text:
         raise HTTPException(status_code=422, detail="Subject and request description cannot be blank")
-    with connect() as db:
+    with closing(connect()) as db, db:
         db.execute("BEGIN IMMEDIATE")
         row = db.execute(
             """SELECT status, record_kind, subject, request_text FROM synthetic_cases
@@ -633,7 +649,7 @@ def edit_case(case_id: str, payload: CaseEditPayload, actor: Actor = Depends(req
 
 @router.post("/api/cases/{case_id}/cancel")
 def cancel_case(case_id: str, actor: Actor = Depends(require_roles("user"))):
-    with connect() as db:
+    with closing(connect()) as db, db:
         db.execute("BEGIN IMMEDIATE")
         row = db.execute(
             """SELECT status FROM synthetic_cases WHERE case_id = ?
@@ -665,7 +681,9 @@ def update_case_status(
     case_id: str, payload: StatusUpdatePayload,
     actor: Actor = Depends(require_roles("staff", "admin")),
 ):
-    with connect() as db:
+    if actor.auditor:
+        raise HTTPException(403, "Auditors cannot change lifecycle status.")
+    with closing(connect()) as db, db:
         db.execute("BEGIN IMMEDIATE")
         row = db.execute(
             """SELECT status FROM synthetic_cases
@@ -709,7 +727,7 @@ def assign_case(
     """Assign or unassign a synthetic case and append an Admin-attributed event."""
     now = stamp(now_utc())
     event_id = "CASE-ASG-" + uuid.uuid4().hex
-    with connect() as db:
+    with closing(connect()) as db, db:
         db.execute("BEGIN IMMEDIATE")
         case = db.execute(
             "SELECT assigned_staff_account_id FROM synthetic_cases WHERE case_id = ? AND is_synthetic = 1",
@@ -750,7 +768,7 @@ def assign_case(
 
 @router.get("/api/admin/case-assignment-events")
 def list_case_assignment_events(actor: Actor = Depends(require_roles("admin"))):
-    with connect() as db:
+    with closing(connect()) as db, db:
         rows = db.execute(
             """SELECT e.event_id, e.case_id, e.actor_account_id,
                       actor.username AS actor_username, e.previous_staff_account_id,
@@ -768,7 +786,7 @@ def list_case_assignment_events(actor: Actor = Depends(require_roles("admin"))):
 
 @router.get("/api/admin/accounts")
 def list_accounts(actor: Actor = Depends(require_roles("admin"))):
-    with connect() as db:
+    with closing(connect()) as db, db:
         rows = db.execute(
             "SELECT account_id, username, role, status, created_at, updated_at FROM synthetic_accounts ORDER BY username"
         ).fetchall()
@@ -780,7 +798,7 @@ def change_account(account_id: str, payload: AccountChange, actor: Actor = Depen
     if payload.role is None and payload.status is None:
         raise HTTPException(status_code=422, detail="At least one account field is required")
     now = stamp(now_utc())
-    with connect() as db:
+    with closing(connect()) as db, db:
         db.execute("BEGIN IMMEDIATE")
         row = db.execute(
             "SELECT account_id, role, status, password_hash FROM synthetic_accounts WHERE account_id = ?",
@@ -831,7 +849,7 @@ def change_account(account_id: str, payload: AccountChange, actor: Actor = Depen
 
 @router.get("/api/admin/session-extension-alerts")
 def list_extension_alerts(actor: Actor = Depends(require_roles("admin"))):
-    with connect() as db:
+    with closing(connect()) as db, db:
         rows = db.execute(
             """SELECT x.alert_id, x.session_id, x.account_id, a.username, x.requested_at,
                       x.review_status, x.reviewed_at
@@ -843,7 +861,7 @@ def list_extension_alerts(actor: Actor = Depends(require_roles("admin"))):
 
 @router.patch("/api/admin/session-extension-alerts/{alert_id}/review")
 def review_extension_alert(alert_id: str, actor: Actor = Depends(require_roles("admin"))):
-    with connect() as db:
+    with closing(connect()) as db, db:
         cursor = db.execute(
             "UPDATE session_extension_alerts SET review_status = 'reviewed', reviewed_at = ? WHERE alert_id = ? AND review_status = 'new'",
             (stamp(now_utc()), alert_id),
@@ -855,7 +873,7 @@ def review_extension_alert(alert_id: str, actor: Actor = Depends(require_roles("
 
 @router.get("/api/product-health")
 def product_health(actor: Actor = Depends(require_roles("staff", "admin"))):
-    with connect() as db:
+    with closing(connect()) as db, db:
         events = db.execute(
             """SELECT event_id, occurred_at, event_type, component, component_version,
                       status_code, error_code, duration_ms

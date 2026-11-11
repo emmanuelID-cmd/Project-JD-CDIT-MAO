@@ -1,5 +1,58 @@
 const $ = (s, root=document) => root.querySelector(s);
 let displayedWarning = "";
+let signedInActor = {};
+let feedbackByDecision = new Map();
+const syntheticSamples = [
+  ["IDNYC application", "I need the IDNYC application form."],
+  ["Personal W-2", "I need a copy of my personal W-2."],
+  ["Withholding change", "My withholding or deduction changed unexpectedly before this payroll closes."]
+];
+
+function decisionFeedback(decision, role) {
+  const entries = feedbackByDecision.get(decision.decision_id) || [];
+  const history = entries.map(entry => '<p class="helper"><strong>' +
+    (entry.flagged ? "Flagged" : "Clear") + '</strong> ' + esc(entry.note) + '</p>').join("");
+  if (role !== "admin") return history;
+  return history + '<form class="stack-form" data-feedback="' + esc(decision.decision_id) +
+    '"><label>Optional note<textarea name="note" maxlength="2000" rows="2"></textarea></label>' +
+    '<label class="check-line"><input type="checkbox" name="flagged"' +
+    (entries[0]?.flagged ? " checked" : "") + '> Flag this version</label>' +
+    '<button class="button secondary" type="submit">Save feedback</button>' +
+    '<span class="form-message" role="status"></span></form>';
+}
+
+function agentActivity(item, role) {
+  if (item.record_kind !== "user_request") return "";
+  const approved = syntheticSamples.some(([,text]) => text === item.request_text);
+  const launch = role === "admin" && approved && item.status === "submitted"
+    ? '<form class="stack-form" data-run="' + esc(item.case_id) + '">' +
+      '<label class="check-line"><input type="checkbox" name="authorize" required>' +
+      'Authorize one billable Claude call</label><button class="button primary">▶ Run live Triage</button>' +
+      '<span class="form-message" role="status"></span></form>' : "";
+  return '<details class="agent-activity" data-run-details="' + esc(item.case_id) +
+    '"><summary><span aria-hidden="true">⌁</span> Agent activity</summary>' +
+    '<div data-run-results role="status"></div>' + launch + '</details>';
+}
+
+async function refreshRuns(panel) {
+  const output = panel.querySelector("[data-run-results]");
+  try {
+    const records = await api("/api/cases/" + encodeURIComponent(panel.dataset.runDetails) + "/agent-runs");
+    output.innerHTML = records.length ? records.map(run => {
+      const result = run.result || {};
+      const stages = [["Coordinator", result.coordinator], ["Claude Triage", result.triage]]
+        .filter(([,value]) => value).map(([label,value]) => '<li>' + label + ': ' + esc(pretty(value)) + '</li>').join("");
+      return '<article class="run-record">' + statusPill(run.status) + ' <small>' + esc(run.run_id) +
+        '</small>' + (stages ? '<ul>' + stages + '</ul>' : '') +
+        (run.provider_attempts !== undefined ? '<p>Provider attempts: ' + run.provider_attempts +
+          ' · Validated response: ' + (result.validated_model_result ? "Yes" : "No") + '</p>' : '') +
+        (result.usage ? '<p>' + esc(result.usage.model) + ' · ' +
+          esc(result.usage.input_tokens) + ' input / ' + esc(result.usage.output_tokens) +
+          ' output tokens</p>' : '') +
+        (result.reason ? '<p>' + esc(pretty(result.reason)) + '</p>' : '') + '</article>';
+    }).join("") : '<p class="helper">No agent run recorded.</p>';
+  } catch (error) { output.textContent = error.message; }
+}
 const esc = value => String(value ?? "").replace(/[&<>"']/g, ch => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[ch]));
 const pretty = value => String(value || "unknown").replaceAll("_"," ").replace(/\b\w/g, c => c.toUpperCase());
 async function api(url, options={}) {
@@ -21,12 +74,21 @@ function auditorPanel(item, decisions, categories, role) {
   const knownVersions = Object.fromEntries(history.reduce((latest, decision) => {
     latest.set(decision.item_id, Math.max(latest.get(decision.item_id) || 0, decision.decision_version)); return latest;
   }, new Map()));
-  let historyHtml = history.length
-    ? '<div class="auditor-history"><b>Recorded decisions</b>' + history.map(d => '<details class="decision-record"><summary>Item ' + esc(d.item_index) + ' of ' + esc(d.item_count) + ' · ' + esc(d.category) + ' / ' + esc(pretty(d.urgency_band)) + ' · v' + esc(d.decision_version) + '</summary><div class="decision-record-meta">' + esc(d.item_id) + ' · Destination: ' + esc(d.destination) + ' · Reviewer: ' + esc(d.reviewer_account_id) + ' · ' + esc(new Date(d.recorded_at).toLocaleString()) + '</div><p><b>Reason</b> ' + esc(d.rationale) + '</p><p><b>Evidence</b> ' + esc(d.evidence) + '</p><p><b>Conditions</b> ' + esc((d.conditions||[]).join("; ") || "None recorded") + '</p><p><b>Exceptions</b> ' + esc((d.exceptions||[]).join("; ") || "None recorded") + '</p><small>Case version ' + esc(d.case_version) + ' · Source ' + esc(d.source_id) + ' / ' + esc(d.source_version) + ' · Span ' + esc(d.source_start) + '–' + esc(d.source_end) + ' · Policy ' + esc(d.policy_version) + '</small></details>').join('') + '</div>'
+  const current = history.filter(d => knownVersions[d.item_id] === d.decision_version);
+  const past = history.filter(d => knownVersions[d.item_id] !== d.decision_version);
+  const currentHtml = current.map(d => '<article class="decision-current"><strong>Current decision · v' +
+    esc(d.decision_version) + '</strong><p>' + esc(d.category) + ' · ' + esc(pretty(d.urgency_band)) +
+    '</p><p>' + esc(d.rationale) + '</p>' + decisionFeedback(d, role) + '</article>').join("");
+  let historyHtml = past.length
+    ? '<div class="auditor-history"><b>Version history</b>' + past.map(d => '<details class="decision-record"><summary>Item ' + esc(d.item_index) + ' of ' + esc(d.item_count) + ' · ' + esc(d.category) + ' / ' + esc(pretty(d.urgency_band)) + ' · v' + esc(d.decision_version) + '</summary><div class="decision-record-meta">' + esc(d.item_id) + ' · Destination: ' + esc(d.destination) + ' · Reviewer: ' + esc(d.reviewer_account_id) + ' · ' + esc(new Date(d.recorded_at).toLocaleString()) + '</div><p><b>Reason</b> ' + esc(d.rationale) + '</p><p><b>Evidence</b> ' + esc(d.evidence) + '</p><p><b>Conditions</b> ' + esc((d.conditions||[]).join("; ") || "None recorded") + '</p><p><b>Exceptions</b> ' + esc((d.exceptions||[]).join("; ") || "None recorded") + '</p><small>Case version ' + esc(d.case_version) + ' · Source ' + esc(d.source_id) + ' / ' + esc(d.source_version) + ' · Span ' + esc(d.source_start) + '–' + esc(d.source_end) + ' · Policy ' + esc(d.policy_version) + '</small>' + decisionFeedback(d, role) + '</details>').join('') + '</div>'
     : '<p class="helper">No human item decisions have been recorded for this case.</p>';
   historyHtml += history.filter(d => d.admin_override_reason).map(d => '<p class="helper"><b>Admin override reason (' + esc(d.reviewer_account_id) + '):</b> ' + esc(d.admin_override_reason) + '</p>').join('');
+  historyHtml = currentHtml + (past.length ? historyHtml : "");
+  const canReview = item.status !== "closed" && (role === "admin" ||
+    signedInActor.auditor && item.assigned_staff_account_id === signedInActor.account_id);
+  if (!canReview) return historyHtml;
   const categoryOptions = categories.map(value => '<option value="' + esc(value) + '">' + esc(value) + '</option>').join('');
-  return '<details class="auditor-panel"><summary>Human Auditor decision <span>Staff/Admin · append-only record</span></summary>' + historyHtml +
+  return '<details class="auditor-panel"><summary>Human Auditor decision <span>Auditor / Admin</span></summary>' + historyHtml +
     '<form class="auditor-decision-form stack-form" data-auditor-decision="' + esc(item.case_id) + '" data-known-versions="' + esc(JSON.stringify(knownVersions)) + '">' +
     '<p class="helper">Synthetic prototype only. Record the human decision for one linked item. This does not change ticket status, contact anyone, or execute a routing action. The case text span and case version are checked when saved.</p>' +
     '<input type="hidden" name="expected_case_version" value="' + esc(item.updated_at) + '"><input type="hidden" name="expected_previous_decision_version" value="0">' +
@@ -62,12 +124,14 @@ function cardForCase(item, role, decisions=[], categories=[], staffAccounts=[], 
     controls = '<form class="case-edit-form" data-case-edit="' + esc(item.case_id) + '"><label>Request title<input name="subject" maxlength="160" value="' + esc(item.subject) + '" required></label><label>Request details<textarea name="request_text" maxlength="12000" rows="3" required>' + esc(item.request_text) + '</textarea></label><button class="button secondary" type="submit">Save changes</button><span class="form-message" role="status"></span></form>';
   } else if (role === "user" && item.can_cancel) {
     controls = '<span class="helper">Editing is locked while support reviews this request.</span><button class="button secondary danger" type="button" data-case-cancel="' + esc(item.case_id) + '">Cancel as unresolved</button>';
+  } else if (signedInActor.auditor) {
+    controls = auditorPanel(item, decisions, categories, role);
   } else if (role !== "user") {
     controls = assignmentPanel(item, role, staffAccounts, assignmentEvents) + '<form class="case-edit-form" data-case-edit="' + esc(item.case_id) + '"><label>Request title<input name="subject" maxlength="160" value="' + esc(item.subject) + '" required></label><label>Request details<textarea name="request_text" maxlength="12000" rows="3" required>' + esc(item.request_text) + '</textarea></label><div class="row-actions"><button class="button secondary" type="submit">Save case details</button>' + (item.allowed_next_statuses.length ? '<label class="status-control">Change status<select name="next_status" required><option value="">Choose status</option>' + statusOptions("", item.allowed_next_statuses) + '</select></label><button class="button primary" type="button" data-case-status="' + esc(item.case_id) + '">Update status</button>' : '<span class="helper">Closed is terminal.</span>') + '</div><span class="form-message" role="status"></span></form>' + auditorPanel(item, decisions, categories, role);
   } else {
     controls = '<span class="helper">' + (item.closure_reason === "requester_cancelled_unresolved" ? "Cancelled by you as unresolved." : "This request is no longer editable.") + '</span>';
   }
-  return '<article class="case-card"><div><div class="case-meta">' + kind + (role !== "user" ? '<span class="case-id">' + ownerLabel + ' ' + esc(item.owner_account_id) + '</span>' : '') + '</div><h3>' + esc(item.subject) + '</h3><p>' + esc(item.request_text) + '</p>' + rationale + '<div class="case-meta"><span class="case-id">' + esc(item.case_id) + '</span>' + statusPill(displayStatus) + statusPill(item.urgency_band) + '<span>Created ' + esc(new Date(item.created_at).toLocaleString()) + '</span></div></div><div class="case-actions">' + controls + '</div></article>';
+  return '<article class="case-card"><div><div class="case-meta">' + kind + (role !== "user" ? '<span class="case-id">' + ownerLabel + ' ' + esc(item.owner_account_id) + '</span>' : '') + '</div><h3>' + esc(item.subject) + '</h3><p>' + esc(item.request_text) + '</p>' + rationale + '<div class="case-meta"><span class="case-id">' + esc(item.case_id) + '</span>' + statusPill(displayStatus) + statusPill(item.urgency_band) + '<span>Created ' + esc(new Date(item.created_at).toLocaleString()) + '</span></div></div><div class="case-actions">' + controls + agentActivity(item,role) + '</div></article>';
 }
 function empty(message) { return '<div class="empty-state"><b>' + esc(message) + '</b><span>There are no synthetic records to show.</span></div>'; }
 function setNav(role) {
@@ -78,12 +142,12 @@ function setNav(role) {
     : [["/app/admin","▤","Overview"],["#accounts","♙","Accounts & access"],["#product-health","⌁","Product Health"],["#extension-alerts","◷","Session requests"]];
   $("#workspace-label").textContent = role === "user" ? "CLIENT WORKSPACE" : role === "staff" ? "SUPPORT OPERATIONS" : "ADMINISTRATION";
   $("#side-nav").innerHTML = items.map((item,i)=>'<a class="nav-item ' + (i===0 ? "active" : "") + '" href="' + item[0] + '"><span>' + item[1] + '</span>' + item[2] + '</a>').join("");
-  $("#actor-role").textContent = role === "user" ? "Client view" : role === "staff" ? "Support operations" : "Privileged access";
+  $("#actor-role").textContent = role === "user" ? "Client view" : role === "staff" ? (signedInActor.auditor ? "Auditor" : "Support operations") : "Privileged access";
   $("#avatar").className = "avatar " + role;
   $("#avatar").textContent = role[0].toUpperCase();
-  const title = role === "user" ? "Your support desk" : role === "staff" ? "Work queue" : "Access & system health";
+  const title = role === "user" ? "Your support desk" : role === "staff" ? (signedInActor.auditor ? "Auditor queue" : "Work queue") : "Access & system health";
   const crumb = role === "user" ? "CLIENT WORKSPACE / REQUESTS" : role === "staff" ? "SUPPORT OPERATIONS / WORKBENCH" : "ADMINISTRATION / OVERVIEW";
-  const description = role === "user" ? "Send a request and follow its current status. A human support specialist reviews every case." : role === "staff" ? "Review synthetic requests, system evidence, and human-review handoffs." : "Manage synthetic accounts and inspect operational metadata. All changes are locally audited.";
+  const description = role === "user" ? "Send a request and follow its current status. Follow agent activity and human review from your ticket." : role === "staff" ? "Review synthetic requests, system evidence, and human-review handoffs." : "Manage synthetic accounts and inspect operational metadata. All changes are locally audited.";
   $("#page-title").textContent=title; $("#crumb").textContent=crumb; $("#page-description").textContent=description;
   $("#today").textContent=new Date().toLocaleDateString(undefined,{weekday:"short",month:"short",day:"numeric",year:"numeric"});
 }
@@ -126,12 +190,46 @@ function renderAlerts(alerts) {
 }
 async function loadData(role) {
   const cases=await api("/api/cases");
+  if (role === "admin" || signedInActor.auditor) {
+    const feedback = await api("/api/auditor/feedback");
+    feedbackByDecision = Map.groupBy(feedback, entry => entry.decision_id);
+  }
   let decisions=[],categories=[];
   if(role!=="user") [decisions,categories]=await Promise.all([api("/api/auditor/decisions"),api("/api/auditor/taxonomy")]).then(([d,t])=>[d,t.categories||[]]);
   let accounts=[],alerts=[],assignmentEvents=[];
   if(role==="admin") [accounts,alerts,assignmentEvents]=await Promise.all([api("/api/admin/accounts"),api("/api/admin/session-extension-alerts"),api("/api/admin/case-assignment-events")]);
-  renderCases(cases,role,decisions,categories,accounts,assignmentEvents);
+  const filters = $("#queue-filter");
+  if (filters) {
+    const redraw = () => {
+      const criteria = Object.fromEntries(new FormData(filters));
+      const query = criteria.search.toLowerCase().trim();
+      const visible = cases.filter(item =>
+        (!query || [item.subject, item.case_id, item.request_text].some(value => value.toLowerCase().includes(query))) &&
+        (!criteria.status || item.status === criteria.status) &&
+        (!criteria.band || item.urgency_band === criteria.band) &&
+        (!criteria.category || item.category === criteria.category) &&
+        (!criteria.from || item.created_at.slice(0, 10) >= criteria.from) &&
+        (!criteria.to || item.created_at.slice(0, 10) <= criteria.to) &&
+        (!criteria.assigned || item.assigned_staff_account_id === signedInActor.account_id));
+      if (criteria.sort === "az") visible.sort((a,b) => a.subject.localeCompare(b.subject));
+      renderCases(visible,role,decisions,categories,accounts,assignmentEvents);
+    };
+    filters.elements.status.innerHTML = '<option value="">Any</option>' +
+      statusOptions(filters.elements.status.value, [...new Set(cases.map(c => c.status))].sort());
+    filters.elements.category.innerHTML = '<option value="">Any</option>' +
+      statusOptions(filters.elements.category.value, [...new Set(cases.map(c => c.category).filter(Boolean))].sort());
+    filters.oninput = redraw;
+    filters.onreset = () => queueMicrotask(redraw);
+    redraw();
+  } else renderCases(cases,role,decisions,categories,accounts,assignmentEvents);
   if(role==="admin"){ renderAccounts(accounts); renderAlerts(alerts); }
+  if (signedInActor.auditor) {
+    const directory = await api("/api/auditor/accounts");
+    $("#auditor-directory").innerHTML = directory.map(account =>
+      '<p>' + esc(account.username) + ' · ' +
+      esc(account.role === "staff" && account.auditor_access ? "Auditor" : pretty(account.role)) +
+      ' · ' + esc(pretty(account.status)) + '</p>').join("");
+  }
   if(role!=="user") renderHealth(await api("/api/product-health"));
   renderMetrics(role,cases,accounts,alerts);
 }
@@ -156,9 +254,45 @@ async function start() {
   try {
     const actor=await api("/auth/me");
     if(actor.role!==role){location.replace("/app/"+actor.role);return;}
-    $("#actor-name").textContent=actor.username; setNav(role); renderStaffPanels(role);
+    signedInActor=actor; $("#actor-name").textContent=actor.username; setNav(role); renderStaffPanels(role);
+    if (role !== "user") {
+      $("#case-list").insertAdjacentHTML("beforebegin", `<form class="queue-filter" id="queue-filter" aria-label="Filter queue">
+        <label>⌕ Search<input name="search" type="search"></label>
+        <label>Status<select name="status"><option value="">Any</option></select></label>
+        <label>Band<select name="band"><option value="">Any</option><option value="low">Low</option><option value="medium">Medium</option><option value="high">High</option><option value="unknown">Unknown</option></select></label>
+        <label>Category<select name="category"><option value="">Any</option></select></label>
+        <label>From<input type="date" name="from"></label><label>Through<input type="date" name="to"></label>
+        <label>Sort<select name="sort"><option value="">Recently updated</option><option value="az">A–Z</option></select></label>
+        ${actor.auditor ? '<label class="check-line"><input type="checkbox" name="assigned" value="1"> My assigned work</label>' : ""}
+        <button type="reset" class="icon-button" title="Reset filters" aria-label="Reset filters">↻</button></form>`);
+    }
+    if (actor.auditor) {
+      $("#view-content").insertAdjacentHTML("beforeend", '<section class="panel"><h2>Account directory</h2><div id="auditor-directory"></div></section>');
+    }
     await loadData(role);
-    if(role==="user") $("#request-form").addEventListener("submit",submitRequest);
+    if(role==="user") {
+      const form = $("#request-form");
+      form.addEventListener("submit", submitRequest);
+      const examples = document.createElement("div");
+      examples.className = "row-actions";
+      examples.setAttribute("aria-label", "Synthetic examples");
+      syntheticSamples.forEach(([label,text]) => {
+        const button = document.createElement("button");
+        button.type = "button";
+        button.className = "button secondary";
+        button.textContent = label;
+        button.addEventListener("click", () => {
+          form.elements.subject.value = label;
+          form.elements.request_text.value = text;
+          form.elements.request_text.focus();
+        });
+        examples.append(button);
+      });
+      form.prepend(examples);
+    }
+    document.addEventListener("toggle", event => {
+      if (event.target.matches("[data-run-details]") && event.target.open) refreshRuns(event.target);
+    }, true);
     const refresh=$("#refresh-cases"); if(refresh)refresh.addEventListener("click",()=>loadData(role).catch(e=>showMessage($("#admin-message"),e.message,"error")));
     document.addEventListener("click", async e=>{
       const scroll=e.target.closest("[data-scroll]"); if(scroll){e.preventDefault();document.querySelector(scroll.dataset.scroll)?.scrollIntoView({behavior:"smooth"});}
@@ -189,6 +323,36 @@ async function start() {
       }
     });
     document.addEventListener("submit", async e=>{
+      const run = e.target.closest("form[data-run]");
+      if (run) {
+        e.preventDefault();
+        const message = run.querySelector(".form-message");
+        const button = run.querySelector("button");
+        button.disabled = true;
+        showMessage(message, "Running live Triage…");
+        try {
+          const result = await api("/api/cases/" + encodeURIComponent(run.dataset.run) + "/agent-runs", {
+            method: "POST", body: JSON.stringify({authorize_billable_call: run.elements.authorize.checked})
+          });
+          await refreshRuns(run.closest("[data-run-details]"));
+          showMessage(message, "Run recorded: " + pretty(result.status) + ".");
+          run.elements.authorize.checked = false;
+        } catch (error) { showMessage(message, error.message, "error"); }
+        finally { button.disabled = false; }
+        return;
+      }
+      const feedback = e.target.closest("form[data-feedback]");
+      if (feedback) {
+        e.preventDefault();
+        const message = feedback.querySelector(".form-message");
+        try {
+          await api("/api/admin/auditor-decisions/" + encodeURIComponent(feedback.dataset.feedback) + "/feedback", {
+            method: "POST", body: JSON.stringify({note:feedback.elements.note.value, flagged:feedback.elements.flagged.checked})
+          });
+          await loadData(role);
+        } catch (error) { showMessage(message, error.message, "error"); }
+        return;
+      }
       const assignmentForm=e.target.closest("form[data-case-assignment]");
       if(assignmentForm){
         e.preventDefault();const message=assignmentForm.querySelector(".form-message");

@@ -48,7 +48,9 @@ def test_admin_assignment_scopes_staff_and_records_history(tmp_path, monkeypatch
         "evidence": "Synthetic case text.",
     }
     decision_url = "/api/cases/SYN-CASE-001/items/auditor-decisions"
-    assert staff.post(decision_url, json=decision_payload).status_code == 201
+    assert staff.post(decision_url, json=decision_payload).status_code == 403
+    override = {**decision_payload, "admin_override_reason": "Assignment-scope test"}
+    assert admin.post(decision_url, json=override).status_code == 201
 
     assigned = admin.patch(
         "/api/admin/cases/SYN-CASE-001/assignment",
@@ -59,7 +61,7 @@ def test_admin_assignment_scopes_staff_and_records_history(tmp_path, monkeypatch
     assert staff.get("/api/cases/SYN-CASE-001").status_code == 404
     assert staff.patch("/api/cases/SYN-CASE-001/status", json={"status": "in_progress"}).status_code == 404
     decision_payload["expected_previous_decision_version"] = 1
-    assert staff.post(decision_url, json=decision_payload).status_code == 404
+    assert staff.post(decision_url, json=decision_payload).status_code == 403
     assert "SYN-CASE-001" in {case["case_id"] for case in second_staff.get("/api/cases").json()}
     assert second_staff.get("/api/cases/SYN-CASE-001").json()["assigned_staff_account_id"] == "SYN-STAFF-002"
     assert len(admin.get("/api/cases").json()) == 81

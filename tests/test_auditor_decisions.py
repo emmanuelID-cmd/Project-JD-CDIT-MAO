@@ -16,10 +16,17 @@ def client_for(tmp_path, monkeypatch, role):
     path = tmp_path / "auditor.sqlite3"
     monkeypatch.setenv("CDIT_DATABASE_PATH", str(path))
     seed_synthetic_data(path)
-    account_id = {"user": "SYN-USER-001", "staff": "SYN-STAFF-001", "admin": "SYN-ADMIN-001"}[role]
+    account_id = {"user": "SYN-USER-001", "staff": "SYN-AUDITOR-001", "admin": "SYN-ADMIN-001"}[role]
     provision_synthetic_password(account_id, PASSWORD)
+    if role == "staff":
+        with connect(path) as db:
+            db.execute(
+                "UPDATE synthetic_cases SET assigned_staff_account_id = ? WHERE case_id = 'SYN-CASE-001'",
+                (account_id,),
+            )
     client = TestClient(app)
-    assert client.post("/auth/login", json={"username": role + ".demo", "password": PASSWORD}).status_code == 200
+    login_name = "auditor" if role == "staff" else role
+    assert client.post("/auth/login", json={"username": login_name + ".demo", "password": PASSWORD}).status_code == 200
     return path, client
 
 
@@ -54,7 +61,7 @@ def test_staff_decision_is_item_scoped_versioned_and_does_not_change_ticket(tmp_
 
     first = staff.post(decision_url, json=payload_for(case, category))
     assert first.status_code == 201, first.text
-    assert first.json()["reviewer_account_id"] == "SYN-STAFF-001"
+    assert first.json()["reviewer_account_id"] == "SYN-AUDITOR-001"
     assert first.json()["decision_version"] == 1
     assert first.json()["ticket_changed"] is False
 
@@ -71,7 +78,7 @@ def test_staff_decision_is_item_scoped_versioned_and_does_not_change_ticket(tmp_
     assert history[0]["conditions"] == ["No active safety concern stated"]
     assert history[0]["exceptions"] == ["Re-review if new impact evidence appears"]
     assert history[0]["source_digest_sha256"]
-    assert history[0]["reviewer_account_id"] == "SYN-STAFF-001"
+    assert history[0]["reviewer_account_id"] == "SYN-AUDITOR-001"
     assert history[0]["case_version"] == case["updated_at"]
     assert staff.get("/api/cases/SYN-CASE-001").json()["status"] == "submitted"
 

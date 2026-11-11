@@ -1,0 +1,62 @@
+.relay-mark {
+    width: 3.25rem;
+    height: 1.7rem;
+    object-fit: contain;
+    flex: none;
+}
+
+.agent-activity, .decision-current {
+    padding: .85rem 1rem;
+    margin-top: .8rem;
+    border: 1px solid #55708b;
+    border-radius: .9rem;
+    background: #11253a;
+}
+
+.decision-current {
+    border-color: #8cebd2;
+}
+
+.agent-activity summary {
+    cursor: pointer;
+    font-weight: 700;
+    color: #adf0e5;
+}
+
+.agent-activity summary:focus-visible {
+    outline: 2px solid #adf0e5;
+    outline-offset: 4px;
+}
+
+.run-record {
+    margin-block: .75rem;
+    padding: .65rem;
+    border-radius: .6rem;
+    background: #182d46;
+    overflow-wrap: anywhere;
+}
+
+.check-line {
+    display: flex;
+    align-items: center;
+    gap: .6rem;
+}
+
+.check-line input[type=checkbox] {
+    width: auto;
+    min-height: auto;
+    accent-color: #70e2c4;
+}
+
+.queue-filter {
+    display: flex;
+    align-items: end;
+    flex-wrap: wrap;
+    gap: .75rem;
+    margin-bottom: 1rem;
+}
+
+.queue-filter label {
+    display: grid;
+    gap: .3rem;
+}
