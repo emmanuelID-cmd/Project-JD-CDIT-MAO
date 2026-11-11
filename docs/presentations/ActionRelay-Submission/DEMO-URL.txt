@@ -1,0 +1,7 @@
+ActionRelay interactive beat walkthrough (opens directly in a browser)
+https://combined-ages-offer-marco.trycloudflare.com/ActionRelay-Beat-Walkthrough.html
+
+Matching MP4:
+https://combined-ages-offer-marco.trycloudflare.com/ActionRelay-Beat-Walkthrough.mp4
+
+Checked responding on 2026-11-11. Temporary Cloudflare quick tunnel; the URL is not guaranteed for 48 hours and depends on the local server and tunnel staying online.
