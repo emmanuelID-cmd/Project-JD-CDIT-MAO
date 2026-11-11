@@ -274,7 +274,8 @@ def reset_synthetic_data(path: str | Path | None = None) -> dict[str, int]:
     tables = (
         "session_extension_alerts", "account_access_events", "sessions",
         "synthetic_case_assignment_events", "actionrelay_auditor_feedback",
-        "actionrelay_runs", "synthetic_auditor_decisions",
+        "actionrelay_runs", "actionrelay_review_runs", "actionrelay_ticket_outcomes",
+        "synthetic_auditor_decisions",
         "synthetic_case_change_events", "synthetic_cases", "synthetic_case_catalog",
         "product_health_summaries", "product_health_events",
         "synthetic_accounts",

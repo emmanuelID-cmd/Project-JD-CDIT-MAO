@@ -30,6 +30,8 @@ def submit(user, text):
 
 
 def test_billable_run_is_explicit_scoped_and_deduplicated(tmp_path, monkeypatch):
+    from cdit_support_mao import actionrelay_outcomes
+    monkeypatch.setattr(actionrelay_outcomes, "approved_pdf", lambda: None)
     clients = accounts(tmp_path, monkeypatch)
     user, admin = clients["user"], clients["admin"]
     case = submit(user, "I need the IDNYC application form.")
@@ -53,7 +55,7 @@ def test_billable_run_is_explicit_scoped_and_deduplicated(tmp_path, monkeypatch)
     run = admin.post(route, json=allow)
     assert run.status_code == 201
     assert run.json()["provider_attempts"] == 1
-    assert admin.get(route).json() == [run.json()]
+    assert admin.get(route).json()[0] == run.json()
     assert admin.post(route, json=allow).status_code == 409
     assert len(attempts) == 1
     assert user.get(case).json()["status"] == "submitted"

@@ -106,6 +106,26 @@ def _run_rows(case_id: str) -> list[dict]:
 def read_runs(case_id: str, actor: Actor = Depends(require_roles("user", "staff", "admin"))):
     get_case(case_id, actor)
     rows = _run_rows(case_id)
+    with closing(connect()) as db:
+        reviews = db.execute(
+            "SELECT run_id, status, started_at, completed_at, result_json "
+            "FROM actionrelay_review_runs WHERE case_id = ? ORDER BY started_at DESC", (case_id,),
+        ).fetchall()
+        outcome = db.execute(
+            "SELECT route, reason, recorded_at FROM actionrelay_ticket_outcomes WHERE case_id = ?",
+            (case_id,),
+        ).fetchone()
+    rows.extend({**{key: row[key] for key in row.keys() if key != "result_json"},
+                 "result": json.loads(row["result_json"])} for row in reviews)
+    if outcome:
+        rows.append({"run_id": "AR-OUTCOME-" + case_id, "status": (
+            "resolved" if outcome["route"] in {"routine_form", "resource_link"} else "human_review"),
+            "started_at": outcome["recorded_at"], "completed_at": outcome["recorded_at"],
+            "result": {"reason": outcome["reason"], "stages": [{
+                "name": "Resource delivery" if outcome["route"] in {"routine_form", "resource_link"} else "Intake routing",
+                "status": "committed" if outcome["route"] in {"routine_form", "resource_link"} else "human_review",
+            }]}})
+    rows.sort(key=lambda row: row["started_at"], reverse=True)
     if actor.role == "user":
         return [{key: row[key] for key in ("run_id", "status", "started_at", "completed_at")}
                 for row in rows]

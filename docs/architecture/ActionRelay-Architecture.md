@@ -1,6 +1,6 @@
 # ActionRelay by CDIT — Technical architecture
 
-Approved requirements amendment recorded on 2026-11-10. This document describes design intent. Presentation behavior is simulated. Backend automatic commits and the newer permissions require implementation and acceptance.
+Approved requirements amendments recorded on 2026-11-10 and 2026-11-11. The local build contains authenticated synthetic flows, digest-checked resource delivery and atomic public-resource resolution. Personal-document department delivery is not implemented. Build acceptance remains pending; live Claude Triage still requires an explicitly authorized billable run.
 
 [Full field guide](actionrelay-field-guide.html) · [Diagram explorer](actionrelay-architecture.html) · [Standalone SVG](actionrelay-architecture.svg) · [PRD-v4](../requirements/PRD-v4.md)
 
@@ -192,6 +192,25 @@ Denial — Stale version, revoked permission, ambiguity, personal record or new 
 
 Return path — A denied write needs revalidation or human action. A changed case cannot reuse stale authority.
 
+### Fixed resource catalog
+
+Owner — Application · Gate — Exact resource match
+
+Input — Whole-request normalized phrase and a fixed catalog key. The model cannot nominate an item, file, external URL, or action.
+
+Internal checks
+
+- Require a complete exact phrase from the allowlist; mixed or unrecognized requests do not match.
+- Load only package-owned files. Check PDF signature, ending marker, size and pinned SHA-256 before delivery.
+- Use a code-owned HTTPS URL for official public resources. Show the external destination clearly and state what it does not complete.
+- Keep personal records, payroll changes and actual schedule-change requests on the human/HR path.
+
+Output — Resource receipt and candidate case transition, scoped to the authenticated User’s own Submitted synthetic request.
+
+Denial — Missing file, digest mismatch, stale case, unauthorized scope or no exact match leaves the case open.
+
+Return path — An unavailable resource produces a bounded human-review reply; correction of the file/catalog requires a new verified build.
+
 ### Atomic local commit
 
 Owner — Manny / SQL · Gate — Commit
@@ -381,6 +400,30 @@ Admin feedback and flags bind to a case/decision version and its author. Feedbac
 Synthetic case/reply/decision content belongs in the permitted case store. Product Health receives allowlisted operational metadata only. Snapshot wheels count mutually exclusive status at cutoff including carryover. Matched-period activity counts events during the same calendar dates and may overlap. Historical outcome dates must come from transition events.
 
 The presentation expands 80 development examples into 960 illustrative variations plus session requests. These are not verified CDIT distributions or held-out acceptance labels. It uses isolated browser memory, simulated processing and no live backend/model write.
+
+## Employee resource library and personal-document delivery boundary
+
+The authenticated common footer exposes a shared Forms & Resources library. It contains visibly synthetic workplace-policy, directory, vacation-request and complaint PDFs, plus direct links to the IRS, U.S. Department of Labor, New York Paid Family Leave and NYC IDNYC issuing sources. The directory catalog also lists the existing weekly timesheet and shift-pattern PDFs. A leave-form notice appears before an FMLA/PFL source opens. User-generated resources must be identified as such if introduced later.
+
+Personal-document flow is a separate, future department-owned path; it must not branch through the six-agent workflow, the case-text record, Product Health, or model context:
+
+```mermaid
+flowchart LR
+  U[Employee chooses file and reason] --> G[Authenticated upload gate]
+  G --> V{Type, size, malware, case and destination valid?}
+  V -- No --> D[Reject; discard bytes; keep request open]
+  V -- Yes --> R[Stream directly to the responsible department]
+  R --> A{Department acknowledges receipt?}
+  A -- No --> D
+  A -- Yes --> H[Return receipt reference only]
+  H --> T[Record minimal non-content audit metadata]
+  G -. Never forwards file bytes .-> M[Automated workflow/model]
+  G -. Never persists file bytes .-> S[ActionRelay case store]
+```
+
+The future path accepts only configured formats (DOCX, ODT, PDF, JPEG, PNG, and other explicitly approved types), validates content rather than trusting filename/MIME alone, enforces size limits, scans for malware, uses encrypted authenticated transport, and authorizes the exact department destination. The source filename and document contents are excluded from application logs and permanent ticket records. Department service accounts must be scoped to the intended department; unrelated Staff/Admin/Auditor queue access does not grant document access. Department-owned retention and handling rules apply after receipt.
+
+If the destination is unavailable, unconfigured, or cannot confirm the correct department, the application rejects the upload, discards the in-flight bytes, leaves the case open, and directs the employee to the employer's approved secure channel. It must never mark a document sent or resolve the request based on an attempted transfer. The current local synthetic build has no upload endpoint or department connection and must not receive real personal documents. These controls are acceptance gates, not claims about a connected production service.
 
 ## Open implementation decisions
 

@@ -372,7 +372,13 @@ def _case_change_event(
 
 def _case_for_role(row: sqlite3.Row, role: str, *, auditor: bool = False) -> dict:
     result = dict(row)
+    if result.get("delivery_links_json") is not None:
+        try:
+            result["reply_links"] = json.loads(result.pop("delivery_links_json") or "[]")
+        except (TypeError, json.JSONDecodeError):
+            result["reply_links"] = []
     if role == "user":
+        result.pop("reply_basis_case_id", None)
         result.pop("assigned_staff_account_id", None)
         result.pop("assigned_staff_username", None)
     result["display_status"] = (
@@ -384,9 +390,13 @@ def _case_for_role(row: sqlite3.Row, role: str, *, auditor: bool = False) -> dic
     result["can_cancel"] = bool(
         role == "user" and result["record_kind"] == "user_request"
         and result["status"] not in {"resolved", "closed"}
+        and not result.get("withdrawal_requested_at")
     )
+    classified = result["urgency_band"] != "unknown" and bool(result["category"])
+    result["review_flag"] = result["status"] == "resolved"
     result["allowed_next_statuses"] = (
-        sorted(ALLOWED_STATUS_TRANSITIONS[result["status"]])
+        sorted(status for status in ALLOWED_STATUS_TRANSITIONS[result["status"]]
+               if classified or status not in {"resolved", "closed"})
         if role in {"staff", "admin"} and not auditor else []
     )
     return result
@@ -396,10 +406,13 @@ def _case_for_role(row: sqlite3.Row, role: str, *, auditor: bool = False) -> dic
 def list_cases(actor: Actor = Depends(require_roles("user", "staff", "admin"))):
     query = """SELECT c.case_id, c.owner_account_id, c.subject, c.request_text, c.status,
                       c.urgency_band, c.created_at, c.updated_at, c.record_kind, c.category,
-                      c.catalog_id, c.closure_reason, c.assigned_staff_account_id,
+                      c.catalog_id, c.closure_reason, c.withdrawal_requested_at, c.assigned_staff_account_id,
                       assigned.username AS assigned_staff_username,
-                      cat.rationale AS catalog_rationale
+                      cat.rationale AS catalog_rationale, outcome.route AS reply_route, outcome.reply,
+                      outcome.source_url AS reply_url, outcome.reason AS reply_reason,
+                      outcome.delivery_links_json, outcome.resolution_basis_case_id AS reply_basis_case_id
                FROM synthetic_cases c
+               LEFT JOIN actionrelay_ticket_outcomes outcome ON outcome.case_id = c.case_id
                LEFT JOIN synthetic_case_catalog cat ON cat.catalog_id = c.catalog_id
                LEFT JOIN synthetic_accounts assigned ON assigned.account_id = c.assigned_staff_account_id"""
     with closing(connect()) as db, db:
@@ -560,7 +573,9 @@ def submit_case(payload: SupportRequest, actor: Actor = Depends(require_roles("u
             before_status=None, after_status="submitted", reason_code="initial_submission",
         )
         db.commit()
-    return {"case_id": case_id, "status": "submitted", "urgency_band": "unknown"}
+    from cdit_support_mao.actionrelay_outcomes import apply_intake_outcome
+
+    return {"case_id": case_id, **apply_intake_outcome(case_id, now, request_text, actor)}
 
 
 @router.get("/api/cases/{case_id}")
@@ -622,6 +637,8 @@ def edit_case(case_id: str, payload: CaseEditPayload, actor: Actor = Depends(req
         if row is None:
             db.rollback()
             raise HTTPException(status_code=404, detail="Case not found")
+        if row["status"] == "closed":
+            raise HTTPException(409, "Closed cases are read-only.")
         if actor.role == "user" and row["status"] != "submitted":
             db.rollback()
             raise HTTPException(status_code=409, detail="This request is in review and can no longer be edited")
@@ -652,7 +669,7 @@ def cancel_case(case_id: str, actor: Actor = Depends(require_roles("user"))):
     with closing(connect()) as db, db:
         db.execute("BEGIN IMMEDIATE")
         row = db.execute(
-            """SELECT status FROM synthetic_cases WHERE case_id = ?
+            """SELECT status, withdrawal_requested_at FROM synthetic_cases WHERE case_id = ?
                AND owner_account_id = ? AND record_kind = 'user_request'""",
             (case_id, actor.account_id),
         ).fetchone()
@@ -662,18 +679,20 @@ def cancel_case(case_id: str, actor: Actor = Depends(require_roles("user"))):
         if row["status"] in {"resolved", "closed"}:
             db.rollback()
             raise HTTPException(status_code=409, detail="This request is already complete and cannot be cancelled")
+        if row["withdrawal_requested_at"]:
+            return {"case_id": case_id, "status": row["status"], "withdrawal_requested": True}
         now = stamp(now_utc())
         db.execute(
-            "UPDATE synthetic_cases SET status = 'closed', closure_reason = 'requester_cancelled_unresolved', updated_at = ? WHERE case_id = ?",
-            (now, case_id),
+            "UPDATE synthetic_cases SET withdrawal_requested_at = ?, updated_at = ? WHERE case_id = ?",
+            (now, now, case_id),
         )
         _case_change_event(
             db, case_id=case_id, actor=actor, action="requester_cancelled",
-            before_status=row["status"], after_status="closed",
+            before_status=row["status"], after_status=row["status"],
             reason_code="requester_cancellation",
         )
         db.commit()
-    return {"case_id": case_id, "status": "closed", "closure_reason": "requester_cancelled_unresolved"}
+    return {"case_id": case_id, "status": row["status"], "withdrawal_requested": True}
 
 
 @router.patch("/api/cases/{case_id}/status")
@@ -686,7 +705,7 @@ def update_case_status(
     with closing(connect()) as db, db:
         db.execute("BEGIN IMMEDIATE")
         row = db.execute(
-            """SELECT status FROM synthetic_cases
+            """SELECT status, category, urgency_band FROM synthetic_cases
                WHERE case_id = ? AND (? = 'admin' OR assigned_staff_account_id = ?)""",
             (case_id, actor.role, actor.account_id),
         ).fetchone()
@@ -701,6 +720,8 @@ def update_case_status(
         if after not in ALLOWED_STATUS_TRANSITIONS[before]:
             db.rollback()
             raise HTTPException(status_code=409, detail=f"Status transition from {before} to {after} is not allowed")
+        if after in {"resolved", "closed"} and (not row["category"] or row["urgency_band"] == "unknown"):
+            raise HTTPException(409, "Classify the case before resolving or closing it.")
         closure_reason = (
             "staff_closed" if after == "closed" and actor.role == "staff"
             else "admin_closed" if after == "closed"
@@ -884,4 +905,24 @@ def product_health(actor: Actor = Depends(require_roles("staff", "admin"))):
                       component_version, event_count, failure_count, total_duration_ms
                FROM product_health_summaries ORDER BY window_ended_at DESC LIMIT 100"""
         ).fetchall()
-    return {"events": [dict(row) for row in events], "summaries": [dict(row) for row in summaries]}
+        workflow_events = db.execute(
+            """WITH workflow(event_id, case_id, occurred_at, event_type, component, status_code) AS (
+                   SELECT run_id, case_id, completed_at, 'triage_run', 'Claude Triage', status
+                   FROM actionrelay_runs WHERE completed_at IS NOT NULL
+                   UNION ALL
+                   SELECT run_id, case_id, completed_at, 'review_run', 'Downstream review', status
+                   FROM actionrelay_review_runs WHERE completed_at IS NOT NULL
+                   UNION ALL
+                   SELECT 'AR-OUTCOME-' || case_id, case_id, recorded_at, 'intake_outcome',
+                          'Application outcome', route FROM actionrelay_ticket_outcomes
+               )
+               SELECT w.event_id, w.occurred_at, w.event_type, w.component, '1.0' AS component_version,
+                      w.status_code, NULL AS error_code, NULL AS duration_ms
+               FROM workflow w JOIN synthetic_cases c ON c.case_id = w.case_id
+               WHERE w.occurred_at >= ? AND (? OR c.assigned_staff_account_id = ?)
+               ORDER BY w.occurred_at DESC LIMIT 100""",
+            (stamp(now_utc() - timedelta(days=30)), actor.role == "admin" or actor.auditor, actor.account_id),
+        ).fetchall()
+    merged = sorted((dict(row) for row in [*events, *workflow_events]),
+                    key=lambda row: row["occurred_at"], reverse=True)
+    return {"events": merged[:100], "summaries": [dict(row) for row in summaries]}

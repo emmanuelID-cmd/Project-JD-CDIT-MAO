@@ -9,8 +9,11 @@ from urllib.parse import quote
 from fastapi.staticfiles import StaticFiles
 
 from cdit_support_mao.actionrelay_live import router as actionrelay_router
+from cdit_support_mao.actionrelay_outcomes import router as outcomes_router
+from cdit_support_mao.actionrelay_resources import router as resources_router
+from cdit_support_mao.actionrelay_review import router as review_router
 from cdit_support_mao.database import check_database
-from cdit_support_mao.web import Actor, require_roles, router as web_router
+from cdit_support_mao.web import Actor, current_actor, require_roles, router as web_router
 
 
 STATIC_DIR = Path(__file__).parent / "static"
@@ -22,6 +25,9 @@ app = FastAPI(
 app.mount("/assets", StaticFiles(directory=STATIC_DIR), name="assets")
 app.include_router(web_router)
 app.include_router(actionrelay_router)
+app.include_router(outcomes_router)
+app.include_router(resources_router)
+app.include_router(review_router)
 
 
 @app.middleware("http")
@@ -79,6 +85,11 @@ def _app_page(role: str, actor: Actor) -> HTMLResponse:
             "X-Authenticated-Role": actor.role,
         },
     )
+
+
+@app.get("/app/resources", response_class=HTMLResponse, include_in_schema=False)
+def resources_app(actor: Actor = Depends(current_actor)) -> HTMLResponse:
+    return _app_page(actor.role, actor)
 
 
 @app.get("/app/user", response_class=HTMLResponse, include_in_schema=False)

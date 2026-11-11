@@ -57,9 +57,10 @@ def test_user_can_edit_only_before_review_then_cancel_unresolved(tmp_path, monke
     assert denied_edit.status_code == 409
     cancelled = user.post("/api/cases/SYN-CASE-001/cancel")
     assert cancelled.status_code == 200
-    assert cancelled.json()["closure_reason"] == "requester_cancelled_unresolved"
+    assert cancelled.json()["withdrawal_requested"] is True
     final = user.get("/api/cases/SYN-CASE-001").json()
-    assert final["status"] == "closed" and final["can_cancel"] is False
+    assert final["status"] == "in_progress" and final["can_cancel"] is False
+    assert final["withdrawal_requested_at"]
 
     with connect(path) as db:
         events = db.execute(
@@ -90,11 +91,14 @@ def test_staff_can_change_example_status_and_edit_is_audited(tmp_path, monkeypat
 
 
 def test_case_status_transitions_fail_closed_and_admin_can_reopen_resolved_case(tmp_path, monkeypatch):
-    _path, admin = make_client(tmp_path, monkeypatch, "admin")
+    path, admin = make_client(tmp_path, monkeypatch, "admin")
     impossible = admin.patch("/api/cases/SYN-CASE-001/status", json={"status": "resolved"})
     assert impossible.status_code == 409
     started = admin.patch("/api/cases/SYN-CASE-001/status", json={"status": "in_progress"})
     assert started.status_code == 200
+    assert admin.patch("/api/cases/SYN-CASE-001/status", json={"status": "resolved"}).status_code == 409
+    with connect(path) as db:
+        db.execute("UPDATE synthetic_cases SET category = 'Forms', urgency_band = 'low' WHERE case_id = 'SYN-CASE-001'")
     resolved = admin.patch("/api/cases/SYN-CASE-001/status", json={"status": "resolved"})
     assert resolved.status_code == 200
     reopened = admin.patch("/api/cases/SYN-CASE-001/status", json={"status": "in_progress"})
