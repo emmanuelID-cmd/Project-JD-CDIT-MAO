@@ -1,5 +1,15 @@
 # Project Handoff — Project-JD-CDIT-MAO
 
+## Current outgoing state — 2026-11-11 (User request-page recovery)
+
+This entry supersedes earlier outgoing-state notes where they conflict; older entries remain historical.
+
+- Repository: `emmanuelID-cmd/Project-JD-CDIT-MAO`; active branch `manny/coordinator-triage-escalation`; PR target `developer`. Verified branch baseline before this fix: `c791a891125bc3c41026dd732ff9aff1921a9dd0` after PR #31 merged.
+- Fix commit: `1f0d37961f092e4d96edea716addbb125d1045b9` restores the three `syntheticSamples` examples used by the User request-page quick-fill controls. The missing declaration caused the `syntheticSamples is not defined` workspace crash. The updated asset returns HTTP 200 from the local preview and existing public tunnel.
+- No demo file was edited or rebuilt. The presenter edition defaults to manual chapter mode (`demoAuto=false`) and waits after each beat; one Next action advances one chapter. Turn on the Auto control for continuous chapter playback. A freeze while Auto is on remains unverified.
+- Validation: Node syntax check, `git diff --check`, and local/public JavaScript asset checks passed. A full authenticated User submit flow and any Claude provider call were not run. The site fix may require a hard refresh to bypass a browser-cached script.
+- No open PR was checked after PR #31's merge. This fix is not yet published; open a PR to `developer`. Do not update `main` or Shawn's owner-managed lane without her approval.
+
 ## Current outgoing state — 2026-11-11 (ActionRelay wiring)
 
 This entry supersedes earlier outgoing-state notes where they conflict; older entries remain historical.

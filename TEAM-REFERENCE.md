@@ -1,5 +1,13 @@
 # Handoffs prepared for push
 
+## 2026-11-11 — User request-page recovery
+
+Summary file: PROJECT-HANDOFF.md
+
+- Restored the three synthetic quick-fill requests used by the User page; no video/demo file was edited.
+- Node syntax and local/public asset checks passed; full authenticated submission and provider behavior remain unverified. A hard refresh may be needed to discard the cached app script.
+- Fix commit `1f0d379` is ready for a PR to `developer`; verified baseline is the post-PR-31 Manny tip `c791a891125bc3c41026dd732ff9aff1921a9dd0`.
+
 ## 2026-11-11 — ActionRelay wiring integration
 
 Summary file: PROJECT-HANDOFF.md

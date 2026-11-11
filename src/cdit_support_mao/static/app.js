@@ -2,6 +2,11 @@ const $ = (s, root=document) => root.querySelector(s);
 let displayedWarning = "";
 let signedInActor = {};
 let feedbackByDecision = new Map();
+const syntheticSamples = [
+  ["IDNYC application", "I need the IDNYC application form."],
+  ["Personal W-2", "I need a copy of my personal W-2."],
+  ["Withholding change", "My withholding or deduction changed unexpectedly before this payroll closes."]
+];
 
 function decisionFeedback(decision, role) {
   const entries = feedbackByDecision.get(decision.decision_id) || [];
