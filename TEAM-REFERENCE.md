@@ -334,3 +334,6 @@ Summary file: PROJECT-HANDOFF.md
 - User authorized this direct main commit/push, requested restoring developer PR/release rules, and directed renaming Manny/Shawn branches to match six-agent ownership.
 - Target lane names: `manny/coordinator-triage-escalation` and `shawn/knowledge-troubleshooting-docs`.
 - `Checklist.md` is the completion and lane-status source; source PRD template remains excluded.
+## 2026-11-11 — Render Free demo setup
+
+Summary file: PROJECT-HANDOFF.md

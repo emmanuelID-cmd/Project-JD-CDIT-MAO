@@ -69,11 +69,12 @@ The API health endpoint is `http://127.0.0.1:8000/health`; interactive API docum
 
 ### Local synthetic role accounts and interfaces
 
-The application seeds three local accounts with no default passwords: user.demo, staff.demo, and admin.demo. After initializing and seeding the local database, configure a unique local synthetic password for each account from a terminal:
+The application seeds four local accounts with no default passwords: user.demo, staff.demo, auditor.demo, and admin.demo. The Auditor account uses the Staff role with Auditor access enabled. After initializing and seeding the local database, configure a unique local synthetic password for each account from a terminal:
 
 ```powershell
 python -m cdit_support_mao.db_cli set-password SYN-USER-001
 python -m cdit_support_mao.db_cli set-password SYN-STAFF-001
+python -m cdit_support_mao.db_cli set-password SYN-AUDITOR-001
 python -m cdit_support_mao.db_cli set-password SYN-ADMIN-001
 ```
 
@@ -81,7 +82,11 @@ The CLI prompts for the password twice and stores only a salted password hash. R
 
 The unauthenticated showcase is separate: /preview/user, /preview/staff, and /preview/admin. Those pages contain fabricated examples and disabled illustrative controls. They make no authenticated API or database requests and cannot create a session or change account access. This is a local synthetic prototype, not production authentication or a deployment-ready security system.
 
-The repository ignores `.env`; a blank local copy is present for `ANTHROPIC_API_KEY`. Add the key locally to that file and never commit or send it in chat. The pinned Anthropic client factory reads the local file but makes no request during import or app startup. A model request requires explicit per-run authorization and a fresh handoff preflight.
+The repository ignores `.env`; a blank local copy is present for `ANTHROPIC_API_KEY`. Add the key locally to that file and never commit or send it in chat. The pinned Anthropic client factory reads deployment environment variables first, then falls back to the local file. It makes no request during import or app startup. A model request requires explicit per-run authorization and a fresh handoff preflight.
+
+### Free Render demo deployment
+
+The repository includes an opt-in Render Free startup bootstrap for the synthetic SQLite demo. It uses `/tmp/cdit_support.db`, recreates sample data and four local demo accounts on each boot, and does not preserve tickets or account changes across restarts, spin-downs, or redeploys. Follow [`docs/deployment/RENDER-FREE-DEMO.md`](docs/deployment/RENDER-FREE-DEMO.md) for exact Render settings. This is not a production deployment and must not receive real CDIT or personal data.
 
 The local prototype now includes the API/runtime, SQLite foundation, synthetic role authentication, and role-specific views. Coordinator, Triage, Escalation, and the Claude Triage adapter belong to Manny's lane; Knowledge, Troubleshooting, Documentation, and retrieval belong to Shawn's lane. Shared state and handoff contracts require coordination before integration.
 
