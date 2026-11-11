@@ -1,0 +1,19 @@
+CDIT is hiring a Customer Support Specialist for its SaaS clinical trial management platform. You'll be the first person a customer reaches when something isn't working — on the phone, by email, or through a Salesforce ticket. Your day centers on the support queue: triaging new requests, documenting what's happening, solving what you can yourself, and handing off what you can't with enough context that the next person doesn't have to start over.
+
+Most of what comes in will be account and navigation questions — password resets, permissions, user roles, how a particular workflow works — and you'll either walk the customer through it live or point them to the right resource. You'll also run training sessions for customers who are new to the platform or want a refresher on features they aren't using yet. Because this is a clinical trial platform, some of what you see will involve patient data, so you'll need to work within HIPAA requirements as a normal part of the job, not an occasional one.
+
+You'll keep an eye on your own queue so tickets don't sit past their SLA, flag the ones that are at risk before they breach, and write up recurring issues so the team's knowledge base actually reflects what customers are running into. You'll work alongside L2 specialists, the Support Lead, and the Product Health team, and your notes on what's going wrong will feed back into how the product and the support process get improved.
+
+This is a 100% remote role, and you can work from anywhere in the United States.
+
+What we’re looking for
+2+ years in customer service or technical support for a SaaS or software product
+Experience supporting or working with clinical research sites, or familiarity with clinical trial workflows, regulatory requirements, or clinical data systems
+Able to troubleshoot a web-based application and explain the fix in plain language
+Strong written and verbal communication
+Comfortable managing a ticket queue against SLAs and productivity metrics
+Able to prioritize and follow up reliably across multiple open items at once
+Nice to have:
+
+Experience using Salesforce or a similar ticketing system
+Experience training customers on software features

@@ -138,6 +138,7 @@ def seed_synthetic_data(path: str | Path | None = None, *, now: datetime | None 
     accounts = (
         ("SYN-USER-001", "user.demo", "user"),
         ("SYN-STAFF-001", "staff.demo", "staff"),
+        ("SYN-AUDITOR-001", "auditor.demo", "staff"),
         ("SYN-ADMIN-001", "admin.demo", "admin"),
     )
     with closing(connect(path)) as connection:
@@ -145,9 +146,9 @@ def seed_synthetic_data(path: str | Path | None = None, *, now: datetime | None 
         for account_id, username, role in accounts:
             connection.execute(
                 """INSERT OR IGNORE INTO synthetic_accounts
-                   (account_id, username, role, status, password_hash, created_at, updated_at)
-                   VALUES (?, ?, ?, 'setup_required', NULL, ?, ?)""",
-                (account_id, username, role, created, created),
+                   (account_id, username, role, status, password_hash, created_at, updated_at, auditor_access)
+                   VALUES (?, ?, ?, 'setup_required', NULL, ?, ?, ?)""",
+                (account_id, username, role, created, created, int(account_id == "SYN-AUDITOR-001")),
             )
         initial_case = connection.execute(
             """INSERT OR IGNORE INTO synthetic_cases
@@ -272,7 +273,9 @@ def reset_synthetic_data(path: str | Path | None = None) -> dict[str, int]:
     initialize_database(path)
     tables = (
         "session_extension_alerts", "account_access_events", "sessions",
-        "synthetic_case_assignment_events", "synthetic_auditor_decisions",
+        "synthetic_case_assignment_events", "actionrelay_auditor_feedback",
+        "actionrelay_runs", "actionrelay_review_runs", "actionrelay_ticket_outcomes",
+        "synthetic_auditor_decisions",
         "synthetic_case_change_events", "synthetic_cases", "synthetic_case_catalog",
         "product_health_summaries", "product_health_events",
         "synthetic_accounts",

@@ -1,0 +1,1041 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ActionRelay by CDIT — Final presentation preview</title>
+<style>
+:root{color-scheme:dark;--bg:#0b1220;--panel:#131e30;--rail:#0e1828;--line:#2d3b51;--ink:#eff5ff;--muted:#aebed3;--mint:#7ce8cd;--violet:#d0bcff;--gold:#ffd28f}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.5 system-ui,sans-serif}button,input,textarea,select{font:inherit;color:inherit}button,input,textarea,select{border:1px solid var(--line);border-radius:9px;background:#101a2b;padding:9px 12px}button,summary{cursor:pointer}button:hover{border-color:var(--mint)}button:disabled{opacity:.6;cursor:default}:focus-visible{outline:3px solid var(--gold);outline-offset:3px}a{color:var(--mint)}h1,h2,h3,p{margin:0}h1{font-size:clamp(28px,4vw,44px);letter-spacing:-.045em;line-height:1.1}h2{font-size:21px;letter-spacing:-.025em}h3{font-size:16px}small,.muted{color:var(--muted)}.eyebrow{font-size:11px;font-weight:750;letter-spacing:.16em;text-transform:uppercase;color:var(--mint)}.primary{background:var(--mint);color:#09251f;border-color:transparent;font-weight:750}.quiet{background:none}.skip{position:absolute;top:-80px;left:12px;z-index:10}.skip:focus{top:12px}.row{display:flex;align-items:center;gap:10px;flex-wrap:wrap}.between{justify-content:space-between}.stack{display:grid;gap:14px}.top{padding:12px clamp(14px,3vw,36px);background:#101b2b;border-bottom:1px solid var(--line)}.logo{display:grid;place-items:center;width:36px;height:36px;background:#183d3d;border:1px solid #32675e;color:var(--mint);border-radius:10px;font-size:12px;font-weight:850;letter-spacing:.08em}.brand strong,.brand small{display:block}.brand small{font-size:11px}.switch button{padding:6px 12px;font-size:13px}.switch button[aria-pressed=true],.rail button[aria-current=page]{background:#19443e;border-color:#39766b;color:#adffe9}.shell{display:grid;grid-template-columns:188px minmax(0,1fr);min-height:calc(100vh - 62px)}.rail{background:var(--rail);border-right:1px solid var(--line);padding:23px 13px}.rail button{display:block;width:100%;text-align:left;margin:5px 0}.rail .eyebrow{padding-left:10px}.main{width:100%;max-width:1440px;margin:auto;padding:clamp(16px,3vw,36px);align-self:start}.hero{padding:26px;border-radius:16px;border:1px solid #334960;background:radial-gradient(ellipse at top right,#243259,transparent 62%),linear-gradient(120deg,#152c3b,#152033);margin-bottom:19px}.hero p{margin-top:9px}.hero h1{margin-top:8px}.pill{display:inline-block;border:1px solid #40516c;border-radius:999px;padding:3px 9px;font-size:12px;white-space:nowrap}.teal,.low{color:#9af2dc;background:#173c38}.medium{color:#ffd798;background:#443321}.high{color:#ffbcc7;background:#4d2b38}.unknown,.purple{color:#dfd0ff;background:#372954}.card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:18px;min-width:0}.grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-bottom:16px}.metric b{display:block;font-size:30px;line-height:1.1;margin:8px 0 4px;font-variant-numeric:tabular-nums}.filters{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:9px;margin:14px 0}label{display:grid;gap:5px;font-size:13px;color:var(--muted)}input,select,textarea{width:100%;min-width:0}textarea{resize:vertical}.scroll{overflow:auto}table{width:100%;border-collapse:collapse;text-align:left}th,td{padding:10px;border-bottom:1px solid var(--line);vertical-align:middle}th{color:var(--muted);font-size:12px}td button.link{border:0;background:none;color:var(--mint);padding:6px 0;text-align:left;font-weight:650}td small{display:block;font-size:11px}.scroll table{min-width:565px}.tablefoot{margin-top:12px}.split{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.bar{height:7px;background:#263750;border-radius:8px;overflow:hidden;margin-top:5px}.bar span{display:block;height:100%;background:#76d7c7;border-radius:8px}.chart{list-style:none;padding:0;margin:13px 0 0;display:grid;gap:11px}.chart li{font-size:13px}.chart b{font-variant-numeric:tabular-nums}.login{display:grid;grid-template-columns:1.15fr 1fr;max-width:1000px;margin:clamp(18px,7vh,72px) auto;gap:18px;padding:0 18px}.intro{padding:clamp(22px,4vw,46px);background:radial-gradient(ellipse at 90% 0,#35305b,transparent 65%),linear-gradient(150deg,#173a48,#111d33);border:1px solid #344863;border-radius:19px;display:grid;align-content:space-between;gap:34px;min-height:400px}.intro h1{margin:14px 0}.login .card{padding:clamp(18px,3vw,30px);align-content:center}.login .primary{width:100%}.notice{border-left:3px solid var(--violet);padding:9px 12px;background:#241f38;border-radius:4px}.workspace{display:grid;gap:12px}.workspace.expanded{grid-template-columns:minmax(0,1fr) minmax(220px,.65fr)}.agent{border-color:#6a568c;background:linear-gradient(145deg,#282041,#171d32);align-self:start}.agent ol{padding-left:22px}.agent li{padding:5px 0}.agent summary{color:var(--violet);font-weight:700}.agent[open] .activity-body{margin-top:10px}.ticket-text{white-space:pre-wrap;overflow-wrap:anywhere}.request-list article{padding:12px 0;border-bottom:1px solid var(--line)}.audit{padding-left:20px}.statusline{padding:0 clamp(14px,3vw,36px);color:var(--mint);min-height:0}.statusline:not(:empty){padding-block:8px;border-bottom:1px solid var(--line)}.hint{font-size:12px}.compact{max-width:650px}.tablefoot button{min-width:64px}
+@media(max-width:850px){.shell{grid-template-columns:1fr}.rail{padding:8px 14px;border-right:0;border-bottom:1px solid var(--line);display:flex;gap:6px;flex-wrap:wrap;align-items:center}.rail button{width:auto;margin:0}.rail .eyebrow{padding:0 5px}}
+@media(max-width:620px){.split,.login,.workspace.expanded{grid-template-columns:1fr}.intro{min-height:0;gap:18px}.grid{gap:7px}.metric{padding:11px}.metric b{font-size:24px}.hero{padding:18px}.top{gap:12px}.switch button{padding:7px 10px}}
+.flag{background:#443321;color:#ffd798}.scroll table{min-width:720px}.filters{grid-template-columns:repeat(auto-fit,minmax(min(145px,100%),1fr))}
+.case-fields{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin:0}
+.case-fields div{padding:10px 12px;border:1px solid var(--line);border-radius:9px}
+.case-fields dt{color:var(--muted);font-size:12px}.case-fields dd{margin:3px 0 0;overflow-wrap:anywhere}
+.review-panel{border-top:1px solid var(--line);padding-top:16px}.review-panel textarea{min-height:110px}
+@media(max-width:620px){.case-fields{grid-template-columns:1fr}}
+.feedback-flag{display:flex;align-items:center;gap:8px}.feedback-flag input{width:auto}
+ .current-decision{border:2px solid var(--mint);border-radius:12px;background:#142d36;padding:16px}
+.current-decision h3{color:var(--mint)}.trend-panel{margin-bottom:14px;background:linear-gradient(145deg,#182a42,#131e30)}
+.trend-controls{margin-top:4px}.trend-chart{min-width:0;overflow-x:auto}.trend-bars{display:grid;grid-auto-flow:column;grid-auto-columns:minmax(48px,1fr);gap:8px;list-style:none;margin:0;padding:4px 2px}
+.trend-bars li{display:grid;grid-template-rows:22px 105px auto;text-align:center;min-width:0;gap:3px}
+.trend-bars b{font-variant-numeric:tabular-nums}.trend-track{display:flex;align-items:end;background:#1e3049;border-radius:5px;overflow:hidden}
+.trend-track span{width:100%;background:linear-gradient(#7ce8cd,#4d91b9);border-radius:5px 5px 0 0}
+.trend-bars small{white-space:nowrap}.trend-summary{display:flex;flex-wrap:wrap;gap:8px}
+
+/* Richer surfaces with a separate, consistent palette for attention bands. */
+body{background:
+  radial-gradient(ellipse at 12% 7%,#193c56 0%,transparent 42%),
+  radial-gradient(ellipse at 88% 19%,#382752 0%,transparent 38%),
+  radial-gradient(ellipse at 65% 96%,#103c3f 0%,transparent 46%),#09111f;background-attachment:fixed}
+body::before{content:"";position:fixed;inset:0;pointer-events:none;background-image:radial-gradient(#8fa9d926 1px,transparent 1px);background-size:23px 23px;mask-image:linear-gradient(#000,transparent 84%);z-index:-1}
+body{isolation:isolate}.top{background:#111a2ef2;border-color:#41506b}.rail{background:#0e1829e8}
+.hero{background:radial-gradient(ellipse at top right,#473363 0%,transparent 60%),linear-gradient(115deg,#153a47,#20243d);border-color:#536681}
+.card{box-shadow:0 12px 24px #050b1740}
+.metric:nth-child(3n+1){background:linear-gradient(145deg,#17414b,#142636);border-color:#3d7580}
+.metric:nth-child(3n+2){background:linear-gradient(145deg,#342654,#1d253d);border-color:#6a5488}
+.metric:nth-child(3n+3){background:linear-gradient(145deg,#493047,#26233e);border-color:#815675}
+.metric .eyebrow{color:#f4e9ff}
+.filter-card{background:linear-gradient(125deg,#1b2d4d,#192037);border-color:#435a80}
+.chart-card[data-chart="band"]{background:linear-gradient(145deg,#173b43,#152637);border-color:#3b7279}
+.chart-card[data-chart="category"]{background:linear-gradient(145deg,#392855,#23233f);border-color:#6d5688}
+.chart-card[data-chart="status"]{background:linear-gradient(145deg,#203b60,#172942);border-color:#4d6f98}
+.chart-card[data-chart="issue"]{background:linear-gradient(145deg,#503044,#2a233b);border-color:#80566e}
+.trend-panel{background:linear-gradient(145deg,#243d63,#202743 58%,#24253e);border-color:#526c97}
+.queue-card{background:linear-gradient(145deg,#183344,#16243a);border-color:#3b5e77}
+.queue-row{background:color-mix(in srgb,var(--case-color) 14%,#142238)}
+.queue-row td:first-child{border-inline-start:4px solid var(--case-color)}
+.queue-row:hover,.queue-row:focus-within{background:color-mix(in srgb,var(--case-color) 23%,#142238)}
+.queue-row button.link{color:#eaf7ff}
+.high{color:#ffd1dc;background:#6a2844;border-color:#e2769c}
+.medium{color:#ffe5a8;background:#5c3d20;border-color:#efb95f}
+.low{color:#bdffeb;background:#155248;border-color:#60ddbc}
+.unknown{color:#edddff;background:#4b3272;border-color:#bd9af2}
+.trend-chart{scrollbar-color:#7e96bb #172740;scroll-snap-type:x proximity;padding:4px 0 10px}
+.trend-bars{--tick-width:68px;grid-auto-columns:var(--tick-width);gap:8px;min-width:max-content}
+.trend-bars li{scroll-snap-align:start;grid-template-rows:22px 122px auto}
+.trend-bars[data-unit="month"]{--tick-width:98px}
+.trend-bars[data-unit="year"]{--tick-width:120px}
+.trend-bars[data-unit="year"].static-years{grid-auto-columns:minmax(0,1fr);min-width:0}
+.trend-track{background:#122540}
+.trend-track span{background:linear-gradient(#cbb5ff,#789cec)}
+.trend-nav{padding-top:3px}.trend-nav button{min-width:118px}
+
+:root{--status-submitted:#9bb5e9;--status-in-progress:#f6c774;--status-waiting-on-customer:#d7a5ef;
+--status-under-investigation:#f19ec0;--status-escalated:#ff8a87;--status-resolved:#73dfbd;--status-closed:#86c4ff}
+.year-comparison{margin-bottom:14px;background:linear-gradient(140deg,#1d304a,#20243c)}
+.wheel-card{background:#17243b;border:1px solid #4c6180;border-radius:14px;padding:16px;text-align:center}
+.wheel{width:min(100%,190px);aspect-ratio:1;margin:auto;border-radius:50%;display:grid;place-items:center}
+.wheel-center{width:66%;aspect-ratio:1;display:grid;place-content:center;background:#17243b;border-radius:50%}
+.wheel-center b{font-size:24px}.wheel-center small{font-size:11px}.legend-dot{width:.72em;height:.72em;border-radius:50%;display:inline-block;margin-inline-end:7px}
+.delta{font-variant-numeric:tabular-nums;font-weight:700}
+.line-scroll{overflow:auto;min-width:0}.line-plot{min-width:620px}
+.line-plot svg{display:block;width:100%;height:auto}.line-plot text{fill:#c6d5e9;font:13px system-ui,sans-serif}
+.line-dates{position:relative;height:38px}
+.line-dates button{position:absolute;transform:translateX(-50%);padding:6px 3px;font-size:11px;white-space:nowrap}.line-dates button[aria-pressed=true]{background:#215051;border-color:#7ce8cd}
+.line-plot [data-chart-date]{cursor:pointer}
+.line-nav{flex-wrap:wrap}.line-controls label.checkbox{display:flex;align-items:center;gap:6px}.line-controls .checkbox input{width:auto}
+.trend-panel .row legend{padding:0 6px;color:var(--muted)}.line-controls{border:1px solid var(--line);border-radius:8px}
+
+.comparison-grid{display:grid;grid-template-columns:minmax(150px,1fr) repeat(2,minmax(118px,155px)) minmax(140px,1fr);gap:10px;align-items:start}
+.comparison-legend,.comparison-change{padding:10px;border:1px solid #4c6180;border-radius:10px;background:#17243b}
+.comparison-legend ul,.comparison-change ul{list-style:none;margin:6px 0 0;padding:0;display:grid;gap:5px}
+.comparison-legend li,.comparison-change li{display:flex;align-items:baseline;justify-content:space-between;gap:5px;font-size:12px}
+.comparison-legend small{white-space:nowrap;font-variant-numeric:tabular-nums}
+.wheel-card{padding:8px;gap:4px;min-width:0}.wheel-graphic{display:block;width:100%;max-width:146px;margin:auto;overflow:visible}
+.wheel-graphic text{fill:var(--ink);font:700 15px system-ui,sans-serif}.wheel-graphic text.slice-label{fill:#122033;font:800 9px system-ui,sans-serif;pointer-events:none}
+.wheel-segment{cursor:pointer}.wheel-segment:focus-visible{outline:none;filter:brightness(1.25) drop-shadow(0 0 2px #fff)}
+.wheel-segment.dimmed{opacity:.35}.wheel-inspect{min-height:3em;font-size:11px}
+.line-controls-row{align-items:end}.line-controls-row form{align-items:end}
+.line-plot{position:relative;min-width:0}.line-plot svg{height:170px;width:100%}
+.line-plot [data-chart-date]{cursor:crosshair}.line-guide{pointer-events:none}
+.line-dates button{min-height:32px}.line-inspect{min-height:72px}
+@media(max-width:1050px){.comparison-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.comparison-legend,.comparison-change{grid-column:1/-1}.comparison-legend ul,.comparison-change ul{grid-template-columns:repeat(auto-fit,minmax(145px,1fr))}}
+@media(max-width:390px){.comparison-legend ul,.comparison-change ul{grid-template-columns:1fr}}
+
+.comparison-detail-table{table-layout:fixed;width:100%;font-variant-numeric:tabular-nums}
+.comparison-detail-table col:first-child{width:46%}
+.comparison-detail-table col:not(:first-child){width:18%}
+.comparison-detail-table th:not(:first-child),.comparison-detail-table td{text-align:right}
+.comparison-detail-section{display:grid;gap:6px;margin-top:12px}
+.comparison-detail-section+.comparison-detail-section{margin-top:2rem}
+.comparison-detail-table tfoot th,.comparison-detail-table tfoot td{font-weight:700;color:var(--ink)}
+
+body::after{content:"";position:fixed;inset:-14%;z-index:-1;pointer-events:none;background:radial-gradient(ellipse at 22% 28%,#379ab538,transparent 39%),radial-gradient(ellipse at 78% 50%,#9962cf3b,transparent 42%);animation:relay-drift 24s ease-in-out infinite alternate;transform-origin:50% 50%}
+@keyframes relay-drift{to{transform:translate(5%,-5%) scale(1.12)}}
+@media(prefers-reduced-motion:reduce){body::after{animation:none}}
+.top{background:linear-gradient(110deg,#172f49,#1c2340 65%,#2b2241);border-color:#54678a;min-height:77px}
+.relay-brand-mark{width:92px;display:grid;place-items:center;padding-right:10px;border-right:1px solid #617591}
+.relay-brand-mark svg{width:100%;height:auto;display:block}
+.brand strong{font-size:20px;letter-spacing:-.035em}.brand strong span{font-size:13px;color:#a9e9da;letter-spacing:0}
+.comparison-grid{grid-template-columns:minmax(146px,.9fr) repeat(2,minmax(144px,1.1fr)) minmax(160px,1fr);gap:8px;align-items:start}
+.wheel-graphic{max-width:212px;filter:drop-shadow(0 7px 7px #070d1d70)}
+.wheel-card{padding:8px 5px}.comparison-change li>span:last-child{text-align:right}.relative-change{display:inline-block;margin-inline-start:4px}
+.line-controls-row form:last-child{margin-inline-start:auto}
+@media(max-width:1000px){.comparison-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:480px){.relay-brand-mark{width:65px}.brand strong{font-size:17px}.comparison-detail-table .relative-change{display:block}}
+</style>
+<style>.control-with-icon{display:inline-flex;align-items:center;gap:6px}.control-with-icon svg{flex:none;vertical-align:middle}</style></head>
+<body>
+<a class="skip" href="#main">Skip to main content</a>
+<header class="top row between">
+  <div class="brand row"><span class="relay-brand-mark" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="-12 13 384 181" role="img" aria-label="ActionRelay frosted glass routing mark"><defs><clipPath id="violetShape"><path d="M155 110c22-5 36-27 52-49 13-18 26-28 55-28h56V18l48 38-48 38V79h-55c-10 0-16 4-23 13-20 27-41 44-62 41Z" /></clipPath><linearGradient id="intake1" gradientUnits="userSpaceOnUse" x1="0" x2="0" y1="110" y2="156"><stop offset="0" stop-color="#789bc8" /><stop offset="0.23" stop-color="#a5c9ef" /><stop offset="0.43" stop-color="#eef8ff" /><stop offset="0.7" stop-color="#b6d7f6" /><stop offset="1" stop-color="#809cbd" /></linearGradient><linearGradient id="green1" gradientUnits="userSpaceOnUse" x1="0" x2="0" y1="110" y2="156"><stop offset="0" stop-color="#298b79" /><stop offset="0.23" stop-color="#59c3aa" /><stop offset="0.43" stop-color="#d0ffee" /><stop offset="0.7" stop-color="#6bcbb5" /><stop offset="1" stop-color="#348e7e" /></linearGradient><linearGradient id="violet1" gradientUnits="userSpaceOnUse" x1="0" x2="0" y1="33" y2="79"><stop offset="0" stop-color="#7251aa" /><stop offset="0.23" stop-color="#ab8adb" /><stop offset="0.43" stop-color="#f0e6ff" /><stop offset="0.7" stop-color="#bca3ee" /><stop offset="1" stop-color="#7f60b6" /></linearGradient><linearGradient id="glass1" x2="1" y2="1"><stop offset="0" stop-color="#eff7ff" stop-opacity="0.76" /><stop offset="0.45" stop-color="#a0cbff" stop-opacity="0.18" /><stop offset="1" stop-color="#c4b6ff" stop-opacity="0.52" /></linearGradient><linearGradient id="bend1" gradientUnits="userSpaceOnUse" x1="160" x2="260" y1="0" y2="0"><stop stop-color="white" /><stop offset=".85" stop-color="white" stop-opacity="0" /></linearGradient><mask id="bendMask1" maskUnits="userSpaceOnUse" x="135" y="25" width="135" height="130"><rect x="135" y="25" width="135" height="130" fill="url(#bend1)" /></mask></defs><path d="M0 110H155L178 133 155 156H0Q-8 156-8 148v-30q0-8 8-8Z" fill="url(#intake1)" />
+<path d="M155 110H318V95L366 133 318 171v-15H155l23-23Z" fill="url(#green1)" />
+<path d="M155 110c22-5 36-27 52-49 13-18 26-28 55-28h56V18l48 38-48 38V79h-55c-10 0-16 4-23 13-20 27-41 44-62 41Z" fill="url(#violet1)" /><g clip-path="url(#violetShape)" mask="url(#bendMask1)" fill="none" stroke-linecap="round"><path d="M151 120C186 119 201 90 221 69Q236 55 263 55" stroke="#ab8adb" stroke-width="38" /><path d="M151 120C186 119 201 90 221 69Q236 55 263 55" stroke="#bca3ee" stroke-width="24" /><path d="M151 120C186 119 201 90 221 69Q236 55 263 55" stroke="#f0e6ff" stroke-width="12" stroke-opacity=".83" /></g>
+<path d="M155 110l23 23-23 23" fill="none" stroke="#223557" stroke-opacity=".7" stroke-width="1.8" />
+<path d="M140 85l30-14v103l-30 14Z" fill="url(#glass1)" stroke="#d5e8ff" stroke-width="2" />
+<path d="m145 90 20-10m-20 18 14-7m-14 87 20-9m-5-35v7" fill="none" stroke="#eff8ff" stroke-opacity=".85" stroke-width="1.5" stroke-linecap="round" />
+<circle cx="310" cy="56" r="10" fill="none" stroke="#38285c" stroke-width="4" />
+<path d="m298 133 9 9 17-19" fill="none" stroke="#124b40" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" />
+</svg></span><div><strong>ActionRelay <span>by CDIT</span></strong><small>Synthetic support desk · Presentation preview</small></div></div>
+  <div id="session-control"></div>
+</header>
+<div id="announcement" class="statusline" role="status"></div>
+<div id="view"></div>
+<script type="application/json" id="catalog">[[1, "Workplace safety", "There is a credible threat of violence at the office right now.", "high", "Immediate safety risk; activate the human safety/emergency path."], [2, "Employee wellbeing", "A coworker has said they may harm themselves today.", "high", "Imminent welfare concern; human response now."], [3, "Harassment / safety", "The person I reported is waiting outside and threatening me.", "high", "Immediate risk; route to designated human safety/HR contacts."], [4, "Privacy incident", "A file containing employee or customer personal data was sent to the wrong external recipient.", "high", "Active or recent disclosure; preserve minimal incident metadata and alert the authorized privacy/security responder."], [5, "Cybersecurity / privilege", "An administrator account appears compromised and is changing access.", "high", "Active privileged-access incident."], [6, "Payroll fraud", "My direct-deposit details were changed without my approval and payday is imminent.", "high", "Potential financial diversion; human payroll/security review immediately."], [7, "Payroll-wide incident", "Many employees are missing pay in the payroll run due today.", "high", "Broad financial impact and imminent processing deadline."], [8, "Payroll system outage", "Payroll processing is unavailable before the pay-run cutoff.", "high", "Widespread deadline-critical service disruption."], [9, "Customer service outage", "Customers across the organization cannot access the core service.", "high", "Broad active service interruption."], [10, "Critical scheduling coverage", "The next shift has no qualified coverage for a safety-critical function.", "high", "Imminent operational/safety coverage gap."], [11, "Workplace injury", "Someone is injured and needs immediate help at the site.", "high", "Immediate safety response; not an agent decision."], [12, "Regulatory / legal deadline", "A formal response or evidence deadline expires today and the required record is missing.", "high", "Imminent external deadline; route to authorized compliance/legal owner."], [13, "Retaliation / threat", "After raising a concern, I received a threat that is happening now.", "high", "Immediate safety/retaliation concern; confidential human handling."], [14, "Critical internal outage", "All staff are locked out of systems needed to operate today.", "high", "Broad service continuity failure."], [15, "Sensitive-data exposure", "A confidential record is publicly accessible and has not been contained.", "high", "Ongoing exposure; human security/privacy response."], [16, "Individual pay discrepancy", "My paycheck is materially short for the pay period that just ended.", "medium", "Personal financial impact; raise to High if pay is diverted, multiple staff are affected, or urgent hardship is reported."], [17, "Missing wages", "My expected pay did not arrive today.", "medium", "Time-sensitive individual impact; raise to High for suspected fraud or a widespread failure."], [18, "Timecard correction", "Several punches are missing and payroll closes tomorrow.", "medium", "Deadline-bound correction; raise if a group or payroll run is affected."], [19, "Overtime discrepancy", "Approved overtime is absent from this pay period.", "medium", "Compensation concern; urgency increases near correction cutoff."], [20, "Payroll tax / deduction correction", "My withholding or deduction changed unexpectedly before this payroll closes.", "medium", "Financial record correction with a near processing deadline."], [21, "Upcoming shift conflict", "Two required staff are scheduled for the same critical shift and one slot is uncovered.", "medium", "Near-term staffing issue; raise to High if it creates a safety-critical gap."], [22, "Shift swap / coverage request", "Can someone cover my shift starting tomorrow?", "medium", "Near-term scheduling coordination; raise if essential coverage is at risk."], [23, "Leave starting soon", "My approved leave starts tomorrow, but the required case step is still pending.", "medium", "Near-term employee/workflow dependency."], [24, "Accommodation needed soon", "I need an approved work adjustment before my next scheduled shift.", "medium", "Time-sensitive; raise if current conditions create immediate safety or access risk."], [25, "Discrimination grievance", "I want to report unequal treatment related to a protected characteristic.", "medium", "Sensitive formal concern; confidential human HR review. Raise to High for immediate threat or imminent retaliation."], [26, "Bullying / harassment complaint", "I want to report repeated bullying by a colleague.", "medium", "Confidential HR handling; raise to High for immediate danger."], [27, "Retaliation concern", "My duties changed after I raised a workplace concern.", "medium", "Prompt, confidential human review; do not infer motive or make findings."], [28, "Manager conduct concern", "I want to report inappropriate conduct by my supervisor.", "medium", "Sensitive employee-relations case; route to authorized human reviewer."], [29, "Disciplinary notice / response", "I received a disciplinary notice and need to submit a response before the stated date.", "medium", "Deadline-sensitive; HR handles process. The system must not decide discipline or guilt."], [30, "Performance-plan documentation", "I need a copy or clarification of the performance plan due for review this week.", "medium", "Near review deadline; human HR/manager process."], [31, "Customer complaint\u2014ongoing impact", "A recurring defect is blocking an active customer workflow.", "medium", "Material customer impact; raise to High if many customers or a critical service is down."], [32, "Customer complaint\u2014committed response due", "A customer escalation has a response commitment due today.", "medium", "External deadline and account impact."], [33, "Partial product outage", "One important function is failing for several customer teams.", "medium", "Multi-user but contained service degradation; raise if impact broadens."], [34, "Work access blocked", "I cannot access the system needed for work scheduled today.", "medium", "Work is materially blocked; raise if organization-wide or safety-critical."], [35, "New-hire access setup", "A new employee starts tomorrow and the required access is not ready.", "medium", "Time-bound onboarding dependency."], [36, "Offboarding access removal", "An employee is leaving today; please confirm the approved access-removal process.", "medium", "Time-sensitive security lifecycle task; human Admin executes approved steps."], [37, "Suspected but contained access issue", "I saw an unfamiliar login, but the account is now locked.", "medium", "Human security review; raise to High if access remains active or data may be exposed."], [38, "Compliance evidence request", "The audit team needs these records by the end of this week.", "medium", "Deadline-bound record retrieval; route to owner, not agent-created evidence."], [39, "Audit record gap", "A required approval record is missing from the audit packet due soon.", "medium", "Near-term assurance impact; preserve the gap rather than fabricate or backfill."], [40, "Legal hold / preservation request", "Please preserve records for a formal matter; the notice names a response date.", "medium", "Route promptly to authorized legal/records staff; raise if deadline is imminent."], [41, "Non-emergency injury report", "I was injured at work earlier and need to file the required report.", "medium", "Human safety/HR process; raise if symptoms or hazard are ongoing."], [42, "Benefits enrollment deadline", "My enrollment choice is due this week and the portal is not accepting it.", "medium", "Time-sensitive benefits issue; raise if deadline is today and no workaround exists."], [43, "Visa / work-authorization document", "My work authorization document expires soon and HR needs the renewal copy.", "medium", "Time-sensitive specialist handling; do not make eligibility determinations."], [44, "Employee-record change affecting work", "My manager or department record is wrong and blocks an approval due tomorrow.", "medium", "Near-term workflow impact; verify through authorized process."], [45, "Customer-record correction", "A customer record field is wrong and is blocking an active delivery.", "medium", "Active delivery impact; preserve source and require authorized correction."], [46, "Form due soon", "The required form is incomplete and the submission deadline is tomorrow.", "medium", "Near-term deadline; identify missing fields only, never invent values."], [47, "Expense reimbursement deadline", "My approved expense has not been reimbursed and the reporting window closes soon.", "medium", "Financial/time-bound; raise if payroll-linked or disputed."], [48, "Schedule change next shift", "A scheduling conflict affects tomorrow\u2019s assigned shift.", "medium", "Time-bound; raise if required coverage is lost."], [49, "Customer review\u2014material complaint", "A public review describes an unresolved service failure and asks for a response.", "medium", "Human customer-response owner should review; raise for safety, privacy, or major account impact."], [50, "Access request for a time-bound task", "I need approved access to complete a customer deliverable due tomorrow.", "medium", "Time-sensitive but still requires identity, authorization, and approval checks."], [51, "Routine pay-statement question", "Can you explain the fields on my latest pay statement?", "low", "Informational unless it reveals a material discrepancy."], [52, "General payroll date question", "When is the next scheduled payday?", "low", "Routine information request."], [53, "Benefits coverage inquiry", "Where can I find the current dental or vision coverage summary?", "low", "Routine benefits information; cite approved material."], [54, "Retirement / 401(k) inquiry", "Where is the plan information and beneficiary form?", "low", "Routine routing/information; no personalized financial advice."], [55, "Beneficiary update request", "How do I update my benefits beneficiary?", "low", "Standard process request; verify identity through the approved workflow."], [56, "PTO balance question", "How much leave balance is recorded in my profile?", "low", "Routine account-specific query; authenticate and disclose only to the requester."], [57, "Vacation accrual policy", "How does vacation accrual work?", "low", "Routine policy question."], [58, "Future leave request", "I plan to take leave next month; which form should I use?", "low", "Future-dated request with no near deadline."], [59, "Contact-information update", "I moved; how do I update my address?", "low", "Routine employee-data request; use approved verification."], [60, "Name / life-event update", "I changed my name and need to update my profile.", "low", "Routine data-maintenance workflow; verify required documents via policy."], [61, "Employment verification letter", "I need a standard employment verification letter for a loan application.", "low", "Routine document request unless an external deadline is near."], [62, "Employment record copy", "Can I get a copy of my employment confirmation letter?", "low", "Standard records request."], [63, "General HR policy question", "Where can I read the current remote-work policy?", "low", "Routine information request; cite the current approved policy."], [64, "Routine form copy / resubmission", "Please send me a blank copy of the travel reimbursement form.", "low", "Routine self-service document request."], [65, "Tuition / training reimbursement", "What documents do I need for a course reimbursement?", "low", "Routine request unless a filing deadline is imminent."], [66, "Training record correction", "My completed training is not showing in the learning system.", "low", "Routine record/system support; raise if compliance deadline is near."], [67, "Onboarding status question", "When will I receive the standard new-hire checklist?", "low", "Routine future-dated onboarding request."], [68, "Future offboarding checklist", "I am leaving next month; what is the standard process?", "low", "Routine future planning; execute only approved human workflows."], [69, "Future schedule preference", "Can I request a different shift next month?", "low", "Routine scheduling request without immediate coverage impact."], [70, "Future shift swap", "Can I swap a shift two weeks from now?", "low", "Routine future-dated coordination."], [71, "General customer feedback", "I like the new report layout; please pass the suggestion to the team.", "low", "Non-blocking feedback; record only minimal product metadata."], [72, "Routine service-quality complaint", "The reply took longer than expected, but the issue is resolved.", "low", "Routine feedback unless repeated, contractually time-bound, or materially harmful."], [73, "Product how-to / documentation request", "Where is the guide for exporting a report?", "low", "Routine source lookup; abstain if no approved article exists."], [74, "Known issue information request", "Is there an approved workaround for this documented minor issue?", "low", "Routine only if a current approved source supports the answer."], [75, "Standard noncritical software access request", "I need access to the optional design tool for next month\u2019s project.", "low", "Routine approval workflow; never grant access from ticket text alone."], [76, "Standard equipment request", "Can I request a replacement headset for next month?", "low", "Routine provisioning request."], [77, "Password reset\u2014no compromise indicators", "I forgot my password and cannot sign in.", "low", "Routine identity-verified recovery; raise to High if compromise is suspected or multiple users are affected."], [78, "Website / feature suggestion", "Could the portal add a filter for saved reports?", "low", "Product feedback, not an incident; route to the appropriate backlog."], [79, "Staff recognition / positive feedback", "Please share my thanks with the support specialist who helped.", "low", "Non-urgent recognition; avoid unnecessary employee data retention."], [80, "Performance-review document copy", "Where can I find the form for my upcoming review next month?", "low", "Routine request; case content stays with the authorized HR process."]]</script>
+<script>
+"use strict";
+const q = (selector, root = document) => root.querySelector(selector);
+const esc = value => String(value ?? "").replace(/[&<>"']/g, ch => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"})[ch]);
+const bands = ["High", "Medium", "Low", "Unknown"];
+const catalog = JSON.parse(q("#catalog").textContent);
+const statuses = ["Submitted", "In Progress", "Waiting on Customer", "Under Investigation", "Escalated", "Resolved", "Closed"];
+const categoryMap = {
+  "Safety & Wellbeing": [1,2,3,11,13,41],
+  "Privacy, Security & Access": [4,5,15,34,35,36,37,50,75,77],
+  "Payroll, Benefits & Expenses": [6,7,8,16,17,18,19,20,42,47,51,52,53,54,55],
+  "Technical Issues & Outages": [9,14,33,74,76],
+  "Scheduling & Leave": [10,21,22,23,24,48,56,57,58,69,70],
+  "Compliance & Legal": [12,38,39,40,43],
+  "HR & Workplace Relations": [25,26,27,28,29,30,44,59,60,63,65,66,67,68,79,80],
+  "Customer Service & Feedback": [31,32,45,49,71,72,73,78],
+  "Forms & Documents": [46,61,62,64]
+};
+const baseTime = Date.UTC(2026,10,10,20);
+const firstDemoDay = Date.UTC(2023,10,10);
+const historyHours = Math.floor((baseTime-firstDemoDay)/3600000);
+const wordings = [
+  text=>text, text=>text, text=>"Could you help with this? "+text,
+  text=>text+" Please let me know the next step.", text=>"I'm following up on this request. "+text,
+  text=>"I need assistance with the following. "+text
+];
+function sample(key, salt) {
+  let mixed = Math.imul(key ^ salt, 0x45d9f3b);
+  mixed = Math.imul(mixed ^ (mixed >>> 16), 0x45d9f3b);
+  return (mixed ^ (mixed >>> 16)) >>> 0;
+}
+function isoDate(timestamp){return new Date(timestamp).toISOString().slice(0,10);}
+function seedLifecycle(timestamp,status,index){
+  if(status==="Submitted") return [];
+  const day=86400000;
+  const progress=Math.min(baseTime,timestamp+(1+sample(index,527)%5)*day);
+  const disposition=Math.min(baseTime,progress+(2+sample(index,801)%33)*day);
+  if(status==="In Progress") return [{status,date:isoDate(progress)}];
+  if(status==="Closed" && index%4===0) return [{status,date:isoDate(disposition)}];
+  const events=[{status:"In Progress",date:isoDate(progress)}];
+  if(status==="Closed") events.push({status:"Resolved",date:isoDate(disposition)});
+  events.push({status,date:isoDate(status==="Closed"?Math.min(baseTime,disposition+3*day):disposition)});
+  return events;
+}
+const cases = catalog.flatMap(([number, issue, original, band, rationale]) =>
+  Array.from({length:12}, (_, variant) => {
+    const index = (number-1)*12+variant+1;
+    const unknown = variant===11 && number%4===0;
+    const request = number===64 && variant<3
+      ? ["I need the X form to finish my application.","Can I get the X form to finish my application?","I need the X form to finish my application."][variant]
+      : wordings[variant%wordings.length](original);
+    const ageHours = sample(index,179)%12===0 ? sample(index,307)%168 : sample(index,307)%historyHours;
+    const timestamp = baseTime - ageHours*3600000 - (sample(index,853)%60)*60000;
+    const statusPool = unknown ? ["Submitted","In Progress"] : statuses;
+    const status = statusPool[sample(index,271)%statusPool.length];
+    return {
+      id:"SYN-CASE-EX-"+String(number).padStart(3,"0")+(variant?"-"+String(variant+1).padStart(2,"0"):""),
+      title:request, request, issue, rationale, timestamp,
+      category:unknown ? "Unclassified" : Object.keys(categoryMap).find(key=>categoryMap[key].includes(number)),
+      band:unknown ? "Unknown" : bands.find(item=>item.toLowerCase()===band),
+      date:new Date(timestamp).toISOString().slice(0,10),
+      owner:number===64 && variant<3 ? (variant===1?"requester-24":"user.demo")
+        : (variant===0 && number%13===0?"user.demo":"requester-"+(sample(index,353)%90+1)),
+      assignee:sample(index,521)%5===0 ? "" : unknown ? "auditor.demo" : "staff.demo",
+      status, lifecycle:seedLifecycle(timestamp,status,index), reviewHours:status==="In Progress" ? Math.min(ageHours, (sample(index,953)%192)/4) : 0
+    };
+  })
+);
+const auditCategories = Object.keys(categoryMap).sort();
+const isAuditor = () => signedIn?.active && signedIn.auditor === true;
+const canAudit = () => role==="Admin" || isAuditor();
+const workspace = () => isAuditor() ? "Auditor workspace" : role+" workspace";
+const needsClassification = c => c.band==="Unknown" || c.category==="Unclassified";
+const isTerminalChoice = status => status==="Resolved" || status==="Closed";
+function attention(c) {
+  if (["Closed","Resolved"].includes(c.status)) return [];
+  const flags = [];
+  if(c.band==="High") flags.push(["Urgent","High-band case. Review current impact promptly."]);
+  if(needsClassification(c)) flags.push(["Needs classification","An authorized human needs to confirm the category or attention band."]);
+  const benchmark = {High:.25,Medium:4,Low:24}[c.band];
+  if(c.status==="In Progress" && c.reviewHours>=benchmark) {
+    const elapsed = c.reviewHours<1 ? c.reviewHours*60+" minutes" : c.reviewHours+" hours";
+    flags.push(["Attention due","In Progress for "+elapsed+". The synthetic review benchmark has been reached."]);
+  }
+  return flags;
+}
+function priority(c) {
+  const flags=attention(c).map(([label])=>label);
+  if(flags.includes("Urgent")) return 0;
+  if(flags.includes("Attention due")) return 1;
+  if(flags.includes("Needs classification")) return 2;
+  return 3;
+}
+const accounts = [
+  {id:"user.demo", role:"User", active:true}, {id:"staff.demo", role:"Staff", active:true},
+  {id:"auditor.demo", role:"Staff", auditor:true, active:true}, {id:"admin.demo", role:"Admin", active:true}
+];
+const events = [];
+const assignmentHistory = [];
+let classificationSequence = 0;
+const showcase = new URLSearchParams(location.search).has("showcase") || location.hash === "#showcase";
+let role = showcase ? "Showcase" : "Login", tab = "Queue", selected = null, edit = null, page = 0, serial = cases.length;
+let filter = {}, run = null, timer, runSerial = 0, signedIn = null;
+const view = q("#view");
+const scoped = () => signedIn?.active ? cases.filter(c => role==="Admin" ||
+  (role==="User" ? c.owner===signedIn.id : c.assignee===signedIn.id)) : [];
+const auditorQueue = () => isAuditor() && tab==="Queue";
+const visibleCases = () => auditorQueue() ? cases : scoped();
+const ownsAudit = c => isAuditor() && c.assignee===signedIn.id;
+const badge = text => '<span class="pill '+esc(text.toLowerCase())+'">'+esc(text)+'</span>';
+const alert = message => { q("#announcement").textContent = message; };
+const focusHeading = () => q("#main h1")?.focus();
+const headline = (kicker, title, copy, action = "") => `<section class="hero row between"><div><div class="eyebrow">${kicker}</div><h1 tabindex="-1">${title}</h1><p class="muted">${copy}</p></div>${action}</section>`;
+const actionIcons = Object.freeze({"add": "<svg aria-hidden=\"true\" width=\"19\" height=\"19\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M12 5v14M5 12h14\"/></svg>", "download": "<svg aria-hidden=\"true\" width=\"19\" height=\"19\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M12 3v12m-5-5 5 5 5-5M5 17v4h14v-4\"/></svg>", "filter": "<svg aria-hidden=\"true\" width=\"19\" height=\"19\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M4 5h16l-6 7v6l-4 2v-8z\"/></svg>", "flag": "<svg aria-hidden=\"true\" width=\"19\" height=\"19\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M5 21V4m0 1c6-4 8 4 14 0v11c-6 4-8-4-14 0\"/></svg>", "activity": "<svg aria-hidden=\"true\" width=\"19\" height=\"19\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M3 12h4l3-7 4 14 3-7h4\"/></svg>", "search": "<svg aria-hidden=\"true\" width=\"19\" height=\"19\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M15 15l5 5M17 10a7 7 0 1 1-14 0 7 7 0 0 1 14 0z\"/></svg>"});
+const iconForAction = Object.freeze({new:"add",clear:"filter",run:"activity",flag:"flag"});
+const btn = (label, action, css = "") => {
+  const symbol = actionIcons[iconForAction[action.split(":")[0]]] || "";
+  return `<button type="button" class="${css} ${symbol?"control-with-icon":""}" data-action="${esc(action)}">${symbol}${esc(label)}</button>`;
+};
+const options = (list, current) => list.map(item => {const [value,label] = Array.isArray(item) ? item : [item,item];return `<option value="${esc(value)}"${current===value?" selected":""}>${esc(label)}</option>`;}).join("");
+const select = (name, label, values, current) => `<label>${label}<select name="${name}">${options(values,current)}</select></label>`;
+function setRole(next, account = null) {
+  signedIn=account;
+  role = next; tab = next === "User" ? "My requests" : isAuditor() ? "Auditor" : "Queue"; selected = edit = null; filter = {}; page = 0;
+  alert(""); render(); focusHeading();
+}
+function record(type, component, code, metrics = {}) {
+  events.unshift({id:"EV-"+String(events.length+1).padStart(3,"0"),
+    time:new Date().toISOString(), type, component, code, version:"actionrelay-final", ...metrics});
+}
+function login() {
+  return `<main id="main" class="login"><section class="intro"><div><div class="eyebrow">ActionRelay by CDIT</div><h1 tabindex="-1">Set support in motion.</h1><p class="muted">A single entrance for support requests, case review, and desk administration.</p></div><div class="row"><span class="pill teal">Synthetic prototype</span><span class="pill">Human review</span></div></section>
+  <form id="login" class="card stack"><div><div class="eyebrow">01 / Sign in</div><h2>Open the support desk</h2></div>
+  <label>Synthetic username<input name="account" required autocomplete="off" placeholder="Enter a demo username"></label>
+  <label>Password illustration<input type="password" value="preview-only" readonly aria-describedby="preview-note"></label>
+  <button class="primary">Continue to role preview</button><p class="muted hint" id="preview-note">Simulated sign-in. No credentials are collected or checked. Use a synthetic demo username supplied for this review.</p></form></main>`;
+}
+function showcaseScreen() {
+  return `<main id="main" class="main">${headline("ActionRelay · Final design","Choose a preview","Open a standalone view for review. The role selector is outside the application.")}<div class="card row">
+  ${btn("Login","preview:login")}${accounts.filter(a=>a.active).map(a=>btn(a.auditor?"Auditor":a.role,"preview:"+a.id)).join("")}</div></main>`;
+}
+function clientStatus(status) { return status==="In Progress"?"In Review":status; }
+const formExamples = {
+  idnyc: {title:"IDNYC application form",request:"Where can I get an IDNYC application form?"},
+  w2: {title:"Copy of my W-2",request:"I need a copy of my personal W-2."}
+};
+const publicFormRequests = new Set([
+  formExamples.idnyc.request,
+  "I need the IDNYC application form.",
+  "Can I get the IDNYC application form?"
+].map(normalizeRequest));
+function normalizeRequest(text) {
+  return text.toLowerCase().trim().replace(/[?.!]+$/,"").replace(/\s+/g," ");
+}
+function routeFormRequest(c) {
+  const request=normalizeRequest(c.request);
+  if(publicFormRequests.has(request)){
+    Object.assign(c,{category:"Forms & Documents",issue:"Public IDNYC application",band:"Low",status:"Resolved",response:"idnyc"});
+    record("Agent simulation","Approved forms demo","public_form_auto_resolved");
+    return "The assistant provided the official application PDF and marked the ticket Resolved.";
+  }
+  if(request===normalizeRequest(formExamples.w2.request)){
+    Object.assign(c,{category:"Payroll, Benefits & Expenses",issue:"Personal W-2 copy",response:"w2",
+      assignee:accounts.find(a=>a.auditor&&a.active)?.id || ""});
+    record("Agent simulation","Approved forms demo","personal_record_handoff");
+    return "The personal W-2 request is open for human review.";
+  }
+  return "The request is open for assignment and review.";
+}
+function ticketResponse(c) {
+  if(c.response==="idnyc") return `<section class="notice stack"><h3>Assistant reply</h3><p>The official blank IDNYC application for ages 14 and older is ready. This copy is in English.</p>
+    <p><a href="https://www.nyc.gov/assets/idnyc/downloads/pdf/application-materials/IDNYC-1b-IDNYC-14-and-Older-Application-English.pdf" class="control-with-icon" target="_blank" rel="noopener noreferrer"><svg aria-hidden="true" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12m-5-5 5 5 5-5M5 17v4h14v-4"/></svg>Download IDNYC application (PDF)</a></p><small>Automatically resolved in this demo after making the requested form available.</small></section>`;
+  if(c.response==="w2") return `<section class="notice stack"><h3>Assistant reply</h3><p><strong>Routed for human review.</strong> Your personal W-2 request stays Submitted while the requested copy is outstanding. The IRS recommends contacting your employer for a copy of a current-year W-2.</p>
+    <p><a href="https://www.irs.gov/faqs/irs-procedures/copies-transcripts/transcript-or-copy-of-form-w-2" target="_blank" rel="noopener noreferrer">View IRS guidance on getting a W-2 copy (new tab)</a></p></section>`;
+  return "";
+}
+function user() {
+  const list = scoped().sort((a,b)=>b.timestamp-a.timestamp);
+  if (edit || tab === "New request") return headline(edit ? "User portal / My requests" : "User portal",edit ? "Edit request" : "New support request",edit ? "Editing "+esc(edit.id) : "Use synthetic information for this preview.") +
+    `<form id="request" class="card stack compact">${edit?"":`<div class="stack"><div><h2>Try a demo request</h2><p class="muted hint">These examples run locally. Use synthetic information.</p></div><div class="row">${btn("Use IDNYC example","example:idnyc")}${btn("Use personal W-2 example","example:w2")}</div></div>`}<label>Subject<input name="title" required maxlength="100" value="${esc(edit?.title)}"></label><label>Describe the issue<textarea name="request" required maxlength="1600" rows="5">${esc(edit?.request)}</textarea></label><div class="row"><button class="primary">${edit?"Save changes":"Submit request"}</button>${btn("Cancel","cancel")}</div></form>`;
+  return headline("User portal / My requests","Your support requests","Follow your requests and see their current status.",btn("New request","new","primary"))+
+    `<section class="card request-list"><h2>My requests</h2>${list.map(c=>`<article class="stack"><div class="row between"><div><small>${c.id} · ${c.date}</small><h3>${esc(c.title)}</h3></div>${badge(clientStatus(c.status))}</div><details><summary>Request details</summary><p class="ticket-text">${esc(c.request)}</p></details>${ticketResponse(c)}${c.status==="Submitted"?'<div>'+btn("Edit request","edit:"+c.id)+'</div>':'<small>Only submitted requests can be edited.</small>'}</article>`).join("") || "<p class='muted'>No requests yet.</p>"}</section>`;
+}
+function results() {
+  const rows = visibleCases().filter(c => (tab!=="Auditor" || needsClassification(c)) && (!filter.band || c.band === filter.band) && (!filter.category || c.category === filter.category)
+    && (!filter.status || c.status === filter.status) && matchesCalendar(c.date) && (!filter.from || c.date >= filter.from) && (!filter.to || c.date <= filter.to));
+  return rows.sort((a,b) => {
+    const newest=b.timestamp-a.timestamp || b.id.localeCompare(a.id);
+    if(filter.order==="az") return a.title.localeCompare(b.title) || newest;
+    if(filter.order==="old") return -newest;
+    if(filter.order==="priority") return priority(a)-priority(b) || newest;
+    return newest;
+  });
+}
+const calendarUnits = [["day","Day"],["month","Month"],["year","Year"]];
+const bucketKey = (date,unit) => date.slice(0,{day:10,month:7,year:4}[unit] || 10);
+function matchesCalendar(date) {
+  return !filter.anchor || !filter.calendar || bucketKey(date,filter.calendar)===bucketKey(filter.anchor,filter.calendar);
+}
+function filters() {
+  const cats = [...new Set(visibleCases().map(c=>c.category))].sort();
+  return `<form id="filters"><div class="filters">
+  ${select("band","Attention band",[["","All bands"],...bands],filter.band || "")}
+  ${select("status","Status",[["","All statuses"],...statuses],filter.status || "")}
+  ${select("category","Category",[["","All categories"],...cats],filter.category || "")}
+  ${select("calendar","Calendar filter",[["","All dates"],...calendarUnits],filter.calendar || "")}
+  <label>Calendar reference date<input type="date" name="anchor" value="${esc(filter.anchor)}" aria-describedby="calendar-help"></label>
+  <label>From date<input type="date" name="from" value="${esc(filter.from)}"></label><label>Through date<input type="date" name="to" value="${esc(filter.to)}"></label>
+  ${select("order","Sort by",[["new","Newest first"],["old","Oldest first"],["az","Subject A–Z"],["priority","Priority"]],filter.order || "new")}
+  </div><p class="muted hint" id="calendar-help">Choose Day, Month, or Year and a date within that period. A custom date range can narrow the selection further.</p><div class="row"><button class="control-with-icon"><svg aria-hidden="true" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h16l-6 7v6l-4 2v-8z"/></svg>Apply filters</button>${btn("Clear filters","clear","quiet")}</div></form>`;
+}
+function counts(rows, key, order) {
+  const items = order || [...new Set(rows.map(c=>c[key]))].sort();
+  return items.map(label => [label,rows.filter(c=>c[key]===label).length]);
+}
+const chartColors = ["#75c9ff","#dc9cf2","#ffd478","#70d9c2","#fc9bac","#aeb1ff","#ffad81","#8fd797","#d3bdf6","#a5b7d8"];
+const bandColors = {High:"#ff88af",Medium:"#f5c067",Low:"#6ce4bf",Unknown:"#c2a0f6"};
+const categoryColor = category => chartColors[(auditCategories.indexOf(category)+chartColors.length)%chartColors.length];
+function bars(title, values, total, kind) {
+  const color=(label,i)=>kind==="band"?bandColors[label]:kind==="category"?categoryColor(label):chartColors[i%chartColors.length];
+  return `<section class="card chart-card" data-chart="${kind}"><h2>${title}</h2>${values.length ? '<ul class="chart">'+values.map(([label,n],i)=>`<li><div class="row between"><span>${esc(label)}</span><b>${n}</b></div><div class="bar" aria-hidden="true"><span style="width:${total ? n/total*100 : 0}%;background:${color(label,i)}"></span></div></li>`).join("")+'</ul>' : '<p class="muted">No matching data.</p>'}</section>`;
+}
+let trendUnit="day", trendOffset=null, pinnedDate="", compareYear=2026, wheelSelection="";
+let timeline=[];
+let activeSeries=["Received","Resolved","Closed"];
+const seriesColors={Received:"#d1b0ff",Resolved:"var(--status-resolved)",Closed:"var(--status-closed)"};
+const statusColor=status=>"var(--status-"+status.toLowerCase().replaceAll(" ","-")+")";
+const statusAt=(c,date)=>(c.lifecycle || []).filter(event=>event.date<=date).at(-1)?.status || "Submitted";
+const analyticsScope=()=>scoped().filter(c=>(!filter.band || c.band===filter.band) && (!filter.category || c.category===filter.category));
+const isOpen=status=>status!=="Resolved" && status!=="Closed";
+function yearSnapshot(rows, year, from, through) {
+  const start=year+from,end=year+through;
+  const cohort=rows.filter(c=>c.date<=end);
+  const mix=Object.fromEntries(statuses.map(status=>[status,0]));
+  for(const c of cohort) mix[statusAt(c,end)]++;
+  const eventCount=status=>cohort.filter(c=>(c.lifecycle || []).some(event=>event.status===status && event.date>=start && event.date<=end)).length;
+  return {year,start,end,mix,total:cohort.length,received:cohort.filter(c=>c.date>=start).length,
+    resolved:eventCount("Resolved"),closed:eventCount("Closed"),
+    open:statuses.filter(isOpen).reduce((sum,status)=>sum+mix[status],0)};
+}
+const percent=(count,total)=>total?(count/total*100).toFixed(1)+"%":"0.0%";
+function wheel(snapshot) {
+  let offset=0;
+  const segments=statuses.filter(status=>snapshot.mix[status]>0).map(status=>{
+    const count=snapshot.mix[status], share=count/snapshot.total*100;
+    const midpoint=(offset+share/2)*Math.PI/50;
+    const detail=status+" · "+count+" tickets · "+percent(count,snapshot.total);
+    const markup=`<circle class="wheel-segment" data-wheel-status="${status}" data-wheel-detail="${detail}" cx="60" cy="60" r="43" fill="none"
+      stroke="${statusColor(status)}" stroke-width="24" pathLength="100" stroke-dasharray="${share} ${100-share}"
+      stroke-dashoffset="${-offset}" transform="rotate(-90 60 60)" role="button" tabindex="0" aria-pressed="false" aria-label="${snapshot.year}: ${detail}"><title>${detail}</title></circle>
+      ${share>=7?`<text class="slice-label" x="${60+43*Math.sin(midpoint)}" y="${63-43*Math.cos(midpoint)}" text-anchor="middle">${Math.round(share)}%</text>`:""}`;
+    offset+=share;
+    return markup;
+  }).join("");
+  return `<section class="wheel-card stack" data-wheel><div><h3>${snapshot.year}</h3><small>${snapshot.start} to ${snapshot.end}</small></div>
+    <svg class="wheel-graphic" viewBox="0 0 120 120" role="group" aria-label="${snapshot.year} status wheel">
+      <defs><linearGradient id="wheel-glass-${snapshot.year}" x2="0" y2="1"><stop stop-color="#fff" stop-opacity=".33"/><stop offset=".38" stop-color="#fff" stop-opacity=".06"/><stop offset=".7" stop-color="#14233a" stop-opacity="0"/><stop offset="1" stop-color="#101d32" stop-opacity=".31"/></linearGradient></defs>
+      <circle cx="60" cy="63" r="43" fill="none" stroke="#0d1729" stroke-width="27"/>
+      <circle cx="60" cy="60" r="43" fill="none" stroke="#2b3c56" stroke-width="24"/>${segments}
+      <circle cx="60" cy="60" r="43" fill="none" stroke="url(#wheel-glass-${snapshot.year})" stroke-width="24" pointer-events="none"/>
+      <circle cx="60" cy="60" r="55" fill="none" stroke="#e4f2ff" stroke-opacity=".3" pointer-events="none"/>
+      <circle cx="60" cy="60" r="31" fill="none" stroke="#081224" stroke-opacity=".55" stroke-width="2" pointer-events="none"/>
+      <text x="60" y="65" text-anchor="middle" aria-label="${snapshot.total} tickets at cutoff">${snapshot.total}</text></svg>
+    <p class="wheel-inspect muted" data-wheel-inspect>Focus or hover on a slice for details.</p></section>`;
+}
+function yearlyComparison() {
+  const rows=analyticsScope();
+  const start=compareYear===2024?"-11-10":"-01-01";
+  const end=compareYear===2026?"-11-10":"-12-31";
+  const prior=yearSnapshot(rows,compareYear-1,start,end), current=yearSnapshot(rows,compareYear,start,end);
+  const activity=[["Received during period","received"],["Resolved during period","resolved"],["Closed during period","closed"]];
+  const metrics=[...activity.map(([label,key])=>[label.replace(" during period",""),key]),["Open backlog","open"]];
+  const delta=(before,after)=>(after>before?"+":"")+(after-before);
+  const relative=(before,after)=>before?((after>before?"+":"")+((after-before)/before*100).toFixed(1)+"%"):after?"No prior baseline":"—";
+  const change=(before,after)=>`<span class="delta">${delta(before,after)}</span> <small class="relative-change">${relative(before,after)}</small>`;
+  const comparisonColumns=`<colgroup><col><col><col><col></colgroup><thead><tr><th scope="col">Measure</th><th scope="col">${prior.year}</th><th scope="col">${current.year}</th><th scope="col">Change</th></tr></thead>`;
+  const countsRow=(label,before,after)=>`<tr><th scope="row">${label}</th><td>${before}</td><td>${after}</td><td>${change(before,after)}</td></tr>`;
+  return `<section class="card stack year-comparison"><div class="row between"><div><div class="eyebrow">Year over year</div><h2>Status at cutoff</h2></div>
+    <form id="year-compare" class="row">${select("year","Selected year",["2026","2025","2024"],String(compareYear))}<button>Compare years</button></form></div>
+    <div class="comparison-grid"><section class="comparison-legend"><h3>Status legend</h3><small>${prior.year} / ${current.year} share</small>
+      <ul>${statuses.map(status=>`<li><span><i class="legend-dot" style="background:${statusColor(status)}" aria-hidden="true"></i>${status}</span><small>${percent(prior.mix[status],prior.total)} / ${percent(current.mix[status],current.total)}</small></li>`).join("")}</ul></section>
+      ${wheel(prior)}${wheel(current)}
+      <section class="comparison-change"><h3>Year-over-year change</h3><ul>
+      ${metrics.map(([label,key])=>`<li><span>${label}</span><span>${change(prior[key],current[key])}</span></li>`).join("")}</ul></section></div>
+    <details><summary>Exact counts and comparison details</summary>
+    <section class="comparison-detail-section" aria-labelledby="cutoff-heading"><h3 id="cutoff-heading">Status at cutoff</h3>
+      <p class="muted hint">A snapshot of every ticket in scope at each cutoff, including tickets carried over from earlier years. Open backlog adds up the five open statuses.</p>
+      <div class="scroll" tabindex="0" role="region" aria-label="Status counts and changes"><table class="comparison-detail-table">${comparisonColumns}
+      <tbody>${statuses.map(status=>countsRow(status,prior.mix[status],current.mix[status])).join("")}</tbody>
+      <tfoot>${countsRow("Open backlog at cutoff",prior.open,current.open)}</tfoot></table></div></section>
+    <section class="comparison-detail-section" aria-labelledby="activity-heading"><h3 id="activity-heading">Matched-period activity</h3>
+      <p class="muted hint">Counts actions during the same calendar dates in each year. A ticket can count as both resolved and closed if both happened in the period.</p>
+      <div class="scroll" tabindex="0" role="region" aria-label="Matched-period activity"><table class="comparison-detail-table">${comparisonColumns}
+      <tbody>${activity.map(([label,key])=>countsRow(label,prior[key],current[key])).join("")}</tbody></table></div></section>
+    </details></section>`;
+}
+function highlightWheel(status) {
+  document.querySelectorAll("[data-wheel]").forEach(card=>{
+    let description="Focus or hover on a slice for details.";
+    card.querySelectorAll("[data-wheel-status]").forEach(slice=>{
+      const matches=slice.dataset.wheelStatus===status;
+      slice.classList.toggle("dimmed",Boolean(status)&&!matches);
+      slice.setAttribute("aria-pressed",String(slice.dataset.wheelStatus===wheelSelection));
+      if(matches) description=slice.dataset.wheelDetail;
+    });
+    if(status && description.startsWith("Focus")) description=status+" · 0 tickets · 0.0%";
+    card.querySelector("[data-wheel-inspect]").textContent=description;
+  });
+}
+function trendBounds() {
+  const period=filter.anchor&&filter.calendar?bucketKey(filter.anchor,filter.calendar):"";
+  let start=isoDate(firstDemoDay),end=isoDate(baseTime);
+  if(period.length===4){start=period+"-01-01";end=period+"-12-31";}
+  if(period.length===7){
+    const [year,month]=period.split("-").map(Number);
+    start=period+"-01";end=isoDate(Date.UTC(year,month,0));
+  }
+  if(period.length===10) end=start=period;
+  start=[start,isoDate(firstDemoDay),filter.from||""].sort().at(-1);
+  end=[end,isoDate(baseTime),filter.to||end].sort()[0];
+  return [start,end];
+}
+function trendData(unit) {
+  const [start,end]=trendBounds();
+  if(start>end) return [];
+  const totals=new Map(), last=bucketKey(end,unit), first=bucketKey(start,unit);
+  const cursor=new Date(first+(unit==="year"?"-01-01":unit==="month"?"-01":""));
+  while(bucketKey(isoDate(cursor),unit)<=last){
+    totals.set(bucketKey(isoDate(cursor),unit),{Received:0,Resolved:0,Closed:0});
+    if(unit==="year") cursor.setUTCFullYear(cursor.getUTCFullYear()+1);
+    else if(unit==="month") cursor.setUTCMonth(cursor.getUTCMonth()+1);
+    else cursor.setUTCDate(cursor.getUTCDate()+1);
+  }
+  function add(date,type){
+    if(date>=start && date<=end) totals.get(bucketKey(date,unit))[type]++;
+  }
+  for(const c of analyticsScope()){
+    if(filter.status && c.status!==filter.status) continue;
+    add(c.date,"Received");
+    for(const event of c.lifecycle || []) if(event.status==="Resolved" || event.status==="Closed") add(event.date,event.status);
+  }
+  return [...totals];
+}
+const timelineWidth=()=>trendUnit==="day"?62:trendUnit==="month"?99:103;
+const timelineInset=38;
+const pointX=index=>timelineInset+index*timelineWidth();
+function trendChart() {
+  timeline=trendData(trendUnit);
+  const keys=Object.keys(seriesColors), step=trendUnit==="day"?"week":trendUnit;
+  const max=timeline.reduce((largest,[,values])=>Math.max(largest,...activeSeries.map(key=>values[key])),1);
+  const y=value=>144-value/max*108;
+  const staticYear=trendUnit==="year" && timeline.length<=10;
+  const width=pointX(timeline.length)+12;
+  const dateLabel=key=>trendUnit==="day"?key.slice(5):key;
+  return `<section class="card stack trend-panel"><div class="row between"><div><div class="eyebrow">Synthetic lifecycle activity</div>
+    <h2>Ticket activity over time</h2><p class="muted hint">Hover between markers to inspect the earlier date. Click or tap to pin it.</p></div>
+    <form id="trend-settings" class="row trend-controls">${select("unit","Chart interval",calendarUnits,trendUnit)}<button>Update chart</button></form></div>
+    <fieldset class="row line-controls"><legend>Show activity</legend>${keys.map(key=>`<button type="button" data-action="series:${key}" aria-pressed="${activeSeries.includes(key)}"><span class="legend-dot" style="background:${seriesColors[key]}"></span>${key}</button>`).join("")}</fieldset>
+    ${timeline.length?`<div class="row between line-controls-row"><div><h3 id="trend-years"></h3><small id="trend-visible-range"></small></div>
+      <div class="row line-controls-row">
+      ${!staticYear&&timeline.length>1?`<button data-action="trend-prev">Previous ${step}</button><button data-action="trend-next">Next ${step}</button>`:""}
+      <form id="trend-jump" class="row"><label>Go to date<input type="date" name="date" required min="${trendBounds()[0]}" max="${trendBounds()[1]}"></label><button>Go to and pin</button></form></div></div>
+    <div id="line-scroll" class="line-scroll" tabindex="0" role="region" aria-label="Scrollable activity line chart and date controls"><div class="line-plot" style="width:${staticYear?"100%":width+"px"};${staticYear?"min-width:0":"max-width:none"}">
+      <svg id="activity-plot" viewBox="0 0 ${width} 170" preserveAspectRatio="none" role="img" aria-label="Line chart of ${activeSeries.join(", ")}. Use the date buttons for exact counts.">
+      <line x1="${timelineInset}" y1="144" x2="${width-12}" y2="144" stroke="#7692b0"/><line x1="${timelineInset}" y1="36" x2="${width-12}" y2="36" stroke="#456080"/>
+      <text x="4" y="41">${max}</text><text x="12" y="149">0</text>
+      ${activeSeries.map(key=>`<polyline points="${timeline.map(([,values],i)=>pointX(i)+","+y(values[key])).join(" ")}" fill="none" stroke="${seriesColors[key]}" stroke-width="2" vector-effect="non-scaling-stroke"/>
+        ${timeline.map(([,values],i)=>`<circle cx="${pointX(i)}" cy="${y(values[key])}" r="3" fill="${seriesColors[key]}"/>`).join("")}`).join("")}
+      <line id="trend-guide" class="line-guide" x1="0" x2="0" y1="22" y2="150" stroke="#e9f5ff" stroke-dasharray="4 4" visibility="hidden"/>
+      ${timeline.map(([key],i)=>`<rect data-chart-date="${key}" x="${pointX(i)}" y="20" width="${timelineWidth()}" height="133" fill="transparent"/>`).join("")}</svg>
+      <div class="line-dates">${timeline.map(([key,values],i)=>`<button style="left:${pointX(i)/width*100}%" data-action="pin:${key}" aria-pressed="${pinnedDate===key}"
+        aria-label="${key}: ${keys.map(label=>label+" "+values[label]).join(", ")}">${dateLabel(key)}</button>`).join("")}</div></div></div>
+    <div class="notice line-inspect row between"><div><strong id="trend-inspect-title"></strong><p id="trend-inspect-counts" role="status"></p></div><button type="button" data-action="clear-pin" hidden>Clear pin</button></div>`
+    :'<p class="notice">The selected dates are outside the synthetic history.</p>'}</section>`;
+}
+function inspectTrend(date=pinnedDate, preview=false) {
+  const title=q("#trend-inspect-title"), counts=q("#trend-inspect-counts"), guide=q("#trend-guide");
+  if(!title || !counts || !guide) return;
+  const index=timeline.findIndex(([key])=>key===date);
+  const entry=timeline[index];
+  title.textContent=entry?(preview?"Preview ":"Pinned ")+entry[0]:"Inspect a date";
+  counts.textContent=entry?Object.keys(seriesColors).map(key=>key+": "+entry[1][key]).join(" · "):"Hover, select a date, or use Go to date.";
+  guide.setAttribute("visibility",entry?"visible":"hidden");
+  if(entry) for(const attr of ["x1","x2"]) guide.setAttribute(attr,pointX(index));
+  const clear=q('[data-action="clear-pin"]');
+  if(clear) clear.hidden=!pinnedDate;
+}
+function pinTrend(date) {
+  if(!timeline.some(([key])=>key===date)) return;
+  if(pinnedDate) q('[data-action="pin:'+pinnedDate+'"]')?.setAttribute("aria-pressed","false");
+  pinnedDate=date;
+  q('[data-action="pin:'+date+'"]')?.setAttribute("aria-pressed","true");
+  inspectTrend();
+}
+function updateTrendRange() {
+  const scroller=q("#line-scroll");
+  if(!scroller || !timeline.length) return;
+  trendOffset=scroller.scrollLeft;
+  const staticYear=trendUnit==="year"&&timeline.length<=10;
+  const start=staticYear?0:Math.max(0,Math.floor((scroller.scrollLeft-timelineInset)/timelineWidth()));
+  const end=staticYear?timeline.length-1:Math.max(start,Math.min(timeline.length-1,
+    Math.floor((scroller.scrollLeft+scroller.clientWidth-timelineInset-1)/timelineWidth())));
+  const years=[...new Set(timeline.slice(start,end+1).map(([key])=>key.slice(0,4)))];
+  q("#trend-years").textContent=years.join(" / ");
+  q("#trend-visible-range").textContent=timeline[start][0]+" through "+timeline[end][0];
+  const prev=q('[data-action="trend-prev"]'),next=q('[data-action="trend-next"]');
+  if(prev) prev.disabled=scroller.scrollLeft<1;
+  if(next) next.disabled=scroller.scrollLeft+scroller.clientWidth>=scroller.scrollWidth-1;
+}
+function setupTrend() {
+  const scroller=q("#line-scroll");
+  if(!scroller) return;
+  scroller.scrollLeft=trendOffset ?? scroller.scrollWidth;
+  scroller.addEventListener("scroll",updateTrendRange,{passive:true});
+  q("#activity-plot")?.addEventListener("pointerleave",()=>inspectTrend());
+  updateTrendRange();
+  inspectTrend();
+}
+function moveTrend(direction) {
+  const scroller=q("#line-scroll");
+  if(!scroller) return;
+  scroller.scrollBy({left:direction*timelineWidth()*(trendUnit==="day"?7:1)});
+  updateTrendRange();
+}
+function queue() {
+  const rows=results(), size=8, pages=Math.max(1,Math.ceil(rows.length/size));
+  page=Math.min(page,pages-1);
+  const auditing=tab==="Auditor";
+  const allCases=role==="Admin" || auditorQueue();
+  const scope=auditorQueue()?"All tickets. Only your assigned cases can be classified.":auditing?(role==="Admin"?"Review all cases awaiting classification. Admin decisions are overrides.":"Review assigned cases awaiting classification."):role==="Admin"?"All cases, including unassigned":"Only cases assigned to "+esc(signedIn.id);
+  const stats=[[auditing?"Awaiting classification":"Cases in scope",auditing?scoped().filter(needsClassification).length:visibleCases().length],["Matching filters",rows.length],["Flagged for attention",rows.filter(c=>attention(c).length).length]];
+  return headline(workspace()+" / "+tab,auditing?"Auditor queue":tab==="Analytics"?"Ticket analytics":"Ticket queue",scope+' · Synthetic demo dataset',badge(auditing?"Needs classification":allCases?"All cases":"Assigned only"))+
+    `<div class="grid">${stats.map(([label,n])=>`<section class="card metric"><div class="eyebrow">${label}</div><b>${n}</b><small>Illustrative preview</small></section>`).join("")}</div>
+    <section class="card stack filter-card" style="margin-bottom:14px"><div><h2>Refine cases</h2><p class="muted hint">960 synthetic seed variants and any requests added in this session. Date and status filters apply to the queue and timeline. The year comparison uses its own matched dates.</p></div>${filters()}</section>`+
+    (tab==="Analytics" ? yearlyComparison()+trendChart()+`<div class="split">${bars("Cases by attention band",counts(rows,"band",bands),rows.length,"band")}${bars("Cases by category",counts(rows,"category").sort((a,b)=>b[1]-a[1]),rows.length,"category")}${bars("Most frequent issues",counts(rows,"issue").sort((a,b)=>b[1]-a[1]).slice(0,8),rows.length,"issue")}</div>` :
+    `<section class="card queue-card"><div class="row between"><h2>${auditing?"Cases awaiting classification":allCases?"All cases":"Assigned cases"}</h2><small>${rows.length} matching</small></div>
+    ${rows.length ? `<div class="scroll" tabindex="0" role="region" aria-label="Scrollable ticket table"><table><thead><tr><th scope="col">Case</th><th scope="col">Band and flags</th><th scope="col">Category</th><th scope="col">Status</th><th scope="col">Date</th>${allCases?'<th scope="col">Assignee</th>':''}</tr></thead><tbody>
+    ${rows.slice(page*size,(page+1)*size).map(c=>`<tr class="queue-row" style="--case-color:${categoryColor(c.category)}"><td><small>${c.id}</small>${btn(c.title,"open:"+c.id,"link")}</td><td><div class="row">${badge(c.band)}${attention(c).map(([label])=>`<span class="pill flag">${label}</span>`).join("")}</div></td><td>${esc(c.category)}<small>${esc(c.issue)}</small></td><td>${esc(c.status)}</td><td>${c.date}</td>${allCases?'<td>'+esc(c.assignee || "Unassigned")+'</td>':''}</tr>`).join("")}</tbody></table></div>
+    <div class="row between tablefoot"><small>Page ${page+1} of ${pages}</small><div class="row"><button data-action="prev" ${page===0?"disabled":""}>Previous</button><button data-action="next" ${page+1>=pages?"disabled":""}>Next</button></div></div>` : auditing&&!scoped().some(needsClassification)?'<p class="notice">All cases are classified.</p>':'<p class="notice">No cases match. Clear filters or widen the date range.</p>'}</section>`);
+}
+const stages = [
+  ["Coordinator","Validate case scope and prepare the synthetic packet"],
+  ["Triage","Propose category and attention band"],
+  ["Knowledge + Escalation","Look for approved evidence and check escalation rules in parallel"],
+  ["Troubleshooting","Check whether Tier 1 guidance can be supported"],
+  ["Documentation","Prepare a bounded review note"],
+  ["Human review","Review the proposal or handle the case manually"]
+];
+const statusTransitions = {
+  "Submitted":["In Progress","Closed"],
+  "In Progress":["Waiting on Customer","Under Investigation","Escalated","Resolved","Closed"],
+  "Waiting on Customer":["In Progress","Under Investigation","Escalated","Resolved","Closed"],
+  "Under Investigation":["In Progress","Escalated","Resolved","Closed"],
+  "Escalated":["In Progress","Under Investigation","Resolved","Closed"],
+  "Resolved":["In Progress","Closed"],
+  "Closed":[]
+};
+function reviewPanel(c) {
+  const pending=needsClassification(c);
+  const next = statusTransitions[c.status].filter(status=>!pending || !isTerminalChoice(status));
+  const choices = [["","Keep current status"],...next.map(status=>[status,
+    c.status==="Submitted" && status==="In Progress" ? "Start human review (In Progress)" :
+    c.status==="Resolved" && status==="In Progress" ? "Reopen (In Progress)" : status])];
+  return `<section class="review-panel stack" aria-labelledby="review-heading"><div>
+    <h2 id="review-heading">Human review</h2><p class="muted hint">Review notes are internal to the Staff/Admin ticket.</p></div>
+    ${pending?'<p class="notice">This case needs a category and attention band before it can be resolved or closed. An assigned Auditor or an Admin can record the classification.</p>':""}
+    ${next.length ? `<form id="case-review" class="stack" data-case="${c.id}">
+      ${select("nextStatus","Next action",choices,"")}
+      <label>Staff review note<textarea name="note" maxlength="1600" rows="4">${esc(c.reviewNote)}</textarea></label>
+      <div><button class="primary">Save review</button></div></form>` :
+      `<p class="notice">This case is closed. No further status changes are available.</p>
+      ${c.reviewNote?`<div><h3>Staff review note</h3><p class="ticket-text">${esc(c.reviewNote)}</p></div>`:""}`}
+    <details><summary>Resolved and Closed</summary><p class="muted">Resolved means the issue has been addressed. A reviewer can reopen it if work is needed or close it when the case is final. Closed ends the case and cannot be reopened. Cases can also be closed without resolution, for example when a request is withdrawn.</p></details>
+    ${c.statusHistory?.length ? `<details><summary>Status history</summary><ul class="audit">${c.statusHistory.map(entry=>`<li>${esc(entry.actor)} · ${esc(entry.before)} → ${esc(entry.after)}<br><small>${entry.time}</small></li>`).join("")}</ul></details>` : ""}
+  </section>`;
+}
+function mayRecordClassification(c) {
+  if(!c || c.status==="Closed" || (role!=="Admin" && !ownsAudit(c))) return false;
+  if(needsClassification(c)) return !isTerminalChoice(c.status);
+  const latest=c.classificationHistory?.at(-1);
+  return Boolean(latest && (role==="Admin" || latest.actor===signedIn.id));
+}
+function feedbackDetails(entry) {
+  if(!entry.flagged && !entry.feedback?.length) return "";
+  return `<div class="notice stack">${entry.flagged?'<div><span class="pill flag">Flagged by Admin</span></div>':""}
+    ${(entry.feedback || []).map(note=>`<div><small>${esc(note.author)} · ${esc(note.time)}</small>
+      <p class="ticket-text">${esc(note.text)}</p></div>`).join("")}</div>`;
+}
+function classificationEntry(entry) {
+  return `<div class="stack"><div><strong>Version ${entry.version} · ${entry.override?"Admin override":entry.version===1?"Auditor classification":"Auditor revision"}</strong>
+    <br><small>${esc(entry.actor)} · ${esc(entry.time)}</small></div>
+    <p>${esc(entry.beforeCategory)} / ${esc(entry.beforeBand)} → ${esc(entry.category)} / ${esc(entry.band)}</p>
+    <p class="ticket-text">${esc(entry.reason)}</p>${feedbackDetails(entry)}</div>`;
+}
+function currentDecision(entry, actions="") {
+  return `<section class="current-decision stack"><h3>Current decision</h3>${classificationEntry(entry)}${actions}</section>`;
+}
+function earlierDecisions(history, withFeedback=false) {
+  const earlier=history.slice(0,-1).reverse();
+  return earlier.length?`<details><summary>Version history · ${earlier.length} earlier</summary><ol class="audit stack">
+    ${earlier.map(entry=>`<li>${classificationEntry(entry)}${withFeedback?feedbackForm(entry):""}</li>`).join("")}</ol></details>`:"";
+}
+function auditorPanel(c) {
+  if(role!=="Admin" && !ownsAudit(c)) return "";
+  const history=c.classificationHistory || [];
+  const revision=history.length>0;
+  const editable=mayRecordClassification(c);
+  if(!editable && !revision) return "";
+  return `<section class="review-panel stack" aria-labelledby="auditor-heading">
+    <div><h2 id="auditor-heading">Auditor classification</h2><p class="muted">${revision?
+      "Revisions preserve the earlier decision and require a new reason. Status and assignment stay as recorded.":
+      "Confirm the category and attention band using the original request. Saving removes the case from the Auditor queue and keeps its current status and assignee."}</p></div>
+    ${revision?currentDecision(history.at(-1)):""}
+    ${editable?`<form id="case-audit" class="stack" data-case="${c.id}"><div class="split">
+      <label>Category<select name="category" required>${options([["","Choose a category"],...auditCategories],auditCategories.includes(c.category)?c.category:"")}</select></label>
+      <label>Attention band<select name="band" required>${options([["","Choose a band"],...bands.slice(0,3)],c.band==="Unknown"?"":c.band)}</select></label>
+    </div><label>${role==="Admin"?"Override reason":revision?"Reason for revision":"Decision reason"}<textarea name="reason" required maxlength="800" rows="3" placeholder="${revision?"What new evidence or correction supports this change?":"What facts support this category and band?"}"></textarea></label>
+    <div><button class="primary">${revision?"Save revision":"Save classification"}</button></div></form>`:""}
+    ${earlierDecisions(history)}
+  </section>`;
+}
+function classificationEntries() {
+  return cases.flatMap(c=>(c.classificationHistory || []).map(entry=>({caseId:c.id,entry})))
+    .sort((a,b)=>b.entry.sequence-a.entry.sequence);
+}
+function feedbackForm(entry) {
+  if(entry.override) return "";
+  return `<details class="review-panel"><summary>Note or flag decision</summary>
+    <form class="stack" id="feedback-${entry.sequence}" data-feedback="${entry.sequence}">
+      <label>Note to ${esc(entry.actor)}<textarea name="note" maxlength="800" rows="3"></textarea></label>
+      <label class="feedback-flag"><input type="checkbox" name="flag" ${entry.flagged?"checked":""}>Flag this decision for attention</label>
+      <div><button>Save feedback</button></div>
+    </form></details>`;
+}
+function auditorActivity() {
+  const reviewed=cases.filter(c=>c.classificationHistory?.length)
+    .sort((a,b)=>b.classificationHistory.at(-1).sequence-a.classificationHistory.at(-1).sequence);
+  const entries=classificationEntries();
+  const stats=[["Cases reviewed",reviewed.length],["Revisions",entries.length-reviewed.length],["Flagged decisions",entries.filter(({entry})=>entry.flagged).length]];
+  return headline("Admin workspace / Oversight","Auditor activity","Review each case, flag a decision version, or send an optional note to its author.")+
+    `<div class="grid">${stats.map(([label,value])=>`<section class="card metric"><div class="eyebrow">${label}</div><b>${value}</b><small>This session</small></section>`).join("")}</div>
+    <div class="stack">${reviewed.length?reviewed.map(c=>{
+      const history=c.classificationHistory;
+      const current=history.at(-1);
+      return `<article class="card stack"><div class="row between"><div><small>${esc(c.id)}</small><h2>${esc(c.title)}</h2></div>
+        ${btn("Open case","open:"+c.id)}</div>${currentDecision(current,feedbackForm(current))}
+        ${earlierDecisions(history,true)}</article>`;
+    }).join(""):'<p class="notice">No decisions recorded this session. Classify a case to populate this log.</p>'}</div>`;
+}
+function auditorFeedback() {
+  const entries=classificationEntries().filter(({entry})=>entry.actor===signedIn.id && (entry.flagged || entry.feedback?.length));
+  const visibleCases=new Set(scoped().map(c=>c.id));
+  return headline("Auditor workspace / Feedback","Admin feedback","Notes and flags are informational. You can leave the decision as recorded.")+
+    `<div class="stack">${entries.length?entries.map(({caseId,entry})=>`<section class="card stack">
+      <h2>${esc(caseId)}</h2>${classificationEntry(entry)}
+      ${visibleCases.has(caseId)?'<div>'+btn("Open case","open:"+caseId)+'</div>':""}</section>`).join("") :
+      '<p class="card">No Admin feedback on your decisions yet.</p>'}</div>`;
+}
+function ticket(c) {
+  const readOnly=isAuditor() && !ownsAudit(c);
+  const active = !readOnly && run?.id === c.id && !run.done, finished = !readOnly && run?.id === c.id && run.done;
+  const outcome = {human_handoff:"Potential escalation · human handoff",
+    needs_classification:"Abstained · human classification needed",evidence_unavailable:"Evidence unavailable · manual review"}[run?.result];
+  const history = assignmentHistory.filter(entry=>entry.id===c.id);
+  return headline(workspace()+" / Case detail",esc(c.id),esc(c.title),btn(tab==="Feedback"?"Back to Feedback":tab==="Auditor activity"?"Back to Auditor activity":tab==="Auditor"?"Back to Auditor":"Back to queue","back"))+
+    `<div class="workspace ${active?"expanded":""}">
+    <section class="card stack"><div class="row">${badge(c.band)}${badge(c.status)}<span class="pill">${esc(c.category)}</span></div>
+    ${attention(c).map(([label,reason])=>`<div class="notice"><strong>${label}</strong><p>${reason}</p></div>`).join("")}
+    <dl class="case-fields">
+      <div><dt>Status</dt><dd>${esc(c.status)}</dd></div><div><dt>Attention band</dt><dd>${esc(c.band)}</dd></div>
+      <div><dt>Category</dt><dd>${esc(c.category)}</dd></div><div><dt>Assignee</dt><dd>${esc(c.assignee || "Unassigned")}</dd></div>
+      <div><dt>Specific issue</dt><dd>${esc(c.issue)}</dd></div><div><dt>Submitted</dt><dd>${esc(c.date)}</dd></div>
+    </dl>
+    <section class="stack"><h2>Original request</h2><p class="ticket-text">${esc(c.request)}</p></section>
+    ${role==="Admin"?`<form id="assign" class="row">${select("assignee","Assign to active Staff",[["","Unassigned"],...accounts.filter(a=>a.role==="Staff"&&a.active).map(a=>a.id)],c.assignee)}<button>Save assignment</button></form>`:""}
+    ${role==="Admin"&&history.length?`<details><summary>Assignment history</summary><ul class="audit">${history.map(entry=>`<li>${esc(entry.actor)} · ${esc(entry.before || "Unassigned")} → ${esc(entry.after || "Unassigned")}<br><small>${entry.time} UTC</small></li>`).join("")}</ul></details>`:""}
+    ${readOnly?'<p class="notice">Read-only case. Only cases assigned to you appear in your Auditor worklist.</p>':ticketResponse(c)}
+    ${auditorPanel(c)}
+    ${isAuditor()?"":reviewPanel(c)}
+    ${isAuditor()?"":`<div class="row">${active?'<button disabled>Simulation running…</button>':btn("Simulate agent review","run","primary")}</div>`}
+    ${finished?'<div class="notice"><strong>'+outcome+'</strong><p>Catalog example only. No approved evidence was checked in this simulation. Review the request and record the next human action in the real workflow.</p></div>':""}</section>
+    ${readOnly?"":`<details id="activity" class="card agent" ${active?"open":""}><summary>Agent activity · ${active?"Processing":finished?"Review needed":"Ready"}</summary>
+    <div class="activity-body"><small>Browser simulation · no API call</small>
+    <ol>${stages.map(([name,desc],i)=>`<li><strong>${name}</strong><div class="muted hint">${esc(desc)}</div><small>${finished ? (i<3?"Simulated":i===5?"Awaiting reviewer":"Skipped · evidence required") : active ? i<run.stage?"Simulated":i===run.stage?"In progress":"Waiting" : "Waiting"}</small></li>`).join("")}</ol></div></details>`}</div>`;
+}
+const sampleEvents = [
+  {id:"EX-EV-01",time:"2026-11-10T18:12:04Z",type:"Agent simulation",component:"Workflow preview",version:"actionrelay-final",code:"needs_classification",runId:"EX-RUN-01",elapsedMs:3900},
+  {id:"EX-EV-02",time:"2026-11-10T18:09:04Z",type:"Agent simulation",component:"Workflow preview",version:"actionrelay-final",code:"evidence_unavailable",runId:"EX-RUN-02",elapsedMs:3900},
+  {id:"EX-EV-03",time:"2026-11-10T18:06:00Z",type:"Assignment change",component:"Queue preview",version:"actionrelay-final",code:"case_reassigned"},
+  {id:"EX-EV-04",time:"2026-11-10T18:03:00Z",type:"Access change",component:"Accounts preview",version:"actionrelay-final",code:"access_suspended"}
+];
+function eventTable(rows, label) {
+  return `<div class="scroll" tabindex="0" role="region" aria-label="${label}"><table><thead><tr>
+    <th scope="col">Event / run</th><th scope="col">Time (UTC)</th><th scope="col">Component / version</th>
+    <th scope="col">Result code</th><th scope="col">Elapsed</th></tr></thead><tbody>
+    ${rows.map(e=>`<tr><td><small>${e.id}${e.runId?" · "+e.runId:""}</small>${e.type}</td>
+    <td>${e.time}</td><td>${e.component}<small>${e.version}</small></td><td>${e.code}</td>
+    <td>${e.elapsedMs===undefined?"—":(e.elapsedMs/1000).toFixed(1)+" s"}</td></tr>`).join("")}
+    </tbody></table></div>`;
+}
+function health() {
+  const canSee = e => role==="Admin" || e.type==="Agent simulation";
+  const visible = events.filter(canSee);
+  return headline(workspace()+" / Diagnostics","Product Health","Review workflow outcomes and timing from the local simulation.")+
+    `<div class="stack"><section class="card stack"><div><h2>This preview session</h2>
+    <p class="muted">Completed simulations add a run ID, timestamp, component version, result code and elapsed preview time.${role==="Admin"?" Assignment, classification, and account access changes also appear here.":""} Refreshing clears session events.</p></div>
+    ${visible.length?eventTable(visible,"Session events"):`<p class="notice">No session events yet. Open a case and complete a simulated agent review${role==="Admin"?", save a changed assignment, or change a synthetic account’s access":""}.</p><div>${btn("Go to ticket queue","health-queue")}</div>`}</section>
+    <section class="card stack"><div class="row between"><h2>Example metadata</h2><span class="pill purple">Illustrative</span></div>
+    <p class="muted">These sample rows show what the event history will look like. Event records contain operational metadata only.</p>
+    ${eventTable(sampleEvents.filter(canSee),"Example metadata")}</section></div>`;
+}
+function accountView() {
+  const manage=role==="Admin";
+  return headline(manage?"Admin workspace / Access":"Auditor workspace / Access","Synthetic accounts",
+    manage?"Review access and simulate account status changes.":"View account roles and status. Account changes require Admin access.")+
+    `<section class="card stack"><div class="row between"><h2>${manage?"Account controls":"Account directory"}</h2>
+    ${manage?"":badge("Read only")}</div><div class="scroll" tabindex="0" role="region" aria-label="Scrollable account table">
+    <table><thead><tr><th scope="col">Account</th><th scope="col">Role</th><th scope="col">Access</th>${manage?'<th scope="col">Action</th>':""}</tr></thead><tbody>
+    ${accounts.map(a=>`<tr><td>${a.id}</td><td>${a.role}${a.auditor?" · Auditor":""}</td><td>${badge(a.active?"Active":"Suspended")}</td>
+    ${manage?`<td>${a.role==="Admin"?"Current admin":btn(a.active?"Suspend "+a.id:"Restore "+a.id,"access:"+a.id)}</td>`:""}</tr>`).join("")}
+    </tbody></table></div>${manage?"<small>Access changes affect the in-memory preview and appear in Product Health.</small>":""}</section>`;
+}
+function render() {
+  const priorAudit=q("#case-audit");
+  const auditDraft=priorAudit && {id:priorAudit.dataset.case,
+    category:priorAudit.elements.category.value, band:priorAudit.elements.band.value, reason:priorAudit.elements.reason.value,
+    focused:priorAudit.contains(document.activeElement)?document.activeElement.name:""};
+  const priorReview=q("#case-review");
+  const draft=priorReview && {
+    id:priorReview.dataset.case, status:priorReview.elements.nextStatus.value, note:priorReview.elements.note.value,
+    focused:priorReview.contains(document.activeElement)?document.activeElement.name:""
+  };
+  q("#session-control").innerHTML = ["Login","Showcase"].includes(role) ? "" : btn("Sign out","logout","quiet");
+  if(role==="Showcase"){view.innerHTML=showcaseScreen();return;}
+  if(role==="Login"){view.innerHTML=login();return;}
+  const tabs=role==="User"?["My requests","New request"]:isAuditor()?["Auditor","Queue","Analytics","Feedback","Accounts"]:
+    ["Queue","Analytics",...(role==="Admin"?["Auditor","Auditor activity","Accounts"]:[]),"Product Health"];
+  const c=selected && visibleCases().find(row=>row.id===selected);
+  view.innerHTML=`<div class="shell"><nav class="rail" aria-label="${role} workspace"><div class="eyebrow">${role==="User"?"Support portal":"Support operations"}</div>${tabs.map(t=>`<button data-tab="${t}" ${t===tab?'aria-current="page"':''}>${t}</button>`).join("")}</nav>
+    <main id="main" class="main">${role==="User"?user():c?ticket(c):tab==="Auditor activity"&&role==="Admin"?auditorActivity():tab==="Feedback"&&isAuditor()?auditorFeedback():tab==="Accounts"&&canAudit()?accountView():tab==="Product Health"&&!isAuditor()?health():queue()}</main></div>`;
+  setupTrend();
+  if(tab==="Analytics") highlightWheel(wheelSelection);
+  const audit=q("#case-audit");
+  if(audit && auditDraft?.id===audit.dataset.case){
+    audit.elements.category.value=auditDraft.category;
+    audit.elements.band.value=auditDraft.band;
+    audit.elements.reason.value=auditDraft.reason;
+    if(auditDraft.focused) audit.elements.namedItem(auditDraft.focused)?.focus();
+  }
+  const review=q("#case-review");
+  if(review && draft?.id===review.dataset.case){
+    if([...review.elements.nextStatus.options].some(option=>option.value===draft.status)) review.elements.nextStatus.value=draft.status;
+    review.elements.note.value=draft.note;
+    if(draft.focused) review.elements.namedItem(draft.focused)?.focus();
+  }
+}
+function go(next) {if(next!==tab && (next==="Auditor" || tab==="Auditor")) filter={};tab=next;selected=edit=null;page=0;render();focusHeading();}
+function startRun(c) {
+  if (run && !run.done) {alert("A preview run is already processing.");return;}
+  const result=needsClassification(c)?"needs_classification":c.band==="High"?"human_handoff":"evidence_unavailable";
+  run={id:c.id,runId:"RUN-"+String(++runSerial).padStart(3,"0"),startedAt:Date.now(),stage:0,done:false,result}; render();q("#activity summary")?.focus();
+  alert("Agent simulation started.");
+  timer=setInterval(()=>{
+    run.stage++;
+    if(run.stage===3){
+      clearInterval(timer);run.done=true;
+      record("Agent simulation","Workflow preview",run.result,
+        {runId:run.runId,elapsedMs:Date.now()-run.startedAt});
+      if (role==="Staff" || role==="Admin") alert("Simulation complete. Human review is needed.");
+    }
+    const currentFocus = document.activeElement;
+    const inActivity = currentFocus === q("#activity summary");
+    if (selected===c.id || tab==="Product Health") {
+      const pendingAssignee = q('#assign select')?.value;
+      render();
+      if(pendingAssignee !== undefined && q('#assign select')) q('#assign select').value = pendingAssignee;
+      if(inActivity) q("#activity summary")?.focus();
+      if(currentFocus?.name === "assignee") q('#assign select')?.focus();
+    }
+  },1300);
+}
+document.addEventListener("pointerover",event=>{
+  const date=event.target.closest("[data-chart-date]")?.dataset.chartDate;
+  if(date) inspectTrend(date,true);
+  const slice=event.target.closest("[data-wheel-status]");
+  if(slice) highlightWheel(slice.dataset.wheelStatus);
+});
+document.addEventListener("pointerout",event=>{
+  const slice=event.target.closest("[data-wheel-status]");
+  if(slice && !event.relatedTarget?.closest?.("[data-wheel-status]")) highlightWheel(wheelSelection);
+});
+document.addEventListener("focusin",event=>{
+  const slice=event.target.closest("[data-wheel-status]");
+  if(slice) highlightWheel(slice.dataset.wheelStatus);
+  const date=event.target.closest('[data-action^="pin:"]')?.dataset.action.slice(4);
+  if(date) inspectTrend(date,true);
+});
+document.addEventListener("focusout",event=>{
+  if(event.target.closest("[data-wheel-status]")) highlightWheel(wheelSelection);
+  if(event.target.closest('[data-action^="pin:"]')) inspectTrend();
+});
+function toggleWheel(slice){
+  const status=slice.dataset.wheelStatus;
+  wheelSelection=wheelSelection===status?"":status;
+  highlightWheel(wheelSelection);
+}
+document.addEventListener("keydown",event=>{
+  const slice=event.target.closest("[data-wheel-status]");
+  if(slice && (event.key==="Enter" || event.key===" ")){event.preventDefault();toggleWheel(slice);}
+});
+document.addEventListener("click",event=>{
+  const slice=event.target.closest("[data-wheel-status]");
+  if(slice){toggleWheel(slice);return;}
+  const chartDate=event.target.closest("[data-chart-date]")?.dataset.chartDate;
+  if(chartDate){pinTrend(chartDate);return;}
+  const button=event.target.closest("button");
+  if(!button)return;
+  if(button.dataset.tab){go(button.dataset.tab);return;}
+  const [action,id]=(button.dataset.action||"").split(":");
+  if(action==="preview" && role==="Showcase"){
+    const account=accounts.find(a=>a.id===id&&a.active);
+    if(account)setRole(account.role,account);
+    else if(id==="login")setRole("Login");
+    return;
+  }
+  if(action==="logout"){setRole("Login");return;}
+  const c=scoped().find(row=>row.id===selected);
+  if(action==="new") go("New request");
+  if(action==="example" && role==="User" && tab==="New request" && !edit && Object.hasOwn(formExamples,id)){
+    const form=q("#request");
+    form.elements.title.value=formExamples[id].title;
+    form.elements.request.value=formExamples[id].request;
+    form.elements.title.focus();
+  }
+  if(action==="cancel") go("My requests");
+  if(action==="edit" && role==="User"){
+    edit=scoped().find(row=>row.id===id&&row.status==="Submitted");
+    if(edit){render();q("#request input")?.focus();}
+  }
+  if(action==="clear"){filter={};page=0;trendOffset=null;pinnedDate="";render();q('#filters select')?.focus();alert("Filters cleared.");}
+  if(action==="prev"||action==="next"){page+=action==="prev"?-1:1;render();q(".tablefoot button:not(:disabled)")?.focus();}
+  if(action==="open" && visibleCases().some(row=>row.id===id)){selected=id;render();focusHeading();}
+  if(action==="back") go(["Auditor","Auditor activity","Feedback"].includes(tab)?tab:"Queue");
+  if(action==="health-queue") go("Queue");
+  if(action==="trend-prev" || action==="trend-next") moveTrend(action==="trend-next"?1:-1);
+  if(action==="pin") pinTrend(id);
+  if(action==="clear-pin"){
+    q('[data-action="pin:'+pinnedDate+'"]')?.setAttribute("aria-pressed","false");
+    pinnedDate="";inspectTrend();q("#trend-jump input")?.focus();
+  }
+  if(action==="series"){
+    if(activeSeries.includes(id) && activeSeries.length>1) activeSeries=activeSeries.filter(key=>key!==id);
+    else if(!activeSeries.includes(id) && Object.hasOwn(seriesColors,id)) activeSeries=[...activeSeries,id];
+    render();q('[data-action="series:'+id+'"]')?.focus();
+  }
+  if(action==="run" && c && !isAuditor() && (role==="Staff" || role==="Admin")) startRun(c);
+  if(action==="access" && role==="Admin"){
+    const a=accounts.find(row=>row.id===id&&row.role!=="Admin");
+    if(!a)return;
+    a.active=!a.active;
+    record("Access change","Accounts preview",a.active?"access_restored":"access_suspended");
+    render();q('[data-action="access:'+id+'"]')?.focus();
+    alert(a.id+(a.active?" restored.":" suspended."));
+  }
+});
+document.addEventListener("submit",event=>{
+  event.preventDefault();
+  const form=event.target, data=Object.fromEntries(new FormData(form));
+  if(form.id==="login"){
+    const account=accounts.find(a=>a.id===data.account.trim().toLowerCase()&&a.active);
+    if(account)setRole(account.role,account);
+    else alert("Demo username unavailable. Check the synthetic username and try again.");
+  }
+  if(form.id==="year-compare" && tab==="Analytics" && [2024,2025,2026].includes(Number(data.year))){
+    compareYear=Number(data.year);render();q("#year-compare select")?.focus();
+  }
+  if(form.id==="trend-jump" && tab==="Analytics"){
+    const [from,to]=trendBounds();
+    if(data.date<from || data.date>to) return;
+    const key=bucketKey(data.date,trendUnit);
+    const index=trendData(trendUnit).findIndex(([date])=>date===key);
+    if(index<0) return;
+    const scroller=q("#line-scroll");
+    if(scroller && !(trendUnit==="year"&&timeline.length<=10)){
+      scroller.scrollLeft=Math.floor(index/(trendUnit==="day"?7:1))*(trendUnit==="day"?7:1)*timelineWidth();
+      updateTrendRange();
+    }
+    q('[data-action="pin:'+key+'"]')?.focus({preventScroll:true});
+    pinTrend(key);
+  }
+  if(form.id==="trend-settings" && tab==="Analytics"){
+    if(!calendarUnits.some(([unit])=>unit===data.unit)) return;
+    trendUnit=data.unit;trendOffset=null;pinnedDate="";
+    render();q("#trend-settings select")?.focus();
+    alert("Chart grouped by "+trendUnit+".");
+  }
+  if(form.id==="filters"){
+    if(data.calendar && !data.anchor){alert("Choose a calendar reference date for the selected period.");return;}
+    if(data.from && data.to && data.from>data.to){alert("Choose a through date on or after the from date.");return;}
+    filter=data;page=0;trendOffset=null;pinnedDate="";render();q('#filters button')?.focus();alert(results().length+" matching cases.");
+  }
+  if(form.id==="request" && role==="User"){
+    const title=data.title.trim(), request=data.request.trim();
+    if(!title||!request){alert("Enter both a subject and an issue description.");return;}
+    if(edit && edit.status==="Submitted"){
+      if(edit.response==="w2" && normalizeRequest(request)!==normalizeRequest(edit.request)){
+        Object.assign(edit,{response:undefined,category:"Unclassified",issue:"Pending classification"});
+      }
+      Object.assign(edit,{title,request});
+      alert("Request updated.");
+    }
+    else if(!edit){
+      const id="SYN-DEMO-"+String(++serial).padStart(3,"0");
+      const ticket={id,title,request,category:"Unclassified",issue:"Pending classification",band:"Unknown",
+        timestamp:baseTime+serial,date:"2026-11-10",owner:"user.demo",assignee:"",status:"Submitted",reviewHours:0};
+      const outcome=routeFormRequest(ticket);
+      ticket.lifecycle=ticket.status==="Resolved"?[{status:"Resolved",date:ticket.date}]:[];
+      cases.push(ticket);
+      alert(id+" submitted. "+outcome);
+    }
+    go("My requests");
+  }
+  if(form.dataset?.feedback && role==="Admin" && tab==="Auditor activity" && !selected){
+    const target=classificationEntries().find(({entry})=>String(entry.sequence)===form.dataset.feedback)?.entry;
+    if(!target || target.override) return;
+    const note=data.note.trim();
+    const flagged=data.flag==="on";
+    if(!note && flagged===Boolean(target.flagged)){alert("Write a note or change the flag before saving.");return;}
+    const flagChanged=flagged!==Boolean(target.flagged);
+    if(note){
+      target.feedback ??= [];
+      target.feedback.push({author:signedIn.id,time:new Date().toISOString(),text:note.slice(0,800)});
+      record("Auditor feedback","Auditor preview","note_sent");
+    }
+    if(flagChanged){
+      target.flagged=flagged;
+      record("Auditor feedback","Auditor preview",flagged?"decision_flagged":"decision_unflagged");
+    }
+    render();
+    const savedForm=q("#feedback-"+target.sequence);
+    if(savedForm){
+      const disclosure=savedForm.closest("details");
+      const history=disclosure.parentElement.closest("details");
+      if(history) history.open=true;
+      disclosure.querySelector("summary")?.focus();
+    }
+    alert(note?"Note sent to "+target.actor+(flagChanged?(flagged?". Decision flagged.":". Flag cleared."):"."):flagged?"Decision flagged.":"Flag cleared.");
+  }
+  if(form.id==="case-audit" && canAudit()){
+    const c=scoped().find(row=>row.id===selected);
+    if(!mayRecordClassification(c)) return;
+    const reason=data.reason.trim();
+    if(!auditCategories.includes(data.category) || !bands.slice(0,3).includes(data.band) || !reason){
+      alert("Choose a category and band, then explain your decision.");
+      return;
+    }
+    if(c.category===data.category && c.band===data.band){alert("Choose a different category or band to save a revision.");return;}
+    const history=c.classificationHistory ??= [];
+    const revision=history.length>0;
+    history.push({version:history.length+1,sequence:++classificationSequence,beforeCategory:c.category,beforeBand:c.band,
+      category:data.category,band:data.band,reason:reason.slice(0,800),
+      actor:signedIn.id,override:role==="Admin",time:new Date().toISOString()});
+    c.category=data.category;
+    c.band=data.band;
+    if(c.issue==="Pending classification") c.issue="Auditor classified";
+    record("Classification change","Auditor preview",role==="Admin"?"admin_classification_override":revision?"classification_revised":"classification_confirmed");
+    form.remove();
+    render();focusHeading();
+    alert(revision?"Revision saved. Earlier decisions remain in history.":"Classification saved. The case left the Auditor queue. Its status and assignee are unchanged.");
+  }
+  if(form.id==="case-review" && !isAuditor() && (role==="Staff" || role==="Admin")){
+    const c=scoped().find(row=>row.id===selected);
+    if(!c || c.status==="Closed") return;
+    const next=data.nextStatus;
+    if(needsClassification(c) && isTerminalChoice(next)){alert("Classify the case before resolving or closing it.");return;}
+    if(next && !statusTransitions[c.status].includes(next)){alert("This status change is unavailable.");return;}
+    c.reviewNote=data.note.trim().slice(0,1600);
+    if(next){
+      c.statusHistory ??= [];
+      c.statusHistory.unshift({actor:signedIn.id,before:c.status,after:next,time:new Date().toISOString()});
+      c.status=next;
+      (c.lifecycle ??= []).push({status:next,date:isoDate(baseTime)});
+      c.reviewHours=0;
+    }
+    form.remove();
+    render();
+    if(next==="Closed") focusHeading();
+    else q("#case-review button")?.focus();
+    alert(next?"Review saved. Status changed to "+next+".":"Review note saved.");
+  }
+  if(form.id==="assign" && role==="Admin"){
+    const c=scoped().find(row=>row.id===selected);
+    if(!c || c.assignee===data.assignee){alert("Assignment is unchanged.");return;}
+    if(data.assignee && !accounts.some(a=>a.active&&a.role==="Staff"&&a.id===data.assignee))return;
+    const prior=c.assignee;
+    c.assignee=data.assignee;
+    assignmentHistory.unshift({id:c.id,actor:"admin.demo",before:prior,after:c.assignee,time:new Date().toISOString().replace("T"," ").slice(0,19)});
+    record("Assignment change","Queue preview",prior ? (c.assignee?"case_reassigned":"case_unassigned") : "case_assigned");
+    render();q("#assign button")?.focus();alert("Assignment saved in the preview.");
+  }
+});
+render();
+</script>
+</body>
+</html>
