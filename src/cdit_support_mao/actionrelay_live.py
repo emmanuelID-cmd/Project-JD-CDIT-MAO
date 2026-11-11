@@ -106,7 +106,7 @@ def read_runs(case_id: str, actor: Actor = Depends(require_roles("user", "staff"
     with closing(connect()) as db:
         reviews = db.execute(
             "SELECT run_id, case_version, status, started_at, completed_at, result_json "
-            "FROM actionrelay_review_runs WHERE case_id = ? ORDER BY started_at DESC", (case_id,),
+            "FROM actionrelay_review_runs WHERE case_id = ? ORDER BY started_at ASC", (case_id,),
         ).fetchall()
         outcome = db.execute(
             "SELECT case_version, route, reason, recorded_at FROM actionrelay_ticket_outcomes WHERE case_id = ?",
@@ -161,14 +161,14 @@ def read_runs(case_id: str, actor: Actor = Depends(require_roles("user", "staff"
         with closing(connect()) as db:
             current = db.execute("SELECT status FROM synthetic_cases WHERE case_id = ?", (case_id,)).fetchone()
         resource_delivered = outcome["route"] in {"routine_form", "resource_link"}
-        resolved = bool(resource_delivered and current and current["status"] in {"resolved", "closed"})
+        outcome_status = current["status"] if resource_delivered and current and current["status"] in {"resolved", "closed"} else None
         workflow["result"]["stages"].append({
             "name": "Application outcome",
-            "status": "resolved" if resolved else ("delivered_open" if resource_delivered else "human_review"),
+            "status": outcome_status or ("delivered_open" if resource_delivered else "human_review"),
         })
         workflow["result"]["outcome_reason"] = outcome["reason"]
-        if resolved:
-            workflow["status"] = "resolved"
+        if outcome_status:
+            workflow["status"] = outcome_status
         workflow["completed_at"] = outcome["recorded_at"]
     rows = sorted(grouped.values(), key=lambda row: row["started_at"], reverse=True)
     if actor.role == "user":
