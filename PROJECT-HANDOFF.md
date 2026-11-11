@@ -1,4 +1,16 @@
 # Project Handoff — Project-JD-CDIT-MAO
+
+## Current outgoing state — 2026-11-11 (Render Free demo setup)
+
+This entry supersedes earlier outgoing-state notes where they conflict; older entries remain historical.
+
+- Repository: `emmanuelID-cmd/Project-JD-CDIT-MAO`. Active lane: `manny/coordinator-triage-escalation`; PR target: `developer`. Verified pre-work baseline: `b8bd10187d8b5b2057954397c022ca49ed8d31b6` on `developer` and the Manny lane. `main` remains `1a5cf4ad6beda1a12b537f2ffc95ac930d921174`.
+- Completed implementation commit: `59beb6802f253c6e913e1ea4667b37b8cdafc7cb` (`feat(deploy): support the Render Free synthetic demo`). Added an opt-in Render Free startup bootstrap using `/tmp/cdit_support.db`, synthetic catalog seeding, and four environment-provisioned role accounts; added Render deployment instructions; updated the Anthropic client to prefer Render environment secrets and fall back to the ignored local `.env`.
+- Render settings are recorded in `docs/deployment/RENDER-FREE-DEMO.md`. The bootstrap fails closed unless explicitly enabled, uses the exact `/tmp` database path, and requires distinct 12–128 character demo-password secrets. Free-tier restarts, spin-downs, and redeploys reset tickets, sessions, account edits, and workflow run history.
+- Live Claude calls still require the configured key, `ACTIONRELAY_ENABLE_LIVE_TRIAGE=1`, explicit per-run authorization, and one of the supported synthetic examples. No live provider call was made as part of this setup. Full six-agent durable end-to-end integration remains incomplete as documented in `docs/planning/ACTIONRELAY-END-TO-END-WIRING-HANDOFF.md`.
+- Validation: Python 3.13 `py_compile` passed for the bootstrap and Anthropic adapter; `git diff --check` passed. The test suite was not run.
+- Publication plan: finish the handoff pointer and final review marker, push the Manny lane, and create a PR to `developer`. Do not modify `main`. Do not claim the hosted Render service has deployed successfully until its dashboard confirms it.
+
 ## Current outgoing state — 2026-11-11 (before publication)
 
 This snapshot supersedes the 2026-11-10 outgoing-state note below where they conflict; older dated notes remain historical.
