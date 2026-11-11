@@ -83,7 +83,11 @@ def run_triage(case_id: str, message: str, actor: Actor, client, record_attempt)
         "usage": {"model": semantic.model, "input_tokens": semantic.input_tokens,
                   "output_tokens": semantic.output_tokens, "elapsed_ms": semantic.elapsed_ms}
                  if semantic else None,
-        "items": [{"index": item.item_index, "category": item.category_label}
+        # Proposed values for human review, with their evidence labels. The
+        # label (inference/unknown) is not the category itself.
+        "items": [{"index": item.item_index, "category": item.category or "unknown",
+                   "category_label": item.category_label, "urgency": item.urgency,
+                   "urgency_label": item.urgency_label}
                   for item in triage.candidate.items] if triage else [],
         "next_action": "human_review",
     }
