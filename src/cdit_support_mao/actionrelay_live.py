@@ -19,17 +19,14 @@ from cdit_support_mao.agents.triage.anthropic_client import (
     AnthropicClientConfigurationError, create_anthropic_client,
 )
 from cdit_support_mao.agents.triage.runtime_harness import MannyA0A2Harness
+from cdit_support_mao.actionrelay_outcomes import SENSITIVE_INPUT
 from cdit_support_mao.database import connect
 from cdit_support_mao.web import Actor, get_case, require_roles, stamp
 
 router = APIRouter()
 POLICY = "SYN-ACTIONRELAY-V1"
-# A finite set of synthetic prompts is the only provider input in this build.
-APPROVED_SAMPLES = {
-    "I need the IDNYC application form.",
-    "I need a copy of my personal W-2.",
-    "My withholding or deduction changed unexpectedly before this payroll closes.",
-}
+# All provider input remains synthetic, short, and explicitly billable-authorized.
+# Requests matching the shared sensitive-input rule stay on the human route.
 
 
 class RunAuthorization(BaseModel):
@@ -95,7 +92,7 @@ def run_triage(case_id: str, message: str, actor: Actor, client, record_attempt)
 def _run_rows(case_id: str) -> list[dict]:
     with closing(connect()) as db:
         rows = db.execute(
-            "SELECT run_id, status, started_at, completed_at, provider_attempts, result_json "
+            "SELECT run_id, case_version, status, started_at, completed_at, provider_attempts, result_json "
             "FROM actionrelay_runs WHERE case_id = ? ORDER BY started_at DESC", (case_id,),
         ).fetchall()
     return [{**{key: row[key] for key in row.keys() if key != "result_json"},
@@ -105,27 +102,75 @@ def _run_rows(case_id: str) -> list[dict]:
 @router.get("/api/cases/{case_id}/agent-runs")
 def read_runs(case_id: str, actor: Actor = Depends(require_roles("user", "staff", "admin"))):
     get_case(case_id, actor)
-    rows = _run_rows(case_id)
+    triage_runs = _run_rows(case_id)
     with closing(connect()) as db:
         reviews = db.execute(
-            "SELECT run_id, status, started_at, completed_at, result_json "
+            "SELECT run_id, case_version, status, started_at, completed_at, result_json "
             "FROM actionrelay_review_runs WHERE case_id = ? ORDER BY started_at DESC", (case_id,),
         ).fetchall()
         outcome = db.execute(
-            "SELECT route, reason, recorded_at FROM actionrelay_ticket_outcomes WHERE case_id = ?",
+            "SELECT case_version, route, reason, recorded_at FROM actionrelay_ticket_outcomes WHERE case_id = ?",
             (case_id,),
         ).fetchone()
-    rows.extend({**{key: row[key] for key in row.keys() if key != "result_json"},
-                 "result": json.loads(row["result_json"])} for row in reviews)
+    # Join persisted checkpoints by the exact case version. A human review can
+    # therefore continue the Triage run that paused, and the deterministic
+    # outcome gate appears on that same case-version timeline.
+    grouped: dict[str, dict] = {}
+    for row in triage_runs:
+        version = row["case_version"]
+        result = row["result"]
+        stages = []
+        if result.get("coordinator"):
+            stages.append({"name": "Coordinator", "status": result["coordinator"]})
+        if result.get("triage"):
+            stages.append({"name": "Claude Triage", "status": result["triage"]})
+        grouped[version] = {
+            "run_id": row["run_id"], "case_version": version,
+            "status": row["status"], "started_at": row["started_at"],
+            "completed_at": row["completed_at"], "provider_attempts": row["provider_attempts"],
+            "result": {**result, "stages": stages},
+        }
+    for row in reviews:
+        version = row["case_version"]
+        review_result = json.loads(row["result_json"])
+        workflow = grouped.setdefault(version, {
+            "run_id": row["run_id"], "case_version": version,
+            "status": row["status"], "started_at": row["started_at"],
+            "completed_at": row["completed_at"], "provider_attempts": 0,
+            "result": {"stages": []},
+        })
+        workflow["result"]["stages"].append({
+            "name": "Auditor decision", "status": "recorded",
+            "decision_id": review_result.get("decision_id"),
+            "decision_version": review_result.get("decision_version"),
+        })
+        workflow["result"]["stages"].extend(review_result.get("stages", []))
+        workflow["result"]["decision_id"] = review_result.get("decision_id")
+        workflow["review_run_id"] = row["run_id"]
+        workflow["status"] = row["status"]
+        workflow["completed_at"] = row["completed_at"] or workflow["completed_at"]
+        if row["started_at"] < workflow["started_at"]:
+            workflow["started_at"] = row["started_at"]
     if outcome:
-        rows.append({"run_id": "AR-OUTCOME-" + case_id, "status": (
-            "resolved" if outcome["route"] in {"routine_form", "resource_link"} else "human_review"),
-            "started_at": outcome["recorded_at"], "completed_at": outcome["recorded_at"],
-            "result": {"reason": outcome["reason"], "stages": [{
-                "name": "Resource delivery" if outcome["route"] in {"routine_form", "resource_link"} else "Intake routing",
-                "status": "committed" if outcome["route"] in {"routine_form", "resource_link"} else "human_review",
-            }]}})
-    rows.sort(key=lambda row: row["started_at"], reverse=True)
+        workflow = grouped.setdefault(outcome["case_version"], {
+            "run_id": "AR-OUTCOME-" + case_id, "case_version": outcome["case_version"],
+            "status": "human_review", "started_at": outcome["recorded_at"],
+            "completed_at": outcome["recorded_at"], "provider_attempts": 0,
+            "result": {"stages": []},
+        })
+        with closing(connect()) as db:
+            current = db.execute("SELECT status FROM synthetic_cases WHERE case_id = ?", (case_id,)).fetchone()
+        resource_delivered = outcome["route"] in {"routine_form", "resource_link"}
+        resolved = bool(resource_delivered and current and current["status"] in {"resolved", "closed"})
+        workflow["result"]["stages"].append({
+            "name": "Application outcome",
+            "status": "resolved" if resolved else ("delivered_open" if resource_delivered else "human_review"),
+        })
+        workflow["result"]["outcome_reason"] = outcome["reason"]
+        if resolved:
+            workflow["status"] = "resolved"
+        workflow["completed_at"] = outcome["recorded_at"]
+    rows = sorted(grouped.values(), key=lambda row: row["started_at"], reverse=True)
     if actor.role == "user":
         return [{key: row[key] for key in ("run_id", "status", "started_at", "completed_at")}
                 for row in rows]
@@ -141,8 +186,10 @@ def start_run(case_id: str, payload: RunAuthorization,
         raise HTTPException(503, "Live Triage is disabled on this server.")
     case = get_case(case_id, actor)
     if (case["record_kind"] != "user_request" or case["status"] != "submitted"
-            or case["request_text"] not in APPROVED_SAMPLES):
-        raise HTTPException(422, "Submit an approved synthetic example before running Claude.")
+            or case["is_synthetic"] != 1 or len(case["request_text"]) > 2000):
+        raise HTTPException(422, "Live Triage requires a submitted synthetic request of 2,000 characters or fewer.")
+    if SENSITIVE_INPUT.search(case["request_text"]):
+        raise HTTPException(422, "This request may contain personal or sensitive information. It remains for human review and was not sent to Claude.")
     try:
         client = create_anthropic_client()
     except AnthropicClientConfigurationError:

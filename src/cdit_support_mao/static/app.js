@@ -2,11 +2,6 @@ const $ = (s, root=document) => root.querySelector(s);
 let displayedWarning = "";
 let signedInActor = {};
 let feedbackByDecision = new Map();
-const syntheticSamples = [
-  ["IDNYC application", "I need the IDNYC application form."],
-  ["Personal W-2", "I need a copy of my personal W-2."],
-  ["Withholding change", "My withholding or deduction changed unexpectedly before this payroll closes."]
-];
 
 function decisionFeedback(decision, role) {
   const entries = feedbackByDecision.get(decision.decision_id) || [];
@@ -41,11 +36,11 @@ function ticketReply(item) {
 
 function agentActivity(item, role) {
   if (item.record_kind !== "user_request") return "";
-  const approved = syntheticSamples.some(([,text]) => text === item.request_text);
-  const launch = role === "admin" && approved && item.status === "submitted"
+  const launch = role === "admin" && item.status === "submitted"
     ? '<form class="stack-form" data-run="' + esc(item.case_id) + '">' +
       '<label class="check-line"><input type="checkbox" name="authorize" required>' +
-      'Authorize one billable Claude call</label><button class="button primary">▶ Run live Triage</button>' +
+      'Authorize one billable Claude call</label><p class="helper">Synthetic requests only · max 2,000 characters · privacy screen blocks likely personal or sensitive details.</p>' +
+      '<button class="button primary">▶ Run live Triage</button>' +
       '<span class="form-message" role="status"></span></form>' : "";
   return '<details class="agent-activity" data-run-details="' + esc(item.case_id) +
     '"><summary>' + relayIcon("activity") + ' Agent activity</summary>' +
@@ -58,9 +53,11 @@ async function refreshRuns(panel) {
     const records = await api("/api/cases/" + encodeURIComponent(panel.dataset.runDetails) + "/agent-runs");
     output.innerHTML = records.length ? records.map(run => {
       const result = run.result || {};
-      const stages = [["Coordinator", result.coordinator], ["Claude Triage", result.triage],
-        ...(result.stages || []).map(stage => [stage.name, stage.status])]
-        .filter(([,value]) => value).map(([label,value]) => '<li>' + label + ': ' + esc(pretty(value)) + '</li>').join("");
+      const stageRows = result.stages || [["Coordinator", result.coordinator], ["Claude Triage", result.triage]]
+        .filter(([,value]) => value).map(([name,status]) => ({name,status}));
+      const stages = stageRows.map(stage => '<li><b>' + esc(stage.name) + '</b>: ' +
+        esc(pretty(stage.status)) + (stage.decision_version ? ' · v' + esc(stage.decision_version) : '') +
+        (stage.reasons?.length ? '<small> · ' + esc(stage.reasons.map(pretty).join(', ')) + '</small>' : '') + '</li>').join("");
       return '<article class="run-record">' + statusPill(run.status) + ' <small>' + esc(run.run_id) +
         '</small>' + (stages ? '<ul>' + stages + '</ul>' : '') +
         (run.provider_attempts !== undefined ? '<p>Provider attempts: ' + run.provider_attempts +
@@ -68,7 +65,10 @@ async function refreshRuns(panel) {
         (result.usage ? '<p>' + esc(result.usage.model) + ' · ' +
           esc(result.usage.input_tokens) + ' input / ' + esc(result.usage.output_tokens) +
           ' output tokens</p>' : '') +
-        (result.reason ? '<p>' + esc(pretty(result.reason)) + '</p>' : '') + '</article>';
+        (result.items?.length ? '<p>Request items: ' + result.items.map(item =>
+          '#' + esc(item.index) + ' ' + esc(item.category)).join(' · ') + '</p>' : '') +
+        (result.reason ? '<p>' + esc(pretty(result.reason)) + '</p>' : '') +
+        (result.outcome_reason ? '<p>Outcome basis: ' + esc(pretty(result.outcome_reason)) + '</p>' : '') + '</article>';
     }).join("") : '<p class="helper">No agent run recorded.</p>';
   } catch (error) { output.textContent = error.message; }
 }

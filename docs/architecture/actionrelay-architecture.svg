@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1680 1400" role="group" aria-labelledby="architecture-title architecture-description">
 <title id="architecture-title">ActionRelay by CDIT — six-agent workflow, bounded writes and return loops</title>
-<desc id="architecture-description">Coordinator and Triage precede parallel Knowledge and Escalation checks. A compatible-version join leads to Troubleshooting, Documentation and the outcome gate. Approved complete routine cases reach a live application write gate and atomic local commit. Exceptions reach humans. Separate visible loops show new-version corrections, bounded same-checkpoint retries, operation-ledger recovery and optional Admin feedback. This is approved design intent and is not an implemented runtime claim.</desc>
+<desc id="architecture-description">This diagram shows the approved target architecture. The current app wires Admin-authorized Coordinator and Triage, a version-bound Auditor pause, sequential local Knowledge, Troubleshooting, Escalation and Documentation, and a deterministic resource outcome path. Persisted stages are shown together by exact case version. Parallel joins, the normalized event ledger, broader correction loops and production integrations remain design or validation work.</desc>
 <style>
 text{font-family:system-ui,sans-serif;fill:#eaf3ff}.svg-title{font-size:23px;font-weight:750}.svg-note{font-size:14px;fill:#b9c9df}
 .arc-node rect{fill:#172940;stroke:#56718e;stroke-width:1.8}.arc-node text.title{font-size:18px;font-weight:700}
