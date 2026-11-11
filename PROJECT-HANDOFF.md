@@ -1,5 +1,17 @@
 # Project Handoff — Project-JD-CDIT-MAO
 
+## Current outgoing state — 2026-11-11 (ActionRelay wiring)
+
+This entry supersedes earlier outgoing-state notes where they conflict; older entries remain historical.
+
+- Repository: `emmanuelID-cmd/Project-JD-CDIT-MAO`; branch `manny/coordinator-triage-escalation`; PR target `developer`. Verified remote baseline before this change: `origin/developer` and `origin/manny/coordinator-triage-escalation` at `f720148b0dbf9bc00228bb0fb8ff7d3e8f30319e`. `main` was not changed.
+- Completed implementation commits: `31aa8c4c7762f9e6250075b9bf032dca4b4cd3d3` (`feat(wiring): connect versioned agent run timeline`) and `59f85bd26da34fbf3dba41fb045cf1c5a0e70130` (`fix(wiring): preserve review order and closed status`). Admin live Triage accepts bounded synthetic user requests (up to 2,000 characters) with per-call billable authorization and the existing likely-sensitive-input screen. Persisted Coordinator/Triage, Auditor-resume and deterministic outcome rows are combined by exact case version for one activity timeline. Triage item categories and downstream stage reason codes appear in the UI. Repeated Auditor revisions stay chronological, and Closed remains distinct from Resolved.
+- Updated PRD-v4, architecture notes and diagram descriptions, the build checkpoint, and [`ACTIONRELAY-END-TO-END-WIRING-HANDOFF.md`](docs/planning/ACTIONRELAY-END-TO-END-WIRING-HANDOFF.md). Shawn's agent internals were not changed; her acknowledgment remains pending. The separate [`ACTIONRELAY-FINAL-VIDEO-SLIDES-HANDOFF.md`](docs/presentations/ACTIONRELAY-FINAL-VIDEO-SLIDES-HANDOFF.md) remains the continuation brief for video and slides.
+- Validation: project app import, Python syntax compilation, JavaScript syntax check and `git diff --check` passed. No end-to-end app test or Claude provider call was run. No claim of production/CDIT readiness is made. Likely-sensitive-input screening is heuristic and may miss personal details.
+- Verified branch baseline before the first push was `f720148b0dbf9bc00228bb0fb8ff7d3e8f30319e`. PR #31 is open from this branch to `developer`; the first push reached `b1127962c0a13e945d1c326bf1ec0a701715e32a`. This follow-up fix must be pushed to the same PR. At last check GitHub reported no status checks and no review decision; merge remains subject to the approved owner/reviewer gate. Fast-forward only clean, eligible branches; do not update `main` or Shawn's lane without her approval.
+
+## Current outgoing state — 2026-11-11 (Render Free demo setup)
+
 ## Current outgoing state — 2026-11-11 (Render Free demo setup)
 
 This entry supersedes earlier outgoing-state notes where they conflict; older entries remain historical.

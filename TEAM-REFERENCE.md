@@ -1,5 +1,13 @@
 # Handoffs prepared for push
 
+## 2026-11-11 — ActionRelay wiring integration
+
+Summary file: PROJECT-HANDOFF.md
+
+- Added the version-matched activity timeline and bounded synthetic live-Triage eligibility update; revised the PRD, architecture, build checkpoint, and wiring handoff accordingly. Follow-up commit `59f85bd` preserves chronological Auditor revisions and the Resolved/Closed distinction.
+- Validation was limited to project app import, Python/JavaScript syntax, and whitespace checks. No live provider call or end-to-end test was run. Shawn's acknowledgment remains pending.
+- PR #31 to `developer` is open. The follow-up commit awaits push; latest remote branch tip is `b1127962c0a13e945d1c326bf1ec0a701715e32a`. GitHub last reported no status checks and no review decision. Keep `main` and Shawn's lane unchanged unless her lane owner approves a fast-forward.
+
 ## 2026-11-11 — ActionRelay app/resource work and deliverable handoffs
 
 Summary file: PROJECT-HANDOFF.md

@@ -1,6 +1,6 @@
 # ActionRelay by CDIT — Technical architecture
 
-Approved requirements amendments recorded on 2026-11-10 and 2026-11-11. The local build contains authenticated synthetic flows, digest-checked resource delivery and atomic public-resource resolution. Personal-document department delivery is not implemented. Build acceptance remains pending; live Claude Triage still requires an explicitly authorized billable run.
+Approved requirements amendments recorded on 2026-11-10 and 2026-11-11. The local build contains authenticated synthetic flows, digest-checked resource delivery and atomic public-resource resolution. The Admin-only live path runs Coordinator and Claude Triage for explicitly authorized synthetic requests; a current Auditor decision resumes local Knowledge, Troubleshooting, Escalation and Documentation in sequence. Persisted results are joined into one activity timeline by exact case version. Likely personal or sensitive details are blocked from provider dispatch. This connection needs synthetic end-to-end validation; personal-document department delivery is not implemented and production/CDIT readiness is not claimed.
 
 [Full field guide](actionrelay-field-guide.html) · [Diagram explorer](actionrelay-architecture.html) · [Standalone SVG](actionrelay-architecture.svg) · [PRD-v4](../requirements/PRD-v4.md)
 
