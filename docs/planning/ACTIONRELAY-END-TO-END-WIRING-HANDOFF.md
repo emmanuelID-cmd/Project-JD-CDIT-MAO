@@ -1,6 +1,6 @@
 # ActionRelay end-to-end wiring handoff
 
-**Snapshot:** 2026-11-11  
+**Snapshot:** 2026-11-11
 **Purpose:** Resume the remaining app-level integration without rebuilding completed components or changing their approved decisions. This file is the current handoff source if work is interrupted. Update the status and obtain Shawn's acknowledgment when the cross-lane connection is handed over.
 
 ## Why the remaining work exists
