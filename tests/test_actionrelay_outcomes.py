@@ -142,7 +142,15 @@ def test_current_auditor_decision_runs_real_knowledge_and_rejects_stale(tmp_path
     result = auditor.post(resume, json=body)
     assert result.status_code == 200, result.text
     assert result.json()["status"] == "human_review", result.text
-    assert result.json()["result"]["stages"][0]["name"] == "Knowledge"
+    stages = result.json()["result"]["stages"]
+    # An abstaining Knowledge stage no longer ends the run: Escalation still checks
+    # the case and Documentation drafts the human handoff (combined-harness order).
+    assert [stage["name"] for stage in stages] == [
+        "Knowledge", "Troubleshooting", "Escalation", "Documentation"]
+    assert stages[0]["status"] == "abstained"
+    assert stages[2]["detail"] in {
+        "escalate_l2", "escalate_support_lead", "human_review", "no_escalation_proposed"}
+    assert stages[3]["detail"] in {"draft_note", "manual_fallback"}
     assert auditor.post(resume, json=body).json() == result.json()
     assert user.get(case).json()["status"] == "submitted"
     payload["expected_previous_decision_version"] = 1

@@ -36,10 +36,21 @@ This section is a handoff record, not a message already sent. Complete it when S
 - **Change carried into handoff:** local resource delivery, live Triage checkpoint, versioned Auditor decisions, and downstream local-agent resume already exist; full app-level durable six-agent run history remains to be completed.
 - **Connector changes completed in this handoff:** live Triage is widened from three exact prompts to bounded synthetic requests with per-call authorization and the existing likely-sensitive-input screen; persisted workflow records are joined by exact case version into one UI timeline; bounded stage reason codes and Triage item categories are displayed. Changes are not yet end-to-end validated or committed.
 - **Agent-internal changes:** none authorized by this handoff.
+- **Shawn connector pass (2026-11-11, on `developer` at `4384eb3`):**
+  - **Resume order.** `actionrelay_review.downstream` now runs Knowledge → Troubleshooting → Escalation → Documentation for every current decision, in the combined-harness order. Before, the first abstention ended the run, so an abstaining Knowledge stage skipped the Escalation check and the Documentation handoff draft. Each agent still applies its own gates to an abstained or blocked upstream contribution. The run stays `human_review`; nothing is written to the ticket.
+  - **Bounded stage detail.** The timeline adds Escalation's `recommendation` and whether Documentation produced a `draft_note` or a `manual_fallback`. No free text is added.
+  - **Start folder.** The default Knowledge corpus and Troubleshooting policy paths resolve against the project root when the server starts outside it. Before, a resume from another start folder failed as `downstream_execution_blocked`.
+  - **Test hygiene.** `test_billable_run_is_explicit_scoped_and_deduplicated` expected the old three-prompt rule. It also reached real client construction with the live flag on, so a machine whose `.env` holds a key could make a billable call during `pytest`. The test now stubs client construction first and checks the 2,000-character and sensitive-input rejections. Its timeline assertion matches the joined activity view.
 - **Handoff commit / PR:** fill in after publishing.
-- **Validation evidence:** Python syntax compilation and JavaScript syntax checking only. No live provider call or app-wired end-to-end validation was performed for these edits. Record actual focused synthetic results here; do not copy old harness results as app-wired evidence.
-- **Open issues or owner returns:** fill in with exact stage and receiving owner.
-- **Shawn acknowledgment:** pending — confirm reviewed contracts, connector-only scope, carried changes, and any returned lane-owned findings.
+- **Validation evidence (2026-11-11, synthetic, no provider call):**
+  - `pytest`: 773 passed.
+  - **App-wired run:** in a scratch database through the authenticated API, User submit → Admin assignment to `auditor.demo` → Auditor decision → resume. A Knowledge-supported request completed all four downstream stages; a lockout request recorded Knowledge `abstained` (weak evidence), Troubleshooting `abstained` (knowledge abstained), Escalation `completed` (human review), and Documentation `completed` (draft note). Both remained Submitted.
+  - **Browser:** the same lockout path was repeated in the authenticated UI as `auditor.demo`. Saving the decision triggered the resume, and **Agent activity** showed the six-row timeline above.
+  - **Not yet run:** one live Claude Triage call through the app. It needs a local `.env` key, `ACTIONRELAY_ENABLE_LIVE_TRIAGE=1`, and explicit per-call authorization.
+- **Open issues or owner returns:**
+  - **Resource gate (Manny).** "My last payslip seems lower than my timesheet suggests." is auto-resolved at intake with the synthetic weekly timesheet (`synthetic_weekly_timesheet`). It reads as an individual pay discrepancy, which section 4 says must go to a human. Returned to the gate owner; not changed here.
+  - **Stage order (Manny/PRD).** The PRD workflow names parallel Knowledge/Escalation before Troubleshooting. `EscalationAgent.run` accepts the Troubleshooting result, and the tested harness runs it after Troubleshooting, so the app follows the harness. Confirm or record the PRD order as a later change.
+- **Shawn acknowledgment:** connector-only scope confirmed for the changes above. Knowledge and Troubleshooting internals are unchanged; only their default data-path lookup changed.
 
 ## Completion definition
 

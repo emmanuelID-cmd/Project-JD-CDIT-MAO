@@ -62,7 +62,8 @@ async function refreshRuns(panel) {
         .filter(([,value]) => value).map(([name,status]) => ({name,status}));
       const stages = stageRows.map(stage => '<li><b>' + esc(stage.name) + '</b>: ' +
         esc(pretty(stage.status)) + (stage.decision_version ? ' · v' + esc(stage.decision_version) : '') +
-        (stage.reasons?.length ? '<small> · ' + esc(stage.reasons.map(pretty).join(', ')) + '</small>' : '') + '</li>').join("");
+        (stage.reasons?.length ? '<small> · ' + esc(stage.reasons.map(pretty).join(', ')) + '</small>' : '') +
+        (stage.detail ? '<small> · ' + esc(pretty(stage.detail)) + '</small>' : '') + '</li>').join("");
       return '<article class="run-record">' + statusPill(run.status) + ' <small>' + esc(run.run_id) +
         '</small>' + (stages ? '<ul>' + stages + '</ul>' : '') +
         (run.provider_attempts !== undefined ? '<p>Provider attempts: ' + run.provider_attempts +
