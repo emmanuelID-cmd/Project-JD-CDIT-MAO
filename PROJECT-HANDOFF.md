@@ -1,5 +1,17 @@
 # Project Handoff — Project-JD-CDIT-MAO
 
+## Current outgoing state — 2026-11-11 (ActionRelay wiring)
+
+This entry supersedes earlier outgoing-state notes where they conflict; older entries remain historical.
+
+- Repository: `emmanuelID-cmd/Project-JD-CDIT-MAO`; branch `manny/coordinator-triage-escalation`; PR target `developer`. Verified remote baseline before this change: `origin/developer` and `origin/manny/coordinator-triage-escalation` at `f720148b0dbf9bc00228bb0fb8ff7d3e8f30319e`. `main` was not changed.
+- Completed implementation commit: `31aa8c4c7762f9e6250075b9bf032dca4b4cd3d3` (`feat(wiring): connect versioned agent run timeline`). Admin live Triage now accepts bounded synthetic user requests (up to 2,000 characters) with per-call billable authorization and the existing likely-sensitive-input screen. Persisted Coordinator/Triage, Auditor-resume and deterministic outcome rows are combined by exact case version for one activity timeline. Triage item categories and downstream stage reason codes appear in the UI.
+- Updated PRD-v4, architecture notes and diagram descriptions, the build checkpoint, and [`ACTIONRELAY-END-TO-END-WIRING-HANDOFF.md`](docs/planning/ACTIONRELAY-END-TO-END-WIRING-HANDOFF.md). Shawn's agent internals were not changed; her acknowledgment remains pending. The separate [`ACTIONRELAY-FINAL-VIDEO-SLIDES-HANDOFF.md`](docs/presentations/ACTIONRELAY-FINAL-VIDEO-SLIDES-HANDOFF.md) remains the continuation brief for video and slides.
+- Validation: project app import, Python syntax compilation, JavaScript syntax check and `git diff --check` passed. No end-to-end app test or Claude provider call was run. No claim of production/CDIT readiness is made. Likely-sensitive-input screening is heuristic and may miss personal details.
+- Verified pre-push baseline is `f720148b0dbf9bc00228bb0fb8ff7d3e8f30319e`; no open PR covers this branch. Push and PR are pending. After push, create a PR to `developer`; merge only after required checks and reviewer/owner approval. Fast-forward only clean, eligible branches; do not update `main`.
+
+## Current outgoing state — 2026-11-11 (Render Free demo setup)
+
 ## Current outgoing state — 2026-11-11 (Render Free demo setup)
 
 This entry supersedes earlier outgoing-state notes where they conflict; older entries remain historical.
