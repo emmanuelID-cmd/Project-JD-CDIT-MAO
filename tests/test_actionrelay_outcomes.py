@@ -19,14 +19,14 @@ def test_public_file_delivery_is_atomic_scoped_and_human_closed(tmp_path, monkey
     assert user.get(case + "/form.pdf").content == sample_pdf
     assert TestClient(app).get(case + "/form.pdf").status_code == 401
     assert clients["staff"].get(case + "/form.pdf").status_code == 404
-    assert clients["auditor"].patch(case + "/status", json={"status": "closed"}).status_code == 403
+    assert clients["auditor"].patch(case + "/status", json={"status": "closed", "response": "Closing this request."}).status_code == 404
     with connect() as db:
         outcome = db.execute("SELECT * FROM actionrelay_ticket_outcomes").fetchone()
         actor = actionrelay_outcomes.Actor("SYN-USER-001", "user.demo", "user")
         actionrelay_outcomes.apply_intake_outcome(outcome["case_id"], outcome["case_version"],
                                                  item["request_text"], actor)
         assert db.execute("SELECT count(*) FROM actionrelay_ticket_outcomes").fetchone()[0] == 1
-    assert admin.patch(case + "/status", json={"status": "closed"}).status_code == 200
+    assert admin.patch(case + "/status", json={"status": "closed", "response": "The request is complete."}).status_code == 200
     assert user.get(case).json()["review_flag"] is False
     assert user.get(case + "/form.pdf").content == sample_pdf
     events = admin.get("/api/queue/activity").json()["events"]
@@ -50,7 +50,7 @@ def test_unavailable_form_mixed_request_and_personal_record_stay_open(tmp_path, 
         assert user.get(case + "/form.pdf").status_code == 404
         reply = user.get(case + "/reply").json()
         assert (reply["reason"] if reply else None) == reason
-        assert admin.patch(case + "/status", json={"status": "closed"}).status_code == 409
+        assert admin.patch(case + "/status", json={"status": "closed", "response": "Classification is required before closeout."}).status_code == 409
     assert calls == ["fetch"]
 
 
@@ -86,7 +86,7 @@ def test_employee_sample_forms_are_fillable_and_resolve_only_exact_requests(tmp_
         assert delivered.content == (root / filename).read_bytes()
         assert filename in delivered.headers["content-disposition"]
         assert clients["staff"].get(route + "/form.pdf").status_code == 404
-        assert admin.patch(route + "/status", json={"status": "closed"}).status_code == 200
+        assert admin.patch(route + "/status", json={"status": "closed", "response": "The request is complete."}).status_code == 200
 
 
 def test_official_benefits_links_resolve_resource_delivery_not_enrollment(tmp_path, monkeypatch):
@@ -145,6 +145,7 @@ def test_current_auditor_decision_runs_real_knowledge_and_rejects_stale(tmp_path
     assert result.json()["result"]["stages"][0]["name"] == "Knowledge"
     assert auditor.post(resume, json=body).json() == result.json()
     assert user.get(case).json()["status"] == "submitted"
+    payload["expected_case_version"] = auditor.get(case).json()["updated_at"]
     payload["expected_previous_decision_version"] = 1
     payload["rationale"] = "Revised classification after reviewing the source."
     assert auditor.post(decisions, json=payload).status_code == 201
@@ -220,7 +221,7 @@ def test_closed_prior_resource_resolution_is_used_as_private_precedent(tmp_path,
     user, admin = clients["user"], clients["admin"]
     first = submit(user, "I need a vacation request form.")
     first_id = first.rsplit("/", 1)[-1]
-    assert admin.patch(first + "/status", json={"status": "closed"}).status_code == 200
+    assert admin.patch(first + "/status", json={"status": "closed", "response": "The request is complete."}).status_code == 200
     second = submit(user, "Could you send me the vacation request application?")
     second_id = second.rsplit("/", 1)[-1]
     assert user.get(second).json()["status"] == "resolved"

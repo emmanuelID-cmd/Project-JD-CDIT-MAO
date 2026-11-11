@@ -113,10 +113,12 @@ class CaseAssignmentPayload(BaseModel):
 
 
 class StatusUpdatePayload(BaseModel):
+    model_config = ConfigDict(extra="forbid")
     status: Literal[
         "submitted", "in_progress", "waiting_on_customer", "under_investigation",
         "escalated", "resolved", "closed",
-    ]
+    ] | None = None
+    response: str | None = Field(default=None, min_length=1, max_length=4000)
 
 
 class AuditorDecisionPayload(BaseModel):
@@ -397,9 +399,37 @@ def _case_for_role(row: sqlite3.Row, role: str, *, auditor: bool = False) -> dic
     result["allowed_next_statuses"] = (
         sorted(status for status in ALLOWED_STATUS_TRANSITIONS[result["status"]]
                if classified or status not in {"resolved", "closed"})
-        if role in {"staff", "admin"} and not auditor else []
+        if role in {"staff", "admin"} else []
     )
     return result
+
+
+def _attach_case_responses(cases: list[dict]) -> list[dict]:
+    """Attach separately stored staff replies without changing request text."""
+    for case in cases:
+        case["responses"] = []
+    case_ids = [case["case_id"] for case in cases]
+    for offset in range(0, len(case_ids), 400):
+        batch = case_ids[offset:offset + 400]
+        if not batch:
+            continue
+        placeholders = ",".join("?" for _ in batch)
+        with closing(connect()) as db:
+            rows = db.execute(
+                f"""SELECT r.case_id, r.response_id, r.case_version, r.response_text,
+                           r.created_at, a.username AS responded_by
+                    FROM synthetic_case_responses r
+                    JOIN synthetic_accounts a ON a.account_id = r.author_account_id
+                    WHERE r.case_id IN ({placeholders})
+                    ORDER BY r.created_at, r.response_id""",
+                batch,
+            ).fetchall()
+        grouped: dict[str, list[dict]] = {}
+        for row in rows:
+            grouped.setdefault(row["case_id"], []).append({key: row[key] for key in row.keys()})
+        for case in cases[offset:offset + 400]:
+            case["responses"] = grouped.get(case["case_id"], [])
+    return cases
 
 
 @router.get("/api/cases")
@@ -428,7 +458,9 @@ def list_cases(actor: Actor = Depends(require_roles("user", "staff", "admin"))):
             ).fetchall()
         else:
             rows = db.execute(query + " ORDER BY c.updated_at DESC").fetchall()
-    return [_case_for_role(row, actor.role, auditor=actor.auditor) for row in rows]
+    return _attach_case_responses([
+        _case_for_role(row, actor.role, auditor=actor.auditor) for row in rows
+    ])
 
 
 @router.get("/api/auditor/taxonomy")
@@ -484,7 +516,7 @@ def record_auditor_decision(
     with closing(connect()) as db, db:
         db.execute("BEGIN IMMEDIATE")
         case = db.execute(
-            "SELECT request_text, updated_at, is_synthetic, status FROM synthetic_cases WHERE case_id = ? AND (? = 'admin' OR assigned_staff_account_id = ?)",
+            "SELECT request_text, updated_at, is_synthetic, status, category, urgency_band FROM synthetic_cases WHERE case_id = ? AND (? = 'admin' OR assigned_staff_account_id = ?)",
             (case_id, actor.role, actor.account_id),
         ).fetchone()
         if case is None or case["is_synthetic"] != 1:
@@ -524,6 +556,15 @@ def record_auditor_decision(
             db.rollback()
             raise HTTPException(status_code=409, detail="A newer decision exists; refresh the decision history")
         source_digest = hashlib.sha256(case["request_text"].encode("utf-8")).hexdigest()
+        classification_changed = (
+            case["category"] != payload.category or case["urgency_band"] != payload.urgency_band
+        )
+        decision_case_version = stamp(now_utc()) if classification_changed else case["updated_at"]
+        if classification_changed:
+            db.execute(
+                "UPDATE synthetic_cases SET category = ?, urgency_band = ?, updated_at = ? WHERE case_id = ? AND updated_at = ?",
+                (payload.category, payload.urgency_band, decision_case_version, case_id, case["updated_at"]),
+            )
         db.execute(
             """INSERT INTO synthetic_auditor_decisions
                (decision_id, case_id, item_id, decision_version, item_index, item_count,
@@ -534,7 +575,7 @@ def record_auditor_decision(
                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 1)""",
             (
                 decision_id, case_id, payload.item_id, previous + 1, payload.item_index,
-                payload.item_count, case["updated_at"], payload.source_id, payload.source_version,
+                payload.item_count, decision_case_version, payload.source_id, payload.source_version,
                 payload.source_start, payload.source_end, source_digest, payload.policy_version,
                 payload.category, payload.urgency_band, payload.destination, payload.rationale,
                 payload.evidence, json.dumps(payload.conditions, ensure_ascii=False, separators=(",", ":")),
@@ -547,7 +588,9 @@ def record_auditor_decision(
         "decision_id": decision_id, "case_id": case_id, "item_id": payload.item_id,
         "decision_version": previous + 1, "reviewer_account_id": actor.account_id,
         "admin_override_reason": payload.admin_override_reason,
-        "recorded_at": now, "ticket_changed": False,
+        "recorded_at": now, "ticket_changed": classification_changed,
+        "classification_changed": classification_changed,
+        "category": payload.category, "urgency_band": payload.urgency_band,
     }
 
 
@@ -607,13 +650,13 @@ def get_case(case_id: str, actor: Actor = Depends(require_roles("user", "staff",
             ).fetchone()
     if row is None:
         raise HTTPException(status_code=404, detail="Case not found")
-    return _case_for_role(row, actor.role, auditor=actor.auditor)
+    return _attach_case_responses([_case_for_role(row, actor.role, auditor=actor.auditor)])[0]
 
 
 @router.patch("/api/cases/{case_id}")
 def edit_case(case_id: str, payload: CaseEditPayload, actor: Actor = Depends(require_roles("user", "staff", "admin"))):
-    if actor.auditor:
-        raise HTTPException(403, "Auditors cannot edit case content.")
+    if actor.role != "user":
+        raise HTTPException(403, "Staff, Auditors, and Admin respond to the request; they cannot rewrite it.")
     fields = payload.model_fields_set
     if not fields:
         raise HTTPException(status_code=422, detail="Provide a subject or request description")
@@ -627,12 +670,8 @@ def edit_case(case_id: str, payload: CaseEditPayload, actor: Actor = Depends(req
         db.execute("BEGIN IMMEDIATE")
         row = db.execute(
             """SELECT status, record_kind, subject, request_text FROM synthetic_cases
-               WHERE case_id = ? AND (
-                 ? = 'admin'
-                 OR (? = 'staff' AND assigned_staff_account_id = ?)
-                 OR (? = 'user' AND owner_account_id = ? AND record_kind = 'user_request')
-               )""",
-            (case_id, actor.role, actor.role, actor.account_id, actor.role, actor.account_id),
+               WHERE case_id = ? AND owner_account_id = ? AND record_kind = 'user_request'""",
+            (case_id, actor.account_id),
         ).fetchone()
         if row is None:
             db.rollback()
@@ -700,12 +739,15 @@ def update_case_status(
     case_id: str, payload: StatusUpdatePayload,
     actor: Actor = Depends(require_roles("staff", "admin")),
 ):
-    if actor.auditor:
-        raise HTTPException(403, "Auditors cannot change lifecycle status.")
+    response_text = payload.response.strip() if payload.response is not None else None
+    if payload.response is not None and not response_text:
+        raise HTTPException(422, "Write a response or leave the response field blank.")
+    if payload.status is None and response_text is None:
+        raise HTTPException(422, "Provide a response, a status update, or both.")
     with closing(connect()) as db, db:
         db.execute("BEGIN IMMEDIATE")
         row = db.execute(
-            """SELECT status, category, urgency_band FROM synthetic_cases
+            """SELECT status, category, urgency_band, updated_at FROM synthetic_cases
                WHERE case_id = ? AND (? = 'admin' OR assigned_staff_account_id = ?)""",
             (case_id, actor.role, actor.account_id),
         ).fetchone()
@@ -713,31 +755,44 @@ def update_case_status(
             db.rollback()
             raise HTTPException(status_code=404, detail="Case not found")
         before = row["status"]
-        after = payload.status
-        if after == before:
+        after = payload.status or before
+        changed = after != before
+        if changed and not response_text:
             db.rollback()
-            return {"case_id": case_id, "status": before, "changed": False}
-        if after not in ALLOWED_STATUS_TRANSITIONS[before]:
+            raise HTTPException(422, "Include a response whenever you change ticket status.")
+        if changed and after not in ALLOWED_STATUS_TRANSITIONS[before]:
             db.rollback()
             raise HTTPException(status_code=409, detail=f"Status transition from {before} to {after} is not allowed")
-        if after in {"resolved", "closed"} and (not row["category"] or row["urgency_band"] == "unknown"):
+        if changed and after in {"resolved", "closed"} and (not row["category"] or row["urgency_band"] == "unknown"):
             raise HTTPException(409, "Classify the case before resolving or closing it.")
-        closure_reason = (
-            "staff_closed" if after == "closed" and actor.role == "staff"
-            else "admin_closed" if after == "closed"
-            else None
-        )
-        db.execute(
-            "UPDATE synthetic_cases SET status = ?, closure_reason = ?, updated_at = ? WHERE case_id = ?",
-            (after, closure_reason, stamp(now_utc()), case_id),
-        )
+        response_id = None
+        new_version = row["updated_at"]
+        if changed:
+            new_version = stamp(now_utc())
+            db.execute(
+                "UPDATE synthetic_cases SET status = ?, closure_reason = ?, updated_at = ? WHERE case_id = ?",
+                (after, "staff_closed" if after == "closed" and actor.role == "staff"
+                 else "admin_closed" if after == "closed" else None, new_version, case_id),
+            )
+        if response_text:
+            response_id = "CASE-RESPONSE-" + uuid.uuid4().hex
+            db.execute(
+                """INSERT INTO synthetic_case_responses
+                   (response_id, case_id, case_version, author_account_id, response_text, created_at)
+                   VALUES (?, ?, ?, ?, ?, ?)""",
+                (response_id, case_id, new_version, actor.account_id, response_text, stamp(now_utc())),
+            )
+        if not changed:
+            return {"case_id": case_id, "status": before, "changed": False,
+                    "response_id": response_id}
         action = actor.role + "_status_updated"
         _case_change_event(
             db, case_id=case_id, actor=actor, action=action,
             before_status=before, after_status=after, reason_code="human_status_change",
         )
         db.commit()
-    return {"case_id": case_id, "status": after, "changed": True}
+    return {"case_id": case_id, "status": after, "changed": changed,
+            "response_id": response_id}
 
 
 @router.patch("/api/admin/cases/{case_id}/assignment")

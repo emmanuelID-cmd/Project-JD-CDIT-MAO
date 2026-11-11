@@ -53,7 +53,7 @@ def payload_for(case, category, admin_override_reason=None):
     }
 
 
-def test_staff_decision_is_item_scoped_versioned_and_does_not_change_ticket(tmp_path, monkeypatch):
+def test_auditor_assessment_updates_assigned_ticket_classification_and_is_versioned(tmp_path, monkeypatch):
     path, staff = client_for(tmp_path, monkeypatch, "staff")
     case = staff.get("/api/cases/SYN-CASE-001").json()
     category = staff.get("/api/auditor/taxonomy").json()["categories"][0]
@@ -63,9 +63,13 @@ def test_staff_decision_is_item_scoped_versioned_and_does_not_change_ticket(tmp_
     assert first.status_code == 201, first.text
     assert first.json()["reviewer_account_id"] == "SYN-AUDITOR-001"
     assert first.json()["decision_version"] == 1
-    assert first.json()["ticket_changed"] is False
+    assert first.json()["ticket_changed"] is True
+    assert first.json()["classification_changed"] is True
 
     case_after = staff.get("/api/cases/SYN-CASE-001").json()
+    assert case_after["category"] == category
+    assert case_after["urgency_band"] == "medium"
+    assert "closed" in case_after["allowed_next_statuses"]
     second_payload = payload_for(case_after, category)
     second_payload["expected_previous_decision_version"] = 1
     second_payload["rationale"] = "Revised synthetic rationale after human review."
@@ -79,7 +83,7 @@ def test_staff_decision_is_item_scoped_versioned_and_does_not_change_ticket(tmp_
     assert history[0]["exceptions"] == ["Re-review if new impact evidence appears"]
     assert history[0]["source_digest_sha256"]
     assert history[0]["reviewer_account_id"] == "SYN-AUDITOR-001"
-    assert history[0]["case_version"] == case["updated_at"]
+    assert history[0]["case_version"] == case_after["updated_at"]
     assert staff.get("/api/cases/SYN-CASE-001").json()["status"] == "submitted"
 
     with connect(path) as db:

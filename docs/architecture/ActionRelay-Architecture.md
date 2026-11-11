@@ -1,6 +1,6 @@
 # ActionRelay by CDIT — Technical architecture
 
-Approved requirements amendments recorded on 2026-11-10 and 2026-11-11. The local build contains authenticated synthetic flows, digest-checked resource delivery and atomic public-resource resolution. The Admin-only live path runs Coordinator and Claude Triage for explicitly authorized synthetic requests; a current Auditor decision resumes local Knowledge, Troubleshooting, Escalation and Documentation in sequence. Persisted results are joined into one activity timeline by exact case version. Likely personal or sensitive details are blocked from provider dispatch. This connection needs synthetic end-to-end validation; personal-document department delivery is not implemented and production/CDIT readiness is not claimed.
+Approved requirements amendments recorded on 2026-11-10 and 2026-11-11. The local build contains authenticated synthetic flows, digest-checked resource delivery and atomic public-resource resolution. User or Admin can initiate one explicitly authorized live Triage call for a submitted synthetic request; User calls are restricted to the requester's own ticket and use a short-lived service session scoped to that case because the Coordinator accepts Staff/Admin workflow roles. Persisted runs are attributed to the authenticated requester. A current Auditor decision resumes local Knowledge, Troubleshooting, Escalation and Documentation in sequence. Persisted results are joined into one activity timeline by exact case version. User activity shows only stage states and bounded categories. Likely personal or sensitive details are blocked from provider dispatch. This connection needs synthetic end-to-end validation; personal-document department delivery is not implemented and production/CDIT readiness is not claimed.
 
 [Full field guide](actionrelay-field-guide.html) · [Diagram explorer](actionrelay-architecture.html) · [Standalone SVG](actionrelay-architecture.svg) · [PRD-v4](../requirements/PRD-v4.md)
 
@@ -241,9 +241,9 @@ Internal checks
 - Auditor classifies or revises own latest assigned decision with a reason.
 - Admin overrides require a reason. Closed cases remain read-only.
 
-Output — Versioned decision, human lifecycle action where permitted, or correction submitted for a new run.
+Output — Versioned decision, a separately stored requester-facing response, permitted lifecycle action, or correction submitted for a new run. Staff, Auditor and Admin never overwrite the submitted request text.
 
-Denial — Auditor all-case Queue reads do not permit all-case classification or account/lifecycle writes.
+Denial — Auditor all-case Queue reads do not permit all-case response, classification or lifecycle writes. These writes require assignment; account and assignment changes remain Admin-only. A lifecycle change and its requester-facing response are committed together. Unknown classification cannot resolve or close a case.
 
 Return path — A reasoned correction takes the new-version loop. Optional Admin feedback may leave the decision unchanged.
 
@@ -399,7 +399,7 @@ Admin feedback and flags bind to a case/decision version and its author. Feedbac
 
 Synthetic case/reply/decision content belongs in the permitted case store. Product Health receives allowlisted operational metadata only. Snapshot wheels count mutually exclusive status at cutoff including carryover. Matched-period activity counts events during the same calendar dates and may overlap. Historical outcome dates must come from transition events.
 
-The presentation expands 80 development examples into 960 illustrative variations plus session requests. These are not verified CDIT distributions or held-out acceptance labels. It uses isolated browser memory, simulated processing and no live backend/model write.
+The authenticated local application and walkthrough use 400 synthetic development tickets based on repeated/paraphrased examples, dated across 2024–2026 and grouped into nine broad categories. Forty synthetic cases remain unclassified and are assigned to the Auditor for demonstration. These are not verified CDIT distributions or held-out acceptance labels. The walkthrough is a separate scripted presentation, not a live backend/model write.
 
 ## Employee resource library and personal-document delivery boundary
 

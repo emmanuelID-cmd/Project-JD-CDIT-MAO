@@ -79,6 +79,7 @@ def run_triage(case_id: str, message: str, actor: Actor, client, record_attempt)
         "triage": triage.status if triage else "not_run",
         "reason": triage.reason if triage else result.intake.reason_code,
         "validated_model_result": semantic is not None,
+        "prompt_id": semantic.prompt_id if semantic else None,
         "provider_failure": failure_codes[-1] if failure_codes else None,
         "usage": {"model": semantic.model, "input_tokens": semantic.input_tokens,
                   "output_tokens": semantic.output_tokens, "elapsed_ms": semantic.elapsed_ms}
@@ -172,14 +173,34 @@ def read_runs(case_id: str, actor: Actor = Depends(require_roles("user", "staff"
         workflow["completed_at"] = outcome["recorded_at"]
     rows = sorted(grouped.values(), key=lambda row: row["started_at"], reverse=True)
     if actor.role == "user":
-        return [{key: row[key] for key in ("run_id", "status", "started_at", "completed_at")}
-                for row in rows]
+        # Requesters can trace what actually ran without seeing free-form model
+        # output or internal evidence. All joins above are case-version bound.
+        safe_rows = []
+        for row in rows:
+            result = row.get("result", {})
+            safe_rows.append({
+                "run_id": row["run_id"], "case_version": row["case_version"],
+                "status": row["status"], "started_at": row["started_at"],
+                "completed_at": row["completed_at"],
+                "provider_attempts": row.get("provider_attempts", 0),
+                "result": {
+                    "stages": [{key: stage[key] for key in ("name", "status") if key in stage}
+                               for stage in result.get("stages", [])],
+                    "validated_model_result": bool(result.get("validated_model_result")),
+                    "reason": result.get("reason"),
+                    "provider_failure": result.get("provider_failure"),
+                    "prompt_id": result.get("prompt_id"),
+                    "items": [{"index": item.get("index"), "category": item.get("category")}
+                              for item in result.get("items", [])],
+                },
+            })
+        return safe_rows
     return rows
 
 
 @router.post("/api/cases/{case_id}/agent-runs", status_code=201)
 def start_run(case_id: str, payload: RunAuthorization,
-              actor: Actor = Depends(require_roles("admin"))):
+              actor: Actor = Depends(require_roles("user", "admin"))):
     if not payload.authorize_billable_call:
         raise HTTPException(422, "Confirm authorization for one billable Claude call.")
     if os.environ.get("ACTIONRELAY_ENABLE_LIVE_TRIAGE") != "1":
@@ -190,6 +211,13 @@ def start_run(case_id: str, payload: RunAuthorization,
         raise HTTPException(422, "Live Triage requires a submitted synthetic request of 2,000 characters or fewer.")
     if SENSITIVE_INPUT.search(case["request_text"]):
         raise HTTPException(422, "This request may contain personal or sensitive information. It remains for human review and was not sent to Claude.")
+    # A User can authorize a run only on a case returned by get_case() from
+    # that User's own synthetic requests. The trusted Coordinator intentionally
+    # accepts staff/admin sessions only, so bridge that authorized request via
+    # a service identity scoped to this single case. Persist attribution and the
+    # provider attempt against the actual signed-in requester below.
+    workflow_actor = actor if actor.role == "admin" else Actor(
+        account_id="SYN-ACTIONRELAY-SERVICE", username="actionrelay.service", role="staff")
     try:
         client = create_anthropic_client()
     except AnthropicClientConfigurationError:
@@ -218,14 +246,14 @@ def start_run(case_id: str, payload: RunAuthorization,
                        AND EXISTS (SELECT 1 FROM synthetic_cases
                            WHERE case_id = ? AND updated_at = ? AND status = 'submitted')
                        AND EXISTS (SELECT 1 FROM synthetic_accounts
-                           WHERE account_id = ? AND role = 'admin' AND status = 'active')""",
-                    (run_id, case_id, case["updated_at"], actor.account_id),
+                           WHERE account_id = ? AND role = ? AND status = 'active')""",
+                    (run_id, case_id, case["updated_at"], actor.account_id, actor.role),
                 ).rowcount
                 if not updated:
                     raise RuntimeError("live_triage_authority_changed")
 
         try:
-            result = run_triage(case_id, case["request_text"], actor, client, record_attempt)
+            result = run_triage(case_id, case["request_text"], workflow_actor, client, record_attempt)
             status = "human_review" if result["validated_model_result"] else "blocked"
         except Exception:
             # Store a bounded failure reason. SDK exceptions may contain sensitive details.

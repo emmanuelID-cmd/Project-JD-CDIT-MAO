@@ -2,6 +2,8 @@ const $ = (s, root=document) => root.querySelector(s);
 let displayedWarning = "";
 let signedInActor = {};
 let feedbackByDecision = new Map();
+let auditorFeedbackRows = [];
+let activeAuditorTab = "queue";
 const syntheticSamples = [
   ["IDNYC application", "I need the IDNYC application form."],
   ["Personal W-2", "I need a copy of my personal W-2."],
@@ -41,11 +43,11 @@ function ticketReply(item) {
 
 function agentActivity(item, role) {
   if (item.record_kind !== "user_request") return "";
-  const launch = role === "admin" && item.status === "submitted"
+  const launch = (role === "admin" || role === "user") && item.status === "submitted"
     ? '<form class="stack-form" data-run="' + esc(item.case_id) + '">' +
       '<label class="check-line"><input type="checkbox" name="authorize" required>' +
       'Authorize one billable Claude call</label><p class="helper">Synthetic requests only · max 2,000 characters · privacy screen blocks likely personal or sensitive details.</p>' +
-      '<button class="button primary">▶ Run live Triage</button>' +
+    '<button class="button primary" type="submit">▶ Run live Triage</button>' +
       '<span class="form-message" role="status"></span></form>' : "";
   return '<details class="agent-activity" data-run-details="' + esc(item.case_id) +
     '"><summary>' + relayIcon("activity") + ' Agent activity</summary>' +
@@ -65,7 +67,7 @@ async function refreshRuns(panel) {
         (stage.reasons?.length ? '<small> · ' + esc(stage.reasons.map(pretty).join(', ')) + '</small>' : '') + '</li>').join("");
       return '<article class="run-record">' + statusPill(run.status) + ' <small>' + esc(run.run_id) +
         '</small>' + (stages ? '<ul>' + stages + '</ul>' : '') +
-        (run.provider_attempts !== undefined ? '<p>Provider attempts: ' + run.provider_attempts +
+        (run.provider_attempts !== undefined ? '<p>Provider attempts recorded: ' + run.provider_attempts +
           ' · Validated response: ' + (result.validated_model_result ? "Yes" : "No") + '</p>' : '') +
         (result.usage ? '<p>' + esc(result.usage.model) + ' · ' +
           esc(result.usage.input_tokens) + ' input / ' + esc(result.usage.output_tokens) +
@@ -73,6 +75,8 @@ async function refreshRuns(panel) {
         (result.items?.length ? '<p>Request items: ' + result.items.map(item =>
           '#' + esc(item.index) + ' ' + esc(item.category)).join(' · ') + '</p>' : '') +
         (result.reason ? '<p>' + esc(pretty(result.reason)) + '</p>' : '') +
+        (result.provider_failure ? '<p>Provider failure code: ' + esc(pretty(result.provider_failure)) + '</p>' : '') +
+        (result.prompt_id ? '<p>Prompt version: ' + esc(result.prompt_id) + '</p>' : '') +
         (result.outcome_reason ? '<p>Outcome basis: ' + esc(pretty(result.outcome_reason)) + '</p>' : '') + '</article>';
     }).join("") : '<p class="helper">No agent run recorded.</p>';
   } catch (error) { output.textContent = error.message; }
@@ -110,20 +114,25 @@ function auditorPanel(item, decisions, categories, role) {
   historyHtml = past.length ? historyHtml : "";
   const canReview = item.status !== "closed" && (role === "admin" ||
     signedInActor.auditor && item.assigned_staff_account_id === signedInActor.account_id);
-  if (!canReview) return currentHtml + historyHtml;
+  if (!canReview) return currentHtml + historyHtml + (signedInActor.auditor && item.status !== "closed"
+    ? '<p class="helper auditor-assignment-notice">Assessment is read-only until Admin assigns this case to you.</p>' : '');
   const categoryOptions = categories.map(value => '<option value="' + esc(value) + '">' + esc(value) + '</option>').join('');
-  return currentHtml + '<details class="auditor-panel"><summary>Review and version history <span>Auditor / Admin</span></summary>' + historyHtml +
+  const itemId = item.case_id + ":item-1";
+  const formAction = role === "admin" ? "Record Admin assessment" : "Record Auditor assessment";
+  return currentHtml + '<details class="auditor-panel" open><summary>Assessment and determination <span>' + esc(role === "admin" ? "Admin" : "Auditor") + '</span></summary>' + historyHtml +
     '<form class="auditor-decision-form stack-form" data-auditor-decision="' + esc(item.case_id) + '" data-known-versions="' + esc(JSON.stringify(knownVersions)) + '">' +
-    '<p class="helper">Synthetic prototype only. Record the human decision for one linked item. This does not change ticket status, contact anyone, or execute a routing action. The case text span and case version are checked when saved.</p>' +
-    '<input type="hidden" name="expected_case_version" value="' + esc(item.updated_at) + '"><input type="hidden" name="expected_previous_decision_version" value="0">' +
-    '<div class="row-actions"><label>Item ID<input name="item_id" maxlength="128" required placeholder="ID from the reviewed item packet"></label><label>Item number<input name="item_index" type="number" min="1" max="8" value="1" required></label><label>Items in parent<input name="item_count" type="number" min="1" max="8" value="1" required></label></div>' +
-    '<div class="row-actions"><label>Source span start<input name="source_start" type="number" min="0" value="0" required></label><label>Source span end<input name="source_end" type="number" min="1" max="12000" required></label><label>Category<select name="category" required><option value="">Choose category</option>' + categoryOptions + '</select></label></div>' +
-    '<div class="row-actions"><label>Urgency band<select name="urgency_band" required><option value="">Choose band</option><option value="low">Low [P3]</option><option value="medium">Medium [P2]</option><option value="high">High [P1]</option></select></label><label>Proposed destination<input name="destination" maxlength="120" required placeholder="Human-selected synthetic destination"></label></div>' +
-    '<div class="row-actions"><label>Source ID<input name="source_id" maxlength="128" required placeholder="Source referenced in the review packet"></label><label>Source version<input name="source_version" maxlength="64" required></label><label>Policy version<input name="policy_version" maxlength="64" required></label></div>' +
+    '<p class="helper">Synthetic prototype. Choose the broad category and band, then record the reason and evidence for your assessment. The case text, case version, source range, and taxonomy version are attached automatically. This does not change ticket status or contact anyone.</p>' +
+    '<input type="hidden" name="item_id" value="' + esc(itemId) + '"><input type="hidden" name="item_index" value="1"><input type="hidden" name="item_count" value="1">' +
+    '<input type="hidden" name="source_start" value="0"><input type="hidden" name="source_end" value="' + esc(item.request_text.length) + '">' +
+    '<input type="hidden" name="expected_case_version" value="' + esc(item.updated_at) + '"><input type="hidden" name="expected_previous_decision_version" value="' + esc(knownVersions[itemId] || 0) + '">' +
+    '<input type="hidden" name="source_id" value="' + esc(item.case_id) + '"><input type="hidden" name="source_version" value="' + esc(item.updated_at) + '"><input type="hidden" name="policy_version" value="case-condition-catalog-v2">' +
+    '<div class="row-actions"><label>Category<select name="category" required><option value="">Choose category</option>' + categoryOptions + '</select></label>' +
+    '<label>Urgency band<select name="urgency_band" required><option value="">Choose band</option><option value="low">Low [P3]</option><option value="medium">Medium [P2]</option><option value="high">High [P1]</option></select></label>' +
+    '<label>Responsible department<input name="destination" maxlength="120" required placeholder="e.g. Payroll, HR, Product Support"></label></div>' +
     (role === "admin" ? '<label>Admin override reason<textarea name="admin_override_reason" maxlength="500" rows="2" required placeholder="Why is Admin reviewing outside the assigned Staff workflow?"></textarea></label>' : '') +
     '<label>Reason / rationale<textarea name="rationale" maxlength="2000" rows="3" required></textarea></label><label>Evidence<textarea name="evidence" maxlength="2000" rows="3" required placeholder="Use synthetic evidence references or a brief source-linked explanation"></textarea></label>' +
     '<label>Conditions<textarea name="conditions" maxlength="1000" rows="2" placeholder="One condition per line (optional)"></textarea></label><label>Exceptions<textarea name="exceptions" maxlength="1000" rows="2" placeholder="One exception per line (optional)"></textarea></label>' +
-    '<div class="form-bottom"><span class="helper">Reviewer identity and timestamp come from the authenticated session.</span><button class="button primary" type="submit">Record human decision</button></div><div class="form-message" role="status" aria-live="polite"></div></form></details>';
+    '<div class="form-bottom"><span class="helper">Reviewer identity and timestamp come from your signed-in account.</span><button class="button primary" type="submit">' + esc(formAction) + '</button></div><div class="form-message" role="status" aria-live="polite"></div></form></details>';
 }
 function assignmentPanel(item, role, staffAccounts=[], assignmentEvents=[]) {
   const current = item.assigned_staff_account_id || "";
@@ -138,6 +147,26 @@ function assignmentPanel(item, role, staffAccounts=[], assignmentEvents=[]) {
   ).join("") + '</details>' : '';
   return '<form class="case-assignment-form" data-case-assignment="' + esc(item.case_id) + '"><label>Assigned Staff<select name="staff_account_id"><option value="">Unassigned</option>' + options + '</select></label><button class="button secondary" type="submit">Save assignment</button><span class="form-message" role="status" aria-live="polite"></span></form>' + historyHtml;
 }
+function caseResponsePanel(item, role) {
+  const canWrite = role === "admin" || role === "staff" &&
+    (!signedInActor.auditor || item.assigned_staff_account_id === signedInActor.account_id);
+  if (!canWrite || item.status === "closed") return "";
+  const statusChoices = (item.allowed_next_statuses || []).map(status =>
+    '<option value="' + esc(status) + '">' + esc(pretty(status)) + '</option>').join("");
+  return '<form class="case-response-form stack-form" data-case-response="' + esc(item.case_id) + '">' +
+    '<label>Response to requester<textarea name="response" maxlength="4000" rows="3" required placeholder="Write the update or resolution message for this ticket."></textarea></label>' +
+    '<div class="row-actions"><label>Ticket status<select name="status"><option value="">Keep ' + esc(pretty(item.status)) + '</option>' + statusChoices + '</select></label>' +
+    '<button class="button primary" type="submit">Save response</button></div>' +
+    '<span class="form-message" role="status" aria-live="polite"></span></form>';
+}
+function caseResponseHistory(item) {
+  const responses = Array.isArray(item.responses) ? item.responses : [];
+  if (!responses.length) return "";
+  return '<section class="case-response-history" aria-label="Ticket responses"><h4>Ticket responses</h4>' +
+    responses.map(entry => '<article class="case-response"><p>' + esc(entry.response_text) + '</p><small>' +
+      esc(entry.responded_by) + ' · ' + esc(new Date(entry.created_at).toLocaleString()) + '</small></article>').join("") +
+    '</section>';
+}
 function cardForCase(item, role, decisions=[], categories=[], staffAccounts=[], assignmentEvents=[]) {
   const displayStatus = item.display_status || item.status;
   const kind = item.record_kind === "development_example" ? '<span class="role-pill">Development example</span>' : '<span class="role-pill">Client request</span>';
@@ -149,24 +178,29 @@ function cardForCase(item, role, decisions=[], categories=[], staffAccounts=[], 
   } else if (role === "user" && item.can_cancel) {
     controls = '<span class="helper">Editing is locked while support reviews this request.</span><button class="button secondary danger" type="button" data-case-cancel="' + esc(item.case_id) + '">' + relayIcon("close") + ' Request withdrawal</button>';
   } else if (signedInActor.auditor) {
-    controls = auditorPanel(item, decisions, categories, role);
+    controls = caseResponsePanel(item, role) + auditorPanel(item, decisions, categories, role);
   } else if (role !== "user") {
-    controls = assignmentPanel(item, role, staffAccounts, assignmentEvents) + '<form class="case-edit-form" data-case-edit="' + esc(item.case_id) + '"><label>Request title<input name="subject" maxlength="160" value="' + esc(item.subject) + '" required></label><label>Request details<textarea name="request_text" maxlength="12000" rows="3" required>' + esc(item.request_text) + '</textarea></label><div class="row-actions"><button class="button secondary" type="submit">Save case details</button>' + (item.allowed_next_statuses.length ? '<label class="status-control">Change status<select name="next_status" required><option value="">Choose status</option>' + statusOptions("", item.allowed_next_statuses) + '</select></label><button class="button primary" type="button" data-case-status="' + esc(item.case_id) + '">' + relayIcon("check") + ' Update status</button>' : '<span class="helper">Closed is terminal.</span>') + '</div><span class="form-message" role="status"></span></form>' + auditorPanel(item, decisions, categories, role);
+    controls = assignmentPanel(item, role, staffAccounts, assignmentEvents) + caseResponsePanel(item, role) + auditorPanel(item, decisions, categories, role);
   } else {
     controls = '<span class="helper">' + (item.closure_reason === "requester_cancelled_unresolved" ? "Cancelled by you as unresolved." : "This request is no longer editable.") + '</span>';
   }
-  return '<article class="case-card"><div><div class="case-meta">' + kind + (role !== "user" ? '<span class="case-id">' + ownerLabel + ' ' + esc(item.owner_account_id) + '</span>' : '') + '</div><h3>' + esc(item.subject) + '</h3><p>' + esc(item.request_text) + '</p>' + rationale + ticketReply(item) + '<div class="case-meta"><span class="case-id">' + esc(item.case_id) + '</span>' + statusPill(displayStatus) + statusPill(item.urgency_band) + (item.withdrawal_requested_at && item.status !== "closed" ? '<span class="status-pill">Withdrawal requested</span>' : "") + (item.review_flag ?
+  return '<article class="case-card" data-case-id="' + esc(item.case_id) + '"><div><div class="case-meta">' + kind + (role !== "user" ? '<span class="case-id">' + ownerLabel + ' ' + esc(item.owner_account_id) + '</span>' : '') + '</div><h3>' + esc(item.subject) + '</h3><p>' + esc(item.request_text) + '</p>' + rationale + caseResponseHistory(item) + ticketReply(item) + '<div class="case-meta"><span class="case-id">' + esc(item.case_id) + '</span>' + statusPill(displayStatus) + statusPill(item.urgency_band) + (item.withdrawal_requested_at && item.status !== "closed" ? '<span class="status-pill">Withdrawal requested</span>' : "") + (item.review_flag ?
     '<span class="review-flag">' + relayIcon("flag") + 'Close out or Review</span>' : "") + '<span>Created ' + esc(new Date(item.created_at).toLocaleString()) + '</span></div></div><div class="case-actions">' + controls + agentActivity(item,role) + '</div></article>';
 }
 function empty(message) { return '<div class="empty-state"><b>' + esc(message) + '</b><span>There are no synthetic records to show.</span></div>'; }
 function setNav(role) {
-  const items = role === "user"
+  const auditorTabs = role === "staff" && signedInActor.auditor;
+  const items = auditorTabs
+    ? [["queue","▤","Case Queue"],["analytics","◉","Analytics"],["feedback","⚑","Admin Feedback"],["metadata","⌁","Metadata"]]
+    : role === "user"
     ? [["/app/user","▤","My requests"],["#new-request","＋","New request"]]
     : role === "staff"
     ? [["/app/staff","▤","Work queue"],["#product-health","⌁","Product Health"]]
     : [["/app/admin","▤","Overview"],["#accounts","♙","Accounts & access"],["#product-health","⌁","Product Health"],["#extension-alerts","◷","Session requests"]];
   $("#workspace-label").textContent = role === "user" ? "CLIENT WORKSPACE" : role === "staff" ? "SUPPORT OPERATIONS" : "ADMINISTRATION";
-  $("#side-nav").innerHTML = items.map((item,i)=>'<a class="nav-item ' + (i===0 ? "active" : "") + '" href="' + item[0] + '"><span>' + item[1] + '</span>' + item[2] + '</a>').join("");
+  $("#side-nav").innerHTML = items.map((item,i)=>auditorTabs
+    ? '<a class="nav-item ' + (i===0 ? "active" : "") + '" href="#' + item[0] + '" data-auditor-tab="' + item[0] + '" aria-current="' + (i===0 ? "page" : "false") + '"><span>' + item[1] + '</span>' + item[2] + '</a>'
+    : '<a class="nav-item ' + (i===0 ? "active" : "") + '" href="' + item[0] + '"><span>' + item[1] + '</span>' + item[2] + '</a>').join("");
   $("#actor-role").textContent = role === "user" ? "Client view" : role === "staff" ? (signedInActor.auditor ? "Auditor" : "Support operations") : "Privileged access";
   $("#avatar").className = "avatar " + role;
   $("#avatar").textContent = role[0].toUpperCase();
@@ -190,13 +224,16 @@ function renderCases(cases, role, decisions=[], categories=[], staffAccounts=[],
   root.innerHTML=cases.length ? cases.map(c=>cardForCase(c,role,decisions,categories,staffAccounts,assignmentEvents)).join("") : empty(role==="user" ? "No requests yet" : "Queue is clear");
 }
 function requestForm() {
-  return '<section class="panel" id="new-request"><div class="panel-heading"><div><div class="eyebrow">CREATE A CASE</div><h2>Tell us what you need</h2><p class="muted">Synthetic prototype only. Do not enter real personal, health, or customer information.</p></div><span class="panel-icon">＋</span></div><div class="resource-intro"><b>Personal documents:</b> This local build does not accept uploads. In a connected workflow, documents go only to the department responsible for the request, are used only for that department’s review, and are not retained in automated-processing or ticket records. Do not include real IDs, medical records, tax forms, or work-authorization documents in this prototype.</div><form id="request-form" class="stack-form"><label for="subject">Request title</label><input id="subject" name="subject" maxlength="160" placeholder="e.g. Report export access" required><label for="request-text">What happened or what do you need?</label><textarea id="request-text" name="request_text" maxlength="12000" rows="5" placeholder="Describe your synthetic support request." required></textarea><div class="form-bottom"><span class="helper">Synthetic examples only · 12,000 character maximum · See Forms & Resources in the footer</span><button class="button primary" type="submit">' + relayIcon("send") + ' Submit request</button></div><div id="request-message" class="form-message" role="status" aria-live="polite"></div></form></section>';
+  return '<section class="panel" id="new-request"><div class="panel-heading"><div><div class="eyebrow">CREATE A CASE</div><h2>Tell us what you need</h2><p class="muted">Synthetic prototype only. Do not enter real personal, health, or customer information.</p></div><span class="panel-icon">＋</span></div><div class="resource-intro"><b>Personal documents:</b> This local build does not accept uploads. In a connected workflow, documents go only to the department responsible for the request, are used only for that department’s review, and are not retained in automated-processing or ticket records. Do not include real IDs, medical records, tax forms, or work-authorization documents in this prototype.</div><form id="request-form" class="stack-form"><label for="subject">Request title</label><input id="subject" name="subject" maxlength="160" placeholder="e.g. Report export access" required><label for="request-text">What happened or what do you need?</label><textarea id="request-text" name="request_text" maxlength="12000" rows="5" placeholder="Describe your synthetic support request." required></textarea><label class="check-line"><input type="checkbox" name="authorize_live_triage"> If this request remains open, authorize one billable Claude Triage call</label><p class="helper">This sends the synthetic request text to Claude only after the checkbox is selected. One call maximum for this case version. Likely personal or sensitive content is blocked before dispatch.</p><div class="form-bottom"><span class="helper">Synthetic examples only · 12,000 character maximum · See Forms & Resources in the footer</span><button class="button primary" type="submit">' + relayIcon("send") + ' Submit request</button></div><div id="request-message" class="form-message" role="status" aria-live="polite"></div></form></section>';
 }
 function renderStaffPanels(role) {
   const header = '<div class="section-head"><div><h2>' + (role==="user" ? "Recent requests" : "Case queue") + '</h2><p class="muted">' + (role==="user" ? "Only requests submitted by this account appear here." : "Manage the synthetic queue and the 80 tagged development examples. Agent outputs remain proposals.") + '</p></div>' + (role==="user" ? '<button class="button secondary" data-scroll="#new-request">＋ New request</button>' : '<button class="button secondary" id="refresh-cases" title="Refresh queue" aria-label="Refresh queue">' + relayIcon("reset") + '</button>') + '</div><div id="case-list" class="case-list" aria-live="polite"><div class="loading-card"><span class="spinner"></span> Loading synthetic cases…</div></div>';
-  let body=header;
+  let body=signedInActor.auditor
+    ? '<section class="auditor-tab-panel" data-auditor-view="queue" id="auditor-queue-view">' + header + '</section>'
+    : header;
   if(role==="user") body+=requestForm();
-  if(role!=="user") body+='<section class="panel" id="product-health"><div class="panel-heading"><div><div class="eyebrow">SYSTEM SIGNALS</div><h2>Product Health</h2><p class="muted">Allowlisted synthetic metadata only. Ticket bodies and arbitrary model text are not stored here.</p></div><span class="panel-icon blue">⌁</span></div><div id="health-events" class="health-list"><div class="loading-card"><span class="spinner"></span> Loading metadata…</div></div></section>';
+  if(signedInActor.auditor) body+='<section class="auditor-tab-panel" data-auditor-view="analytics" id="relay-analytics"></section><section class="auditor-tab-panel" data-auditor-view="feedback"><div class="panel"><div class="panel-heading"><div><div class="eyebrow">DECISION OVERSIGHT</div><h2>Admin feedback</h2><p class="muted">Notes and flags from Admin, attached to your recorded decision versions.</p></div><span class="panel-icon violet">⚑</span></div><div id="auditor-feedback-list" class="health-list"></div></div></section><section class="auditor-tab-panel" data-auditor-view="metadata"><section class="panel" id="product-health"><div class="panel-heading"><div><div class="eyebrow">SYSTEM SIGNALS</div><h2>Product Health Metadata</h2><p class="muted">Allowlisted synthetic metadata only. Ticket bodies and arbitrary model text are not stored here.</p></div><span class="panel-icon blue">⌁</span></div><div id="health-events" class="health-list"><div class="loading-card"><span class="spinner"></span> Loading metadata…</div></div></section><section class="panel"><div class="panel-heading"><div><div class="eyebrow">ACCOUNT REFERENCE</div><h2>Account directory</h2><p class="muted">Read-only directory. Account changes remain Admin-only.</p></div></div><div id="auditor-directory"></div></section></section>';
+  else if(role!=="user") body+='<section class="panel" id="product-health"><div class="panel-heading"><div><div class="eyebrow">SYSTEM SIGNALS</div><h2>Product Health</h2><p class="muted">Allowlisted synthetic metadata only. Ticket bodies and arbitrary model text are not stored here.</p></div><span class="panel-icon blue">⌁</span></div><div id="health-events" class="health-list"><div class="loading-card"><span class="spinner"></span> Loading metadata…</div></div></section>';
   if(role==="admin") body+='<section class="panel" id="accounts"><div class="panel-heading"><div><div class="eyebrow">PRIVILEGED CONTROLS</div><h2>Accounts & access</h2><p class="muted">Change role or status for synthetic accounts. Changes record before/after values.</p></div><span class="panel-icon violet">♙</span></div><div id="account-list" class="table-wrap"><div class="loading-card"><span class="spinner"></span> Loading accounts…</div></div></section><section class="panel" id="extension-alerts"><div class="panel-heading"><div><div class="eyebrow">SESSION OVERSIGHT</div><h2>Session review requests</h2><p class="muted">Reviewing never extends a session.</p></div><span class="panel-icon">◷</span></div><div id="extension-list" class="health-list"><div class="loading-card"><span class="spinner"></span> Loading requests…</div></div></section>';
   $("#view-content").innerHTML=body;
 }
@@ -204,6 +241,36 @@ function renderHealth(data) {
   const root=$("#health-events"); if(!root)return;
   const events=data.events||[];
   root.innerHTML=events.length ? events.map(e=>'<div class="health-row"><div><b>' + esc(pretty(e.event_type)) + '</b><small>' + esc(e.component) + ' · v' + esc(e.component_version) + ' · ' + esc(new Date(e.occurred_at).toLocaleString()) + '</small></div><span class="health-code">' + esc(e.error_code || e.status_code || "recorded") + '</span></div>').join("") : empty("No Product Health events");
+}
+function renderAuditorFeedback(entries) {
+  const root=$("#auditor-feedback-list"); if(!root)return;
+  root.innerHTML=entries.length ? entries.map(entry=>'<article class="health-row"><div><b>' +
+    (entry.flagged ? '⚑ Flagged decision' : 'Admin note') + '</b><small>' + esc(entry.case_id) +
+    ' · Decision v' + esc(entry.decision_version) + ' · ' + esc(new Date(entry.created_at).toLocaleString()) +
+    '</small><p>' + esc(entry.note || (entry.flagged ? "Admin flagged this decision for review." : "No note text was added.")) +
+    '</p><button class="button secondary" type="button" data-feedback-case="' + esc(entry.case_id) + '">Open case</button></div></article>').join("") : empty("No Admin feedback on your decisions yet");
+}
+function activateAuditorTab(tab) {
+  const allowed = new Set(["queue","analytics","feedback","metadata"]);
+  activeAuditorTab = allowed.has(tab) ? tab : "queue";
+  document.querySelectorAll("[data-auditor-view]").forEach(panel => {
+    panel.hidden = panel.dataset.auditorView !== activeAuditorTab;
+  });
+  document.querySelectorAll("[data-auditor-tab]").forEach(link => {
+    const active = link.dataset.auditorTab === activeAuditorTab;
+    link.classList.toggle("active", active);
+    link.setAttribute("aria-current", active ? "page" : "false");
+  });
+  const labels = {
+    queue: ["AUDITOR WORKSPACE / CASE QUEUE","Auditor queue","Review the full ticket queue. Write and record decisions on your assigned cases."],
+    analytics: ["AUDITOR WORKSPACE / ANALYTICS","Analytics","Activity and case trends from recorded synthetic data."],
+    feedback: ["AUDITOR WORKSPACE / FEEDBACK","Admin feedback","Review Admin notes and flags attached to your decision versions."],
+    metadata: ["AUDITOR WORKSPACE / METADATA","Metadata","Product Health signals and the read-only account directory."]
+  }[activeAuditorTab];
+  $("#crumb").textContent = labels[0];
+  $("#page-title").textContent = labels[1];
+  $("#page-description").textContent = labels[2];
+  $("#metrics").hidden = activeAuditorTab !== "analytics";
 }
 function renderAccounts(accounts) {
   const root=$("#account-list"); if(!root)return;
@@ -218,6 +285,10 @@ async function loadData(role) {
   if (role === "admin" || signedInActor.auditor) {
     const feedback = await api("/api/auditor/feedback");
     feedbackByDecision = Map.groupBy(feedback, entry => entry.decision_id);
+    if (signedInActor.auditor) {
+      auditorFeedbackRows = feedback;
+      renderAuditorFeedback(feedback);
+    }
   }
   let decisions=[],categories=[];
   if(role!=="user") [decisions,categories]=await Promise.all([api("/api/auditor/decisions"),api("/api/auditor/taxonomy")]).then(([d,t])=>[d,t.categories||[]]);
@@ -299,10 +370,8 @@ async function start() {
         ${actor.auditor ? '<label class="check-line"><input type="checkbox" name="assigned" value="1"> My assigned work</label>' : ""}
         <button type="reset" class="icon-button" title="Reset filters" aria-label="Reset filters">${relayIcon("reset")}</button></form></details>`);
     }
-    if (actor.auditor) {
-      $("#view-content").insertAdjacentHTML("beforeend", '<section class="panel"><h2>Account directory</h2><div id="auditor-directory"></div></section>');
-    }
     await loadData(role);
+    if (actor.auditor) activateAuditorTab(activeAuditorTab);
     if(role==="user") {
       const form = $("#request-form");
       form.addEventListener("submit", submitRequest);
@@ -328,6 +397,10 @@ async function start() {
     }, true);
     const refresh=$("#refresh-cases"); if(refresh)refresh.addEventListener("click",()=>loadData(role).catch(e=>showMessage($("#admin-message"),e.message,"error")));
     document.addEventListener("click", async e=>{
+      const auditorTab=e.target.closest("[data-auditor-tab]");
+      if(auditorTab){e.preventDefault();activateAuditorTab(auditorTab.dataset.auditorTab);return;}
+      const feedbackCase=e.target.closest("[data-feedback-case]");
+      if(feedbackCase){activateAuditorTab("queue");requestAnimationFrame(()=>document.querySelector('[data-case-id="' + CSS.escape(feedbackCase.dataset.feedbackCase) + '"]')?.scrollIntoView({behavior:"smooth",block:"center"}));return;}
       const scroll=e.target.closest("[data-scroll]"); if(scroll){e.preventDefault();document.querySelector(scroll.dataset.scroll)?.scrollIntoView({behavior:"smooth"});}
       const roleSave=e.target.closest("[data-role-save]"); if(roleSave){const id=roleSave.dataset.roleSave;const select=document.querySelector('[data-role-select="' + id + '"]');if(select.value)await adminChange(id,{role:select.value},role);else showMessage($("#admin-message"),"Choose a role first.");}
       const statusSave=e.target.closest("[data-status-save]"); if(statusSave){const id=statusSave.dataset.statusSave;const select=document.querySelector('[data-status-select="' + id + '"]');if(select.value)await adminChange(id,{status:select.value},role);else showMessage($("#admin-message"),"Choose an access status first.");}
@@ -356,6 +429,20 @@ async function start() {
       }
     });
     document.addEventListener("submit", async e=>{
+      const responseForm=e.target.closest("form[data-case-response]");
+      if(responseForm){
+        e.preventDefault();const message=responseForm.querySelector(".form-message");const button=responseForm.querySelector('[type="submit"]');button.disabled=true;
+        try{
+          const result=await api("/api/cases/"+encodeURIComponent(responseForm.dataset.caseResponse)+"/status",{
+            method:"PATCH",body:JSON.stringify({status:responseForm.elements.status.value||null,response:responseForm.elements.response.value})
+          });
+          await loadData(role);
+          if(signedInActor.auditor) activateAuditorTab(activeAuditorTab);
+          showMessage($("[data-case-id=\""+CSS.escape(responseForm.dataset.caseResponse)+"\"] .form-message"),result.changed?"Response saved and ticket status updated.":"Response saved.","success");
+        }catch(error){showMessage(message,error.message,"error");}
+        finally{button.disabled=false;}
+        return;
+      }
       const run = e.target.closest("form[data-run]");
       if (run) {
         e.preventDefault();
@@ -437,8 +524,30 @@ async function start() {
 async function signOut(){await api("/auth/logout",{method:"POST"}).catch(()=>{});location.assign("/login");}
 async function submitRequest(event) {
   event.preventDefault();const form=event.currentTarget;const button=form.querySelector('[type="submit"]');button.disabled=true;
-  try { const created=await api("/api/cases",{method:"POST",body:JSON.stringify({subject:form.elements.subject.value,request_text:form.elements.request_text.value})});showMessage($("#request-message"),created.status === "resolved" ? "Resolved. The requested document or official resource is available in your ticket." :
-    "Request submitted as " + created.case_id + ". It remains open for review.","success");form.reset();await loadData("user"); }
+  const authorizeLive = form.elements.authorize_live_triage.checked;
+  try {
+    const created=await api("/api/cases",{method:"POST",body:JSON.stringify({subject:form.elements.subject.value,request_text:form.elements.request_text.value})});
+    if (created.status === "resolved") {
+      showMessage($("#request-message"),"Resolved. The requested document or official resource is available in your ticket; no model call was needed.","success");
+    } else if (authorizeLive) {
+      showMessage($("#request-message"),"Request submitted. Starting the one authorized live Triage call…");
+      try {
+        const run = await api("/api/cases/" + encodeURIComponent(created.case_id) + "/agent-runs", {
+          method:"POST", body:JSON.stringify({authorize_billable_call:true})
+        });
+        showMessage($("#request-message"),"Request submitted. Live Triage recorded " + run.run_id + " (" + pretty(run.status) + "). Check Agent activity for actual stages.","success");
+      } catch (error) {
+        showMessage($("#request-message"),"Request submitted as " + created.case_id + ". Live Triage did not start: " + error.message + ". Open Agent activity to inspect or retry after correcting the cause.","error");
+      }
+    } else {
+      showMessage($("#request-message"),"Request submitted as " + created.case_id + ". It remains open. You can authorize a live Triage call from Agent activity.","success");
+    }
+    form.reset();await loadData("user");
+    if (created.status !== "resolved") {
+      const panel=[...document.querySelectorAll("[data-run-details]")].find(node=>node.dataset.runDetails===created.case_id);
+      if(panel){panel.open=true;await refreshRuns(panel);}
+    }
+  }
   catch(error){showMessage($("#request-message"),error.message,"error");}finally{button.disabled=false;}
 }
 async function adminChange(id,change,role) {

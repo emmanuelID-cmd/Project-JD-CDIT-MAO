@@ -117,7 +117,7 @@ def test_adapter_sends_minimized_synthetic_request_and_validates_output():
     assert user_payload["items"] == [{"item_index": 1, "text": "I cannot access the trial schedule."}]
     assert "case_id" not in user_payload
     assert result.request_payload_sha256 == hashlib.sha256(exact_user_body.encode("utf-8")).hexdigest()
-    assert result.prompt_id == SYSTEM_PROMPT_ID == "manny-triage-system-v2"
+    assert result.prompt_id == SYSTEM_PROMPT_ID == "manny-triage-system-v3"
     assert call["system"] == SYSTEM_PROMPT
     assert call["output_config"]["format"]["type"] == "json_schema"
     assert call["output_config"]["format"]["schema"]["additionalProperties"] is False

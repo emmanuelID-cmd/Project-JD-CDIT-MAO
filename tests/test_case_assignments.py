@@ -64,7 +64,7 @@ def test_admin_assignment_scopes_staff_and_records_history(tmp_path, monkeypatch
     assert staff.post(decision_url, json=decision_payload).status_code == 403
     assert "SYN-CASE-001" in {case["case_id"] for case in second_staff.get("/api/cases").json()}
     assert second_staff.get("/api/cases/SYN-CASE-001").json()["assigned_staff_account_id"] == "SYN-STAFF-002"
-    assert len(admin.get("/api/cases").json()) == 81
+    assert len(admin.get("/api/cases").json()) == 401
     assert staff.get("/api/auditor/decisions").json() == []
     assert len(second_staff.get("/api/auditor/decisions").json()) == 1
     assert len(admin.get("/api/auditor/decisions").json()) == 1

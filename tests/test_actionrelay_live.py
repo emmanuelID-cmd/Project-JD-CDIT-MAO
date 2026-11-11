@@ -40,26 +40,37 @@ def test_billable_run_is_explicit_scoped_and_deduplicated(tmp_path, monkeypatch)
     monkeypatch.delenv("ACTIONRELAY_ENABLE_LIVE_TRIAGE", raising=False)
     assert admin.post(route, json=allow).status_code == 503
     monkeypatch.setenv("ACTIONRELAY_ENABLE_LIVE_TRIAGE", "1")
-    assert user.post(route, json=allow).status_code == 403
-    assert admin.post(route, json={"authorize_billable_call": False}).status_code == 422
-    assert admin.post(submit(user, "Unapproved free text") + "/agent-runs", json=allow).status_code == 422
+    unknown_case = submit(user, "The synthetic scheduling portal shows a blank panel after I choose a weekly view.")
+    assert user.post(unknown_case + "/agent-runs", json={"authorize_billable_call": False}).status_code == 422
+    assert admin.post(unknown_case + "/agent-runs", json={"authorize_billable_call": False}).status_code == 422
     attempts = []
+    workflow_roles = []
     monkeypatch.setattr(actionrelay_live, "create_anthropic_client", lambda: nullcontext(object()))
 
     def invoke(case_id, message, actor, client, record_attempt):
         attempts.append(case_id)
+        workflow_roles.append(actor.role)
         record_attempt()
-        return {"validated_model_result": True, "triage": "proposal_for_human_review"}
+        return {"validated_model_result": True, "triage": "proposal_for_human_review",
+                "coordinator": "ready_for_triage", "reason": "proposal_for_human_review",
+                "items": [{"index": 1, "category": "Scheduling"}]}
 
     monkeypatch.setattr(actionrelay_live, "run_triage", invoke)
-    run = admin.post(route, json=allow)
+    run = user.post(unknown_case + "/agent-runs", json=allow)
     assert run.status_code == 201
     assert run.json()["provider_attempts"] == 1
-    assert admin.get(route).json()[0] == run.json()
-    assert admin.post(route, json=allow).status_code == 409
+    assert workflow_roles == ["staff"]  # The scoped Coordinator service identity, not a broadened User role.
+    admin_view = admin.get(unknown_case + "/agent-runs").json()[0]
+    assert admin_view["run_id"] == run.json()["run_id"]
+    assert [stage["name"] for stage in admin_view["result"]["stages"]] == ["Coordinator", "Claude Triage"]
+    user_view = user.get(unknown_case + "/agent-runs").json()[0]
+    assert user_view["provider_attempts"] == 1
+    assert [stage["name"] for stage in user_view["result"]["stages"]] == ["Coordinator", "Claude Triage"]
+    assert user_view["result"]["items"] == [{"index": 1, "category": "Scheduling"}]
+    assert "usage" not in user_view["result"]
+    assert user.post(unknown_case + "/agent-runs", json=allow).status_code == 409
     assert len(attempts) == 1
-    assert user.get(case).json()["status"] == "submitted"
-    assert "result" not in user.get(route).json()[0]
+    assert user.get(unknown_case).json()["status"] == "submitted"
 
 
 def test_auditor_queue_and_version_feedback_scope(tmp_path, monkeypatch):
@@ -74,9 +85,20 @@ def test_auditor_queue_and_version_feedback_scope(tmp_path, monkeypatch):
     assert auditor.post(decision_route, json=payload_for(auditor.get(case).json(), category)).status_code == 404
     assert auditor.get("/api/admin/accounts").status_code == 403
     assert auditor.get("/api/auditor/accounts").status_code == 200
-    assert auditor.patch(case + "/status", json={"status": "in_progress"}).status_code == 403
     assert admin.patch("/api/admin/cases/" + case_id + "/assignment",
                        json={"staff_account_id": "SYN-AUDITOR-001"}).status_code == 200
+    status_update = auditor.patch(case + "/status", json={
+        "status": "in_progress", "response": "We have started reviewing this synthetic request."
+    })
+    assert status_update.status_code == 200, status_update.text
+    assert auditor.patch(case + "/status", json={
+        "status": "resolved", "response": "This should remain blocked while classification is unknown."
+    }).status_code == 409
+    requester_view = user.get(case).json()
+    assert requester_view["request_text"] == "Synthetic review case"
+    assert requester_view["responses"][0]["response_text"] == "We have started reviewing this synthetic request."
+    assert auditor.patch(case, json={"request_text": "Auditor rewrite"}).status_code == 403
+    assert admin.patch(case, json={"request_text": "Rewrite the requester message"}).status_code == 403
     reviewed = auditor.post(decision_route, json=payload_for(auditor.get(case).json(), category))
     assert reviewed.status_code == 201, reviewed.text
     decision = reviewed.json()["decision_id"]
@@ -86,4 +108,4 @@ def test_auditor_queue_and_version_feedback_scope(tmp_path, monkeypatch):
     entries = auditor.get("/api/auditor/feedback").json()
     assert [(row["decision_id"], row["decision_version"], row["flagged"]) for row in entries] == [(decision, 1, 1)]
     assert staff.get("/api/auditor/feedback").status_code == 403
-    assert user.get(case).json()["status"] == "submitted"
+    assert user.get(case).json()["status"] == "in_progress"

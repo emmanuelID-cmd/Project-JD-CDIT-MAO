@@ -36,6 +36,39 @@
     overflow-wrap: anywhere;
 }
 
+.auditor-tab-panel[hidden] { display: none !important; }
+
+.case-response-form {
+    margin-top: .85rem;
+    padding: 1rem;
+    border: 1px solid #57718f;
+    border-radius: .8rem;
+    background: linear-gradient(145deg, rgba(37, 57, 82, .9), rgba(20, 38, 58, .96));
+    box-shadow: inset 0 1px rgba(255,255,255,.05), 0 .5rem 1.4rem rgba(0,0,0,.14);
+}
+
+.case-response-form textarea { min-height: 5.5rem; }
+.case-response-form .row-actions { align-items: end; }
+.case-response-form select { min-width: 13rem; }
+
+.case-response-history {
+    display: grid;
+    gap: .55rem;
+    margin-block: .8rem;
+}
+
+.case-response-history h4 { margin: 0; color: #a9c4dd; }
+.case-response {
+    padding: .75rem .85rem;
+    border-inline-start: 3px solid #62d6be;
+    border-radius: .45rem;
+    background: rgba(24, 45, 70, .78);
+}
+.case-response p { margin: 0 0 .35rem; white-space: pre-wrap; }
+.case-response small { color: #9eb0c5; }
+
+[data-auditor-tab] { cursor: pointer; }
+
 .check-line {
     display: flex;
     align-items: center;

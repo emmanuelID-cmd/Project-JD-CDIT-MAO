@@ -3,6 +3,7 @@ from __future__ import annotations
 
 import hashlib
 import json
+import random
 import sqlite3
 from contextlib import closing
 from datetime import datetime, timezone, timedelta
@@ -13,6 +14,33 @@ from cdit_support_mao.config import database_path
 
 class MigrationError(RuntimeError):
     """Raised when local schema history is inconsistent with packaged migrations."""
+
+
+_COMPACT_CATEGORY_ROWS = {
+    "Safety & Wellbeing": {1, 2, 3, 11, 13, 41},
+    "Privacy, Security & Access": {4, 5, 15, 34, 35, 36, 37, 50, 75, 77},
+    "Payroll, Benefits & Expenses": {6, 7, 8, 16, 17, 18, 19, 20, 42, 47, 51, 52, 53, 54, 55},
+    "Technical Issues & Outages": {9, 14, 33, 74, 76},
+    "Scheduling & Leave": {10, 21, 22, 23, 24, 48, 56, 57, 58, 69, 70},
+    "Compliance & Legal": {12, 38, 39, 40, 43},
+    "HR & Workplace Relations": {25, 26, 27, 28, 29, 30, 44, 59, 60, 63, 65, 66, 67, 68, 79, 80},
+    "Customer Service & Feedback": {31, 32, 45, 49, 71, 72, 73, 78},
+    "Forms & Documents": {46, 61, 62, 64},
+}
+_CATEGORY_BY_ROW = {
+    row_number: category
+    for category, rows in _COMPACT_CATEGORY_ROWS.items()
+    for row_number in rows
+}
+_DEVELOPMENT_STATUS_COUNTS = {
+    "submitted": 48,
+    "in_progress": 96,
+    "waiting_on_customer": 48,
+    "under_investigation": 48,
+    "escalated": 32,
+    "resolved": 88,
+    "closed": 40,
+}
 
 
 # One earlier local v2 migration used different source bytes but created this exact schema.
@@ -40,7 +68,7 @@ def _matches_legacy_case_catalog_schema(connection: sqlite3.Connection) -> bool:
             return False
     required_objects = {
         "synthetic_case_catalog_band_idx", "synthetic_case_change_events_case_time_idx",
-        "synthetic_cases_catalog_id_uq", "synthetic_cases_kind_status_idx",
+        "synthetic_cases_kind_status_idx",
         "synthetic_case_catalog_kind_insert", "synthetic_case_catalog_kind_update",
     }
     actual_objects = {
@@ -67,6 +95,74 @@ def _timestamp(value: datetime | None = None) -> str:
     if instant.tzinfo is None:
         raise ValueError("timestamps must be timezone-aware")
     return instant.astimezone(timezone.utc).strftime("%Y-%m-%dT%H:%M:%S.%fZ")
+
+
+def _development_case_specs(catalog_rows: list[dict], now: datetime) -> list[dict]:
+    """Build 400 reproducible synthetic tickets dated over the prior three years."""
+    rng = random.Random(20261111)
+    specs = []
+    for copy_index in range(5):
+        for example in catalog_rows:
+            row = example["row_number"]
+            sequence = copy_index * len(catalog_rows) + row
+            case_id = f"SYN-CASE-EX-{row:03d}" if copy_index == 0 else f"SYN-CASE-EX-{row:03d}-R{copy_index + 1}"
+            issue_label = example.get("issue_label", example["category"])
+            variants = (
+                example["example_query"],
+                "Could you help me with this? " + example["example_query"],
+                "I need assistance with the following: " + example["example_query"],
+                example["example_query"] + " Please let me know the next step.",
+                "Can I get help with this? " + example["example_query"],
+            )
+            specs.append({
+                "row": row, "sequence": sequence, "case_id": case_id,
+                "issue_label": issue_label, "category": example["category"],
+                "catalog_id": example["catalog_id"], "band": example["default_band"],
+                "request_text": variants[copy_index],
+                "subject": f"Example {row:02d}: {issue_label}" if copy_index == 0
+                           else f"Repeat {sequence:03d}: {issue_label}",
+            })
+    statuses = [status for status, count in _DEVELOPMENT_STATUS_COUNTS.items() for _ in range(count)]
+    rng.shuffle(statuses)
+    if statuses[0] != "submitted":
+        replacement = statuses.index("submitted", 1)
+        statuses[0], statuses[replacement] = statuses[replacement], statuses[0]
+    start = datetime(2024, 1, 1, tzinfo=timezone.utc)
+    latest_start = now.astimezone(timezone.utc) - timedelta(days=45)
+    day_span = max(1, (latest_start.date() - start.date()).days)
+    for spec, status in zip(specs, statuses, strict=True):
+        unknown_classification = spec["sequence"] % 10 == 0
+        if unknown_classification:
+            status = "submitted" if spec["sequence"] % 20 == 0 else "in_progress"
+            spec["category"] = None
+            spec["band"] = "unknown"
+        created = start + timedelta(days=rng.randrange(day_span), seconds=rng.randrange(86400))
+        spec["created"] = created
+        spec["status"] = status
+        spec["assignee"] = "SYN-AUDITOR-001" if spec["sequence"] % 2 == 0 else "SYN-STAFF-001"
+        spec["history"] = []
+        if status == "in_progress":
+            path = ["in_progress"]
+        elif status == "waiting_on_customer":
+            path = ["in_progress", "waiting_on_customer"]
+        elif status == "under_investigation":
+            path = ["in_progress", "under_investigation"]
+        elif status == "escalated":
+            path = ["in_progress", "escalated"]
+        elif status == "resolved":
+            path = ["in_progress", "resolved"]
+        elif status == "closed":
+            path = ["in_progress", "resolved", "closed"]
+        else:
+            path = []
+        prior = "submitted"
+        at = created
+        for index, next_status in enumerate(path):
+            at += timedelta(days=rng.randint(1, 7), hours=rng.randint(0, 20))
+            spec["history"].append((prior, next_status, at, index))
+            prior = next_status
+        spec["updated"] = at
+    return specs
 
 
 def _migration_files() -> list[tuple[int, str, bytes]]:
@@ -167,39 +263,116 @@ def seed_synthetic_data(path: str | Path | None = None, *, now: datetime | None 
                    VALUES (?, ?, ?, 'user_submitted', NULL, 'submitted', 'initial_submission', ?)""",
                 ("EV-CASE-001-INIT", "SYN-CASE-001", "SYN-USER-001", created),
             )
-        catalog_path = Path(__file__).parent / "catalogs" / "case-condition-catalog-v1.json"
+        catalog_path = Path(__file__).parent / "catalogs" / "case-condition-catalog-v2.json"
         catalog_rows = json.loads(catalog_path.read_text(encoding="utf-8"))
         for example in catalog_rows:
             connection.execute(
-                """INSERT OR IGNORE INTO synthetic_case_catalog
+                """INSERT INTO synthetic_case_catalog
                    (catalog_id, row_number, category, example_query, default_band, rationale,
                     source_document, source_version, is_synthetic)
-                   VALUES (?, ?, ?, ?, ?, ?, ?, ?, 1)""",
+                   VALUES (?, ?, ?, ?, ?, ?, ?, ?, 1)
+                   ON CONFLICT(catalog_id) DO UPDATE SET
+                     category=excluded.category,
+                     example_query=excluded.example_query,
+                     default_band=excluded.default_band,
+                     rationale=excluded.rationale,
+                     source_version=excluded.source_version""",
                 (
                     example["catalog_id"], example["row_number"], example["category"],
                     example["example_query"], example["default_band"], example["rationale"],
                     example["source_document"], example["source_version"],
                 ),
             )
-            case_id = f"SYN-CASE-EX-{example['row_number']:03d}"
-            seeded = connection.execute(
-                """INSERT OR IGNORE INTO synthetic_cases
-                   (case_id, owner_account_id, subject, request_text, status, urgency_band,
-                    is_synthetic, created_at, updated_at, record_kind, category, catalog_id)
-                   VALUES (?, 'SYN-STAFF-001', ?, ?, 'submitted', ?, 1, ?, ?, 'development_example', ?, ?)""",
-                (
-                    case_id, f"Example {example['row_number']:02d}: {example['category']}",
-                    example["example_query"], example["default_band"], created, created,
-                    example["category"], example["catalog_id"],
-                ),
-            )
-            if seeded.rowcount == 1:
+        for spec in _development_case_specs(catalog_rows, now or datetime.now(timezone.utc)):
+            case_id = spec["case_id"]
+            existing = connection.execute(
+                "SELECT status, created_at, updated_at, assigned_staff_account_id FROM synthetic_cases WHERE case_id = ?",
+                (case_id,),
+            ).fetchone()
+            if existing:
                 connection.execute(
-                    """INSERT OR IGNORE INTO synthetic_case_change_events
+                    "UPDATE synthetic_cases SET category = ? WHERE case_id = ? AND record_kind = 'development_example'",
+                    (spec["category"], case_id),
+                )
+            event_rows = connection.execute(
+                "SELECT event_id, action FROM synthetic_case_change_events WHERE case_id = ? ORDER BY occurred_at, event_id",
+                (case_id,),
+            ).fetchall()
+            pristine_seed = bool(
+                existing
+                and existing["status"] == "submitted"
+                and len(event_rows) == 1
+                and event_rows[0]["action"] == "example_seeded"
+                and not connection.execute("SELECT 1 FROM synthetic_auditor_decisions WHERE case_id = ? LIMIT 1", (case_id,)).fetchone()
+                and not connection.execute("SELECT 1 FROM synthetic_case_responses WHERE case_id = ? LIMIT 1", (case_id,)).fetchone()
+            )
+            if existing is None:
+                connection.execute(
+                    """INSERT INTO synthetic_cases
+                       (case_id, owner_account_id, subject, request_text, status, urgency_band,
+                        is_synthetic, created_at, updated_at, record_kind, category, catalog_id,
+                        assigned_staff_account_id, closure_reason)
+                       VALUES (?, 'SYN-STAFF-001', ?, ?, ?, ?, 1, ?, ?, 'development_example', ?, ?, ?, ?)""",
+                    (case_id, spec["subject"], spec["request_text"], spec["status"], spec["band"],
+                     _timestamp(spec["created"]), _timestamp(spec["updated"]), spec["category"],
+                     spec["catalog_id"], spec["assignee"], "staff_closed" if spec["status"] == "closed" else None),
+                )
+                connection.execute(
+                    """INSERT INTO synthetic_case_change_events
                        (event_id, case_id, actor_account_id, action, before_status, after_status, reason_code, occurred_at)
                        VALUES (?, ?, 'SYN-STAFF-001', 'example_seeded', NULL, 'submitted', 'synthetic_catalog_seed', ?)""",
-                    (f"EV-CASE-EX-{example['row_number']:03d}-INIT", case_id, created),
+                    (f"EV-{case_id}-INIT", case_id, _timestamp(spec["created"])),
                 )
+                if spec["assignee"]:
+                    connection.execute(
+                        """INSERT INTO synthetic_case_assignment_events
+                           (event_id, case_id, actor_account_id, previous_staff_account_id,
+                            assigned_staff_account_id, action, occurred_at)
+                           VALUES (?, ?, NULL, NULL, ?, 'seed_assigned', ?)""",
+                        ("CASE-ASG-SEED-" + case_id, case_id, spec["assignee"], _timestamp(now)),
+                    )
+            elif pristine_seed:
+                connection.execute(
+                    """UPDATE synthetic_cases
+                       SET subject=?, request_text=?, status=?, urgency_band=?, created_at=?, updated_at=?,
+                           category=?, catalog_id=?, closure_reason=? WHERE case_id=?""",
+                    (spec["subject"], spec["request_text"], spec["status"], spec["band"],
+                     _timestamp(spec["created"]), _timestamp(spec["updated"]), spec["category"],
+                     spec["catalog_id"], "staff_closed" if spec["status"] == "closed" else None, case_id),
+                )
+                connection.execute(
+                    "UPDATE synthetic_case_change_events SET occurred_at = ? WHERE event_id = ?",
+                    (_timestamp(spec["created"]), event_rows[0]["event_id"]),
+                )
+                for before, after, at, transition_index in spec["history"]:
+                    connection.execute(
+                        """INSERT OR IGNORE INTO synthetic_case_change_events
+                           (event_id, case_id, actor_account_id, action, before_status, after_status, reason_code, occurred_at)
+                           VALUES (?, ?, 'SYN-STAFF-001', 'staff_status_updated', ?, ?, 'human_status_change', ?)""",
+                        (f"EV-{case_id}-{transition_index + 1}", case_id, before, after, _timestamp(at)),
+                    )
+            # Reassign only previously seeded fixtures. Preserve any later Admin decision.
+            assignment = connection.execute(
+                "SELECT assigned_staff_account_id FROM synthetic_cases WHERE case_id = ?", (case_id,)
+            ).fetchone()[0]
+            if existing is not None and assignment == "SYN-STAFF-001" and spec["assignee"] == "SYN-AUDITOR-001":
+                latest_assignment = connection.execute(
+                    "SELECT action FROM synthetic_case_assignment_events WHERE case_id = ? ORDER BY occurred_at DESC, event_id DESC LIMIT 1",
+                    (case_id,),
+                ).fetchone()
+                if latest_assignment and latest_assignment["action"] == "seed_assigned":
+                    assignment_stamp = _timestamp(now)
+                    connection.execute(
+                        "UPDATE synthetic_cases SET assigned_staff_account_id = ? WHERE case_id = ?",
+                        (spec["assignee"], case_id),
+                    )
+                    connection.execute(
+                        """INSERT INTO synthetic_case_assignment_events
+                           (event_id, case_id, actor_account_id, previous_staff_account_id,
+                            assigned_staff_account_id, action, occurred_at)
+                           VALUES (?, ?, 'SYN-ADMIN-001', 'SYN-STAFF-001', ?, 'reassigned', ?)""",
+                        ("CASE-ASG-REBALANCE-" + case_id, case_id, spec["assignee"], assignment_stamp),
+                    )
         initial_assignments = connection.execute(
             """SELECT case_id FROM synthetic_cases c
                WHERE c.assigned_staff_account_id IS NULL
@@ -229,7 +402,7 @@ def seed_synthetic_data(path: str | Path | None = None, *, now: datetime | None 
             ("SYN-EVENT-SEED-001", created),
         )
         connection.commit()
-    return {"accounts": len(accounts), "cases": 1 + len(catalog_rows), "catalog_examples": len(catalog_rows), "product_health_events": 1}
+    return {"accounts": len(accounts), "cases": 1 + len(catalog_rows) * 5, "catalog_examples": len(catalog_rows) * 5, "product_health_events": 1}
 
 
 def _subtract_months(instant: datetime, months: int) -> datetime:
@@ -275,7 +448,7 @@ def reset_synthetic_data(path: str | Path | None = None) -> dict[str, int]:
         "session_extension_alerts", "account_access_events", "sessions",
         "synthetic_case_assignment_events", "actionrelay_auditor_feedback",
         "actionrelay_runs", "actionrelay_review_runs", "actionrelay_ticket_outcomes",
-        "synthetic_auditor_decisions",
+        "synthetic_auditor_decisions", "synthetic_case_responses",
         "synthetic_case_change_events", "synthetic_cases", "synthetic_case_catalog",
         "product_health_summaries", "product_health_events",
         "synthetic_accounts",
