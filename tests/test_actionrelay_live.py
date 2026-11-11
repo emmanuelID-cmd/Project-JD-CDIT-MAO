@@ -104,3 +104,24 @@ def test_auditor_queue_and_version_feedback_scope(tmp_path, monkeypatch):
     assert [(row["decision_id"], row["decision_version"], row["flagged"]) for row in entries] == [(decision, 1, 1)]
     assert staff.get("/api/auditor/feedback").status_code == 403
     assert user.get(case).json()["status"] == "submitted"
+
+
+def test_live_triage_summary_reports_proposed_category_not_its_label():
+    # Fake client only: no provider call. The summary must show the proposed
+    # category; "inference"/"unknown" is its evidence label, kept separately.
+    from test_manny_triage_runtime_harness import FakeClient, FakeMessages
+    from cdit_support_mao.web import Actor
+
+    messages = FakeMessages(category="Work access blocked", quote="cannot access")
+    attempts = []
+    result = actionrelay_live.run_triage(
+        "SYN-CASE-summary", "I cannot access the portal",
+        Actor("SYN-ADMIN-001", "admin.demo", "admin"), FakeClient(messages),
+        lambda: attempts.append(1),
+    )
+    assert result["validated_model_result"] is True
+    assert result["items"] == [{
+        "index": 1, "category": "Work access blocked", "category_label": "inference",
+        "urgency": "unknown", "urgency_label": "unknown",
+    }]
+    assert len(messages.calls) == 1 and attempts == [1]

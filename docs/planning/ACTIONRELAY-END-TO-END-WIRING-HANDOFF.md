@@ -42,11 +42,17 @@ This section is a handoff record, not a message already sent. Complete it when S
   - **Start folder.** The default Knowledge corpus and Troubleshooting policy paths resolve against the project root when the server starts outside it. Before, a resume from another start folder failed as `downstream_execution_blocked`.
   - **Test hygiene.** `test_billable_run_is_explicit_scoped_and_deduplicated` expected the old three-prompt rule. It also reached real client construction with the live flag on, so a machine whose `.env` holds a key could make a billable call during `pytest`. The test now stubs client construction first and checks the 2,000-character and sensitive-input rejections. Its timeline assertion matches the joined activity view.
 - **Handoff commit / PR:** fill in after publishing.
-- **Validation evidence (2026-11-11, synthetic, no provider call):**
-  - `pytest`: 773 passed.
+- **Validation evidence (2026-11-11, synthetic):**
+  - `pytest`: 774 passed.
   - **App-wired run:** in a scratch database through the authenticated API, User submit → Admin assignment to `auditor.demo` → Auditor decision → resume. A Knowledge-supported request completed all four downstream stages; a lockout request recorded Knowledge `abstained` (weak evidence), Troubleshooting `abstained` (knowledge abstained), Escalation `completed` (human review), and Documentation `completed` (draft note). Both remained Submitted.
   - **Browser:** the same lockout path was repeated in the authenticated UI as `auditor.demo`. Saving the decision triggered the resume, and **Agent activity** showed the six-row timeline above.
-  - **Not yet run:** one live Claude Triage call through the app. It needs a local `.env` key, `ACTIONRELAY_ENABLE_LIVE_TRIAGE=1`, and explicit per-call authorization.
+  - **Live six-agent run (one authorized billable call, 2026-11-11).** A scratch database with `ACTIONRELAY_ENABLE_LIVE_TRIAGE=1` and Shawn's project-local `.env` key was used. In the browser UI:
+    1. As `user.demo`, submitted "Site user cannot find where to export the site enrollment report."
+    2. As `admin.demo`, ticked **Authorize one billable Claude call** and clicked **Run live Triage**. Run `AR-RUN-34a4b6de3dc34c4cb88a0dafc852e863`: Coordinator `ready_for_triage`, Claude Triage `proposal_for_human_review`, 1 provider attempt, validated response, `claude-sonnet-5-5`, 2,841 input and 208 output tokens.
+    3. Admin assigned the case to `auditor.demo`. This does not change the case version.
+    4. As `auditor.demo`, recorded decision v1 (Product how-to / documentation request, Low). The resume ran Knowledge `completed`, Troubleshooting `completed`, Escalation `completed` (`no_escalation_proposed`), and Documentation `completed` (`draft_note`).
+    5. **Agent activity** showed all seven rows on one case-version timeline. The server log shows exactly one `POST /agent-runs` and no errors. The case stayed Submitted.
+  - **Triage summary mapping (fixed after the live run).** The connector summary put the item's evidence label (`inference`) in the `category` field, so the timeline read "#1 inference". It now records the proposed category and urgency with their labels, and the UI shows them under "Proposed for review". A fake-client test covers it. The run above was stored before the fix and still shows the old summary; no second call was made.
 - **Open issues or owner returns:**
   - **Resource gate (Manny).** "My last payslip seems lower than my timesheet suggests." is auto-resolved at intake with the synthetic weekly timesheet (`synthetic_weekly_timesheet`). It reads as an individual pay discrepancy, which section 4 says must go to a human. Returned to the gate owner; not changed here.
   - **Stage order (Manny/PRD).** The PRD workflow names parallel Knowledge/Escalation before Troubleshooting. `EscalationAgent.run` accepts the Troubleshooting result, and the tested harness runs it after Troubleshooting, so the app follows the harness. Confirm or record the PRD order as a later change.

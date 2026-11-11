@@ -71,8 +71,11 @@ async function refreshRuns(panel) {
         (result.usage ? '<p>' + esc(result.usage.model) + ' · ' +
           esc(result.usage.input_tokens) + ' input / ' + esc(result.usage.output_tokens) +
           ' output tokens</p>' : '') +
-        (result.items?.length ? '<p>Request items: ' + result.items.map(item =>
-          '#' + esc(item.index) + ' ' + esc(item.category)).join(' · ') + '</p>' : '') +
+        (result.items?.length ? '<p>Proposed for review: ' + result.items.map(item =>
+          '#' + esc(item.index) + ' ' + esc(item.category) +
+          (item.category_label ? ' (' + esc(item.category_label) + ')' : '') +
+          (item.urgency ? ' · urgency ' + esc(pretty(item.urgency)) +
+            (item.urgency_label ? ' (' + esc(item.urgency_label) + ')' : '') : '')).join(' · ') + '</p>' : '') +
         (result.reason ? '<p>' + esc(pretty(result.reason)) + '</p>' : '') +
         (result.outcome_reason ? '<p>Outcome basis: ' + esc(pretty(result.outcome_reason)) + '</p>' : '') + '</article>';
     }).join("") : '<p class="helper">No agent run recorded.</p>';
