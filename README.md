@@ -2,6 +2,12 @@
 
 Planning workspace for a human-supervised multi-agent orchestration (MAO) assistant supporting Tier 1 customer support for a clinical-trial-management SaaS platform.
 
+## ActionRelay in 30 seconds
+
+[![Watch the 30-second ActionRelay demo](docs/presentations/ActionRelay-promo/ActionRelay-30s-demo-poster.jpg)](https://cdn.jsdelivr.net/gh/emmanuelID-cmd/Project-JD-CDIT-MAO@c3f8a07620e00acf7d9beff64d056a0a22e43846/docs/presentations/ActionRelay-promo/ActionRelay-30s-demo.mp4)
+
+**[Watch the 30-second demo](https://cdn.jsdelivr.net/gh/emmanuelID-cmd/Project-JD-CDIT-MAO@c3f8a07620e00acf7d9beff64d056a0a22e43846/docs/presentations/ActionRelay-promo/ActionRelay-30s-demo.mp4)** (opens in the browser on desktop and mobile). It shows a routine request resolved with an approved form, six agents passing one version-checked handoff, a sensitive case routed to a person, and the Admin overview. All data is synthetic. The source and recording script are in [`docs/presentations/ActionRelay-promo/`](docs/presentations/ActionRelay-promo/).
+
 ## Project status
 
 PRD-v4 is the current requirements source. Manny owns the SQL foundation and local app/auth/UI work; the Manny agent phases remain separately tracked in Checklist.md. The SQL foundation includes local synthetic authentication, server-authorized User/Staff/Admin routes, an 80-row Staff/Admin-only development example catalog, human-only case status/edit controls, and three static unauthenticated previews. User accounts see only their own requests, can edit while Submitted, see In Progress as In Review, and may cancel their own unresolved request. Agents remain read-only. Current verification is tracked in Checklist.md; manual browser/accessibility review remains open. No real customer or CDIT data is used.
