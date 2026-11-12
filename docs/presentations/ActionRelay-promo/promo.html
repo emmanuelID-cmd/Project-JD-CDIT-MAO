@@ -1,0 +1,313 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ActionRelay 30-second demo</title>
+<style>
+  :root {
+    --bg: #070d1a; --ink: #f4f7fc; --muted: #aab8cc; --dim: #7d8ba3;
+    --mint: #62e2c2; --gold: #ffd17d; --lilac: #b895ff; --coral: #ff8b75;
+    --card: #111b2e; --edge: rgba(255,255,255,.12);
+    --ease: cubic-bezier(.2,.7,.2,1);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { width: 100%; height: 100%; background: #000; overflow: hidden; }
+  body { font-family: "Aptos", "Segoe UI", system-ui, sans-serif; color: var(--ink); }
+  #stage { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; overflow: hidden;
+           background: var(--bg); transform-origin: 0 0; }
+  h1, h2, .display { font-family: "Aptos Display", "Aptos", "Segoe UI", sans-serif; font-weight: 700; letter-spacing: -.01em; }
+
+  /* ---------- Background ---------- */
+  .glow { position: absolute; border-radius: 50%; pointer-events: none; }
+  .g1 { width: 1300px; height: 1300px; left: -420px; top: -560px;
+        background: radial-gradient(closest-side, rgba(98,226,194,.20), rgba(98,226,194,0));
+        animation: drift1 30s linear 0s both; }
+  .g2 { width: 1500px; height: 1500px; right: -560px; top: -260px;
+        background: radial-gradient(closest-side, rgba(150,110,255,.24), rgba(150,110,255,0));
+        animation: drift2 30s linear 0s both; }
+  .g3 { width: 1400px; height: 1400px; left: 280px; bottom: -900px;
+        background: radial-gradient(closest-side, rgba(70,130,255,.18), rgba(70,130,255,0));
+        animation: drift3 30s linear 0s both; }
+  @keyframes drift1 { from { transform: translate(0,0); } to { transform: translate(260px,160px); } }
+  @keyframes drift2 { from { transform: translate(0,0); } to { transform: translate(-220px,120px); } }
+  @keyframes drift3 { from { transform: translate(0,0); } to { transform: translate(180px,-140px); } }
+  .dots { position: absolute; inset: 0; opacity: .5;
+          background-image: radial-gradient(rgba(255,255,255,.07) 1.4px, transparent 1.6px);
+          background-size: 48px 48px; }
+  .vignette { position: absolute; inset: 0; pointer-events: none;
+              background: radial-gradient(ellipse at center, rgba(0,0,0,0) 55%, rgba(0,0,0,.45) 100%); }
+
+  /* ---------- Timeline helpers ---------- */
+  .scene { position: absolute; inset: 0; opacity: 0;
+           animation: sceneIn .55s var(--ease) var(--in) both, sceneOut .45s ease-in var(--out) forwards; }
+  @keyframes sceneIn { from { opacity: 0; transform: translateY(18px); filter: blur(6px); }
+                       to { opacity: 1; transform: none; filter: none; } }
+  @keyframes sceneOut { from { opacity: 1; transform: none; filter: none; }
+                        to { opacity: 0; transform: translateY(-14px); filter: blur(6px); } }
+  .rise { animation: rise .7s var(--ease) var(--d) both; }
+  @keyframes rise { from { opacity: 0; transform: translateY(34px); } to { opacity: 1; transform: none; } }
+  .pop { animation: pop .6s var(--ease) var(--d) both; }
+  @keyframes pop { from { opacity: 0; transform: translateY(24px) scale(.94); } to { opacity: 1; transform: none; } }
+
+  /* ---------- Persistent brand bug and footer ---------- */
+  .bug { position: absolute; left: 140px; top: 52px; display: flex; align-items: center; gap: 18px; opacity: 0;
+         animation: sceneIn .5s var(--ease) 3.7s both, sceneOut .4s ease-in 26.75s forwards; }
+  .bug img { height: 50px; }
+  .bug span { font-size: 34px; font-weight: 700; letter-spacing: -.01em; }
+  .foot { position: absolute; right: 140px; bottom: 44px; font-size: 26px; color: var(--dim); opacity: 0;
+          animation: sceneIn .5s var(--ease) 3.7s both, sceneOut .4s ease-in 26.75s forwards; }
+
+  /* ---------- Shared slide type ---------- */
+  .eyebrow { position: absolute; left: 140px; top: 150px; font-size: 30px; font-weight: 700;
+             letter-spacing: .16em; text-transform: uppercase; color: var(--mint); }
+  .headline { position: absolute; left: 140px; top: 188px; font-size: 80px; line-height: 1.05; white-space: nowrap; }
+  .sub { position: absolute; left: 140px; top: 292px; font-size: 40px; color: var(--muted); white-space: nowrap; }
+
+  /* ---------- Scene 1: brand open ---------- */
+  .s1 { --in: 0s; --out: 3.15s; animation: sceneOut .45s ease-in var(--out) forwards; opacity: 1; }
+  .s1 .center { position: absolute; left: 0; right: 0; top: 250px; text-align: center; }
+  .s1 .logo { height: 190px; }
+  .s1 .name { font-size: 132px; margin-top: 18px; line-height: 1; }
+  .s1 .tag { font-size: 54px; color: var(--muted); margin-top: 26px; }
+  .s1 .kicker { display: inline-block; margin-top: 46px; font-size: 32px; letter-spacing: .14em; text-transform: uppercase;
+                color: var(--mint); font-weight: 700; padding: 14px 30px; border: 1.5px solid rgba(98,226,194,.45);
+                border-radius: 999px; background: rgba(98,226,194,.08); }
+  .sheen { position: absolute; left: 0; top: 0; width: 100%; height: 100%; pointer-events: none;
+           background: linear-gradient(105deg, transparent 40%, rgba(255,255,255,.10) 50%, transparent 60%);
+           animation: sheen 1.6s ease-in-out .2s both; }
+  @keyframes sheen { from { transform: translateX(-70%); } to { transform: translateX(70%); } }
+
+  /* ---------- Scene 2: problem ---------- */
+  .s2 { --in: 3.6s; --out: 7.85s; }
+  .s2 .headline { top: 196px; font-size: 96px; }
+  .problems { position: absolute; left: 140px; right: 140px; top: 420px; display: grid;
+              grid-template-columns: repeat(3, 1fr); gap: 40px; }
+  .problem { background: linear-gradient(180deg, rgba(20,32,54,.92), rgba(14,22,40,.92)); border: 1.5px solid var(--edge);
+             border-radius: 28px; padding: 40px 40px 44px; min-height: 380px; }
+  .icon { width: 92px; height: 92px; border-radius: 50%; display: grid; place-items: center; margin-bottom: 30px; }
+  .icon svg { width: 50px; height: 50px; fill: none; stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round; }
+  .problem h3 { font-size: 48px; line-height: 1.1; margin-bottom: 16px; font-family: "Aptos Display", "Aptos", sans-serif; }
+  .problem p { font-size: 32px; line-height: 1.35; color: var(--muted); }
+  .i-coral { background: rgba(255,139,117,.14); } .i-coral svg { stroke: var(--coral); }
+  .i-gold { background: rgba(255,209,125,.14); } .i-gold svg { stroke: var(--gold); }
+  .i-lilac { background: rgba(184,149,255,.16); } .i-lilac svg { stroke: var(--lilac); }
+
+  /* ---------- Scene 3: six agents ---------- */
+  .s3 { --in: 7.85s; --out: 13.25s; }
+  .s3 .headline { top: 196px; font-size: 92px; }
+  .s3 .sub { top: 318px; }
+  .chain { position: absolute; left: 145px; top: 520px; width: 1630px; height: 300px; }
+  .node { position: absolute; top: 0; width: 250px; height: 132px; border-radius: 24px; border: 2px solid var(--edge);
+          background: rgba(17,27,46,.95); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px;
+          animation: pop .5s var(--ease) var(--d) both, nodeOn .35s ease-out var(--on) forwards; }
+  .node b { font-size: 24px; color: var(--dim); font-weight: 700; letter-spacing: .1em; }
+  .node span { font-size: 28px; font-weight: 700; }
+  @keyframes nodeOn { to { border-color: var(--mint); background: rgba(98,226,194,.13);
+                           box-shadow: 0 0 0 6px rgba(98,226,194,.10), 0 0 46px rgba(98,226,194,.35); } }
+  .track { position: absolute; left: 125px; width: 1380px; top: 196px; height: 6px; border-radius: 3px; background: rgba(255,255,255,.10); }
+  .fill { position: absolute; left: 0; top: 0; height: 100%; width: 100%; border-radius: 3px; transform-origin: 0 50%;
+          background: linear-gradient(90deg, var(--mint), var(--lilac)); animation: fill 2.5s linear 9.6s both; }
+  @keyframes fill { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+  .tick { position: absolute; top: 186px; width: 26px; height: 26px; margin-left: -13px; border-radius: 50%;
+          background: var(--bg); border: 3px solid rgba(255,255,255,.22); }
+  .packet { position: absolute; left: 125px; top: 172px; width: 54px; height: 54px; margin-left: -27px; border-radius: 50%;
+            background: radial-gradient(circle at 40% 35%, #fff, var(--gold) 45%, rgba(255,209,125,.0) 72%);
+            box-shadow: 0 0 40px 10px rgba(255,209,125,.45); opacity: 0;
+            animation: packetIn .25s ease-out 9.4s forwards, travel 2.5s linear 9.6s both; }
+  @keyframes packetIn { to { opacity: 1; } }
+  @keyframes travel { from { transform: translateX(0); } to { transform: translateX(1380px); } }
+  .packet-label { position: absolute; left: 0; right: 0; top: 248px; text-align: center; font-size: 34px; color: var(--gold); font-weight: 600; }
+
+  /* ---------- UI cards ---------- */
+  .card { position: absolute; border-radius: 26px; overflow: hidden; border: 1.5px solid rgba(255,255,255,.16);
+          box-shadow: 0 40px 90px rgba(0,0,0,.55), 0 0 0 1px rgba(0,0,0,.4), 0 0 80px rgba(98,226,194,.10);
+          transform-origin: var(--focus, 50% 50%);
+          animation: cardIn .9s var(--ease) var(--d) both, push var(--kb, 4s) linear var(--d) both; }
+  .card img { display: block; width: 100%; height: 100%; object-fit: cover; }
+  @keyframes cardIn { from { opacity: 0; transform: perspective(1600px) translateY(70px) rotateX(10deg) scale(.96); }
+                      to { opacity: 1; transform: none; } }
+  @keyframes push { from { scale: 1; } to { scale: 1.03; } }
+  .chip { position: absolute; display: inline-flex; align-items: center; gap: 16px; font-size: 38px; font-weight: 700;
+          padding: 18px 34px; border-radius: 999px; white-space: nowrap; }
+  .chip svg { width: 38px; height: 38px; fill: none; stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; }
+  .chip.mint { color: var(--mint); background: rgba(98,226,194,.12); border: 2px solid rgba(98,226,194,.55); }
+  .chip.mint svg { stroke: var(--mint); }
+  .chip.coral { color: #ffb4a6; background: rgba(255,139,117,.12); border: 2px solid rgba(255,139,117,.55); }
+  .chip.coral svg { stroke: var(--coral); }
+
+  .s4 { --in: 13.25s; --out: 17.05s; }
+  .s5 { --in: 17.05s; --out: 20.75s; }
+  .s5 .eyebrow { top: 300px; } .s5 .headline { top: 344px; white-space: normal; width: 960px; }
+  .s5 .sub { top: 538px; white-space: normal; width: 930px; line-height: 1.35; }
+  .s6 { --in: 20.75s; --out: 24.35s; }
+  .s6 .eyebrow { color: var(--coral); }
+  .s7 { --in: 24.35s; --out: 26.75s; }
+  .s7 .eyebrow { color: var(--lilac); }
+  .badges { position: absolute; left: 0; right: 0; top: 846px; display: flex; justify-content: center; gap: 26px; }
+  .badge { font-size: 32px; font-weight: 600; padding: 14px 30px; border-radius: 999px; color: var(--ink);
+           background: rgba(255,255,255,.06); border: 1.5px solid rgba(255,255,255,.18); }
+  .badge::before { content: ""; display: inline-block; width: 14px; height: 14px; border-radius: 50%;
+                   background: var(--mint); margin-right: 14px; vertical-align: 3px; }
+
+  /* ---------- Scene 8: end card ---------- */
+  .s8 { --in: 26.75s; --out: 99s; }
+  .s8 .center { position: absolute; left: 0; right: 0; top: 150px; text-align: center; }
+  .s8 .logo { height: 120px; }
+  .s8 .name { font-size: 64px; margin-top: 12px; }
+  .cta { display: inline-flex; align-items: center; gap: 26px; margin-top: 56px; padding: 30px 70px; border-radius: 999px;
+         background: linear-gradient(135deg, #7ff0d3, var(--mint)); color: #06231c; font-size: 84px; font-weight: 800;
+         box-shadow: 0 0 0 10px rgba(98,226,194,.14), 0 24px 70px rgba(98,226,194,.35);
+         animation: pop .6s var(--ease) 27.05s both, pulse 1.6s ease-in-out 27.8s both; }
+  .cta svg { width: 70px; height: 70px; fill: none; stroke: #06231c; stroke-width: 3.6; stroke-linecap: round; stroke-linejoin: round; }
+  @keyframes pulse { 0%,100% { box-shadow: 0 0 0 10px rgba(98,226,194,.14), 0 24px 70px rgba(98,226,194,.35); }
+                     50% { box-shadow: 0 0 0 22px rgba(98,226,194,.07), 0 24px 90px rgba(98,226,194,.5); } }
+  .url { margin-top: 46px; font-size: 54px; font-weight: 600; color: var(--ink); letter-spacing: .005em; }
+  .url small { color: var(--mint); font-size: inherit; }
+  .credit { margin-top: 44px; font-size: 34px; color: var(--muted); }
+  .tech { margin-top: 14px; font-size: 28px; color: var(--dim); }
+</style>
+</head>
+<body>
+<div id="stage">
+  <div class="glow g1"></div><div class="glow g2"></div><div class="glow g3"></div>
+  <div class="dots"></div>
+
+  <!-- Persistent brand bug and honesty label (scenes 2-7). -->
+  <div class="bug"><img src="ui/actionrelay-logo.svg" alt=""><span>ActionRelay</span></div>
+  <div class="foot">Prototype · synthetic data</div>
+
+  <!-- 1. Brand open: fully visible on frame 0 so it doubles as the poster frame. -->
+  <section class="scene s1">
+    <div class="center">
+      <img class="logo" src="ui/actionrelay-logo.svg" alt="ActionRelay logo">
+      <h1 class="name">ActionRelay</h1>
+      <p class="tag">From request to action.</p>
+      <div class="kicker rise" style="--d:.5s">Human-supervised · multi-agent Tier 1 support</div>
+    </div>
+    <div class="sheen"></div>
+  </section>
+
+  <!-- 2. The problem, from the Customer Support Specialist job description. -->
+  <section class="scene s2">
+    <div class="eyebrow rise" style="--d:3.75s">The problem</div>
+    <h2 class="headline rise" style="--d:3.85s">Support queues don’t wait.</h2>
+    <div class="problems">
+      <div class="problem pop" style="--d:4.45s">
+        <div class="icon i-coral"><svg viewBox="0 0 24 24"><circle cx="12" cy="13" r="8"/><path d="M12 9v4l2.5 2.5M9 2h6M12 2v3"/></svg></div>
+        <h3>SLA pressure</h3>
+        <p>At-risk tickets must be flagged before they breach.</p>
+      </div>
+      <div class="problem pop" style="--d:4.95s">
+        <div class="icon i-gold"><svg viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"/><path d="M7 4h10M7 20h10"/></svg></div>
+        <h3>Routine volume</h3>
+        <p>Password resets and access questions crowd the queue.</p>
+      </div>
+      <div class="problem pop" style="--d:5.45s">
+        <div class="icon i-lilac"><svg viewBox="0 0 24 24"><path d="M12 3l8 3v6c0 4.5-3.4 8.2-8 9-4.6-.8-8-4.5-8-9V6l8-3z"/><path d="M9 12l2 2 4-4"/></svg></div>
+        <h3>Sensitive handoffs</h3>
+        <p>HIPAA-bound cases need full context, every time.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 3. Six agents, one handoff packet travelling the chain. -->
+  <section class="scene s3">
+    <div class="eyebrow rise" style="--d:8.0s">The design</div>
+    <h2 class="headline rise" style="--d:8.1s">Six agents. One accountable handoff.</h2>
+    <p class="sub rise" style="--d:8.35s">Each handoff is checked before the next agent acts.</p>
+    <div class="chain">
+      <div class="track"><div class="fill"></div></div>
+      <div class="tick" style="left:125px"></div><div class="tick" style="left:401px"></div><div class="tick" style="left:677px"></div>
+      <div class="tick" style="left:953px"></div><div class="tick" style="left:1229px"></div><div class="tick" style="left:1505px"></div>
+      <div class="node" style="left:0px;--d:8.6s;--on:9.6s"><b>01</b><span>Coordinator</span></div>
+      <div class="node" style="left:276px;--d:8.72s;--on:10.1s"><b>02</b><span>Triage</span></div>
+      <div class="node" style="left:552px;--d:8.84s;--on:10.6s"><b>03</b><span>Knowledge</span></div>
+      <div class="node" style="left:828px;--d:8.96s;--on:11.1s"><b>04</b><span>Troubleshooting</span></div>
+      <div class="node" style="left:1104px;--d:9.08s;--on:11.6s"><b>05</b><span>Escalation</span></div>
+      <div class="node" style="left:1380px;--d:9.2s;--on:12.1s"><b>06</b><span>Documentation</span></div>
+      <div class="packet"></div>
+      <div class="packet-label rise" style="--d:10.0s">Handoff packet: case version · evidence · confidence · unknowns</div>
+    </div>
+  </section>
+
+  <!-- 4. Routine request resolved with the approved file. -->
+  <section class="scene s4">
+    <div class="eyebrow rise" style="--d:13.4s">Routine request</div>
+    <h2 class="headline rise" style="--d:13.5s">Routine requests, resolved.</h2>
+    <p class="sub rise" style="--d:13.7s">The approved form arrives right in the ticket.</p>
+    <div class="card" style="left:140px; top:388px; width:1440px; height:410px; --d:13.85s; --kb:3.4s; --focus:30% 70%">
+      <img src="ui/ui-routine.png" alt="">
+    </div>
+    <div class="chip mint pop" style="left:140px; top:836px; --d:14.9s">
+      <svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>Official form delivered · ticket Resolved
+    </div>
+  </section>
+
+  <!-- 5. Agent activity, visible to staff. -->
+  <section class="scene s5">
+    <div class="eyebrow rise" style="--d:17.2s">Agent activity</div>
+    <h2 class="headline rise" style="--d:17.3s">Every agent step, visible to staff.</h2>
+    <p class="sub rise" style="--d:17.55s">Each step shows its status, and a human reviews last. Nothing is written without a check.</p>
+    <div class="card" style="left:1156px; top:125px; width:624px; height:830px; --d:17.4s; --kb:3.6s; --focus:50% 20%">
+      <img src="ui/ui-agents.png" alt="">
+    </div>
+  </section>
+
+  <!-- 6. Sensitive request routed to a person. -->
+  <section class="scene s6">
+    <div class="eyebrow rise" style="--d:20.9s">Sensitive or unclear</div>
+    <h2 class="headline rise" style="--d:21.0s">Sensitive cases go to a person.</h2>
+    <p class="sub rise" style="--d:21.2s">Full context travels with the handoff.</p>
+    <div class="card" style="left:340px; top:388px; width:1440px; height:443px; --d:21.35s; --kb:3.0s; --focus:40% 60%">
+      <img src="ui/ui-human.png" alt="">
+    </div>
+    <div class="chip coral pop" style="left:140px; top:866px; --d:22.3s">
+      <svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21c1.5-4 4.5-6 8-6s6.5 2 8 6"/></svg>Stays open · routed for human review
+    </div>
+  </section>
+
+  <!-- 7. Admin oversight and guardrails. -->
+  <section class="scene s7">
+    <div class="eyebrow rise" style="--d:24.5s">Admin oversight</div>
+    <h2 class="headline rise" style="--d:24.6s">The whole queue at a glance.</h2>
+    <div class="card" style="left:260px; top:330px; width:1400px; height:412px; --d:24.7s; --kb:2.4s; --focus:50% 50%">
+      <img src="ui/ui-analytics.png" alt="">
+    </div>
+    <div class="badges">
+      <span class="badge pop" style="--d:25.2s">Human-in-the-loop</span>
+      <span class="badge pop" style="--d:25.35s">Version-checked handoffs</span>
+      <span class="badge pop" style="--d:25.5s">Synthetic data only</span>
+    </div>
+  </section>
+
+  <!-- 8. End card: Try the demo + online URL. -->
+  <section class="scene s8">
+    <div class="center">
+      <img class="logo rise" style="--d:26.85s" src="ui/actionrelay-logo.svg" alt="">
+      <div class="name display rise" style="--d:26.95s">ActionRelay</div>
+      <div class="cta"><span>Try the demo</span><svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></div>
+      <div class="url rise" style="--d:27.35s">github.com/<small>emmanuelID-cmd/Project-JD-CDIT-MAO</small></div>
+      <div class="credit rise" style="--d:27.6s">Built by Emmanuel De Jesus &amp; Shawn Bi · Pursuit</div>
+      <div class="tech rise" style="--d:27.75s">Python · FastAPI · SQLite · Claude</div>
+    </div>
+  </section>
+
+  <div class="vignette"></div>
+</div>
+<script>
+  // Fit the 1920x1080 stage to any window for previewing; the recorder uses an exact 1920x1080 viewport.
+  function fit() {
+    const s = Math.min(innerWidth / 1920, innerHeight / 1080);
+    const stage = document.getElementById("stage");
+    stage.style.transform = `translate(${(innerWidth - 1920 * s) / 2}px, ${(innerHeight - 1080 * s) / 2}px) scale(${s})`;
+  }
+  addEventListener("resize", fit); fit();
+  // Deterministic seek for frame-by-frame recording: every CSS animation shares one global clock.
+  window.seek = (seconds) => {
+    for (const a of document.getAnimations()) { a.pause(); a.currentTime = seconds * 1000; }
+  };
+  document.addEventListener("click", () => location.reload());
+</script>
+</body>
+</html>
