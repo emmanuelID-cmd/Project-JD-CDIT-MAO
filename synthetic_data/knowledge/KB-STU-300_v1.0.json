@@ -1,0 +1,41 @@
+{
+  "doc_id": "KB-STU-300",
+  "version": "1.0",
+  "title": "Switching between studies and sites",
+  "topic": "study_switcher",
+  "product_area": "navigation",
+  "status": "approved",
+  "data_classification": "synthetic",
+  "owner": "Synthetic Knowledge Owner",
+  "effective_date": "2026-02-15",
+  "review_due": "2027-02-15",
+  "keywords": [
+    "switch",
+    "study",
+    "selector",
+    "top bar",
+    "change study",
+    "multiple studies"
+  ],
+  "sections": [
+    {
+      "section_id": "s1",
+      "heading": "Switch to a different assigned study",
+      "text": "Users assigned to more than one study switch between them with the study selector in the top bar. Only studies and sites assigned to the user are listed.",
+      "steps": [
+        {
+          "step_id": "st1",
+          "action_type": "navigate_ui",
+          "text": "Ask the user to select the study name in the top bar and choose the assigned study they need."
+        }
+      ],
+      "information_needed": [],
+      "stop_conditions": [
+        {
+          "condition_id": "KB-STU-300-SC1",
+          "text": "If the user sees a study they were not assigned to, stop and escalate as a possible permission configuration issue."
+        }
+      ]
+    }
+  ]
+}

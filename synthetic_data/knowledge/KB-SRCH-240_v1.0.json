@@ -1,0 +1,57 @@
+{
+  "doc_id": "KB-SRCH-240",
+  "version": "1.0",
+  "title": "Subject search returns no results",
+  "topic": "subject_search",
+  "product_area": "search",
+  "status": "approved",
+  "data_classification": "synthetic",
+  "owner": "Synthetic Knowledge Owner",
+  "effective_date": "2026-07-01",
+  "review_due": "2027-07-01",
+  "keywords": [
+    "search",
+    "subject",
+    "screening number",
+    "no results",
+    "find",
+    "lookup",
+    "filter"
+  ],
+  "sections": [
+    {
+      "section_id": "s1",
+      "heading": "A subject cannot be found with search",
+      "text": "Subject search looks only within the study and site selected in the top bar, and it applies any saved list filters. Searching by screening number requires the full number including the site prefix.",
+      "steps": [
+        {
+          "step_id": "st1",
+          "action_type": "navigate_ui",
+          "text": "Ask the user to confirm the correct study and site are selected in the top bar."
+        },
+        {
+          "step_id": "st2",
+          "action_type": "navigate_ui",
+          "text": "Ask the user to clear saved list filters on the subject list."
+        },
+        {
+          "step_id": "st3",
+          "action_type": "retry_operation",
+          "text": "Ask the user to search again using the full screening number with the site prefix."
+        }
+      ],
+      "information_needed": [
+        {
+          "field": "screening_number_format",
+          "prompt": "The screening number format the user entered, without the subject's other details."
+        }
+      ],
+      "stop_conditions": [
+        {
+          "condition_id": "KB-SRCH-240-SC1",
+          "text": "If the subject appears under a different site than expected, stop immediately and escalate as a possible data-access incident."
+        }
+      ]
+    }
+  ]
+}

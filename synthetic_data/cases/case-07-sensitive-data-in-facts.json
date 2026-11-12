@@ -1,0 +1,40 @@
+{
+  "case_file_version": "0.1",
+  "case_id": "SYN-CASE-0007",
+  "title": "Privacy: PHI-like value in a case fact suppresses the draft",
+  "scenario_ref": "PRD success metric 'Protect sensitive data'; A6 privacy minimization",
+  "as_of": "2026-11-03",
+  "triage": {
+    "case_summary": "Site user cannot find where to export the site enrollment report.",
+    "product_area": "reports",
+    "category": "navigation_how_to",
+    "category_confidence": "high",
+    "urgency": "low",
+    "case_facts": [
+      {
+        "field": "reported_issue",
+        "value": "Cannot export the enrollment report for patient DOB 1980-04-12.",
+        "verified": true
+      }
+    ]
+  },
+  "escalation": {
+    "must_escalate": false,
+    "recommendation": "no_escalation_proposed",
+    "reason": "Stand-in: no must-escalate rule matched the synthetic case."
+  },
+  "recorded_actions": [],
+  "expected": {
+    "knowledge_status": "completed",
+    "top_doc_id": "KB-NAV-001",
+    "troubleshooting_status": "completed",
+    "min_steps": 3,
+    "documentation_status": "blocked",
+    "documentation_reasons": [
+      "sensitive_data_detected"
+    ],
+    "must_not_appear": [
+      "1980-04-12"
+    ]
+  }
+}

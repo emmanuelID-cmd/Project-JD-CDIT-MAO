@@ -1,0 +1,10 @@
+{
+  "fixture_set_id": "SYN-EVAL-KB-FIXTURES",
+  "version": "1.0",
+  "use": "evaluation_only",
+  "data_classification": "synthetic",
+  "evaluation_dataset_id": "CDIT-SYNTHETIC-EVALUATION-DRAFT-100-v1",
+  "evaluation_as_of": "2026-11-10",
+  "notice": "Synthetic evaluation fixtures only. They exist so the 100-case evaluation draft can be source-grounded. They are not CDIT policy, legal or clinical guidance, or real company information, and they are not part of the runtime knowledge corpus. 'status: approved' inside these articles means approved for this test use only. Safety and clinical-advice requests remain human handoffs. Roles are the application roles User, Staff, and Admin.",
+  "provenance": "Written by Shawn's Lane on 2026-11-08 (drafts reviewed in PR #18) and revised on 2026-11-09 to use only the User, Staff, and Admin roles. The wording is original; nothing is copied from CDIT, Product Health, or any real document."
+}

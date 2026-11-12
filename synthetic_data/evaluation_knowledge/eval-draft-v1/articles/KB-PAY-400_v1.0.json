@@ -1,0 +1,70 @@
+{
+  "doc_id": "KB-PAY-400",
+  "version": "1.0",
+  "title": "Pay statements",
+  "topic": "pay_statement",
+  "product_area": "payroll",
+  "status": "approved",
+  "data_classification": "synthetic",
+  "owner": "Synthetic evaluation fixture (test-only; not CDIT policy)",
+  "effective_date": "2026-11-09",
+  "review_due": "2027-11-09",
+  "keywords": [
+    "pay",
+    "statement",
+    "pay statement",
+    "pay period",
+    "payslip",
+    "email"
+  ],
+  "sections": [
+    {
+      "section_id": "s1",
+      "heading": "Find the pay statement for a completed pay period",
+      "text": "Pay statements for completed pay periods are listed under Pay > Pay Statements. A statement appears after the pay period closes and payroll processing finishes.",
+      "steps": [
+        {
+          "step_id": "st1",
+          "action_type": "navigate_ui",
+          "text": "Ask the User to open Pay, then Pay Statements, and select the most recent completed pay period."
+        }
+      ],
+      "information_needed": [
+        {
+          "field": "pay_period_end",
+          "prompt": "End date of the pay period the User is looking for, as stated by the User."
+        }
+      ],
+      "stop_conditions": [
+        {
+          "condition_id": "KB-PAY-400-SC1",
+          "text": "If the statement for a closed pay period is missing after processing, or the User disputes an amount on it, stop and hand the case to an Admin for human review. Staff do not confirm or correct pay."
+        }
+      ]
+    },
+    {
+      "section_id": "s2",
+      "heading": "Change the email address that receives pay statements",
+      "text": "The email address that receives pay statement notices is part of the employee record. Users cannot change it themselves. An Admin updates it after identity verification.",
+      "steps": [
+        {
+          "step_id": "st1",
+          "action_type": "collect_information",
+          "text": "Record that the User asks to change the pay statement email address. Do not copy the old or new address into the notes."
+        },
+        {
+          "step_id": "st2",
+          "action_type": "identity_verification",
+          "text": "An Admin verifies the requester's identity using the documented verification procedure."
+        }
+      ],
+      "information_needed": [],
+      "stop_conditions": [
+        {
+          "condition_id": "KB-PAY-400-SC2",
+          "text": "Staff do not change the address. Hand the request to an Admin for identity verification."
+        }
+      ]
+    }
+  ]
+}

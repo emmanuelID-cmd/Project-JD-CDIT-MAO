@@ -1,0 +1,75 @@
+{
+  "doc_id": "KB-DOC-180",
+  "version": "2.2",
+  "title": "Downloading documents from the site binder",
+  "topic": "document_download",
+  "product_area": "documents",
+  "status": "approved",
+  "data_classification": "synthetic",
+  "owner": "Synthetic Knowledge Owner",
+  "effective_date": "2026-07-15",
+  "review_due": "2027-07-15",
+  "keywords": [
+    "download",
+    "binder",
+    "pdf",
+    "greyed",
+    "disabled",
+    "final"
+  ],
+  "sections": [
+    {
+      "section_id": "s1",
+      "heading": "Download button is greyed out",
+      "text": "The Download button is available only for documents in Final status. Documents still in Draft or In Review status can be previewed but not downloaded.",
+      "steps": [
+        {
+          "step_id": "st1",
+          "action_type": "navigate_ui",
+          "text": "Ask the user to check the Status column for the document in the site binder."
+        },
+        {
+          "step_id": "st2",
+          "action_type": "share_approved_article",
+          "text": "Share this article section explaining that only Final documents can be downloaded."
+        }
+      ],
+      "information_needed": [
+        {
+          "field": "document_name",
+          "prompt": "The document name as shown in the site binder."
+        }
+      ],
+      "stop_conditions": [
+        {
+          "condition_id": "KB-DOC-180-SC1",
+          "text": "If the user cannot download a Final document their role should allow, stop and escalate as a possible permission configuration issue."
+        }
+      ]
+    },
+    {
+      "section_id": "s2",
+      "heading": "Downloaded PDF will not open",
+      "text": "Downloaded documents are PDF files. If the file does not open, the device may lack a PDF viewer or the download may be incomplete.",
+      "steps": [
+        {
+          "step_id": "st1",
+          "action_type": "verify_client_setting",
+          "text": "Ask the user to confirm a PDF viewer is installed and set as the default for PDF files."
+        },
+        {
+          "step_id": "st2",
+          "action_type": "retry_operation",
+          "text": "Ask the user to download the document again and open it from the downloads folder."
+        }
+      ],
+      "information_needed": [
+        {
+          "field": "exact_error_message",
+          "prompt": "The exact error message shown, copied without any subject or patient details."
+        }
+      ],
+      "stop_conditions": []
+    }
+  ]
+}

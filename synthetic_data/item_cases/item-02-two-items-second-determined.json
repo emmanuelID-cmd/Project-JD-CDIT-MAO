@@ -1,0 +1,41 @@
+{
+  "case_file_version": "0.1",
+  "case_id": "SYN-CASE-0101",
+  "title": "Linked item 2 of 2: password reset email, Auditor has set band and route",
+  "scenario_ref": "A2-ITEM-HANDOFF-RECEIVER-REVIEW R-02 (multi-item input, item 2)",
+  "as_of": "2026-11-03",
+  "triage": {
+    "case_summary": "the user forgot their password and the reset email never arrived.",
+    "product_area": "login",
+    "category": "password_help",
+    "category_confidence": "medium",
+    "urgency": "low",
+    "item_scope": {
+      "parent_message": "Site user cannot find where to export the site enrollment report. Separately, the user forgot their password and the reset email never arrived.",
+      "item_index": 2,
+      "item_count": 2,
+      "source_start": 78,
+      "category_basis": "Stand-in: the item reports a missing password reset email.",
+      "auditor_review": "band_and_route_determined",
+      "attention_check": "check_not_run"
+    }
+  },
+  "escalation": {
+    "must_escalate": false,
+    "recommendation": "no_escalation_proposed",
+    "reason": "Stand-in: no must-escalate rule matched this synthetic item."
+  },
+  "recorded_actions": [],
+  "expected": {
+    "knowledge_status": "completed",
+    "top_doc_id": "KB-PWD-070",
+    "troubleshooting_status": "completed",
+    "min_steps": 2,
+    "max_steps": 2,
+    "documentation_status": "completed",
+    "must_not_appear": [
+      "enrollment report export",
+      "Site user cannot find"
+    ]
+  }
+}

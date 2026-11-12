@@ -1,0 +1,41 @@
+{
+  "case_file_version": "0.1",
+  "case_id": "SYN-CASE-0101",
+  "title": "Linked item 1 of 2: report export, Auditor has set band and route",
+  "scenario_ref": "A2-ITEM-HANDOFF-RECEIVER-REVIEW R-02 (multi-item input, item 1)",
+  "as_of": "2026-11-03",
+  "triage": {
+    "case_summary": "Site user cannot find where to export the site enrollment report.",
+    "product_area": "reports",
+    "category": "navigation_how_to",
+    "category_confidence": "medium",
+    "urgency": "low",
+    "item_scope": {
+      "parent_message": "Site user cannot find where to export the site enrollment report. Separately, the user forgot their password and the reset email never arrived.",
+      "item_index": 1,
+      "item_count": 2,
+      "source_start": 0,
+      "category_basis": "Stand-in: the item asks where a report export is.",
+      "auditor_review": "band_and_route_determined",
+      "attention_check": "no_configured_match"
+    }
+  },
+  "escalation": {
+    "must_escalate": false,
+    "recommendation": "no_escalation_proposed",
+    "reason": "Stand-in: no must-escalate rule matched this synthetic item."
+  },
+  "recorded_actions": [],
+  "expected": {
+    "knowledge_status": "completed",
+    "top_doc_id": "KB-NAV-001",
+    "troubleshooting_status": "completed",
+    "min_steps": 3,
+    "max_steps": 3,
+    "documentation_status": "completed",
+    "must_not_appear": [
+      "forgot their password",
+      "reset email"
+    ]
+  }
+}

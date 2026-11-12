@@ -1,0 +1,88 @@
+{
+  "doc_id": "KB-CMP-480",
+  "version": "1.0",
+  "title": "Compliance requests at Tier 1",
+  "topic": "compliance_requests",
+  "product_area": "compliance",
+  "status": "approved",
+  "data_classification": "synthetic",
+  "owner": "Synthetic evaluation fixture (test-only; not CDIT policy)",
+  "effective_date": "2026-11-09",
+  "review_due": "2027-11-09",
+  "keywords": [
+    "notice",
+    "deadline",
+    "due date",
+    "legal",
+    "regulatory",
+    "audit record",
+    "reviewed",
+    "configuration"
+  ],
+  "sections": [
+    {
+      "section_id": "s1",
+      "heading": "A notice with a regulatory or legal deadline",
+      "text": "Staff do not interpret legal or regulatory notices, set or confirm due dates, or draft a response. They record what the notice says and hand it to an Admin for human review.",
+      "steps": [
+        {
+          "step_id": "st1",
+          "action_type": "collect_information",
+          "text": "Record the notice reference, the due date, and the requested record exactly as the notice states them. Mark any missing item as unknown."
+        }
+      ],
+      "information_needed": [
+        {
+          "field": "notice_reference",
+          "prompt": "The reference shown on the notice."
+        },
+        {
+          "field": "stated_due_date",
+          "prompt": "The due date exactly as the notice states it, or unknown."
+        },
+        {
+          "field": "requested_record",
+          "prompt": "The record the notice asks for, or unknown."
+        }
+      ],
+      "stop_conditions": [
+        {
+          "condition_id": "KB-CMP-480-SC1",
+          "text": "If the due date or the requested record is missing, record it as unknown. Never estimate it."
+        },
+        {
+          "condition_id": "KB-CMP-480-SC2",
+          "text": "Hand every notice to an Admin for human review. Staff do not reply to the requester."
+        }
+      ]
+    },
+    {
+      "section_id": "s2",
+      "heading": "A request for an approved audit record",
+      "text": "Audit records, such as who reviewed a study configuration, are produced only by an Admin. Staff do not search for, export, or summarize audit records.",
+      "steps": [
+        {
+          "step_id": "st1",
+          "action_type": "collect_information",
+          "text": "Record the synthetic study identifier, the record requested, and the date range, as the User states them."
+        }
+      ],
+      "information_needed": [
+        {
+          "field": "study_id",
+          "prompt": "Synthetic study identifier named in the request."
+        },
+        {
+          "field": "date_range",
+          "prompt": "The period the requested record covers, as stated by the User."
+        }
+      ],
+      "stop_conditions": [
+        {
+          "condition_id": "KB-CMP-480-SC3",
+          "text": "Hand the request to an Admin. Never export another site's or study's records."
+        }
+      ]
+    }
+  ]
+}

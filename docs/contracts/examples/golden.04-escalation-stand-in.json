@@ -1,0 +1,38 @@
+{
+  "contract_version": "0.1.0-proposed",
+  "contribution_id": "ESC-0E7A137880BA6CCC",
+  "stage": "escalation",
+  "agent": "escalation-stand-in (fixture; not Manny's Escalation agent)",
+  "agent_version": "fixture-0.1",
+  "context": {
+    "run_id": "RUN-SYN-CASE-0001-1",
+    "case_id": "SYN-CASE-0001",
+    "case_version": 1,
+    "policy_version": "SYN-SUPPORT-POLICY-0.1",
+    "data_classification": "synthetic"
+  },
+  "input_refs": [
+    {
+      "contribution_id": "TRI-CFA88256A7D129F5",
+      "stage": "triage",
+      "contract_version": "0.1.0-proposed",
+      "content_digest": "6c267f2a30aa878d0f42ce05b9d8e27ae449516a6f48c159aa828fa51219deec"
+    }
+  ],
+  "created_at": "2026-11-03T15:00:00Z",
+  "status": "completed",
+  "checkpoint": {
+    "checkpoint": "A5",
+    "passed": true,
+    "reason_codes": []
+  },
+  "claims": [],
+  "confidence": "medium",
+  "confidence_rationale": "Lane-validation stand-in value from the synthetic case file.",
+  "unknowns": [],
+  "human_review_required": true,
+  "must_escalate": false,
+  "triggers": [],
+  "recommendation": "no_escalation_proposed",
+  "reason": "Stand-in: no must-escalate rule matched the synthetic case."
+}

@@ -1,0 +1,56 @@
+{
+  "doc_id": "KB-BRW-160",
+  "version": "3.1",
+  "title": "Supported browsers and blank pages",
+  "topic": "supported_browsers",
+  "product_area": "general",
+  "status": "approved",
+  "data_classification": "synthetic",
+  "owner": "Synthetic Knowledge Owner",
+  "effective_date": "2026-02-01",
+  "review_due": "2027-02-01",
+  "keywords": [
+    "browser",
+    "supported",
+    "chrome",
+    "edge",
+    "firefox",
+    "safari",
+    "blank",
+    "buttons",
+    "unresponsive",
+    "version",
+    "compatibility"
+  ],
+  "sections": [
+    {
+      "section_id": "s1",
+      "heading": "Pages load blank or buttons do not respond",
+      "text": "The application supports the two most recent major versions of Chrome, Edge, Firefox, and Safari. Older browsers, compatibility mode, and some browser extensions can leave pages blank or make buttons unresponsive.",
+      "steps": [
+        {
+          "step_id": "st1",
+          "action_type": "verify_client_setting",
+          "text": "Ask the user to confirm their browser name and version from the browser's About page."
+        },
+        {
+          "step_id": "st2",
+          "action_type": "clear_browser_cache",
+          "text": "Ask the user to clear the browser cache and cookies for the application site, then reload the page."
+        },
+        {
+          "step_id": "st3",
+          "action_type": "verify_client_setting",
+          "text": "Ask the user to try again in a private window with browser extensions turned off."
+        }
+      ],
+      "information_needed": [
+        {
+          "field": "browser",
+          "prompt": "Browser name and version from the browser's About page."
+        }
+      ],
+      "stop_conditions": []
+    }
+  ]
+}

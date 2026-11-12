@@ -1,0 +1,56 @@
+{
+  "doc_id": "KB-DASH-230",
+  "version": "1.0",
+  "title": "Dashboard widgets keep loading",
+  "topic": "dashboard_widgets",
+  "product_area": "dashboard",
+  "status": "approved",
+  "data_classification": "synthetic",
+  "owner": "Synthetic Knowledge Owner",
+  "effective_date": "2026-08-15",
+  "review_due": "2027-08-15",
+  "keywords": [
+    "dashboard",
+    "widget",
+    "widgets",
+    "loading",
+    "spinner",
+    "tiles",
+    "home page"
+  ],
+  "sections": [
+    {
+      "section_id": "s1",
+      "heading": "Dashboard widgets show a loading spinner",
+      "text": "Dashboard widgets load separately after the home page opens. A widget that keeps showing a loading spinner usually has a stale cached response.",
+      "steps": [
+        {
+          "step_id": "st1",
+          "action_type": "clear_browser_cache",
+          "text": "Ask the user to clear the browser cache for the application site and reload the dashboard."
+        },
+        {
+          "step_id": "st2",
+          "action_type": "retry_operation",
+          "text": "Ask the user to wait one minute and select Refresh on the affected widget."
+        }
+      ],
+      "information_needed": [
+        {
+          "field": "browser",
+          "prompt": "Browser name and version from the browser's About page."
+        },
+        {
+          "field": "widget_name",
+          "prompt": "The title of the widget that does not load."
+        }
+      ],
+      "stop_conditions": [
+        {
+          "condition_id": "KB-DASH-230-SC1",
+          "text": "If several users at the same site report the same widgets failing, stop and escalate to L2 as a possible service problem."
+        }
+      ]
+    }
+  ]
+}

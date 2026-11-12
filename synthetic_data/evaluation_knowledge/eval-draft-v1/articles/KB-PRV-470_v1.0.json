@@ -1,0 +1,41 @@
+{
+  "doc_id": "KB-PRV-470",
+  "version": "1.0",
+  "title": "Sensitive data pasted into a ticket",
+  "topic": "sensitive_data_in_ticket",
+  "product_area": "privacy",
+  "status": "approved",
+  "data_classification": "synthetic",
+  "owner": "Synthetic evaluation fixture (test-only; not CDIT policy)",
+  "effective_date": "2026-11-09",
+  "review_due": "2027-11-09",
+  "keywords": [
+    "sensitive",
+    "ssn",
+    "pasted",
+    "wrong ticket",
+    "privacy",
+    "personal data"
+  ],
+  "sections": [
+    {
+      "section_id": "s1",
+      "heading": "A ticket contains a sensitive value",
+      "text": "If a ticket contains a sensitive value, such as a government ID number, Staff do not copy, repeat, or quote the value. They record only the kind of data and where it appears, and hand the case to an Admin for human review. Staff do not delete or edit the ticket.",
+      "steps": [
+        {
+          "step_id": "st1",
+          "action_type": "collect_information",
+          "text": "Record the kind of sensitive data and the ticket field where it appears, without the value itself."
+        }
+      ],
+      "information_needed": [],
+      "stop_conditions": [
+        {
+          "condition_id": "KB-PRV-470-SC1",
+          "text": "Stop routine handling and hand the case to an Admin for human review as a possible privacy incident."
+        }
+      ]
+    }
+  ]
+}

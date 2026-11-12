@@ -1,0 +1,51 @@
+{
+  "doc_id": "KB-ACC-015",
+  "version": "1.0",
+  "title": "Requests for a higher role or an Admin-only screen",
+  "topic": "privileged_role_request",
+  "product_area": "access",
+  "status": "approved",
+  "data_classification": "synthetic",
+  "owner": "Synthetic evaluation fixture (test-only; not CDIT policy)",
+  "effective_date": "2026-11-09",
+  "review_due": "2027-11-09",
+  "keywords": [
+    "administrator",
+    "admin",
+    "promote",
+    "admin-only",
+    "audit screen",
+    "privilege"
+  ],
+  "sections": [
+    {
+      "section_id": "s1",
+      "heading": "A User asks for Admin rights or an Admin-only screen",
+      "text": "Some screens, such as the access audit screen, are available only to the Admin role. Staff do not change roles, give Admin rights, or open Admin-only screens for another account. They record the request and hand it to an Admin.",
+      "steps": [
+        {
+          "step_id": "st1",
+          "action_type": "collect_information",
+          "text": "Record the role or screen the User asks for and the reason the User gives."
+        },
+        {
+          "step_id": "st2",
+          "action_type": "access_review",
+          "text": "An Admin reviews the request and decides whether any role change is appropriate."
+        }
+      ],
+      "information_needed": [
+        {
+          "field": "requested_role_or_screen",
+          "prompt": "The role or screen the User asks for."
+        }
+      ],
+      "stop_conditions": [
+        {
+          "condition_id": "KB-ACC-015-SC1",
+          "text": "If the User asks to see another team's or site's records, stop and hand the case to an Admin for human review."
+        }
+      ]
+    }
+  ]
+}

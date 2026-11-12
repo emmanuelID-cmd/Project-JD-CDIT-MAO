@@ -1,0 +1,569 @@
+{
+  "set_id": "SYN-KCAL",
+  "version": "3.0",
+  "data_classification": "synthetic",
+  "as_of": "2026-11-10",
+  "authored": "2026-11-09, before any run of the Knowledge agent on these cases and before the L-1/L-2 batch design",
+  "label_status": "draft, not yet human-approved (D-09)",
+  "purpose": "Held-out measurement set for the second L-1/L-2 batch: reworded and padded requests, ineligible on-topic articles, and uncovered requests that share words or courtesy text with the corpus. It uses the runtime corpus only and product_area null, as on the linked-item path. Record the baseline first; measure the batch's changes once. v2.0 is no longer held out and may be used for design. Single author (Shawn's Lane, AI-assisted): it does not meet the independent-author condition for D-08 threshold changes.",
+  "label_rules": {
+    "answer": "An approved, current source answers the case. Correct when the rank-1 passage matches one acceptable 'DOC#section'.",
+    "abstain": "No approved, current, non-conflicting, safe source answers the case. Correct when the Knowledge agent abstains."
+  },
+  "cases": [
+    {
+      "case_id": "SYN-KCAL-2001",
+      "summary": "Got a new mobile and the two-factor numbers are no longer accepted",
+      "product_area": null,
+      "expect": "answer",
+      "acceptable_sources": [
+        "KB-MFA-200#s1"
+      ],
+      "kind": "paraphrase"
+    },
+    {
+      "case_id": "SYN-KCAL-2002",
+      "summary": "The screen keeps bouncing me back to the session expired notice when I log in",
+      "product_area": null,
+      "expect": "answer",
+      "acceptable_sources": [
+        "KB-LOGIN-020#s1"
+      ],
+      "kind": "paraphrase"
+    },
+    {
+      "case_id": "SYN-KCAL-2003",
+      "summary": "Locked out because of too many wrong password attempts",
+      "product_area": null,
+      "expect": "answer",
+      "acceptable_sources": [
+        "KB-AUD-080#s1"
+      ],
+      "kind": "paraphrase"
+    },
+    {
+      "case_id": "SYN-KCAL-2004",
+      "summary": "The password recovery message never reached my mailbox",
+      "product_area": null,
+      "expect": "answer",
+      "acceptable_sources": [
+        "KB-PWD-070#s1"
+      ],
+      "kind": "paraphrase"
+    },
+    {
+      "case_id": "SYN-KCAL-2005",
+      "summary": "The home page charts show a wheel that never stops turning",
+      "product_area": null,
+      "expect": "answer",
+      "acceptable_sources": [
+        "KB-DASH-230#s1"
+      ],
+      "kind": "paraphrase"
+    },
+    {
+      "case_id": "SYN-KCAL-2006",
+      "summary": "Cannot e-sign the visit form because the signature fails",
+      "product_area": null,
+      "expect": "answer",
+      "acceptable_sources": [
+        "KB-DOC-190#s1"
+      ],
+      "kind": "paraphrase"
+    },
+    {
+      "case_id": "SYN-KCAL-2007",
+      "summary": "Clicking preview does nothing for the PDF",
+      "product_area": null,
+      "expect": "answer",
+      "acceptable_sources": [
+        "KB-BRW-170#s1"
+      ],
+      "kind": "paraphrase"
+    },
+    {
+      "case_id": "SYN-KCAL-2008",
+      "summary": "Part of the page is missing when I print the CRF",
+      "product_area": null,
+      "expect": "answer",
+      "acceptable_sources": [
+        "KB-PRN-270#s1"
+      ],
+      "kind": "paraphrase"
+    },
+    {
+      "case_id": "SYN-KCAL-2009",
+      "summary": "Appointment times are off by a few hours",
+      "product_area": null,
+      "expect": "answer",
+      "acceptable_sources": [
+        "KB-SCH-150#s1"
+      ],
+      "kind": "paraphrase"
+    },
+    {
+      "case_id": "SYN-KCAL-2010",
+      "summary": "Looking up a participant by screening number finds nothing",
+      "product_area": null,
+      "expect": "answer",
+      "acceptable_sources": [
+        "KB-SRCH-240#s1"
+      ],
+      "kind": "paraphrase"
+    },
+    {
+      "case_id": "SYN-KCAL-2011",
+      "summary": "How do I jump to another study I am assigned to?",
+      "product_area": null,
+      "expect": "answer",
+      "acceptable_sources": [
+        "KB-STU-300#s1"
+      ],
+      "kind": "paraphrase"
+    },
+    {
+      "case_id": "SYN-KCAL-2012",
+      "summary": "My course is done but the record still says not completed",
+      "product_area": null,
+      "expect": "answer",
+      "acceptable_sources": [
+        "KB-TRN-250#s1"
+      ],
+      "kind": "paraphrase"
+    },
+    {
+      "case_id": "SYN-KCAL-2013",
+      "summary": "The system will not take my attachment because of its file format",
+      "product_area": null,
+      "expect": "answer",
+      "acceptable_sources": [
+        "KB-ATT-330#s1"
+      ],
+      "kind": "paraphrase"
+    },
+    {
+      "case_id": "SYN-KCAL-2014",
+      "summary": "The tablet app is not uploading the data I captured offline",
+      "product_area": null,
+      "expect": "answer",
+      "acceptable_sources": [
+        "KB-MOB-260#s1"
+      ],
+      "kind": "paraphrase"
+    },
+    {
+      "case_id": "SYN-KCAL-2015",
+      "summary": "Automated report emails stopped coming in",
+      "product_area": null,
+      "expect": "answer",
+      "acceptable_sources": [
+        "KB-RPT-290#s1"
+      ],
+      "kind": "paraphrase"
+    },
+    {
+      "case_id": "SYN-KCAL-2016",
+      "summary": "It logs me off when I leave the screen idle",
+      "product_area": null,
+      "expect": "answer",
+      "acceptable_sources": [
+        "KB-SES-310#s1"
+      ],
+      "kind": "paraphrase"
+    },
+    {
+      "case_id": "SYN-KCAL-2017",
+      "summary": "Binder file download is disabled for me",
+      "product_area": null,
+      "expect": "answer",
+      "acceptable_sources": [
+        "KB-DOC-180#s1"
+      ],
+      "kind": "paraphrase"
+    },
+    {
+      "case_id": "SYN-KCAL-2018",
+      "summary": "The PDF I downloaded from the binder is corrupted and will not open",
+      "product_area": null,
+      "expect": "answer",
+      "acceptable_sources": [
+        "KB-DOC-180#s2"
+      ],
+      "kind": "paraphrase"
+    },
+    {
+      "case_id": "SYN-KCAL-2019",
+      "summary": "I answered the data clarification but it is still open",
+      "product_area": null,
+      "expect": "answer",
+      "acceptable_sources": [
+        "KB-EDC-110#s2"
+      ],
+      "kind": "paraphrase"
+    },
+    {
+      "case_id": "SYN-KCAL-2020",
+      "summary": "The page is frozen and I cannot edit the entries",
+      "product_area": null,
+      "expect": "answer",
+      "acceptable_sources": [
+        "KB-EDC-120#s1"
+      ],
+      "kind": "paraphrase"
+    },
+    {
+      "case_id": "SYN-KCAL-2021",
+      "summary": "Study visits are not showing in my Google calendar subscription",
+      "product_area": null,
+      "expect": "answer",
+      "acceptable_sources": [
+        "KB-SCH-140#s1"
+      ],
+      "kind": "paraphrase"
+    },
+    {
+      "case_id": "SYN-KCAL-2022",
+      "summary": "Buttons are unresponsive and the page is white",
+      "product_area": null,
+      "expect": "answer",
+      "acceptable_sources": [
+        "KB-BRW-160#s1"
+      ],
+      "kind": "paraphrase"
+    },
+    {
+      "case_id": "SYN-KCAL-2023",
+      "summary": "I need to update the job title shown on my account",
+      "product_area": null,
+      "expect": "answer",
+      "acceptable_sources": [
+        "KB-PRF-210#s1"
+      ],
+      "kind": "paraphrase"
+    },
+    {
+      "case_id": "SYN-KCAL-2024",
+      "summary": "Need a CSV of enrollment for our site; where is it?",
+      "product_area": null,
+      "expect": "answer",
+      "acceptable_sources": [
+        "KB-NAV-001#s1"
+      ],
+      "kind": "paraphrase"
+    },
+    {
+      "case_id": "SYN-KCAL-2025",
+      "summary": "I cannot respond to the open query on the lab page",
+      "product_area": null,
+      "expect": "answer",
+      "acceptable_sources": [
+        "KB-EDC-110#s1"
+      ],
+      "kind": "paraphrase"
+    },
+    {
+      "case_id": "SYN-KCAL-2026",
+      "summary": "My study access disappeared after my role was updated",
+      "product_area": null,
+      "expect": "answer",
+      "acceptable_sources": [
+        "KB-ACC-010#s1"
+      ],
+      "kind": "paraphrase"
+    },
+    {
+      "case_id": "SYN-KCAL-2031",
+      "summary": "Hi team, hope you are well. My form page will not save when I click Save.",
+      "product_area": null,
+      "expect": "answer",
+      "acceptable_sources": [
+        "KB-EDC-100#s1"
+      ],
+      "kind": "padded_query"
+    },
+    {
+      "case_id": "SYN-KCAL-2032",
+      "summary": "Good morning! The enrollment export keeps timing out. Kind regards, Dana",
+      "product_area": null,
+      "expect": "answer",
+      "acceptable_sources": [
+        "KB-NAV-001#s2"
+      ],
+      "kind": "padded_query"
+    },
+    {
+      "case_id": "SYN-KCAL-2033",
+      "summary": "Urgent please: the verification codes fail after I changed my phone. Our inspection starts in an hour.",
+      "product_area": null,
+      "expect": "answer",
+      "acceptable_sources": [
+        "KB-MFA-200#s1"
+      ],
+      "kind": "padded_query"
+    },
+    {
+      "case_id": "SYN-KCAL-2034",
+      "summary": "Apologies for the bother. The document preview window will not open.",
+      "product_area": null,
+      "expect": "answer",
+      "acceptable_sources": [
+        "KB-BRW-170#s1"
+      ],
+      "kind": "padded_query"
+    },
+    {
+      "case_id": "SYN-KCAL-2035",
+      "summary": "Following up on my earlier note: the scheduled report email still has not arrived.",
+      "product_area": null,
+      "expect": "answer",
+      "acceptable_sources": [
+        "KB-RPT-290#s1"
+      ],
+      "kind": "padded_query"
+    },
+    {
+      "case_id": "SYN-KCAL-2036",
+      "summary": "Quick question for whoever is on duty: how do I switch to my other study?",
+      "product_area": null,
+      "expect": "answer",
+      "acceptable_sources": [
+        "KB-STU-300#s1"
+      ],
+      "kind": "padded_query"
+    },
+    {
+      "case_id": "SYN-KCAL-2037",
+      "summary": "Not sure who to ask, but the printed report is cut off at the edge.",
+      "product_area": null,
+      "expect": "answer",
+      "acceptable_sources": [
+        "KB-PRN-270#s1"
+      ],
+      "kind": "padded_query"
+    },
+    {
+      "case_id": "SYN-KCAL-2038",
+      "summary": "My account is locked after several failed attempts. Cheers for sorting this out.",
+      "product_area": null,
+      "expect": "answer",
+      "acceptable_sources": [
+        "KB-AUD-080#s1"
+      ],
+      "kind": "padded_query"
+    },
+    {
+      "case_id": "SYN-KCAL-2039",
+      "summary": "Times on the schedule look shifted by hours. Any help would be wonderful, thanks again.",
+      "product_area": null,
+      "expect": "answer",
+      "acceptable_sources": [
+        "KB-SCH-150#s1"
+      ],
+      "kind": "padded_query"
+    },
+    {
+      "case_id": "SYN-KCAL-2040",
+      "summary": "Hello, I finished my training course but it still shows incomplete. Best wishes.",
+      "product_area": null,
+      "expect": "answer",
+      "acceptable_sources": [
+        "KB-TRN-250#s1"
+      ],
+      "kind": "padded_query"
+    },
+    {
+      "case_id": "SYN-KCAL-2041",
+      "summary": "This is blocking our site today: a subject cannot be found by search.",
+      "product_area": null,
+      "expect": "answer",
+      "acceptable_sources": [
+        "KB-SRCH-240#s1"
+      ],
+      "kind": "padded_query"
+    },
+    {
+      "case_id": "SYN-KCAL-2042",
+      "summary": "Sorry to chase. The answered query still will not close on our side.",
+      "product_area": null,
+      "expect": "answer",
+      "acceptable_sources": [
+        "KB-EDC-110#s2"
+      ],
+      "kind": "padded_query"
+    },
+    {
+      "case_id": "SYN-KCAL-2051",
+      "summary": "Where can I export the list of training I have completed over the years?",
+      "product_area": null,
+      "expect": "abstain",
+      "acceptable_sources": [],
+      "kind": "stale_shadow"
+    },
+    {
+      "case_id": "SYN-KCAL-2052",
+      "summary": "I need my course history record as a document",
+      "product_area": null,
+      "expect": "abstain",
+      "acceptable_sources": [],
+      "kind": "stale_shadow"
+    },
+    {
+      "case_id": "SYN-KCAL-2053",
+      "summary": "Filter the visit schedule report so it only shows overdue windows",
+      "product_area": null,
+      "expect": "abstain",
+      "acceptable_sources": [],
+      "kind": "stale_shadow"
+    },
+    {
+      "case_id": "SYN-KCAL-2054",
+      "summary": "How do I narrow the visit schedule report to one window?",
+      "product_area": null,
+      "expect": "abstain",
+      "acceptable_sources": [],
+      "kind": "stale_shadow"
+    },
+    {
+      "case_id": "SYN-KCAL-2055",
+      "summary": "Activate automatic reminder emails ahead of patient visits",
+      "product_area": null,
+      "expect": "abstain",
+      "acceptable_sources": [],
+      "kind": "stale_shadow"
+    },
+    {
+      "case_id": "SYN-KCAL-2056",
+      "summary": "Reminder email before visits: how do I switch it on?",
+      "product_area": null,
+      "expect": "abstain",
+      "acceptable_sources": [],
+      "kind": "stale_shadow"
+    },
+    {
+      "case_id": "SYN-KCAL-2057",
+      "summary": "Upload a spreadsheet to add many site staff at once",
+      "product_area": null,
+      "expect": "abstain",
+      "acceptable_sources": [],
+      "kind": "stale_shadow"
+    },
+    {
+      "case_id": "SYN-KCAL-2058",
+      "summary": "Carry forward last visit's values into the current form",
+      "product_area": null,
+      "expect": "abstain",
+      "acceptable_sources": [],
+      "kind": "stale_shadow"
+    },
+    {
+      "case_id": "SYN-KCAL-2061",
+      "summary": "Hi there, my car park permit expired. Thanks in advance!",
+      "product_area": null,
+      "expect": "abstain",
+      "acceptable_sources": [],
+      "kind": "no_coverage"
+    },
+    {
+      "case_id": "SYN-KCAL-2062",
+      "summary": "Urgent: the canteen menu is wrong today.",
+      "product_area": null,
+      "expect": "abstain",
+      "acceptable_sources": [],
+      "kind": "no_coverage"
+    },
+    {
+      "case_id": "SYN-KCAL-2063",
+      "summary": "Could someone please reset the meeting room projector? Many thanks.",
+      "product_area": null,
+      "expect": "abstain",
+      "acceptable_sources": [],
+      "kind": "no_coverage"
+    },
+    {
+      "case_id": "SYN-KCAL-2064",
+      "summary": "My expense report for the site visit was rejected. Kind regards.",
+      "product_area": null,
+      "expect": "abstain",
+      "acceptable_sources": [],
+      "kind": "no_coverage"
+    },
+    {
+      "case_id": "SYN-KCAL-2065",
+      "summary": "Where do I find the holiday calendar for next year?",
+      "product_area": null,
+      "expect": "abstain",
+      "acceptable_sources": [],
+      "kind": "no_coverage"
+    },
+    {
+      "case_id": "SYN-KCAL-2066",
+      "summary": "Good afternoon, the office Wi-Fi keeps dropping. Appreciate any help.",
+      "product_area": null,
+      "expect": "abstain",
+      "acceptable_sources": [],
+      "kind": "no_coverage"
+    },
+    {
+      "case_id": "SYN-KCAL-2067",
+      "summary": "How do I change the font size in my email client?",
+      "product_area": null,
+      "expect": "abstain",
+      "acceptable_sources": [],
+      "kind": "no_coverage"
+    },
+    {
+      "case_id": "SYN-KCAL-2068",
+      "summary": "Following up: who signs off the monitoring plan?",
+      "product_area": null,
+      "expect": "abstain",
+      "acceptable_sources": [],
+      "kind": "no_coverage"
+    },
+    {
+      "case_id": "SYN-KCAL-2069",
+      "summary": "Please print the attendance list for tomorrow's training.",
+      "product_area": null,
+      "expect": "abstain",
+      "acceptable_sources": [],
+      "kind": "no_coverage"
+    },
+    {
+      "case_id": "SYN-KCAL-2070",
+      "summary": "Hello! Can you export the vacation schedule for my team? Thank you.",
+      "product_area": null,
+      "expect": "abstain",
+      "acceptable_sources": [],
+      "kind": "no_coverage"
+    },
+    {
+      "case_id": "SYN-KCAL-2081",
+      "summary": "Error 504 when exporting 3,000 enrollment rows",
+      "product_area": null,
+      "expect": "answer",
+      "acceptable_sources": [
+        "KB-NAV-001#s2"
+      ],
+      "kind": "numeric_detail"
+    },
+    {
+      "case_id": "SYN-KCAL-2082",
+      "summary": "Visit 9 form for subject 1207 is read-only and locked",
+      "product_area": null,
+      "expect": "answer",
+      "acceptable_sources": [
+        "KB-EDC-120#s1"
+      ],
+      "kind": "numeric_detail"
+    },
+    {
+      "case_id": "SYN-KCAL-2083",
+      "summary": "Signature attempt 2 of 3 rejected on form 14",
+      "product_area": null,
+      "expect": "answer",
+      "acceptable_sources": [
+        "KB-DOC-190#s1"
+      ],
+      "kind": "numeric_detail"
+    }
+  ]
+}

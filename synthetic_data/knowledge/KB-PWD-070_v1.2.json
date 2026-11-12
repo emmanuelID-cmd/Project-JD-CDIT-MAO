@@ -1,0 +1,30 @@
+{
+  "doc_id": "KB-PWD-070",
+  "version": "1.2",
+  "title": "Forgotten password: self-service reset",
+  "topic": "password_self_service",
+  "product_area": "login",
+  "status": "approved",
+  "data_classification": "synthetic",
+  "owner": "Synthetic Platform Support Owner",
+  "effective_date": "2026-06-01",
+  "review_due": "2027-06-01",
+  "keywords": ["password", "forgot", "forgotten", "reset", "email", "self-service"],
+  "sections": [
+    {
+      "section_id": "s1",
+      "heading": "Forgotten password and missing reset email",
+      "text": "Users reset a forgotten password themselves with the Forgot password link on the sign-in page. The reset email can take several minutes to arrive.",
+      "steps": [
+        {"step_id": "st1", "action_type": "navigate_ui", "text": "Direct the user to the Forgot password link on the sign-in page."},
+        {"step_id": "st2", "action_type": "verify_client_setting", "text": "Ask the user to check their spam or junk folder for the reset email."}
+      ],
+      "information_needed": [
+        {"field": "attempt_time", "prompt": "When the user last requested the reset email."}
+      ],
+      "stop_conditions": [
+        {"condition_id": "KB-PWD-070-SC1", "text": "Tier 1 staff do not reset passwords on a user's behalf. If self-service reset fails, route to an authorized administrator using the documented verification procedure."}
+      ]
+    }
+  ]
+}

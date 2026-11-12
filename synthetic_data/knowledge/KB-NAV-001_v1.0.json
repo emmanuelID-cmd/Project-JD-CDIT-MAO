@@ -1,0 +1,25 @@
+{
+  "doc_id": "KB-NAV-001",
+  "version": "1.0",
+  "title": "Export the Site Enrollment Report",
+  "topic": "report_export_enrollment",
+  "product_area": "reports",
+  "status": "retired",
+  "data_classification": "synthetic",
+  "owner": "Synthetic Knowledge Owner",
+  "effective_date": "2025-02-01",
+  "review_due": "2026-08-31",
+  "keywords": ["export", "enrollment", "report"],
+  "sections": [
+    {
+      "section_id": "s1",
+      "heading": "Where to find the enrollment report export",
+      "text": "Open Admin, then Exports, and select Site Enrollment Report to download the enrollment report export.",
+      "steps": [
+        {"step_id": "st1", "action_type": "navigate_ui", "text": "Ask the user to open Admin and then Exports."}
+      ],
+      "information_needed": [],
+      "stop_conditions": []
+    }
+  ]
+}

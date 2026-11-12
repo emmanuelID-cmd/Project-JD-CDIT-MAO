@@ -1,0 +1,55 @@
+{
+  "doc_id": "KB-SHF-440",
+  "version": "1.0",
+  "title": "Overlapping shifts on the schedule",
+  "topic": "shift_overlap",
+  "product_area": "scheduling",
+  "status": "approved",
+  "data_classification": "synthetic",
+  "owner": "Synthetic evaluation fixture (test-only; not CDIT policy)",
+  "effective_date": "2026-11-09",
+  "review_due": "2027-11-09",
+  "keywords": [
+    "shift",
+    "shifts",
+    "overlap",
+    "schedule",
+    "conflict",
+    "double booked"
+  ],
+  "sections": [
+    {
+      "section_id": "s1",
+      "heading": "Two shifts overlap on the schedule",
+      "text": "When two shifts overlap on a User's schedule, Staff record both shifts and hand the conflict to an Admin for human review. Staff do not move, cancel, or swap shifts.",
+      "steps": [
+        {
+          "step_id": "st1",
+          "action_type": "navigate_ui",
+          "text": "Ask the User to open My Schedule and read the date, start time, and end time of both shifts."
+        },
+        {
+          "step_id": "st2",
+          "action_type": "collect_information",
+          "text": "Record both shifts exactly as the schedule shows them, and the time zone shown on the page."
+        }
+      ],
+      "information_needed": [
+        {
+          "field": "shift_details",
+          "prompt": "Date, start time, and end time of both shifts, as shown on the schedule."
+        }
+      ],
+      "stop_conditions": [
+        {
+          "condition_id": "KB-SHF-440-SC1",
+          "text": "If the times look shifted by several hours, the overlap may be a time zone display difference; share KB-SCH-150 before handing on a conflict."
+        },
+        {
+          "condition_id": "KB-SHF-440-SC2",
+          "text": "Staff do not change the schedule. Hand the conflict to an Admin for human review."
+        }
+      ]
+    }
+  ]
+}

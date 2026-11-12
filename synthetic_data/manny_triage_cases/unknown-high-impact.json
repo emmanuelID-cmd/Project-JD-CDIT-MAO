@@ -1,0 +1,25 @@
+{
+  "case_id": "SYN-MANNY-TRIAGE-0001",
+  "case_version": 1,
+  "policy_version": "SYN-POLICY-1",
+  "data_classification": "synthetic",
+  "scenario": "Unknown severity with plausible broad impact",
+  "label_status": "approved_behavior_contract_not_gold_label",
+  "basis": "Approved behavior: preserve Unknown urgency for insufficient impact evidence; keep a potential-attention signal when major impact is plausible; require human review; prohibit downstream dispatch.",
+  "message": "I cannot confirm the affected scope, but this may block a critical workflow for several users.",
+  "attention_fixture_literal": "may block a critical workflow for several users",
+  "expected": {
+    "item_count": 1,
+    "category": null,
+    "category_label": "unknown",
+    "item_status": "abstained_needs_human",
+    "urgency": "unknown",
+    "destination": "unknown",
+    "auditor_review_reasons": ["unknown_category", "unknown_urgency", "unknown_destination"],
+    "attention_status": "potential_attention",
+    "human_review_required": true,
+    "parent_complete": false,
+    "downstream_allowed": false,
+    "dispatched": false
+  }
+}

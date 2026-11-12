@@ -1,0 +1,27 @@
+{
+  "supplements_manifest": "docs/temp/trace/EVAL-DRAFT-V1-LIVE-TRIAGE.manifest.json",
+  "original_manifest_sha256": "90305a5d90272517b306d48a0e11642d7b2bedaa53c01504e31fad838d84845f",
+  "runtime_prompt_source": "src/cdit_support_mao/agents/triage/anthropic_adapter.py",
+  "runtime_prompt_source_sha256": "20022db418c8e078dff2278de966562860acae2c6a5f38ed16e37fff7bb84ad8",
+  "runtime_prompt_id": "manny-triage-system-v1",
+  "runtime_system_prompt_sha256": "92dcee2769dbefed8b42e9b8579dd1e929789bd9c340d7d17bdc844225aa996c",
+  "verification": "Runtime source uses inline SYSTEM_PROMPT; its SHA matches every validated model result and the manifest. docs/lanes/manny/TRIAGE-PROMPT-v0.md is design context only and explicitly was not loaded.",
+  "case067_note": "Case 067 was called once in the initial smoke and once in the 100-case sweep; it appears once among 100 unique cases.",
+  "corrected_results_path": "docs/temp/trace/EVAL-DRAFT-V1-LIVE-TRIAGE.corrected.results.json",
+  "corrected_results_sha256": "2393b4256fba8e793a29555734d7e1bb5fd36eeed8e5ece6a9d7460b5569d6b8",
+  "final_trace_report_path": "docs/temp/trace/Trace 2026-11-09_14-22-36-671595_-0500 Manny-Triage Live100-001 coordinator.md",
+  "final_trace_report_sha256": "fbcd99868f772647ac123ebb066146f98e41818372b85aa871fe9b7a3455241b",
+  "verification_tests": {
+    "focused": "3 passed in 37.01s",
+    "full_suite": "717 passed in 63.98s"
+  },
+  "case_level_adjudications": {
+    "cases": [
+      "SYN-EVAL-068",
+      "SYN-EVAL-070"
+    ],
+    "adjudicator": "Manny",
+    "decision": "confirmed_failure",
+    "scope": "these two cases only; remaining label approvals unchanged"
+  }
+}

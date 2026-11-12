@@ -1,0 +1,34 @@
+{
+  "case_file_version": "0.1",
+  "case_id": "SYN-CASE-0012",
+  "title": "Stop: triage checkpoint failed, downstream agents must not run",
+  "scenario_ref": "PRD 'A failed checkpoint stops downstream agent work'",
+  "as_of": "2026-11-03",
+  "triage": {
+    "status": "blocked",
+    "case_summary": "Synthetic ticket with uncertain high-impact severity.",
+    "category_confidence": "low",
+    "urgency": "unknown"
+  },
+  "escalation": {
+    "must_escalate": null,
+    "recommendation": "human_review",
+    "reason": "Stand-in: triage blocked; route to staff."
+  },
+  "recorded_actions": [],
+  "expected": {
+    "knowledge_status": "blocked",
+    "knowledge_reasons": [
+      "upstream_blocked"
+    ],
+    "troubleshooting_status": "blocked",
+    "troubleshooting_reasons": [
+      "upstream_blocked"
+    ],
+    "max_steps": 0,
+    "documentation_status": "blocked",
+    "documentation_reasons": [
+      "upstream_blocked"
+    ]
+  }
+}

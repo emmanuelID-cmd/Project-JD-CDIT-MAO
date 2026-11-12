@@ -1,0 +1,46 @@
+{
+  "case_file_version": "0.1",
+  "case_id": "SYN-CASE-0004",
+  "title": "Conflict: two approved sources disagree on upload size",
+  "scenario_ref": "PRD A3 (stale/conflicting versions) and confidence/factuality tests",
+  "as_of": "2026-11-03",
+  "triage": {
+    "case_summary": "Site coordinator asks what the maximum file size is for uploading a regulatory document.",
+    "product_area": "documents",
+    "category": "how_to",
+    "category_confidence": "high",
+    "urgency": "low",
+    "case_facts": [
+      {
+        "field": "reported_issue",
+        "value": "Asks for the maximum regulatory document upload size.",
+        "verified": true
+      }
+    ]
+  },
+  "escalation": {
+    "must_escalate": false,
+    "recommendation": "no_escalation_proposed",
+    "reason": "Stand-in: no must-escalate rule matched the synthetic case."
+  },
+  "recorded_actions": [],
+  "expected": {
+    "knowledge_status": "abstained",
+    "knowledge_reasons": [
+      "conflicting_sources"
+    ],
+    "troubleshooting_status": "abstained",
+    "troubleshooting_reasons": [
+      "knowledge_abstained"
+    ],
+    "max_steps": 0,
+    "escalation_signals": [
+      "insufficient_approved_evidence"
+    ],
+    "documentation_status": "completed",
+    "must_not_appear": [
+      "up to 25 MB",
+      "up to 50 MB"
+    ]
+  }
+}

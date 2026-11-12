@@ -1,0 +1,34 @@
+{
+  "doc_id": "KB-EDC-350",
+  "version": "0.2",
+  "title": "Copy values from a previous visit",
+  "topic": "copy_forward",
+  "product_area": "data_entry",
+  "status": "draft",
+  "data_classification": "synthetic",
+  "owner": "Synthetic Knowledge Owner",
+  "effective_date": "2026-10-01",
+  "review_due": "2027-10-01",
+  "keywords": [
+    "copy",
+    "previous visit",
+    "carry forward",
+    "duplicate"
+  ],
+  "sections": [
+    {
+      "section_id": "s1",
+      "heading": "Copy values from a previous visit",
+      "text": "Use Copy Forward on the form toolbar to copy values from the previous visit.",
+      "steps": [
+        {
+          "step_id": "st1",
+          "action_type": "navigate_ui",
+          "text": "Ask the user to select Copy Forward on the form toolbar."
+        }
+      ],
+      "information_needed": [],
+      "stop_conditions": []
+    }
+  ]
+}

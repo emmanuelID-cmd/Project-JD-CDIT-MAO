@@ -1,0 +1,232 @@
+{
+  "contract_version": "0.1.0-proposed",
+  "contribution_id": "TRB-0CE90E80456EC671",
+  "stage": "troubleshooting",
+  "agent": "troubleshooting-agent",
+  "agent_version": "0.2.0",
+  "context": {
+    "run_id": "RUN-SYN-CASE-0003-1",
+    "case_id": "SYN-CASE-0003",
+    "case_version": 1,
+    "policy_version": "SYN-SUPPORT-POLICY-0.1",
+    "data_classification": "synthetic"
+  },
+  "input_refs": [
+    {
+      "contribution_id": "TRI-2E0FB5958610EF0B",
+      "stage": "triage",
+      "contract_version": "0.1.0-proposed",
+      "content_digest": "04711fc512b037d8750da66b53174c682b7c8491963683226bba87f66488e104"
+    },
+    {
+      "contribution_id": "KNW-594C90201D7A10CF",
+      "stage": "knowledge",
+      "contract_version": "0.1.0-proposed",
+      "content_digest": "9f9a9d54d17e2e937d6bffc32b409488110c9bc0a9f9154be7ea2e54af0f08fc"
+    }
+  ],
+  "created_at": "2026-11-03T15:00:00Z",
+  "status": "abstained",
+  "checkpoint": {
+    "checkpoint": "A4",
+    "passed": false,
+    "reason_codes": [
+      "restricted_action_requested",
+      "policy_stop_condition",
+      "knowledge_abstained"
+    ]
+  },
+  "claims": [
+    {
+      "statement": "No Tier 1 troubleshooting steps are suggested for this case.",
+      "label": "unknown",
+      "sources": [],
+      "basis": null,
+      "confidence": "low"
+    },
+    {
+      "statement": "The case text appears to request a restricted action (bulk_account_action); the assistant cannot perform or advise it.",
+      "label": "inference",
+      "sources": [
+        {
+          "kind": "policy_rule",
+          "source_id": "SYN-TS-POLICY",
+          "version": "0.1.2",
+          "locator": "RR-01"
+        }
+      ],
+      "basis": "Deterministic pattern RR-01 on untrusted case text; risk signal only.",
+      "confidence": "medium"
+    },
+    {
+      "statement": "The case text appears to request a restricted action (export_cross_site_data); the assistant cannot perform or advise it.",
+      "label": "inference",
+      "sources": [
+        {
+          "kind": "policy_rule",
+          "source_id": "SYN-TS-POLICY",
+          "version": "0.1.2",
+          "locator": "RR-02"
+        }
+      ],
+      "basis": "Deterministic pattern RR-02 on untrusted case text; risk signal only.",
+      "confidence": "medium"
+    },
+    {
+      "statement": "The case text appears to request a restricted action (policy_override); the assistant cannot perform or advise it.",
+      "label": "inference",
+      "sources": [
+        {
+          "kind": "policy_rule",
+          "source_id": "SYN-TS-POLICY",
+          "version": "0.1.2",
+          "locator": "RR-03"
+        }
+      ],
+      "basis": "Deterministic pattern RR-03 on untrusted case text; risk signal only.",
+      "confidence": "medium"
+    },
+    {
+      "statement": "The case text appears to request a restricted action (reset_password); the assistant cannot perform or advise it.",
+      "label": "inference",
+      "sources": [
+        {
+          "kind": "policy_rule",
+          "source_id": "SYN-TS-POLICY",
+          "version": "0.1.2",
+          "locator": "RR-05"
+        }
+      ],
+      "basis": "Deterministic pattern RR-05 on untrusted case text; risk signal only.",
+      "confidence": "medium"
+    },
+    {
+      "statement": "Stop condition TS-SC-PRIVACY applies: The case suggests exposure of another site's or a patient's data. Stop routine handling and escalate as a possible privacy incident.",
+      "label": "inference",
+      "sources": [
+        {
+          "kind": "policy_rule",
+          "source_id": "SYN-TS-POLICY",
+          "version": "0.1.2",
+          "locator": "TS-SC-PRIVACY"
+        }
+      ],
+      "basis": "Deterministic pattern on untrusted case text; risk signal only.",
+      "confidence": "medium"
+    }
+  ],
+  "confidence": "low",
+  "confidence_rationale": "Abstained: evidence missing or request/guidance outside Tier 1 authority.",
+  "unknowns": [
+    "No approved guidance supports Tier 1 steps for this case."
+  ],
+  "human_review_required": true,
+  "policy_id": "SYN-TS-POLICY",
+  "policy_version": "0.1.2",
+  "primary_source": null,
+  "steps": [],
+  "staff_only_procedures": [],
+  "stop_conditions": [
+    {
+      "condition_id": "TS-SC-PRIVACY",
+      "text": "The case suggests exposure of another site's or a patient's data. Stop routine handling and escalate as a possible privacy incident.",
+      "origin": "troubleshooting_policy",
+      "source": {
+        "kind": "policy_rule",
+        "source_id": "SYN-TS-POLICY",
+        "version": "0.1.2",
+        "locator": "TS-SC-PRIVACY"
+      },
+      "triggered": true
+    }
+  ],
+  "information_needed": [],
+  "rejected": [
+    {
+      "item_kind": "case_request",
+      "reference": "RR-01",
+      "action_type": "bulk_account_action",
+      "reason": "restricted_action_requested"
+    },
+    {
+      "item_kind": "case_request",
+      "reference": "RR-02",
+      "action_type": "export_cross_site_data",
+      "reason": "restricted_action_requested"
+    },
+    {
+      "item_kind": "case_request",
+      "reference": "RR-03",
+      "action_type": "policy_override",
+      "reason": "restricted_action_requested"
+    },
+    {
+      "item_kind": "case_request",
+      "reference": "RR-05",
+      "action_type": "reset_password",
+      "reason": "restricted_action_requested"
+    }
+  ],
+  "escalation_signals": [
+    {
+      "signal": "bulk_account_action_requested",
+      "basis": "Restricted request rule RR-01 matched the case summary.",
+      "sources": [
+        {
+          "kind": "policy_rule",
+          "source_id": "SYN-TS-POLICY",
+          "version": "0.1.2",
+          "locator": "RR-01"
+        }
+      ]
+    },
+    {
+      "signal": "cross_site_data_request",
+      "basis": "Restricted request rule RR-02 matched the case summary.",
+      "sources": [
+        {
+          "kind": "policy_rule",
+          "source_id": "SYN-TS-POLICY",
+          "version": "0.1.2",
+          "locator": "RR-02"
+        }
+      ]
+    },
+    {
+      "signal": "policy_override_attempt",
+      "basis": "Restricted request rule RR-03 matched the case summary.",
+      "sources": [
+        {
+          "kind": "policy_rule",
+          "source_id": "SYN-TS-POLICY",
+          "version": "0.1.2",
+          "locator": "RR-03"
+        }
+      ]
+    },
+    {
+      "signal": "possible_privacy_incident",
+      "basis": "Stop condition TS-SC-PRIVACY matched the case summary.",
+      "sources": [
+        {
+          "kind": "policy_rule",
+          "source_id": "SYN-TS-POLICY",
+          "version": "0.1.2",
+          "locator": "TS-SC-PRIVACY"
+        }
+      ]
+    },
+    {
+      "signal": "insufficient_approved_evidence",
+      "basis": "Knowledge agent abstained: weak_evidence",
+      "sources": [
+        {
+          "kind": "contribution",
+          "source_id": "KNW-594C90201D7A10CF",
+          "version": "0.1.0-proposed",
+          "locator": null
+        }
+      ]
+    }
+  ]
+}

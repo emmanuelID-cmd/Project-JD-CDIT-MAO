@@ -1,0 +1,40 @@
+{
+  "case_file_version": "0.1",
+  "case_id": "SYN-CASE-0009",
+  "title": "Governance: approved article contains a forbidden account action",
+  "scenario_ref": "PRD A4 (unsupported step / action allowlist)",
+  "as_of": "2026-11-03",
+  "triage": {
+    "case_summary": "User account is locked after several failed sign-in attempts.",
+    "product_area": "login",
+    "category": "account_lockout",
+    "category_confidence": "high",
+    "urgency": "medium",
+    "case_facts": [
+      {
+        "field": "reported_issue",
+        "value": "Account locked after failed sign-in attempts.",
+        "verified": true
+      }
+    ]
+  },
+  "escalation": {
+    "must_escalate": false,
+    "recommendation": "no_escalation_proposed",
+    "reason": "Stand-in: no must-escalate rule matched the synthetic case."
+  },
+  "recorded_actions": [],
+  "expected": {
+    "knowledge_status": "completed",
+    "top_doc_id": "KB-AUD-080",
+    "troubleshooting_status": "abstained",
+    "troubleshooting_reasons": [
+      "unsupported_step_rejected"
+    ],
+    "max_steps": 0,
+    "escalation_signals": [
+      "guidance_step_outside_tier1"
+    ],
+    "documentation_status": "completed"
+  }
+}

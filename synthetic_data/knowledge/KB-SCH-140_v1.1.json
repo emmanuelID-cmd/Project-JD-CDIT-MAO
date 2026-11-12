@@ -1,0 +1,53 @@
+{
+  "doc_id": "KB-SCH-140",
+  "version": "1.1",
+  "title": "Visit appointments in an external calendar",
+  "topic": "calendar_sync",
+  "product_area": "scheduling",
+  "status": "approved",
+  "data_classification": "synthetic",
+  "owner": "Synthetic Knowledge Owner",
+  "effective_date": "2026-06-15",
+  "review_due": "2027-06-15",
+  "keywords": [
+    "calendar",
+    "sync",
+    "outlook",
+    "appointment",
+    "appointments",
+    "subscription",
+    "feed",
+    "ics"
+  ],
+  "sections": [
+    {
+      "section_id": "s1",
+      "heading": "Visit appointments missing from an external calendar",
+      "text": "Scheduled visit appointments can be shown in an external calendar through the personal calendar feed link on the Scheduling page. External calendars refresh the feed on their own timetable, often every few hours, so new appointments can take time to appear.",
+      "steps": [
+        {
+          "step_id": "st1",
+          "action_type": "verify_client_setting",
+          "text": "Ask the user to confirm the calendar feed link in their external calendar matches the link shown under Scheduling > Calendar Feed."
+        },
+        {
+          "step_id": "st2",
+          "action_type": "retry_operation",
+          "text": "Ask the user to remove and re-add the calendar feed link if appointments are still missing after several hours."
+        }
+      ],
+      "information_needed": [
+        {
+          "field": "calendar_application",
+          "prompt": "The external calendar application and version in use."
+        }
+      ],
+      "stop_conditions": [
+        {
+          "condition_id": "KB-SCH-140-SC1",
+          "text": "If appointments for another site's subjects appear in the feed, stop immediately and escalate as a possible data-access incident."
+        }
+      ]
+    }
+  ]
+}

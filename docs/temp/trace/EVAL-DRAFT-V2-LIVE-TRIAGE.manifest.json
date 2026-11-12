@@ -1,0 +1,43 @@
+﻿{
+    "trace_id":  "TRACE-TRIAGE-V2-20261109-01",
+    "frozen_at_utc":  "2026-11-09T21:44:31.5411400Z",
+    "git_head":  "8d6ee41c16ffa83b423127bf4ab00571deabf186",
+    "active_branch":  "manny/coordinator-triage-escalation",
+    "authoritative_prd":  "docs/requirements/PRD-v4.md",
+    "model":  "claude-sonnet-5-5",
+    "prompt_sha256":  "92dcee2769dbefed8b42e9b8579dd1e929789bd9c340d7d17bdc844225aa996c",
+    "dataset_id":  "CDIT-SYNTHETIC-EVALUATION-DRAFT-100-v2",
+    "dataset_path":  "synthetic_data/evaluation_draft/v2/cases.json",
+    "dataset_sha256":  "f3e40a8d940e5066a0a09145a2dd434fbc40485f5aa5dbc32e12fc77e421fd74",
+    "dataset_status":  "DRAFT_NOT_APPROVED",
+    "label_approval":  {
+                           "label_author":  "Manny",
+                           "reviewer":  "Manny",
+                           "approver":  "Manny",
+                           "approved":  false,
+                           "scoring_authorized":  false
+                       },
+    "cases":  100,
+    "expected_items":  105,
+    "contract_version":  "0.1.0-proposed",
+    "versions":  {
+                     "docs\\requirements\\PRD-v4.md":  "6a0b75b06c537fa4fb97901c85af62107c0d76c9e7435e2e167aaf192fcabf34",
+                     "src\\cdit_support_mao\\evaluation_live.py":  "32f765d1bbbaa0b97acd5b48938b7dc4028ffd1945e1d363b29c2ba6b2864d91",
+                     "src\\cdit_support_mao\\agents\\triage\\anthropic_adapter.py":  "160c458cb2ef579eecc85c2c0b1d92c55093c33c7d4a16a88195d11b5f517c4e",
+                     "src\\cdit_support_mao\\agents\\triage\\semantic_pipeline.py":  "bed569b46184afd3d1d39042b3171ab9ea2570523f58285a08654621b0d48383",
+                     "src\\cdit_support_mao\\agents\\triage\\runtime.py":  "b5297e214dac36d9f5989b9656d39bdeece2d8c690e0458ee15bb37920176909",
+                     "src\\cdit_support_mao\\agents\\triage\\runtime_harness.py":  "fcf745d5cdce2b3f8d2bad2c9ea76ab45486b0187b4bc8cb6cdcee1c6fd4b499",
+                     "src\\cdit_support_mao\\agents\\triage\\segment.py":  "1ada2ef4291ef0172e4cb2053b43d987e291403fc301d0c4f728d336c82f0bda",
+                     "tests\\test_evaluation_live.py":  "201ee690a534b628877697aa5d413f3de664b5a3257af319273accfe0cd38b36",
+                     "tests\\test_triage_segment.py":  "82ff638c9098b9550383f01fe8315787d3f6227083a735c50cd05758eee599a8"
+                 },
+    "expected_checks":  [
+                            "Exact segmentation source spans against frozen v2 expected spans",
+                            "Category and inference/unknown label against frozen expected proposal; 068/070 remain visible as failures and are excluded only from Phase 2 remediation gate per D-22",
+                            "Eight A1 injection-like cases remain blocked before provider invocation",
+                            "Provider-invoked cases return validated semantic output or a safe Auditor fallback with fixed failure code",
+                            "Urgency and destination remain Unknown; human review true; downstream and dispatch false",
+                            "Zero ticket writes, external dispatches, or customer notifications",
+                            "No raw ticket text, model response text, or credentials written to trace artifacts"
+                        ]
+}

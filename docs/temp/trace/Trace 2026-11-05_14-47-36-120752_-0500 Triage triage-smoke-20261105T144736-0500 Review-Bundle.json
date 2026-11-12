@@ -1,0 +1,32 @@
+{
+  "trace_id": "triage-smoke-20261105T144736-0500",
+  "frozen_at": "2026-11-05T14:50:31.331786-05:00",
+  "manifest": {
+    "path": "docs\\temp\\trace\\Trace 2026-11-05_14-47-36-120752_-0500 Triage triage-smoke-20261105T144736-0500 Manifest.json",
+    "sha256": "65f692923351bb9135511ae25a6bd0c4e698326929a40d92a2ffcb503284e096"
+  },
+  "evidence": {
+    "path": "docs\\temp\\trace\\Trace 2026-11-05_14-47-36-120752_-0500 Triage triage-smoke-20261105T144736-0500 Evidence.json",
+    "sha256": "b9fdc0987793b3f3f6a7952a30d6ee171df9b53da6428c2efb37a1f26c45ee55"
+  },
+  "source_versions": {
+    "AGENTS.md": "0386a14225cbf790828f0eae9d55d23639cad8cf805156cc3b04629674fa2a81",
+    "docs/requirements/PRD-v3.md": "153d0970e048dab34b02f41439d3cddf20ebc505dedee62fd44242fcfb878453",
+    "docs/lanes/manny/TRIAGE-PROMPT-v0.md": "636f3effe17700a444d63f5e91a1a5baaae6a1ea36fa24b4fc865317a4e9ba52",
+    "docs/contracts/HANDOFF-CONTRACTS.md": "069c18aedec874f9b0a31ca8baea25407289395d99177c344d8dc93827f1dd2c",
+    "src/cdit_support_mao/agents/coordinator/intake.py": "ede6a08dfe256f9ff42ef04de648bd083e279b289c4ccca630d8131441137d9a",
+    "src/cdit_support_mao/agents/coordinator/handoff.py": "79468747bc2fab58c131d5db65b437122646db60cee74be1af7da14358ca2423",
+    "src/cdit_support_mao/agents/triage/input.py": "510ad1cd3a7cda35d75048882ccdbf605892aaa69b5ec7bb8c01cc546f8f035a",
+    "src/cdit_support_mao/agents/triage/multi_item.py": "502ddb435ead2dcb199f356d5ad42e37fc22b789c577618ba68b891f92f208ef",
+    "src/cdit_support_mao/agents/triage/multi_item_adapter.py": "d294633433a052867f09dcadbd6950be3faf2c7ea06991745ccf4d185311ae2a",
+    "src/cdit_support_mao/agents/triage/semantic_contract.py": "296d5b3c46d7e8ecfd265a01bc7a38f4955d9f967d8b8464cfc790ab50c1eb23",
+    "src/cdit_support_mao/agents/triage/semantic_pipeline.py": "69ff071e96fa668ab12ab42467acb8848dd163359d0240e8052ead3966932c5d",
+    "src/cdit_support_mao/agents/triage/anthropic_adapter.py": "dda307426903e99a1391d0d4848209422e27707164e660d15a42c8c2fa527616",
+    "src/cdit_support_mao/agents/triage/anthropic_client.py": "32117d54453c8da2b841b4de64efa9beb92f8deef9dc598c34bf5d9bd49cf6f4",
+    "tests/test_manny_triage_flow.py": "18c63f3421a2c3564cb119b75b128f89d854bf35837c6c986b3e28e30e5fd0eb",
+    "tests/test_triage_semantic_contract.py": "c48a318b76b37c822ff374de04a85c0dce1174ce29877b5e23b8e8fb9d70c2ec",
+    "tests/test_triage_anthropic_adapter.py": "ddde92c9bf5bf59dbeb9e9683ad20e9d2f2a3a3d5faf0f0ffaf48f9e08fa3eb6",
+    "tests/test_triage_anthropic_client.py": "e0be55e47ad57d9158fb91928c65de3b67ab4ec2de8066cb7b897c3fa841f8c9"
+  },
+  "instructions": "Both independent reviewers receive this identical bundle; do not share reviewer conclusions until both initial reviews are saved."
+}

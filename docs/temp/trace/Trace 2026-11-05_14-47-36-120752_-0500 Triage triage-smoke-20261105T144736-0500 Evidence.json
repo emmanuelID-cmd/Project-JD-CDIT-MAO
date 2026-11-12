@@ -1,0 +1,141 @@
+{
+  "trace_id": "triage-smoke-20261105T144736-0500",
+  "actual_started_at": "2026-11-05T14:48:29.794806-05:00",
+  "fixture_id": "SYN-TRACE-001",
+  "data_classification": "synthetic",
+  "fixture_text": "I cannot log in to the trial dashboard.",
+  "provider_call_attempts": 1,
+  "provider_call_succeeded": true,
+  "external_tools_offered": false,
+  "credential_material_recorded": false,
+  "model_returned": "claude-sonnet-5-5",
+  "input_tokens": 461,
+  "output_tokens": 680,
+  "elapsed_ms": 5910,
+  "estimated_api_cost_usd": 0.007722,
+  "adapter_validation": "PASS",
+  "actual_output": {
+    "items": [
+      {
+        "item_index": 1,
+        "category": null,
+        "category_label": "unknown",
+        "evidence_quote": null,
+        "rationale": null,
+        "missing_questions": [
+          "Are you asking for access or permissions to be granted to the trial dashboard, or did you previously have access and now cannot sign in?",
+          "What happens when you try to log in (for example, an error message or a rejected password)?"
+        ],
+        "urgency": "unknown",
+        "urgency_label": "unknown",
+        "destination": "unknown",
+        "destination_label": "unknown",
+        "human_review_required": true,
+        "downstream_allowed": false
+      }
+    ],
+    "human_review_required": true,
+    "parent_complete": false,
+    "downstream_allowed": false,
+    "dispatched": false
+  },
+  "semantic_oracle": "UNVERIFIED; no human-approved label for this fixture",
+  "actual_finished_at": "2026-11-05T14:48:36.083424-05:00",
+  "duration_ms": 6289,
+  "pre_call_manifest_sha256": "d348c31848e1aa7e8abc880d92fe64ed519ef0c6c3f102d80a7bdacb243be1f8",
+  "test_runs": [
+    {
+      "test_id": "TR-SMOKE-FOCUSED",
+      "command": ".venv/Scripts/python.exe -m pytest tests/test_triage_anthropic_client.py tests/test_triage_anthropic_adapter.py tests/test_triage_semantic_contract.py tests/test_manny_triage_flow.py -q",
+      "expected": "All focused tests pass",
+      "actual": "29 passed",
+      "status": "PASS"
+    },
+    {
+      "test_id": "TR-SMOKE-FULL",
+      "command": ".venv/Scripts/python.exe -m pytest -q",
+      "expected": "All synthetic-only tests pass",
+      "actual": "478 passed",
+      "status": "PASS"
+    },
+    {
+      "test_id": "TR-SMOKE-DEPS",
+      "command": ".venv/Scripts/python.exe -m pip check",
+      "expected": "No broken dependency requirements",
+      "actual": "No broken requirements found",
+      "status": "PASS"
+    },
+    {
+      "test_id": "TR-SMOKE-DIFF",
+      "command": "git diff --check",
+      "expected": "No whitespace errors",
+      "actual": "Exit 0; Git noted Checklist.md CRLF will normalize on future Git operations",
+      "status": "PASS"
+    }
+  ],
+  "observed_checks": [
+    {
+      "check_id": "TR-01",
+      "expected": "Only synthetic case text enters request",
+      "actual": "Synthetic fixture SYN-TRACE-001; minimized request contains item text/category list only",
+      "status": "PASS"
+    },
+    {
+      "check_id": "TR-02",
+      "expected": "Response is one-item structured output accepted by strict schema",
+      "actual": "One item, index 1, accepted by semantic contract",
+      "status": "PASS"
+    },
+    {
+      "check_id": "TR-03",
+      "expected": "Category is in supplied taxonomy or abstains as unknown",
+      "actual": "Category null, label unknown",
+      "status": "PASS"
+    },
+    {
+      "check_id": "TR-04",
+      "expected": "Urgency and destination remain unknown",
+      "actual": "Both unknown",
+      "status": "PASS"
+    },
+    {
+      "check_id": "TR-05",
+      "expected": "Human review required; parent incomplete; downstream/dispatched false",
+      "actual": "All four safety fields matched",
+      "status": "PASS"
+    },
+    {
+      "check_id": "TR-06",
+      "expected": "Semantic category matches an approved label",
+      "actual": "No approved gold label exists for this smoke sentence",
+      "status": "UNVERIFIED"
+    },
+    {
+      "check_id": "TR-07",
+      "expected": "No external tools or ticket actions",
+      "actual": "No tools offered; adapter returns no action capability",
+      "status": "PASS"
+    },
+    {
+      "check_id": "TR-08",
+      "expected": "Usage and latency recorded",
+      "actual": "461 input tokens, 680 output tokens, 5910 ms; estimated $0.00772200",
+      "status": "PASS"
+    },
+    {
+      "check_id": "TR-09",
+      "expected": "Current handoff checked immediately before provider call",
+      "actual": "Preflight callback passed; stale callback failure separately tested in fake-client suite",
+      "status": "PASS"
+    },
+    {
+      "check_id": "TR-10",
+      "expected": "Full multi-agent workflow trace available",
+      "actual": "No app-wired six-agent runtime or combined harness in this trace",
+      "status": "NOT_TESTED"
+    }
+  ],
+  "scoring_note": "These diagnostic check IDs were organized after the one-call run; no full-trace score or A\u2013E band is assigned. The trace is INCOMPLETE due absent pre-registered denominator, semantic oracle, runtime integration, and required reviewer/security completion.",
+  "pricing_source": "https://platform.claude.com/docs/en/models/sonnet-5-5/overview",
+  "sdk_source": "https://github.com/anthropics/anthropic-sdk-python/releases/tag/v2.5.0"
+}

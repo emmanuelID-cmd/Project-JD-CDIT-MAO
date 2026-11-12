@@ -1,0 +1,59 @@
+{
+  "doc_id": "KB-PAY-410",
+  "version": "1.0",
+  "title": "Report a possible pay discrepancy",
+  "topic": "pay_discrepancy",
+  "product_area": "payroll",
+  "status": "approved",
+  "data_classification": "synthetic",
+  "owner": "Synthetic evaluation fixture (test-only; not CDIT policy)",
+  "effective_date": "2026-11-09",
+  "review_due": "2027-11-09",
+  "keywords": [
+    "pay",
+    "short",
+    "wrong",
+    "discrepancy",
+    "hours",
+    "entered",
+    "missing"
+  ],
+  "sections": [
+    {
+      "section_id": "s1",
+      "heading": "Pay appears short or wrong",
+      "text": "Staff record what the User reports and hand the case to an Admin for human review. Staff do not calculate, confirm, or correct pay, and do not fill in missing dates or hours.",
+      "steps": [
+        {
+          "step_id": "st1",
+          "action_type": "collect_information",
+          "text": "Record the pay period, the difference the User reports, and the hours the User says they entered, exactly as the User states them."
+        }
+      ],
+      "information_needed": [
+        {
+          "field": "pay_period",
+          "prompt": "The pay period the User says is affected."
+        },
+        {
+          "field": "reported_difference",
+          "prompt": "The amount the User believes is missing or wrong, as stated by the User."
+        },
+        {
+          "field": "hours_entered",
+          "prompt": "The dates and hours the User says they entered."
+        }
+      ],
+      "stop_conditions": [
+        {
+          "condition_id": "KB-PAY-410-SC1",
+          "text": "If dates or hours are missing, ask the User for them. Never estimate or fill them in."
+        },
+        {
+          "condition_id": "KB-PAY-410-SC2",
+          "text": "Hand every pay discrepancy to an Admin for human review. Staff do not close the request."
+        }
+      ]
+    }
+  ]
+}

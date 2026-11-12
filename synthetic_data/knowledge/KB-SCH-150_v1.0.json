@@ -1,0 +1,48 @@
+{
+  "doc_id": "KB-SCH-150",
+  "version": "1.0",
+  "title": "Dates and times shown in the wrong time zone",
+  "topic": "time_zone_display",
+  "product_area": "profile",
+  "status": "approved",
+  "data_classification": "synthetic",
+  "owner": "Synthetic Knowledge Owner",
+  "effective_date": "2026-03-15",
+  "review_due": "2027-03-15",
+  "keywords": [
+    "time zone",
+    "timezone",
+    "wrong time",
+    "hours",
+    "offset",
+    "dates",
+    "clock",
+    "shifted"
+  ],
+  "sections": [
+    {
+      "section_id": "s1",
+      "heading": "Times appear shifted by several hours",
+      "text": "All dates and times are displayed in the time zone set on the user's profile. If the profile time zone differs from the user's location, visit and entry times appear shifted.",
+      "steps": [
+        {
+          "step_id": "st1",
+          "action_type": "navigate_ui",
+          "text": "Ask the user to open Profile > Preferences and check the Time Zone setting."
+        },
+        {
+          "step_id": "st2",
+          "action_type": "verify_client_setting",
+          "text": "Ask the user to select the time zone for their site location and save the profile."
+        }
+      ],
+      "information_needed": [
+        {
+          "field": "profile_time_zone",
+          "prompt": "The time zone currently shown on the user's profile."
+        }
+      ],
+      "stop_conditions": []
+    }
+  ]
+}

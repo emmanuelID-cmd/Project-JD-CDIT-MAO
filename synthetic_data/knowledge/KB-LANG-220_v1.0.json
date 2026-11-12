@@ -1,0 +1,37 @@
+{
+  "doc_id": "KB-LANG-220",
+  "version": "1.0",
+  "title": "Changing the interface language",
+  "topic": "interface_language",
+  "product_area": "profile",
+  "status": "approved",
+  "data_classification": "synthetic",
+  "owner": "Synthetic Knowledge Owner",
+  "effective_date": "2026-03-01",
+  "review_due": "2027-03-01",
+  "keywords": [
+    "language",
+    "interface",
+    "translation",
+    "spanish",
+    "french",
+    "german",
+    "locale"
+  ],
+  "sections": [
+    {
+      "section_id": "s1",
+      "heading": "Switch the interface language",
+      "text": "The interface language is set under Profile > Preferences > Language. The change applies after signing out and back in.",
+      "steps": [
+        {
+          "step_id": "st1",
+          "action_type": "navigate_ui",
+          "text": "Ask the user to open Profile > Preferences > Language and choose a language."
+        }
+      ],
+      "information_needed": [],
+      "stop_conditions": []
+    }
+  ]
+}
